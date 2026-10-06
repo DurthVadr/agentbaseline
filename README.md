@@ -10,12 +10,16 @@ body as it matures.
 |---|---|
 | **Status** | `v1.0-draft` — not a standard, no conformance programme |
 | **Identifiers** | not yet frozen; they freeze at `v1.0`. See [VERSIONING.md](VERSIONING.md) before citing |
-| **Comment closes** | 30 September 2026 |
+| **Comment** | closed on the baseline 30 September 2026; open on the [reference architecture](https://agentbaseline.org/reference-architecture) |
 | **Source of truth** | [`whitepaper/controls.yaml`](whitepaper/controls.yaml) |
 
 An agent's behaviour is not settled before it ships: an end user reprograms it at runtime,
 in natural language. This baseline defines what has to be true to run one safely, by outcome
 rather than by product category.
+
+**Built on it: the [reference architecture](https://agentbaseline.org/reference-architecture)** applies the six
+outcomes to the software factory: five primitives, three maturity levels, source in
+[`software-factory/`](software-factory/).
 
 **The argument, in full: [agentbaseline.org](https://agentbaseline.org)**
 — why product categories do not map to the problem, and the three questions the six answer.

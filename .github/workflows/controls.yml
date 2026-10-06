@@ -57,6 +57,8 @@ jobs:
       # read, and of the PDF it produced. No browser, no pandoc, under a second.
       - name: The committed PDF is the one this source builds
         run: python3 bin/check-pdf-current
+      - name: The second paper's PDF is not the stand-in
+        run: python3 bin/check-sf-pdf
 
   # Determinism is the other half of the question and it needs the browser, so it
   # gets its own job with a pinned one. It does not compare against the committed

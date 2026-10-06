@@ -28,6 +28,18 @@ disableKinds = ["taxonomy", "term", "RSS", "section"]
   source = "whitepaper/contributors.yaml"
   target = "data/contributors.yaml"
 [[module.mounts]]
+  source = "software-factory/primitives.yaml"
+  target = "data/primitives.yaml"
+[[module.mounts]]
+  source = "software-factory/maturity.yaml"
+  target = "data/maturity.yaml"
+[[module.mounts]]
+  source = "software-factory/signals.yaml"
+  target = "data/sfsignals.yaml"
+[[module.mounts]]
+  source = "software-factory/contributors.yaml"
+  target = "data/sfcontributors.yaml"
+[[module.mounts]]
   source = "layouts"
   target = "layouts"
 [[module.mounts]]
@@ -101,19 +113,64 @@ disableKinds = ["taxonomy", "term", "RSS", "section"]
   path = "agent-baseline-wordmark-animated-on-dark.mov"
   icon = "file-video"
 
-# The event strip renders only while `until` is in the future, so it removes
-# itself the day after rather than relying on anyone noticing.
+# The reference architecture: the second paper, built on the baseline, with
+# the software factory as its subject. The homepage section, its own page, the
+# Artifacts rows, the bar's pill and the controls page all read this table.
+# `pdf` and `paper` are checked with fileExists, so a checkout without the
+# file gets no dead link; `source` is the repo subfolder; `template` is the
+# issue form that applies the `software-factory` label, which an outside
+# commenter cannot set from a URL. `commentsUntil` is empty until the working
+# group names a date — the copy then says "open for comment" and no more.
+# The PDF in the spike is a labelled stand-in and bin/check-sf-pdf refuses it.
+# If the published PDF is not ready at cut-over, delete the stand-in rather
+# than ship it; the links go with it.
+[params.softwareFactory]
+  # The one paragraph that says what the paper is, shown on the homepage and
+  # at the top of its page. One value, so the two cannot drift.
+  summary       = "The reference architecture applies Agent Baseline to the software factory. A software factory is a system of AI agents that takes a ticket or a request and turns it into tested code, ready for a person to review and merge. The paper describes three maturity levels for building one, from a single agent to a factory run by an orchestrator."
+  pdf           = "software-factory.pdf"
+  source        = "software-factory"
+  # The paper's markdown inside `source`. Checked with fileExists like `pdf`,
+  # so a checkout without the paper gets no "View the source" that lands on a
+  # README instead.
+  paper         = "software-factory.md"
+  template      = "software-factory.yml"
+  commentsUntil = ""
+  # The launch band stops rendering at build time on this date, two weeks
+  # after the 13 October launch, and the pill drops its "New". Same mechanism
+  # as [params.event].until.
+  launchUntil   = "2026-10-27"
+  # The maturity band. Level names and marks follow the paper's Maturity
+  # Model, unchanged between Draft 2 (15 September) and Draft 3 (5 October).
+  # Set false if the section reopens before launch; the band leaves in one
+  # line.
+  showMaturity  = true
+  # ⟡ SPIKE ONLY. Renders contributors with `confirmed: false`, each marked
+  #   ⟡ (the repo's sign for unverified). Must be false before anything ships:
+  #   the site does not publish an affiliation its owner has not agreed to.
+  showUnconfirmed = true
+
+# The event strip and the closing block render only while `until` is in the
+# future AT BUILD TIME. The site is static, so after `until` passes they stay
+# up until the next production deploy. On 14 October 2026: push anything, or
+# redeploy from the Vercel dashboard, and they are gone.
 [params.event]
-  id    = "blackhat-2026"
-  label = "Live · Black Hat"
-  say   = "Docker, Keycard and Snyk are there 3–7 August. Bring the baseline a hard question."
+  id    = "sf-show-and-tell-2026"
+  label = "Live · New York"
+  say   = "Secure Software Factory Show and Tell, 13 October at Elsie Rooftop, during AI Engineer NYC. Bring the factory a hard question."
   cta   = "RSVP"
-  url   = "https://luma.com/insecure-wbn3"
-  until = "2026-08-08"
+  url   = "https://luma.com/keycard-rg1c"
+  # RFC 3339 with the New York offset. A bare date is parsed as midnight UTC,
+  # which is 8pm on launch night in New York: a deploy that evening would have
+  # pulled the strip and the closing block while the room was still full. The
+  # site sets no timeZone (a root key, and it would change how every date on
+  # the site is read), so the offset lives on the value. Still EDT on
+  # 14 October; US clocks change on 1 November.
+  until = "2026-10-14T06:00:00-04:00"
   # The closing block renders from the same table, so the strip and the block
   # expire together and can never disagree about the event.
   pull  = "Filing an issue is the durable way to disagree with this. Being in the room is the faster one."
-  when  = "Black Hat week · 3–7 August 2026"
-  where = "Marquee, Las Vegas"
-  what  = "Securing Your Coding Agent: The Road to the Software Factory"
-  who   = "A panel with Docker, Keycard and Snyk"
+  when  = "Tuesday 13 October 2026 · 5:30–8:30 pm · launch night, during AI Engineer NYC"
+  where = "Elsie Rooftop, 1412 Broadway, New York"
+  what  = "Secure Software Factory Show and Tell"
+  who   = "A panel of the paper's authors and the co-author of OAuth 2.0, moderated by its editor, then live demos from Keycard, Docker, Braintrust and Socket"

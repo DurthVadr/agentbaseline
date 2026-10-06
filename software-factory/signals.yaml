@@ -1,0 +1,30 @@
+# The paper's "Measuring the Factory" table (Draft 3, 5 October, lines
+# 462–466), one entry per row, in the paper's order. /reference-architecture
+# renders them as a numbered list under "Five signals to measure".
+#
+#   statement  the signal as one plain statement of what a secure factory
+#              shows (the paper's "Measure…" column, said as a fact), with
+#              the count it replaces (the "Instead of counting…" column)
+#              folded into the same line as its contrast, so each item is
+#              one sentence or two whole ones, never a fragment
+signals:
+  # d3 462
+  - statement: >-
+      The code the factory ships lowers risk across the whole system, rather
+      than just piling up pull requests and lines of code.
+  # d3 463, 451
+  - statement: >-
+      When the factory drifts from its policy, the drift is caught and
+      contained quickly. A written policy does not prove that.
+  # d3 464
+  - statement: >-
+      Tampered packages and hidden instructions are stopped before any code is
+      written, not just logged by a scan afterwards.
+  # d3 465
+  - statement: >-
+      Every running agent is watched and held to its rules from start to
+      finish, not just counted.
+  # d3 466
+  - statement: >-
+      Human review changes what the factory does, rather than signing off on
+      what it has already done.

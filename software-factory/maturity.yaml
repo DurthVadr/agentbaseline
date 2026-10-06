@@ -1,0 +1,136 @@
+# The three maturity levels, as the paper's Maturity Model describes them
+# (Draft 3, 5 October, lines 387–447). Levels 1 and 2 carry the paper's
+# names; level 3 carries the name the working group settled on, "Factory as
+# orchestrator" (the draft's heading still reads "The Orchestrated Factory").
+#
+# /reference-architecture shows one level at a time: a one-line header, then
+# the five stages down the side with what the level does at each. The stages
+# are the same at every level; what a level changes is the text beside them.
+#
+#   stages   the paper's five stages, in order (lines 344–383). `op` marks
+#            the three the paper groups as the factory's operation.
+#   levels   in order, lowest first:
+#     name     the level's name
+#     header   where the factory runs and who coordinates the agents
+#     repeat   true when the factory's operation can run more than once
+#              (line 368: "in higher maturity models")
+#     does     what the level does at each stage, keyed by stage name. A
+#              stage the level does not list is carried over from the level
+#              below, and the page renders it as carried over.
+#     guards   the parts of Figure 1 that guard each stage at this level,
+#              keyed by stage name, as keys into `parts`. Only where the
+#              paper ties that part to that stage at that level; a stage
+#              with no part is left out. Level 3 builds on level 2 (line
+#              433), so its lists keep level 2's parts. A stage the level
+#              does not list in `does` carries its parts with its text.
+#
+#   parts    every part Figure 1 draws, by key. The figure and the rail
+#            both take their names from here, so a name cannot differ
+#            between them; a rail key with no part here fails the build.
+#            Primitive names are the paper's (lines 278–339, "What it is
+#            in practice") and must match software-factory/primitives.yaml,
+#            ignoring case, or the build fails. The request that comes in and
+#            the pull request that goes out are drawn as plain text, not
+#            parts.
+#
+# Behind params.softwareFactory.showMaturity so the section can be pulled in
+# one line if it moves.
+parts:
+  spec:         { name: Spec check, primitive: Supply Chain }        # 297, 415
+  orchestrator: { name: Orchestrator, primitive: Orchestration }     # 336, 433
+  scan:         { name: Registry scan, primitive: Supply Chain }     # 297, 423
+  sandbox:      { name: Sandbox, primitive: Runtime Isolation }      # 323, 423
+  profile:      { name: Signed profile }                  # 323, 419
+  coding:       { name: Coding agent }                    # 423
+  monitor:      { name: Monitoring agent }                # 445, 534
+  plane:        { name: Agent control plane, primitive: Identity and Access }  # 284, 423
+  identities:   { name: Identities }                      # 284
+  credentials:  { name: Short-lived credentials }         # 284
+  audit:        { name: Tamper-proof audit log }          # 284, 423
+  tests:        { name: Tests, primitive: Supply Chain }  # 297, 423
+  chaos:        { name: Chaos agent }                     # 441, 528
+  egress:       { name: Egress proxy, primitive: Network }           # 310, 407, 423
+  outside:      { name: "Models, registries, tools" }     # 218, 310
+stages:
+  - name: Inputs
+  - name: Design
+  - name: Assemble
+    op: true
+  - name: Build
+    op: true
+  - name: Verify
+    op: true
+levels:
+  - name: Factory as a skill
+    header: One agent on a local machine, following a skill file.        # 397–403
+    does:
+      Inputs: >-  # 403
+        A prompt, or a prompt and a spec. Anyone with the skill can run it,
+        and a person reviews the inputs.
+      Design: >-  # 403, 407
+        Basic network rules: a proxy blocks all outbound traffic by default
+        and allows only what the agent needs, such as source control,
+        approved registries and model gateways.
+      Assemble: >-  # 411
+        Packages go through a cool-down period instead of being
+        scanned.
+      Build: >-  # 403, 411
+        One agent runs the skill in a sandbox, away from the machine’s own
+        files. It gets short-lived credentials for each task, and the audit
+        log names the agent and the person it works for.
+      Verify: >-  # 411
+        Tests run at the end of the skill, then a pull request opens.
+    guards:
+      Design: [egress]              # 403, 407
+      Build: [sandbox, plane]       # 403, 411
+      Verify: [tests]               # 411
+  - name: Factory as code
+    header: Several agents in the cloud, one after another, defined as code.   # 393, 415
+    repeat: true
+    does:
+      Inputs: >-  # 415
+        Policy decides who may start the factory, and an AI judge or a
+        scanner checks the spec.
+      Design: >-  # 415, 419
+        Allowed registries, models and resources are set ahead of time. Each
+        agent gets a signed profile of its rules, network limits and
+        tools.
+      Assemble: >-  # 423
+        Skills and packages pulled from registries are scanned for
+        malware.
+      Build: >-  # 393, 415, 419, 423
+        Several agents run in the cloud, one after another. The runtime
+        refuses an unsigned profile, credentials can be revoked at any
+        point, and every action goes to a tamper-proof audit log.
+      Verify: >-  # 423
+        Everything the agents produce is tested against the organization’s
+        security and engineering standards.
+    guards:
+      Inputs: [plane, spec]         # 415
+      Design: [egress, profile]     # 415, 419, 423
+      Assemble: [scan]              # 423
+      Build: [sandbox, egress, plane]   # 423
+      Verify: [tests]               # 423
+  - name: Factory as orchestrator
+    header: An orchestrator in the cloud that plans each run and starts the agents. Everything from level 2 stays in place.   # 393, 433–437
+    repeat: true
+    does:
+      Inputs: >-  # 433
+        An orchestrator runs a preflight check. It pulls in the latest
+        tickets, code changes and conversations, and can ask a person for
+        input.
+      Design: >-  # 433
+        The preflight decides which blueprints, models and resources each
+        agent may use.
+      Build: >-  # 437, 445
+        Sub-agents work in series or in parallel. Each coding agent has a
+        monitoring agent that corrects it when it gets stuck.
+      Verify: >-  # 441
+        A chaos agent plants bad code to prove the checks catch it. Records
+        from every run flow back to the orchestrator, so each run improves
+        the next.
+    guards:
+      Inputs: [plane, spec, orchestrator]       # 415, 433
+      Design: [egress, profile, orchestrator]   # 419, 423, 433
+      Build: [sandbox, egress, plane, monitor]  # 423, 445
+      Verify: [tests, chaos]                    # 423, 441

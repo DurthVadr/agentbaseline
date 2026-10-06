@@ -1,0 +1,23 @@
+{{/* The five signals of a secure factory, from the paper's "Measuring the
+     Factory" table, as a plain numbered list: what a secure factory shows,
+     and under it what the paper says not to count. The numerals are drawn
+     in mono; the list keeps its semantics with role=list, since
+     list-style:none drops it in Safari. Data: software-factory/signals.yaml. */}}
+{{- $signals := hugo.Data.sfsignals.signals }}
+{{- if not $signals }}{{ errorf "software-factory/signals.yaml: no `signals` list — the page would render the heading over an empty list" }}{{ end }}
+<style>
+  /* The five signals. Scoped to ol.signals. */
+  ol.signals { list-style:none; margin:4px 0 0; padding:0; }
+  ol.signals li.sig { display:grid; grid-template-columns:34px minmax(0,1fr);
+    padding:16px 0 17px; }
+  ol.signals li.sig + li.sig { border-top:1px solid var(--line); }
+  ol.signals .n { font-family:var(--mono); font-size:13px; line-height:1.6rem;
+    color:var(--accent); padding-top:1px; }
+  ol.signals p { margin:0; grid-column:2; }
+  ol.signals .st { font-size:17.5px; line-height:1.55; color:var(--ink); }
+</style>
+<ol class="signals" role="list">
+{{- range $i, $s := $signals }}
+  <li class="sig"><span class="n" aria-hidden="true">{{ add $i 1 }}</span><p class="st">{{ $s.statement }}</p></li>
+{{- end }}
+</ol>

@@ -1,0 +1,26 @@
+# Contributors to the reference architecture (the software factory paper). Same rules as
+# whitepaper/contributors.yaml: people, not logos; surname order; nothing is
+# published with `confirmed: false`. Every entry below is unconfirmed — the
+# names come from the working-group call recaps and the launch plan, and the
+# sources disagree on two affiliations (noted per entry). Confirm each person's
+# name and affiliation with them before launch.
+#
+# Also in the working-group recaps but not on this list: Andrew McMahon
+# (Barclays), asked to revise the primitives section, and Arjun Ramakrishnan
+# (Mastercard), in later sessions. Confirm whether they are authors.
+statement: >-
+  The reference architecture was drafted by a working group building on
+  Agent Baseline. Its contributors are credited here as each confirms their
+  name and affiliation.
+
+contributors:
+  - { name: Eli Aleyner,     sortkey: Aleyner,     affiliation: Docker,         confirmed: false }
+  - { name: Jet Anderson,    sortkey: Anderson,    affiliation: GEICO,          confirmed: false, note: "launch plan and mockup say GEICO; the working-group recaps say Mile Two" }
+  - { name: Michael Davis,   sortkey: Davis,       affiliation: J.P. Morgan,    confirmed: false }
+  - { name: Ranti Familusi,  sortkey: Familusi,    affiliation: Docker,         confirmed: false }
+  - { name: Allie Howe,      sortkey: Howe,        affiliation: Keycard,        confirmed: false }
+  - { name: Ian Livingstone, sortkey: Livingstone, affiliation: Keycard,        confirmed: false }
+  - { name: William Manning, sortkey: Manning,     affiliation: Docker,         confirmed: false }
+  - { name: Ahmad Nassri,    sortkey: Nassri,      affiliation: Socket,         confirmed: false }
+  - { name: Aaron Stanley,   sortkey: Stanley,     affiliation: Secure Theory,  confirmed: false, note: "recaps say Secure Theory; the launch plan says former CISO, dbt Labs" }
+  - { name: Ricardo Torres,  sortkey: Torres,      affiliation: Keycard,        confirmed: false, note: "in the mockup only; not in the recaps or the launch plan" }

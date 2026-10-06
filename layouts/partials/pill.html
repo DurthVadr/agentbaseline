@@ -1,0 +1,15 @@
+{{- /* The one tinted block in the chrome is the site's ask, on every page.
+
+     It follows params.softwareFactory: while the table is set, the ask is the
+     reference architecture, "New" while launchUntil is still ahead; remove
+     the table and the pill returns to the baseline's comment line, so the bar
+     never points at a page that is not there. The copy lives here once —
+     typed into three layouts it would drift. It also carries `right`, the
+     bar's margin-left:auto: the published date that used to sit there named
+     one paper's date, and there are two papers now. */ -}}
+{{- with .Site.Params.softwareFactory -}}
+{{- $new := true }}{{ if .launchUntil }}{{ $new = lt now.Unix (time .launchUntil).Unix }}{{ end -}}
+<a class="closes right" href="/reference-architecture">{{ if $new }}New · {{ end }}Reference architecture</a>
+{{- else -}}
+<a class="closes right" href="{{ .Site.Params.repo }}/issues">Comment closes {{ .Site.Params.commentsUntil }}</a>
+{{- end -}}

@@ -16,9 +16,10 @@
        2. Only real pages are listed. Taxonomy and term pages are filtered by
           kind, not by trusting that they are switched off elsewhere — this
           file stays right even if someone turns them back on.
-       3. The white paper is listed. It is the artifact the site exists to
-          hand over, it is linked from both pages, and the built-in template
-          cannot see it because it is a static file rather than a page.
+       3. Both papers are listed, each under the same guard as its download
+          link. They are the artifacts the site exists to hand over, and the
+          built-in template cannot see them because they are static files
+          rather than pages.
 
        No lastmod, changefreq or priority: the content carries no meaningful
        dates, and a sitemap that states a date it invented is worse than one
@@ -43,4 +44,9 @@
     <loc>{{ "whitepaper.pdf" | absURL }}</loc>
   </url>
   {{- end }}
+  {{- with site.Params.softwareFactory }}{{ if fileExists (printf "static/%s" .pdf) }}
+  <url>
+    <loc>{{ .pdf | absURL }}</loc>
+  </url>
+  {{- end }}{{ end }}
 </urlset>

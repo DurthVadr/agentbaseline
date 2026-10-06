@@ -9,6 +9,16 @@ never reused.
 ## [Unreleased]
 
 ### Added
+- The reference architecture, which applies the baseline to the software factory: its own page at
+  `/reference-architecture` in the homepage's shape — the paper's front matter and its own
+  sentence mapping the six outcomes to the factory, then the five signals a secure factory
+  shows, the workflow figure, the three maturity levels drawn as a curve, the downloads and
+  the authors — pointing at the paper rather than retelling it; a section on the homepage; a second PDF under Artifacts
+  (`/software-factory.pdf`, source in `/software-factory`); feedback filed through an issue
+  form that carries the `software-factory` label. The bar's pill now points at it; comment on
+  the baseline closed on 30 September 2026. CONTRIBUTING says how to comment on it: by issue,
+  naming a primitive or maturity level. The second credits line renders only confirmed
+  contributors and falls back to a working-group statement. *(2026-10-06)*
 - The community Slack is linked from the utility bar on every page and, on the homepage,
   from the review section, with the invite address in one place in `hugo.toml`.
   CONTRIBUTING and GOVERNANCE say what belongs in Slack and what belongs in an issue, and

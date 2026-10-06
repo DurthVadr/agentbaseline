@@ -1,0 +1,24 @@
+#!/usr/bin/env python3
+"""Refuse the stand-in PDF.
+
+static/software-factory.pdf began life as a one-page labelled placeholder so the
+site's fileExists-guarded rows would render while the layout was built. A
+placeholder that ships is worse than a missing file: the links are guarded and
+disappear with the file, but nothing guards against the wrong file. This runs
+anywhere Python runs and takes no time; it knows the stand-in by its digest.
+"""
+import hashlib, pathlib, sys
+
+ROOT = pathlib.Path(__file__).resolve().parents[1]
+PDF = ROOT / "static" / "software-factory.pdf"
+STANDIN = "9375b15aa25002d9deda10138e827a6be2fb1d7e7b83971c67323ca46166a9ae"
+
+if not PDF.exists():
+    print("sf-pdf: static/software-factory.pdf absent — the PDF links are guarded and will not render")
+    sys.exit(0)
+digest = hashlib.sha256(PDF.read_bytes()).hexdigest()
+if digest == STANDIN:
+    sys.exit("static/software-factory.pdf is the spike stand-in (NOT FOR PUBLICATION). "
+             "Replace it with the published PDF, or delete it — the PDF links are "
+             "fileExists-guarded and disappear with it.")
+print(f"sf-pdf: ok  sha256 {digest[:12]}…  {PDF.stat().st_size:,} bytes")

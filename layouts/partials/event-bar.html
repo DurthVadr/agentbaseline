@@ -1,13 +1,16 @@
 {{/* A time-bound strip above the masthead, for the week the framework gets
      argued with in person.
 
-     It expires by itself: `until` is compared against build time, so the bar
-     stops rendering the day after the event rather than waiting for someone to
+     It expires on the next build after `until`: the date is compared against
+     build time, so the bar cannot outlive a deploy made the day after the
+     event — but a static site does not rebuild on its own, and a stale "live"
+     banner is worse than never having had one. Redeploy the day after; see
+     hugo.toml. It stops rendering then rather than waiting for someone to
      remember. A stale "live at" banner is worse than never having had one, and
      nobody ever remembers.
 
      Deliberately not accent-filled. The utility bar already carries one tinted
-     chip (comment closes), and two tinted blocks in the same viewport fight.
+     block (the pill, a.closes), and two tinted blocks in the same viewport fight.
      Here the accent is spent on the registration mark and the link only; the
      strip itself is the page's wash with a hairline under it — the same
      treatment the questions band and the figure plate use. */}}
@@ -27,7 +30,7 @@
 
   /* The event strip. Datum-sheet grammar: a registration mark, a mono label with
      the section-mark's tracking, a hairline beneath. No fill and no glow — the
-     utility bar already spends the accent on the comment-closes chip, and two
+     utility bar already spends the accent on the pill (a.closes), and two
      tinted blocks in one viewport compete. Sits above the sticky masthead on
      purpose: it should scroll away, not follow you down the page. */
   .eventbar { background:var(--wash); border-bottom:1px solid var(--line);

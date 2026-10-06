@@ -105,7 +105,8 @@
   .utility .pub { font-family:var(--labelfont); font-size:11.5px;
     letter-spacing:.07em; text-transform:uppercase; color:var(--soft); }
   .utility .pub .k { color:var(--faint); margin-right:2px; }
-  /* The one tinted block in the chrome: the deadline is the site's ask.
+  /* The one tinted block in the chrome: the pill is the site's ask — today the
+     new paper.
      Soft treatment — accent text on a translucent wash of itself. */
   .utility a.closes, .utility a.closes:visited {
     background:color-mix(in srgb, var(--accent) 12%, transparent);
@@ -224,8 +225,7 @@
     </details>
     <span class="crumb"><a class="mast" href="/">Agent Baseline</a>
       <span class="sep">/</span> <span class="here">Not found</span></span>
-    <span class="right pub"><span class="k">Published</span> {{ .Site.Params.published }}</span>
-    <a class="closes" href="{{ .Site.Params.repo }}/issues">Comment closes {{ .Site.Params.commentsUntil }}</a>
+    {{ partial "pill.html" . }}
     {{ partial "artifacts-menu.html" . }}
     <span class="ver">v{{ .Site.Params.version }}</span>
     {{/* aria-pressed is corrected by theme.js as soon as the body parses — the
@@ -254,11 +254,12 @@
     published.</p>
     {{/* The count is read from the catalogue, like every other number on the
          site, so it cannot drift from controls.yaml. */}}
-    <p class="note">Everything here is two pages: the overview, and the
-    {{ len $cat.controls }} controls behind the six outcomes.</p>
+    <p class="note">Everything here is three pages: the overview, the
+    {{ len $cat.controls }} controls behind the six outcomes, and the reference architecture.</p>
     <p class="ctas">
       <a href="/">Go to the overview</a> ·
-      <a href="/controls">Browse the controls</a>
+      <a href="/controls">Browse the controls</a> ·
+      <a href="/reference-architecture">Read the reference architecture</a>
       {{ if fileExists "static/whitepaper.pdf" }}· <a href="/whitepaper.pdf">Download the PDF</a>{{ end }}
     </p>
   </div>

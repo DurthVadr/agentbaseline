@@ -1,0 +1,227 @@
+{{/* The three maturity levels, one at a time. A factory runs the same five
+     stages at every level; a level changes where it runs, who coordinates
+     the agents, and what guards each stage. So the drawing is the stages,
+     drawn once, down the side, and a level is the text beside them.
+
+     Above the stages, three steps that climb from left to right, one per
+     level, lowest first. With static/js/tabs.js they are the level tabs and
+     one level shows at a time. Without the script (and in print) the steps
+     stay hidden and the three levels show stacked, each under its own
+     heading.
+
+     Each level is a section: its heading, a one-line header (where the
+     factory runs, who coordinates), and an ordered list of the five stages.
+     Assemble, Build and Verify sit in a nested list, the factory's
+     operation; at the levels where it can run more than once a dashed loop
+     runs from Verify back to Assemble. A line the level sets is new and
+     drawn in the accent with a "New" tag; a stage the level does not set
+     keeps the text of the level below, drawn quiet and tagged with the level
+     it comes from. The pull request that leaves the factory is the same at
+     every level, so it is written once, under the levels, as the foot of
+     the rail.
+
+     Data: software-factory/maturity.yaml. Real text throughout, no SVG, so
+     it reflows at any width. All of this section's CSS is in the <style>
+     below, scoped to .mx. */}}
+{{- $m := hugo.Data.maturity }}
+{{- $levels := $m.levels }}
+{{- $stages := $m.stages }}
+{{- if ne (len $stages) 5 }}{{ errorf "software-factory/maturity.yaml: `stages` must list the paper's five stages, Inputs to Verify" }}{{ end }}
+<style>
+  /* Three maturity levels. Scoped to .mx. */
+  .mx { margin-top:10px; }
+  .mx-fig { margin:0; }
+  /* Captioned the way Figure 1 is. */
+  .mx-fig > figcaption { margin-top:22px; font-size:15px; line-height:1.55;
+    color:var(--soft); }
+  .mx-fig > figcaption .fn { font-family:var(--labelfont); font-weight:500;
+    font-size:11.5px; letter-spacing:.1em; text-transform:uppercase;
+    color:var(--ink); margin-right:8px; }
+
+  /* The steps: three blocks on one baseline, each 24px higher than the one
+     before, so the row climbs to the right. The selected step is filled
+     with the accent and its words take the paper colour. */
+  .mx-steps { display:grid; grid-template-columns:repeat(3,minmax(0,1fr));
+    border-bottom:1px solid var(--faint); margin-bottom:26px; }
+  .mx-steps[hidden] { display:none; }
+  .mx-step { appearance:none; -webkit-appearance:none; margin:0; font:inherit;
+    text-align:left; cursor:pointer; min-width:0; position:relative;
+    display:flex; flex-direction:column; gap:3px;
+    padding:10px 12px 16px; background:var(--wash); color:var(--soft);
+    border:0; border-top:2px solid var(--faint); border-radius:0; }
+  .mx-step:nth-child(1) { margin-top:48px; }
+  .mx-step:nth-child(2) { margin-top:24px; }
+  .mx-step + .mx-step { border-left:1px solid var(--faint); }
+  .mx-step .n { font-family:var(--mono); font-size:12px; line-height:1.4;
+    letter-spacing:.02em; }
+  .mx-step .nm { font-family:var(--labelfont); font-weight:500; font-size:12.5px;
+    line-height:1.35; letter-spacing:.07em; text-transform:uppercase;
+    color:var(--ink); }
+  .mx-step:hover { background:var(--line); }
+  .mx-step[aria-selected="true"] { background:var(--accent); border-top-color:var(--accent);
+    color:var(--paper); cursor:default; }
+  .mx-step[aria-selected="true"] .nm { color:var(--paper); }
+  .mx-step:focus-visible { outline:2px solid var(--link); outline-offset:2px; z-index:1; }
+  .mx-step[aria-selected="true"]:focus-visible { outline-color:var(--ink); }
+  /* Phones: the steps keep climbing; the names drop the caps so the longest
+     word fits a third of a 320px screen. */
+  @media (max-width:479px) {
+    .mx-step { padding:8px 8px 12px; }
+    .mx-step:nth-child(1) { margin-top:36px; }
+    .mx-step:nth-child(2) { margin-top:18px; }
+    .mx-step .nm { font-family:var(--head); font-size:12.5px; letter-spacing:0;
+      text-transform:none; hyphens:auto; }
+  }
+
+  /* A level: its heading, its header line, its stages. */
+  .mx .lvp + .lvp { margin-top:52px; }
+  .mx.is-tabbed .lvp + .lvp { margin-top:0; }
+  .mx .lvp:focus-visible { outline:2px solid var(--link); outline-offset:6px; }
+  .mx .lvp h3 { margin:0 0 6px; font-family:var(--labelfont); font-weight:500;
+    font-size:13.5px; line-height:1.4; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--ink); display:flex; align-items:baseline; gap:10px; }
+  .mx .lvp h3 .n { font-family:var(--mono); font-size:12px; letter-spacing:.02em;
+    color:var(--accent); text-transform:none; }
+  .mx.is-tabbed .lvp h3 { position:absolute; width:1px; height:1px; padding:0;
+    margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0; }
+  .mx .lead { font-size:19px; line-height:1.5; color:var(--ink); margin:0 0 18px; }
+
+  /* The rail. Every row is a grid: the node column (with the line, the
+     loop and the node), the stage name, and what the level does there. The
+     line is a background on the list, from the first node down. */
+  .mx ol.rail, .mx ol.ops { list-style:none; margin:0; padding:0; }
+  .mx ol.rail { background:linear-gradient(var(--faint),var(--faint)) 31.5px 25px / 1px 100% no-repeat; }
+  .mx li.st { position:relative; display:grid;
+    grid-template-columns:44px 104px minmax(0,1fr); padding:12px 14px 12px 0; }
+  .mx .st-n { grid-column:2; font-family:var(--labelfont); font-weight:500;
+    font-size:12px; line-height:1.6rem; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--ink); }
+  .mx .st-t { grid-column:3; margin:0; font-size:16px; line-height:1.6;
+    color:var(--soft); }
+  /* Level 1 has no level below it, so its lines are plain ink with no tag.
+     Above it, a line the level adds is ink with an accent "New" tag, and a
+     line carried over stays quiet with its level named: the accent marks
+     only what changed, so the rail never turns wholly accent. */
+  .mx .is-base .st-t, .mx .is-new .st-t { color:var(--ink); }
+  .mx .is-new .tag { color:var(--accent); }
+  .mx .is-base .nd { border-color:var(--ink); background:var(--ink); }
+  .mx .nd { position:absolute; left:26.5px; top:19.5px; width:11px; height:11px;
+    border-radius:50%; border:1.5px solid var(--faint); background:var(--paper); }
+  .mx .is-new .nd { border-color:var(--accent); background:var(--accent); }
+  .mx .tag { display:inline-block; font-family:var(--labelfont); font-weight:500;
+    font-size:10.5px; line-height:1; letter-spacing:.08em; text-transform:uppercase;
+    padding:3px 5px 2px; margin-right:4px; vertical-align:2px; border-radius:2px;
+    border:1px solid currentColor; }
+  .mx .is-old .tag { color:var(--faint); }
+
+  /* The parts that guard a stage, named as Figure 1 names them, each in a
+     small box like the figure's. A part the stage already had at the level
+     below is drawn quiet, so switching level shows which parts arrive. */
+  .mx ul.pt { grid-column:3; list-style:none; margin:8px 0 0; padding:0;
+    display:flex; flex-wrap:wrap; gap:6px; }
+  .mx ul.pt li { font-family:var(--head); font-weight:600; font-size:13px;
+    line-height:1.3; color:var(--ink); padding:3px 8px 3px; border-radius:3px;
+    border:1px solid var(--faint); background:var(--paper); }
+  .mx ul.pt li.was { font-weight:500; color:var(--soft); border-color:var(--line); }
+
+  /* The factory's operation: Assemble, Build and Verify in a dashed box,
+     labelled; where it can repeat, a dashed loop on the left runs from
+     Verify back up into Assemble. */
+  .mx li.op { position:relative; margin:6px 0; padding:8px 0 4px; }
+  .mx li.op::before { content:""; position:absolute; inset:0; pointer-events:none;
+    border:1px dashed var(--faint); border-radius:6px; }
+  .mx .op-l { display:flex; justify-content:space-between; gap:12px;
+    padding:0 14px 0 44px; font-family:var(--labelfont); font-weight:500;
+    font-size:11px; letter-spacing:.09em; text-transform:uppercase; color:var(--faint); }
+  .mx .rep .ops li.st::after { content:""; position:absolute; left:13px; width:12px;
+    border:0 dashed var(--faint); border-left-width:1.25px; pointer-events:none; }
+  .mx .rep .ops li.st:first-child::after { top:25px; bottom:0;
+    border-top-width:1.25px; border-top-left-radius:8px; }
+  .mx .rep .ops li.st:nth-child(2)::after { top:0; bottom:0; }
+  .mx .rep .ops li.st:last-child::after { top:0; height:25px;
+    border-bottom-width:1.25px; border-bottom-left-radius:8px; }
+  .mx .rep .ops li.st:first-child::before { content:""; position:absolute;
+    left:20px; top:21.5px; border-left:6px solid var(--faint);
+    border-block:3.5px solid transparent; }
+
+  /* The foot of the rail: the pull request leaving the factory. */
+  .mx .out { position:relative; display:grid; grid-template-columns:44px minmax(0,1fr);
+    margin:0; padding:12px 0 0; font-size:16px; line-height:1.6; color:var(--ink); }
+  .mx .out > span { grid-column:2; }
+  .mx .out::before { content:""; position:absolute; left:31.5px; top:0; height:20px;
+    width:1px; background:var(--faint); }
+  .mx .out::after { content:""; position:absolute; left:27px; top:19px;
+    border-top:7px solid var(--faint); border-inline:5px solid transparent; }
+  .mx:not(.is-tabbed) .out { margin-top:28px; }
+  .mx:not(.is-tabbed) .out::before { display:none; }
+
+  /* Phones: the stage name sits over its text. */
+  @media (max-width:559px) {
+    .mx li.st { grid-template-columns:44px minmax(0,1fr); padding-right:12px; }
+    .mx .st-t, .mx ul.pt { grid-column:2; }
+    .mx .op-l { padding-right:12px; }
+  }
+
+  /* Print shows every level, as without the script. */
+  @media print {
+    .mx-steps { display:none; }
+    .mx .lvp[hidden] { display:block; }
+    .mx .lvp + .lvp, .mx.is-tabbed .lvp + .lvp { margin-top:40px; }
+    .mx.is-tabbed .lvp h3 { position:static; width:auto; height:auto; margin:0 0 6px;
+      overflow:visible; clip:auto; white-space:normal; }
+  }
+</style>
+<figure class="mx-fig">
+<div class="mx" data-tabs>
+  <div class="mx-steps" data-tablist aria-label="Maturity levels" hidden>
+  {{- range $i, $l := $levels }}{{ $n := add $i 1 }}
+    <button type="button" class="mx-step" id="lv-tab-{{ $n }}" data-tab aria-controls="level-{{ $n }}"><span class="n">Level {{ $n }}</span><span class="nm">{{ $l.name }}</span></button>
+  {{- end }}
+  </div>
+  {{- $carry := dict }}
+  {{- $prev := dict }}
+  {{- range $i, $l := $levels }}{{ $n := add $i 1 }}
+  <section class="lvp{{ if $l.repeat }} rep{{ end }}" id="level-{{ $n }}" aria-labelledby="level-{{ $n }}-h">
+    <h3 id="level-{{ $n }}-h"><span class="n">Level {{ $n }}</span> {{ $l.name }}</h3>
+    <p class="lead">{{ $l.header }}</p>
+    {{- $rows := slice }}
+    {{- range $stages }}
+      {{- $set := index $l.does .name }}
+      {{- if $set }}
+        {{- $keys := index ($l.guards | default dict) .name | default slice }}
+        {{- $carry = merge $carry (dict .name (dict "text" $set "lv" $n "keys" $keys)) }}
+      {{- end }}
+      {{- $c := index $carry .name }}
+      {{- if not $c }}{{ errorf "software-factory/maturity.yaml: level %d sets nothing for %s and has no level below to carry it from" $n .name }}{{ end }}
+      {{- /* The parts that guard the stage, by the names Figure 1 draws. A
+             part the stage did not have at the level below is "new". */}}
+      {{- $sn := .name }}
+      {{- $was := index $prev .name | default slice }}
+      {{- $parts := slice }}
+      {{- range $c.keys }}
+        {{- $pt := index $m.parts . }}
+        {{- if not $pt }}{{ errorf "software-factory/maturity.yaml: level %d guards %s with %q, which is not in `parts`" $n $sn . }}{{ end }}
+        {{- $parts = $parts | append (dict "name" $pt.name "new" (or (eq $n 1) (not (in $was .)))) }}
+      {{- end }}
+      {{- $rows = $rows | append (dict "name" .name "op" .op "text" $c.text "from" $c.lv "new" (eq $c.lv $n) "base" (eq $n 1) "parts" $parts) }}
+    {{- end }}
+    {{- range $stages }}{{ $prev = merge $prev (dict .name (index $carry .name).keys) }}{{ end }}
+    <ol class="rail">
+    {{- range where $rows "op" "!=" true }}{{ partial "mx-row.html" . }}{{ end }}
+      <li class="op"><span class="op-l"><span>Factory operation</span>{{ if $l.repeat }}<span>Can repeat</span>{{ end }}</span>
+        <ol class="ops">
+        {{- range where $rows "op" true }}{{ partial "mx-row.html" . }}{{ end }}
+        </ol>
+      </li>
+    </ol>
+  </section>
+  {{- end }}
+  <p class="out"><span>A pull request goes to a person, who reviews it and decides whether to merge.</span></p>
+</div>
+<figcaption><span class="fn">Figure 2</span> The five stages at each level, with the parts of Figure 1 that guard each one.</figcaption>
+</figure>
+<script src="/js/tabs.js" defer></script>
+{{- define "partials/mx-row.html" }}
+<li class="st {{ if .base }}is-base{{ else if .new }}is-new{{ else }}is-old{{ end }}"><span class="nd" aria-hidden="true"></span><span class="st-n">{{ .name }}</span><p class="st-t">{{ if .base }}{{ else if .new }}<span class="tag">New</span> {{ else }}<span class="tag">From level {{ .from }}</span> {{ end }}{{ .text }}</p>
+{{- with .parts }}<ul class="pt" aria-label="Parts">{{ range . }}<li{{ if not .new }} class="was"{{ end }}>{{ .name }}</li>{{ end }}</ul>{{ end }}</li>
+{{- end }}

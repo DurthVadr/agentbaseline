@@ -1,0 +1,29 @@
+# The five primitives of the software factory reference architecture, and the
+# Agent Baseline outcomes each supports — from the paper's primitive tables.
+# The homepage renders this list; edit here, not in the template.
+primitives:
+  - name: Identity and access
+    icon: key
+    outcomes: [DIS, AUT, OBS, RES]
+    requirement: Know who called the factory and who each agent acts for.
+    detail: Identities for every agent and user, short-lived task-scoped credentials, and an audit log the agent can’t alter.
+  - name: Supply chain
+    icon: package
+    outcomes: [DIS, VAL]
+    requirement: Admit only vetted inputs, packages, skills and models.
+    detail: A firewall or secure registry for packages and skills, an approved list of MCPs and models, and tests on PRDs, prompts and generated code.
+  - name: Network
+    icon: globe-simple
+    outcomes: [DIS, CON, OBS, RES]
+    requirement: Limit what each agent can reach.
+    detail: A default-deny egress proxy for inference, registries, APIs and MCPs, no inbound route to the factory or any agent, and traffic monitored for drift.
+  - name: Runtime isolation
+    icon: bounding-box
+    outcomes: [AUT, CON, OBS, RES]
+    requirement: Contain each agent and enforce policy at the boundary.
+    detail: A sandbox built from a hardened image, with the agent’s profile as a signed layer, scoped file access and no view of the host.
+  - name: Orchestration
+    icon: tree-structure
+    outcomes: [DIS, VAL, OBS, RES]
+    requirement: Assemble each run from approved parts, with one kill switch.
+    detail: An orchestrator runs preflight to choose blueprints, models and resources, and gathers telemetry across every agent.
