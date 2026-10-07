@@ -127,7 +127,7 @@ disableKinds = ["taxonomy", "term", "RSS", "section"]
 [params.softwareFactory]
   # The one paragraph that says what the paper is, shown on the homepage and
   # at the top of its page. One value, so the two cannot drift.
-  summary       = "The reference architecture applies Agent Baseline to the software factory. A software factory is a system of AI agents that takes a ticket or a request and turns it into tested code, ready for a person to review and merge. The paper describes three maturity levels for building one, from a single agent to a factory run by an orchestrator."
+  summary       = "A software factory uses AI agents to turn a ticket or request into a tested pull request for human review. This reference architecture applies Agent Baseline’s security controls to that workflow as it grows from a local agent to a cloud factory coordinated by an orchestrator."
   pdf           = "software-factory.pdf"
   source        = "software-factory"
   # The paper's markdown inside `source`. Checked with fileExists like `pdf`,
@@ -148,7 +148,7 @@ disableKinds = ["taxonomy", "term", "RSS", "section"]
   # ⟡ SPIKE ONLY. Renders contributors with `confirmed: false`, each marked
   #   ⟡ (the repo's sign for unverified). Must be false before anything ships:
   #   the site does not publish an affiliation its owner has not agreed to.
-  showUnconfirmed = true
+  showUnconfirmed = false
 
 # The event strip and the closing block render only while `until` is in the
 # future AT BUILD TIME. The site is static, so after `until` passes they stay

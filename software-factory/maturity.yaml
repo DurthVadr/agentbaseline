@@ -62,49 +62,49 @@ stages:
     op: true
 levels:
   - name: Factory as a skill
-    header: One agent on a local machine, following a skill file.        # 397–403
+    header: One local agent follows a workflow in a skill file.        # 397–403
     does:
       Inputs: >-  # 403
-        A prompt, or a prompt and a spec. Anyone with the skill can run it,
-        and a person reviews the inputs.
+        A person reviews the prompt and any accompanying spec. Anyone with
+        access to the skill can start the factory.
       Design: >-  # 403, 407
-        Basic network rules: a proxy blocks all outbound traffic by default
-        and allows only what the agent needs, such as source control,
-        approved registries and model gateways.
+        An egress proxy blocks outbound traffic by default and permits only
+        the connections the agent needs, such as source control,
+        approved registries, and model gateways.
       Assemble: >-  # 411
-        Packages go through a cool-down period instead of being
-        scanned.
+        The factory waits through a package cool-down period before using
+        new releases; this level does not scan packages.
       Build: >-  # 403, 411
-        One agent runs the skill in a sandbox, away from the machine’s own
-        files. It gets short-lived credentials for each task, and the audit
-        log names the agent and the person it works for.
+        The agent runs the skill in a sandbox with restricted access to host
+        files. It receives short-lived task credentials, and the audit log
+        identifies both the agent and the person it acts for.
       Verify: >-  # 411
-        Tests run at the end of the skill, then a pull request opens.
+        The skill runs tests before opening a pull request for human review.
     guards:
       Design: [egress]              # 403, 407
       Build: [sandbox, plane]       # 403, 411
       Verify: [tests]               # 411
   - name: Factory as code
-    header: Several agents in the cloud, one after another, defined as code.   # 393, 415
+    header: A workflow defined in code runs several cloud agents in sequence.   # 393, 415
     repeat: true
     does:
       Inputs: >-  # 415
-        Policy decides who may start the factory, and an AI judge or a
-        scanner checks the spec.
+        The agent control plane enforces policy on who can start the factory.
+        An AI judge or scanner checks the spec.
       Design: >-  # 415, 419
-        Allowed registries, models and resources are set ahead of time. Each
-        agent gets a signed profile of its rules, network limits and
-        tools.
+        The team approves registries, models, and resources ahead of time.
+        Each agent receives a signed profile that defines its rules,
+        network limits, and tools.
       Assemble: >-  # 423
-        Skills and packages pulled from registries are scanned for
-        malware.
+        The factory scans skills and packages from registries for malware
+        before agents use them.
       Build: >-  # 393, 415, 419, 423
-        Several agents run in the cloud, one after another. The runtime
-        refuses an unsigned profile, credentials can be revoked at any
-        point, and every action goes to a tamper-proof audit log.
+        Cloud agents run in sequence under signed profiles; the runtime rejects
+        unsigned profiles. The control plane supports credential revocation
+        at any point and records each action in an audit log agents can’t alter.
       Verify: >-  # 423
-        Everything the agents produce is tested against the organization’s
-        security and engineering standards.
+        The factory tests agent output against the organization’s security
+        and engineering standards.
     guards:
       Inputs: [plane, spec]         # 415
       Design: [egress, profile]     # 415, 419, 423
@@ -112,23 +112,22 @@ levels:
       Build: [sandbox, egress, plane]   # 423
       Verify: [tests]               # 423
   - name: Factory as orchestrator
-    header: An orchestrator in the cloud that plans each run and starts the agents. Everything from level 2 stays in place.   # 393, 433–437
+    header: A cloud orchestrator plans each run and coordinates the agents, retaining the controls from level 2.   # 393, 433–437
     repeat: true
     does:
       Inputs: >-  # 433
-        An orchestrator runs a preflight check. It pulls in the latest
-        tickets, code changes and conversations, and can ask a person for
-        input.
+        Before starting a run, the orchestrator gathers the latest tickets,
+        code changes, and conversations for a preflight check. It can ask
+        a person for more input.
       Design: >-  # 433
-        The preflight decides which blueprints, models and resources each
-        agent may use.
+        During preflight, the orchestrator selects the blueprints, models,
+        and resources each agent can use.
       Build: >-  # 437, 445
-        Sub-agents work in series or in parallel. Each coding agent has a
-        monitoring agent that corrects it when it gets stuck.
+        The orchestrator runs sub-agents in sequence or in parallel. A monitoring
+        agent watches each coding agent and intervenes when it gets stuck.
       Verify: >-  # 441
-        A chaos agent plants bad code to prove the checks catch it. Records
-        from every run flow back to the orchestrator, so each run improves
-        the next.
+        A chaos agent injects faulty code to test whether the checks catch it.
+        The orchestrator collects records from each run to inform later runs.
     guards:
       Inputs: [plane, spec, orchestrator]       # 415, 433
       Design: [egress, profile, orchestrator]   # 419, 423, 433

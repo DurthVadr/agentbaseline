@@ -27,7 +27,7 @@
 {{- $l3 := index hugo.Data.maturity.levels 2 }}
 {{- $l3name := "" }}{{ with $l3 }}{{ $l3name = printf ", %s" .name }}{{ end }}
 {{- $title := printf "Figure 1: the software factory at level 3%s" $l3name }}
-{{- $desc := printf "A request (a prompt, ticket or spec) enters the software factory at the %s, which sits on the factory boundary. Inside the boundary the work moves through five stages. Inputs: the %s (%s). Design: the %s (%s), which starts the agents. Assemble: the %s (%s). Build: a stack of %s (%s), each holding a %s, a %s and a %s. Verify: the %s (%s); a %s plants bad code in the work to prove the tests catch it. The %s (%s) sits on the factory boundary, between the sandboxes and the %s outside; what comes back from registries passes the %s on its way to the sandboxes. The %s (%s) holds the agents' identities, grants their short-lived credentials and keeps the tamper-proof audit log. A pull request leaves the factory for a person, who merges it."
+{{- $desc := printf "A request (a prompt, ticket or spec) enters the software factory at the %s, which sits on the factory boundary. Inside the boundary, controls check inputs and govern how agents build and verify code. Inputs: the %s (%s). Design: the %s (%s), which starts the agents. Assemble: the %s (%s). Build: a stack of %s (%s), each holding a %s, a %s and a %s. Verify: the %s (%s); a %s injects faulty code to test whether the checks catch it. The %s (%s) sits on the factory boundary, between the sandboxes and the %s outside; what comes back from registries passes the %s on its way to the sandboxes. The %s (%s) holds the agents' identities, grants their short-lived credentials and keeps the tamper-proof audit log. A pull request leaves the factory for a person to review and decide whether to merge."
       (lower $P.spec.name) (lower $P.spec.name) $P.spec.primitive (lower $P.orchestrator.name) $P.orchestrator.primitive (lower $P.scan.name) $P.scan.primitive "sandboxes" $P.sandbox.primitive (lower $P.coding.name) (lower $P.monitor.name) (lower $P.profile.name) (lower $P.tests.name) $P.tests.primitive (lower $P.chaos.name) (lower $P.egress.name) $P.egress.primitive (lower $P.outside.name) (lower $P.scan.name) (lower $P.plane.name) $P.plane.primitive }}
 <style>
   /* Figure 1. Scoped to .rh; colours are the page's tokens. */
@@ -104,7 +104,7 @@
 <line class="fw" x1="832" y1="162" x2="832" y2="197" marker-end="url(#f1w-ar)"/>
 <line class="fw" x1="886" y1="226" x2="1086" y2="226" marker-end="url(#f1w-ar)"/>
 <text class="nm" x="918" y="214">Pull request</text>
-<text class="sub" x="918" y="250">to a person, who merges it</text>
+<text class="sub" x="918" y="250">for human review</text>
 <rect class="bx" x="444" y="140" width="112" height="48" rx="4"/>
 <text class="nm" x="500.0" y="160" text-anchor="middle">{{ $P.scan.name }}</text>
 <text class="pr" x="500.0" y="177" text-anchor="middle">{{ $P.scan.primitive | upper }}</text>
@@ -182,7 +182,7 @@
 <line class="fw" x1="295" y1="291" x2="277" y2="291" marker-end="url(#f1n-ar)"/>
 <line class="fw" x1="36" y1="751" x2="36" y2="809" marker-end="url(#f1n-ar)"/>
 <text class="nm" x="14" y="829">Pull request</text>
-<text class="sub" x="14" y="847">to a person, who merges it</text>
+<text class="sub" x="14" y="847">for human review</text>
 </svg>
 <figcaption><span class="fn">Figure 1</span> The software factory at level 3{{ $l3name }}. Levels 1 and 2 use fewer of these parts.</figcaption>
 </figure>

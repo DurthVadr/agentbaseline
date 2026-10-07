@@ -10,21 +10,21 @@
 signals:
   # d3 462
   - statement: >-
-      The code the factory ships lowers risk across the whole system, rather
-      than just piling up pull requests and lines of code.
+      Measure whether the code the factory produces reduces risk across the
+      system, beyond the number of pull requests or lines of code.
   # d3 463, 451
   - statement: >-
-      When the factory drifts from its policy, the drift is caught and
-      contained quickly. A written policy does not prove that.
+      Track how quickly the factory detects and contains policy drift.
+      Check whether it enforces the policy during a run.
   # d3 464
   - statement: >-
-      Tampered packages and hidden instructions are stopped before any code is
-      written, not just logged by a scan afterwards.
+      Check whether the factory blocks tampered packages and hidden
+      instructions before agents write code.
   # d3 465
   - statement: >-
-      Every running agent is watched and held to its rules from start to
-      finish, not just counted.
+      Check whether monitoring and policy enforcement cover every agent
+      throughout its run.
   # d3 466
   - statement: >-
-      Human review changes what the factory does, rather than signing off on
-      what it has already done.
+      Assess whether human review changes the factory’s decisions and
+      output, beyond approving completed work.

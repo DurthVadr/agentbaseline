@@ -32,6 +32,10 @@ never reused.
   Figtree face to render. *(2026-09-18)*
 
 ### Changed
+- The reference architecture page uses more direct descriptions of its controls and
+  security signals, without repeating section counts. The maturity selector now includes
+  a selection hint and an accent tint on hover while keeping its stepped design.
+  *(2026-10-07, Matthew Creager, Keycard)*
 - The catalogue is rebuilt from Appendix A of the paper as it landed in this repository —
   the appendix declares itself the canonical naming and requirement set, and the body prose
   now agrees with it. 35 controls across the six outcomes: `CON` narrows to 4 controls,

@@ -44,6 +44,9 @@
   .mx-steps { display:grid; grid-template-columns:repeat(3,minmax(0,1fr));
     border-bottom:1px solid var(--faint); margin-bottom:26px; }
   .mx-steps[hidden] { display:none; }
+  .mx .mx-hint { display:none; margin:0 0 10px; font-family:var(--head);
+    font-size:13px; line-height:1.5; color:var(--soft); }
+  .mx.is-tabbed .mx-hint { display:block; }
   .mx-step { appearance:none; -webkit-appearance:none; margin:0; font:inherit;
     text-align:left; cursor:pointer; min-width:0; position:relative;
     display:flex; flex-direction:column; gap:3px;
@@ -57,7 +60,8 @@
   .mx-step .nm { font-family:var(--labelfont); font-weight:500; font-size:12.5px;
     line-height:1.35; letter-spacing:.07em; text-transform:uppercase;
     color:var(--ink); }
-  .mx-step:hover { background:var(--line); }
+  .mx-step:hover { background:color-mix(in srgb, var(--accent) 12%, var(--wash));
+    border-top-color:var(--accent); }
   .mx-step[aria-selected="true"] { background:var(--accent); border-top-color:var(--accent);
     color:var(--paper); cursor:default; }
   .mx-step[aria-selected="true"] .nm { color:var(--paper); }
@@ -164,7 +168,7 @@
 
   /* Print shows every level, as without the script. */
   @media print {
-    .mx-steps { display:none; }
+    .mx-steps, .mx.is-tabbed .mx-hint { display:none; }
     .mx .lvp[hidden] { display:block; }
     .mx .lvp + .lvp, .mx.is-tabbed .lvp + .lvp { margin-top:40px; }
     .mx.is-tabbed .lvp h3 { position:static; width:auto; height:auto; margin:0 0 6px;
@@ -173,7 +177,8 @@
 </style>
 <figure class="mx-fig">
 <div class="mx" data-tabs>
-  <div class="mx-steps" data-tablist aria-label="Maturity levels" hidden>
+  <p class="mx-hint" id="maturity-hint">Select a level to explore its workflow.</p>
+  <div class="mx-steps" data-tablist aria-label="Maturity levels" aria-describedby="maturity-hint" hidden>
   {{- range $i, $l := $levels }}{{ $n := add $i 1 }}
     <button type="button" class="mx-step" id="lv-tab-{{ $n }}" data-tab aria-controls="level-{{ $n }}"><span class="n">Level {{ $n }}</span><span class="nm">{{ $l.name }}</span></button>
   {{- end }}
@@ -218,7 +223,7 @@
   {{- end }}
   <p class="out"><span>A pull request goes to a person, who reviews it and decides whether to merge.</span></p>
 </div>
-<figcaption><span class="fn">Figure 2</span> The five stages at each level, with the parts of Figure 1 that guard each one.</figcaption>
+<figcaption><span class="fn">Figure 2</span> The workflow and the controls each maturity level adds. Component names match Figure 1.</figcaption>
 </figure>
 <script src="/js/tabs.js" defer></script>
 {{- define "partials/mx-row.html" }}

@@ -215,29 +215,23 @@ if _wp.exists() and _cfg.exists():
                                        f"site — whitepaper.md says “{_pm.group(1)}”, "
                                        f"hugo.toml says “{_cm.group(1)}”"))
 
-# ── 3c-ter · a heading that states a count must sit over that many rows ──────
-# /reference-architecture says "Five signals" over a numbered list, one
-# <li class="sig"> per signal, and "Three maturity levels" over the level
-# sections, one <section class="lvp"> per level, both ranged from
-# software-factory/*.yaml. Hugo is silent when a mount source is missing or a
-# top-level key is renamed: the range renders nothing, the heading stays, and
-# the build is green. check-bindings covers only controls.yaml, so the count
-# the heading asserts is checked here. Each count is taken between its heading
-# and the next one, so a row elsewhere on the page cannot make up the number.
+# ── 3c-ter · the reference architecture must render its data rows ──────────
+# Locate sections by their stable IDs so heading edits cannot bypass this check.
 _ra = ROOT / "public" / "reference-architecture" / "index.html"
 if _ra.exists():
     _h = _ra.read_text(encoding="utf-8")
-    for _head, _row, _want in (
-        ("Five signals", r'<li class="?sig\b', 5),
-        ("Three maturity levels", r'<section class="?lvp\b', 3),
+    for _id, _row, _want in (
+        ("signals", r'<li class="?sig\b', 5),
+        ("maturity", r'<section class="?lvp\b', 3),
     ):
-        # The heading, not any mention — the meta description names the counts too.
-        _m = re.search(r"<h2[^>]*>\s*" + re.escape(_head) + r"(.*?)(?=<h2\b|</main>)", _h, re.S)
+        _m = re.search(r'<h2\b[^>]*\bid=["\']?' + re.escape(_id)
+                       + r'(?:["\']|(?=[\s>]))[^>]*>(.*?)(?=<h2\b|</main>)', _h, re.S)
         if not _m:
+            findings.append(("count", f"/reference-architecture is missing section {_id}"))
             continue
         _n = len(re.findall(_row, _m.group(1)))
         if _n != _want:
-            findings.append(("count", f"“{_head}” heads {_n} row(s) on /reference-architecture; the heading says {_want}"))
+            findings.append(("count", f"section {_id} has {_n} row(s) on /reference-architecture; expected {_want}"))
 
 # ── 3d · no two consecutive authors from the same organization ────────────────
 # A jointly published document is read for whose document it really is, and the

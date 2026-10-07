@@ -18,7 +18,7 @@
 <title>Reference architecture — Agent Baseline</title>
 <meta name="description" content="{{ .Site.Params.softwareFactory.summary }}">
 <link rel="canonical" href="{{ strings.TrimSuffix "/" .Permalink }}">
-{{ partial "social-meta.html" (dict "ctx" . "title" "Reference architecture — Agent Baseline" "desc" "The reference architecture applies Agent Baseline to the software factory, where AI agents turn a ticket into a tested pull request. It names five signals to measure and three maturity levels.") }}
+{{ partial "social-meta.html" (dict "ctx" . "title" "Reference architecture — Agent Baseline" "desc" "The reference architecture applies Agent Baseline to the software factory, where AI agents turn a ticket into a tested pull request. It describes how to apply security controls and assess them during a run.") }}
 <link rel="icon" href="/icon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="/icon-512.png">
 <link rel="icon" href="/icon-512.png" sizes="512x512" type="image/png">
@@ -334,25 +334,23 @@
 
   {{ partial "software-factory-figure.html" . }}
 
-  <h2 id="signals">Five signals to measure</h2>
+  <h2 id="signals">Measuring security</h2>
   <div class="prose">
     {{/* The paper's "Measuring the Factory" section, in plain sentences. */}}
-    <p>Reaching a higher maturity level does not prove that a factory is secure. What proves
-    it is what happens when something goes wrong: how fast a problem is found, and how far it
-    spreads. The paper names five signals of a secure factory, to measure in place of simple
-    counts.</p>
+    <p>Assess a factory by how its controls work during a run: what they block, how quickly
+    they catch policy drift, and whether human review changes the outcome.</p>
   </div>
   {{ partial "software-factory-signals.html" . }}
 
   {{- if $sf.showMaturity }}
-  <h2 id="maturity">Three maturity levels</h2>
+  <h2 id="maturity">Maturity levels</h2>
   <div class="prose">
     {{/* What a level is, then the paper's caveat, which points back at the
          signals. */}}
-    <p>A factory runs the same five stages at every level. What changes is where it runs,
-    who coordinates the agents, and which controls guard each stage. Each level builds on the
-    one below, and a team picks the level that fits it. A level describes how a factory is
-    built, not how secure it is. <a href="#signals">The five signals</a> measure that.</p>
+    <p>The maturity levels describe where a factory runs, how it coordinates agents,
+    and which controls it uses. Each level builds on the previous one. Choose the level
+    that fits your team’s workflow, then use <a href="#signals">the security signals</a>
+    to assess how well its controls work.</p>
   </div>
   {{ partial "software-factory-levels.html" . }}
   {{- end }}
@@ -362,10 +360,10 @@
     {{/* Why to read the paper, not a list of its contents: it starts from what
          went wrong (PocketOS, d3 156; Hugging Face, d3 176) and builds the
          factory that guards against it. */}}
-    <p>The paper explains why each control is there. It starts from real incidents,
-    such as an agent that deleted a database in nine seconds, and another that escaped its
-    sandbox and tried to hide its tracks. Then it shows how to build a factory that guards
-    against them, one level at a time.</p>
+    <p>The paper connects the controls to real failures, including an agent that deleted
+    a database in nine seconds and another that escaped its sandbox and tried to hide its
+    tracks. It explains how to apply the controls at each maturity level to reduce the risk
+    of similar failures.</p>
     <p class="ctas">
       {{ if fileExists (printf "static/%s" $sf.pdf) }}<a href="/{{ $sf.pdf }}">Download the PDF</a> · {{ end }}
       {{ if fileExists (printf "%s/%s" $sf.source $sf.paper) }}<a href="{{ .Site.Params.repo }}/tree/main/{{ $sf.source }}">View the source</a> · {{ end }}
