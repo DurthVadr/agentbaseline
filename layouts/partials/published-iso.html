@@ -1,0 +1,19 @@
+{{- /* params.published as an ISO 8601 date, for the machine-readable surfaces.
+
+     The param is written for people — "30 July 2026" — and the pages show it
+     that way. time.AsTime does not read that form, and a second param holding
+     the same date as 2026-07-30 would be a second source of truth that someone
+     updates and someone else does not. So it is converted here, and the result
+     goes back through time.AsTime, which fails the build on anything that is
+     not a real date rather than publishing one. */ -}}
+{{- $p := split site.Params.published " " -}}
+{{- $months := slice "January" "February" "March" "April" "May" "June" "July" "August" "September" "October" "November" "December" -}}
+{{- $m := 0 -}}
+{{- if eq (len $p) 3 -}}
+  {{- range $i, $name := $months -}}{{- if eq $name (index $p 1) -}}{{- $m = add $i 1 -}}{{- end -}}{{- end -}}
+{{- end -}}
+{{- if not $m -}}
+  {{- errorf "params.published is %q — expected a day, a month name and a year, like \"30 July 2026\"" site.Params.published -}}
+{{- end -}}
+{{- $iso := printf "%s-%02d-%02d" (index $p 2) $m (int (index $p 0)) -}}
+{{- return (time.AsTime $iso).Format "2006-01-02" -}}
