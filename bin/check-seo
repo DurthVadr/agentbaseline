@@ -336,8 +336,9 @@ for p in pages:
         text_links(tw, f)
         path = "/" + tw
         hd = served_headers(path)
-        if not hd.get("content-type", "").startswith("text/markdown"):
-            find("vercel.json", f"{path} is not served as text/markdown")
+        if not re.fullmatch(r"text/markdown;\s*charset=utf-8", hd.get("content-type", ""), re.I):
+            find("vercel.json", f"{path} is not served as `text/markdown; charset=utf-8` — without "
+                                f"the charset a browser guesses, and an en dash reads as mojibake")
         if len(canon) == 1 and hd.get("link") != f'<{canon[0]}>; rel="canonical"':
             find("vercel.json", f"{path} has Link {hd.get('link')!r}; want "
                                 f"'<{canon[0]}>; rel=\"canonical\"', the canonical of {where}")
@@ -398,6 +399,12 @@ else:
     ours, off = text_links("llms.txt", llms)
     if not ours:
         find("llms.txt", "links to nothing on this site")
+# Both files are UTF-8 with dashes and curly quotes in them. Vercel happens to
+# add charset=utf-8 to .txt today; naming it means a default changing, or a
+# local preview server, cannot turn an en dash into mojibake for an agent.
+for name in ("llms.txt", "llms-full.txt"):
+    if not re.fullmatch(r"text/plain;\s*charset=utf-8", served_headers(f"/{name}").get("content-type", ""), re.I):
+        find("vercel.json", f"/{name} is not served as `text/plain; charset=utf-8`")
 full = PUBLIC / "llms-full.txt"
 if not full.is_file() or not re.match(r"# \S", full.read_text(encoding="utf-8")):
     find("llms-full.txt", "missing, or does not open with an H1")
