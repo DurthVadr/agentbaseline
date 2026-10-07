@@ -37,6 +37,12 @@ that convened this is a complete implementation.
 Full text: [`whitepaper/CONTROLS.md`](whitepaper/CONTROLS.md) ·
 machine-readable: [`whitepaper/controls.yaml`](whitepaper/controls.yaml)
 
+**For agents:** the site serves the paper and the controls as Markdown, at
+[`/whitepaper.md`](https://agentbaseline.org/whitepaper.md) and
+[`/controls.md`](https://agentbaseline.org/controls.md), and lists both in
+[`/llms.txt`](https://agentbaseline.org/llms.txt). They are built from the same files
+as the PDF, so the text an agent quotes is the text a reader prints.
+
 ## Using it
 
 **Reference a control** in an audit finding, a policy document or an RFP response:
@@ -110,7 +116,12 @@ python3 bin/check-appendix      # Appendix A still agrees with the catalogue
 python3 bin/check-bindings      # templates only read fields the catalogue has
 python3 bin/check-js            # scripts parse, source and minified
 python3 bin/check-pdf-current   # the committed PDF is the one this source builds
+python3 bin/check-seo           # what crawlers and agents are told: meta, JSON-LD, llms.txt
 ```
+
+`check-seo` reads `public/`, so it runs after `hugo`. Lighthouse runs in CI as its own job;
+to score the build locally, `npx --yes @lhci/cli@0.15.1 autorun` (thresholds in
+`lighthouserc.cjs`).
 
 `check-pdf-current` needs nothing but Python. It compares the tree against
 `whitepaper/pdf.provenance.json`, which `bin/build-pdf` writes as it renders — the digest

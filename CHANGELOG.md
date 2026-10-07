@@ -9,6 +9,14 @@ never reused.
 ## [Unreleased]
 
 ### Added
+- The white paper and the controls are published as Markdown for agents, at `/whitepaper.md`
+  and `/controls.md`, with the paper's figures at `/figures/`. Hugo builds both from the
+  files the PDF and `CONTROLS.md` come from, and each opens with a short header naming its
+  page, version and licence. Each page links its Markdown in the head, a request that asks
+  for `text/markdown` is redirected to it, and `/llms.txt` and `/llms-full.txt` list and
+  carry both. The pages describe the paper, the catalogue and the site in JSON-LD. Nothing
+  a person sees has changed. `bin/check-seo` holds the build to all of it, and Lighthouse
+  scores the pages in CI. *(2026-10-07)*
 - The community Slack is linked from the utility bar on every page and, on the homepage,
   from the review section, with the invite address in one place in `hugo.toml`.
   CONTRIBUTING and GOVERNANCE say what belongs in Slack and what belongs in an issue, and
