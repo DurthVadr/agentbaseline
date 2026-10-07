@@ -42,7 +42,18 @@ Every indexable page (any built .html that is not noindex):
 The 404 page: noindex, and no canonical or og:url. An error page that claims an
 address can be indexed as that address.
 
-sitemap.xml: every <loc> is on the origin and maps to a built file.
+sitemap.xml: every <loc> is on the origin and maps to a built file, and every
+page it lists is indexable. The page rules above skip noindex pages, so this is
+where an accidental noindex on / or /controls is caught.
+
+vercel.json, for each text version: a single temporary redirect from its page's
+path, conditioned on Accept: text/markdown, to the text version, and Vary:
+Accept on the page — the third place, after hugo.toml and the headers, where a
+page and its text version must agree.
+
+Links in a text version or llms.txt — inline, reference-style or raw src/href —
+are absolute; links into the repository's main branch name files this checkout
+has, and so do the repository URLs in the JSON-LD.
 
 robots.txt: names the sitemap, at its absolute URL.
 
@@ -65,6 +76,8 @@ m = re.search(r'^baseURL\s*=\s*"([^"]+)"', cfg, re.M)
 if not m:
     sys.exit("no baseURL in hugo.toml — cannot tell which origin is ours, so this is a fail")
 ORIGIN = m.group(1).rstrip("/")             # https://agentbaseline.org
+_r = re.search(r'^\s*repo\s*=\s*"([^"]+)"', (ROOT / "hugo.toml").read_text(encoding="utf-8"), re.M)
+REPO = _r.group(1).rstrip("/") if _r else ""  # https://github.com/agentbaseline/agentbaseline
 
 if not (PUBLIC / "index.html").exists():
     # Not a pass. Every rule below reads the build; with no build they would all
@@ -162,8 +175,15 @@ else:
     if not locs:
         find("sitemap.xml", "lists no URLs")
     for loc in locs:
-        if not built(loc):
+        f = built(loc)
+        if not f:
             find("sitemap.xml", f"{loc} maps to no built file")
+        # A page the sitemap advertises must be one search engines may index.
+        # The per-page rules below skip noindex pages, so without this an
+        # accidental noindex on / or /controls — the costliest SEO regression
+        # this site could ship — would pass in silence.
+        elif f.suffix == ".html" and "noindex" in " ".join(meta(parse(f), "robots")).lower():
+            find("sitemap.xml", f"{loc} is noindex — the sitemap may list only pages meant to be found")
 
 # ── robots.txt ───────────────────────────────────────────────────────────────
 robots = PUBLIC / "robots.txt"
@@ -191,12 +211,26 @@ def served_headers(path):
     return out
 
 
+def repo_file_missing(url):
+    """A link to a file on the repository's main branch names a path this
+    checkout has. Checked offline: a rename in the repo breaks the link the
+    same day, and nothing else would notice."""
+    m = REPO and re.match(re.escape(REPO) + r"/(?:blob|raw)/main/([^#?]+)", url)
+    return bool(m) and not (ROOT / m.group(1)).exists()
+
+
 def text_links(where, path):
     """A text version (or llms.txt) may hold only absolute links and fragments,
-    and every link to this site must resolve. Returns (ours, elsewhere)."""
+    and every link to this site must resolve. Inline links, reference-style
+    definitions and raw src/href attributes all count — the template rewrites
+    only inline ones, so the others are exactly the links that would ship
+    relative. Returns (ours, elsewhere)."""
     text = path.read_text(encoding="utf-8")
     ours = elsewhere = 0
-    for target in re.findall(r"\]\(([^)\s]+)", text):
+    targets = (re.findall(r"\]\(([^)\s]+)", text)
+               + re.findall(r"^\s*\[[^\]]+\]:\s*(\S+)", text, re.M)
+               + re.findall(r"""(?:src|href)=["']([^"']+)["']""", text))
+    for target in targets:
         if target.startswith("#") or target.startswith("mailto:"):
             continue
         if not re.match(r"[a-zA-Z][a-zA-Z0-9+.-]*:", target):
@@ -208,6 +242,8 @@ def text_links(where, path):
                 find(where, f"{target} resolves to no built file")
         else:
             elsewhere += 1
+            if repo_file_missing(target):
+                find(where, f"{target} names a file the repository does not have")
     return ours, elsewhere
 
 
@@ -265,7 +301,19 @@ for p in pages:
         except json.JSONDecodeError as e:
             find(where, f"JSON-LD block {i} does not parse: {e}")
             continue
-        for node in ld if isinstance(ld, list) else [ld]:
+        nodes = ld if isinstance(ld, list) else [ld]
+        if not nodes:
+            find(where, f"JSON-LD block {i} is empty")
+        stack = [ld]
+        while stack:
+            v = stack.pop()
+            if isinstance(v, dict):
+                stack.extend(v.values())
+            elif isinstance(v, list):
+                stack.extend(v)
+            elif isinstance(v, str) and repo_file_missing(v):
+                find(where, f"JSON-LD block {i} links {v}, a file the repository does not have")
+        for node in nodes:
             ctx = node.get("@context") if isinstance(node, dict) else None
             if not (isinstance(ctx, str) and re.fullmatch(r"https?://schema\.org/?", ctx)):
                 find(where, f"JSON-LD block {i} has @context {ctx!r}; want https://schema.org")
@@ -293,6 +341,27 @@ for p in pages:
         if len(canon) == 1 and hd.get("link") != f'<{canon[0]}>; rel="canonical"':
             find("vercel.json", f"{path} has Link {hd.get('link')!r}; want "
                                 f"'<{canon[0]}>; rel=\"canonical\"', the canonical of {where}")
+        # A client that asks the page for Markdown is sent to this file: one
+        # temporary redirect from the page's own path, conditioned on Accept,
+        # and Vary: Accept on the page so a cache never hands the redirect to
+        # a browser. The third place, after hugo.toml and the headers above,
+        # where the page and its text version must agree.
+        if len(canon) == 1 and canon[0].startswith(ORIGIN):
+            src = canon[0][len(ORIGIN):] or "/"
+            reds = [r for r in vercel.get("redirects", []) if r.get("source") == src
+                    and any(c.get("type") == "header" and c.get("key", "").lower() == "accept"
+                            and "text/markdown" in json.dumps(c.get("value", "")) for c in r.get("has", []))]
+            if len(reds) != 1:
+                find("vercel.json", f"{len(reds)} Accept: text/markdown redirect(s) from {src}; want one")
+            else:
+                if reds[0].get("destination") != path:
+                    find("vercel.json", f"the Markdown redirect from {src} goes to "
+                                        f"{reds[0].get('destination')!r}; want {path!r}")
+                if reds[0].get("permanent") is not False:
+                    find("vercel.json", f"the Markdown redirect from {src} is not `permanent: false`"
+                                        f" — a permanent one would be cached for browsers too")
+            if "accept" not in served_headers(src).get("vary", "").lower():
+                find("vercel.json", f"{src} does not send Vary: Accept")
 
 # ── the 404 page ─────────────────────────────────────────────────────────────
 nf = PUBLIC / "404.html"
