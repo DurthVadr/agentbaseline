@@ -1,0 +1,22 @@
+{{- /* What a page says to machines about itself. One line in the <head> of each
+     indexable page:
+
+       {{ partial "machine-readable.html" . }}
+
+     Not in layouts/404.html: an error page has no text version and is not a
+     thing to be described.
+
+     The page's text version. Every params.texts entry whose `page` is this
+     page gets a <link rel="alternate" type="text/markdown">, which is how an
+     agent that has landed on the HTML finds the Markdown without being told the
+     URL. Absolute, like the canonical, so it means the same thing when the HTML
+     has been saved or proxied. People see nothing: a <link> in the head does
+     not render. */ -}}
+{{- $here := strings.TrimSuffix "/" .RelPermalink | default "/" -}}
+{{- range $e := site.Params.texts -}}
+  {{- if eq $e.page $here -}}
+    {{- with site.Home.OutputFormats.Get $e.format }}
+<link rel="alternate" type="text/markdown" href="{{ .Permalink }}" title="{{ $e.title }} (Markdown)">
+    {{- end -}}
+  {{- end -}}
+{{- end }}

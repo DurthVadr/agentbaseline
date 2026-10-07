@@ -76,9 +76,23 @@ disableKinds = ["taxonomy", "term", "RSS", "section"]
   isPlainText = true
   notAlternative = true
   permalinkable = true
+# /llms.txt and /llms-full.txt, after llmstxt.org. Each has its own template,
+# layouts/index.llms.txt and layouts/index.llmsfull.txt.
+[outputFormats.llms]
+  mediaType = "text/plain"
+  baseName = "llms"
+  isPlainText = true
+  notAlternative = true
+  permalinkable = true
+[outputFormats.llmsfull]
+  mediaType = "text/plain"
+  baseName = "llms-full"
+  isPlainText = true
+  notAlternative = true
+  permalinkable = true
 
 [outputs]
-  home = ["html", "paper", "catalogue"]
+  home = ["html", "paper", "catalogue", "llms", "llmsfull"]
 
 [params]
   version       = "1.0-draft"
