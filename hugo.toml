@@ -47,7 +47,9 @@ disableKinds = ["taxonomy", "term", "RSS", "section"]
   files = ["*.svg"]
 # The text versions read their documents from here — see params.texts. Mounted
 # at the same path they have in the repository, so a relative link inside one
-# resolves against the directory it was written in.
+# resolves against the directory it was written in. Declaring any assets mount
+# replaces Hugo's default one, as with static above; this site has no assets/
+# directory, so if one is ever added, mount it here first.
 [[module.mounts]]
   source = "whitepaper/whitepaper.md"
   target = "assets/whitepaper/whitepaper.md"
