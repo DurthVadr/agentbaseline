@@ -28,6 +28,12 @@ jobs:
       # pass a build that shipped something else.
       - name: Scripts parse — source and minified
         run: python3 bin/check-js
+      # What crawlers and agents are told and people never see: titles,
+      # descriptions, canonicals, social cards, JSON-LD, the text versions and
+      # their headers, the sitemap, robots.txt and llms.txt. After the build
+      # for the same reason as the step above: it reads what would deploy.
+      - name: What search engines and agents are told — meta, JSON-LD, llms.txt
+        run: python3 bin/check-seo
       # The PDF renders Appendix A from controls.yaml rather than from the
       # paper's own table. That substitution is only honest while they agree.
       - name: Appendix A agrees with the catalogue

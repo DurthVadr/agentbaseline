@@ -1,0 +1,343 @@
+#!/usr/bin/env python3
+"""Hold the built site to what search engines and agents are told about it.
+
+Everything this reads is invisible on the page. A missing description, a
+canonical that points at a redirect, a JSON-LD block with a stray comma, a
+llms.txt link to a file that was renamed: each one renders nothing, raises
+nothing, and passes every other gate here, because those read the prose. The
+sitemap is the precedent — it advertised three addresses that answered 308 and
+nobody saw it for months, because no person ever opens a sitemap. So this reads
+public/ after `hugo --gc --minify`, the way a crawler would, and fails on what a
+crawler would get wrong.
+
+Every indexable page (any built .html that is not noindex):
+
+  title        exactly one non-empty <title>. Two is a template that included
+               its head twice; none is a page that is listed as its URL.
+  description  a meta description of at least 50 characters, so the snippet is
+               ours rather than whatever text a search engine scrapes from the
+               page. Above 160 it is cut off in results — reported as a
+               warning, not a failure, because a long one still says something.
+  canonical    one, absolute, on the configured origin (https://agentbaseline.org),
+               equal to og:url and listed in sitemap.xml. Three places name the
+               page's address; when they disagree a crawler picks one and it is
+               not always ours. The origin test also catches a public/ written by
+               `hugo server`, which uses a localhost baseURL.
+  social card  og:title, og:description, an absolute og:image with
+               og:image:width and og:image:height, and twitter:card
+               summary_large_image. Without the size a platform has to fetch the
+               image before it can lay out the preview, and some do not wait.
+  JSON-LD      at least one block; every block parses as JSON, names
+               schema.org as its @context and has an @type. A block that does
+               not parse is ignored without a word by everything that reads it.
+  text version a <link rel="alternate" type="text/markdown"> whose href is a
+               built, non-empty file on this site. Then the file itself: no
+               relative link survives in it (it is served from the root, so a
+               relative link means something different there than in the
+               repository), every link to this site resolves to a built file,
+               and vercel.json serves it as text/markdown with a Link header
+               naming this page's canonical — hugo.toml and vercel.json both
+               hold that pairing, and nothing else would notice them drift.
+
+The 404 page: noindex, and no canonical or og:url. An error page that claims an
+address can be indexed as that address.
+
+sitemap.xml: every <loc> is on the origin and maps to a built file.
+
+robots.txt: names the sitemap, at its absolute URL.
+
+llms.txt: exists and parses as llmstxt.org describes it — the first line is the
+H1 — and every link in it to this site resolves to a built file. Links
+elsewhere (the repository) are counted and not fetched: this runs offline.
+llms-full.txt exists and opens with an H1.
+
+Findings are printed, then a count; any finding exits non-zero. Warnings print
+but do not fail.
+"""
+import html.parser, json, pathlib, re, sys
+from urllib.parse import urlsplit
+
+ROOT = pathlib.Path(__file__).resolve().parents[1]
+PUBLIC = ROOT / "public"
+
+cfg = (ROOT / "hugo.toml").read_text(encoding="utf-8")
+m = re.search(r'^baseURL\s*=\s*"([^"]+)"', cfg, re.M)
+if not m:
+    sys.exit("no baseURL in hugo.toml — cannot tell which origin is ours, so this is a fail")
+ORIGIN = m.group(1).rstrip("/")             # https://agentbaseline.org
+
+if not (PUBLIC / "index.html").exists():
+    # Not a pass. Every rule below reads the build; with no build they would all
+    # find nothing wrong.
+    sys.exit("public/index.html is missing — run `hugo --gc --minify` first")
+
+findings, warnings = [], []
+
+
+def find(where, msg):
+    findings.append((where, msg))
+
+
+def warn(where, msg):
+    warnings.append((where, msg))
+
+
+def built(url):
+    """The built file a URL on our origin is served from, or None.
+
+    Mirrors the deployment: cleanUrls serves /controls from controls/index.html
+    (or controls.html), and a fragment or query never names a different file.
+    """
+    if not url.startswith(ORIGIN + "/") and url != ORIGIN:
+        return None
+    path = urlsplit(url).path or "/"
+    rel = path.lstrip("/")
+    for cand in (rel, f"{rel}/index.html", f"{rel}.html") if rel else ("index.html",):
+        p = PUBLIC / cand
+        if p.is_file():
+            return p
+    return None
+
+
+class Head(html.parser.HTMLParser):
+    """The machine-facing tags of one page: title, meta, link, JSON-LD."""
+
+    def __init__(self):
+        super().__init__(convert_charrefs=True)
+        self.titles, self.meta, self.links, self.ldjson = [], [], [], []
+        self._in = None
+        self._buf = []
+
+    def handle_starttag(self, tag, attrs):
+        a = {k: (v or "") for k, v in attrs}
+        if tag == "title":
+            self._in, self._buf = "title", []
+        elif tag == "script" and a.get("type", "").lower() == "application/ld+json":
+            self._in, self._buf = "ld", []
+        elif tag == "meta":
+            self.meta.append(a)
+        elif tag == "link":
+            self.links.append(a)
+
+    def handle_data(self, data):
+        if self._in:
+            self._buf.append(data)
+
+    def handle_endtag(self, tag):
+        if tag == "title" and self._in == "title":
+            self.titles.append("".join(self._buf).strip())
+            self._in = None
+        elif tag == "script" and self._in == "ld":
+            self.ldjson.append("".join(self._buf))
+            self._in = None
+
+
+def parse(path):
+    h = Head()
+    h.feed(path.read_text(encoding="utf-8"))
+    return h
+
+
+def meta(h, key):
+    """Every content value for a meta name= or property=."""
+    return [m.get("content", "") for m in h.meta
+            if m.get("name") == key or m.get("property") == key]
+
+
+def rels(h, rel, **attrs):
+    out = []
+    for l in h.links:
+        if rel in l.get("rel", "").lower().split() and all(l.get(k) == v for k, v in attrs.items()):
+            out.append(l)
+    return out
+
+
+# ── sitemap.xml ──────────────────────────────────────────────────────────────
+sitemap = PUBLIC / "sitemap.xml"
+locs = []
+if not sitemap.is_file():
+    find("sitemap.xml", "missing")
+else:
+    locs = [l.strip() for l in re.findall(r"<loc>(.*?)</loc>", sitemap.read_text(encoding="utf-8"), re.S)]
+    if not locs:
+        find("sitemap.xml", "lists no URLs")
+    for loc in locs:
+        if not built(loc):
+            find("sitemap.xml", f"{loc} maps to no built file")
+
+# ── robots.txt ───────────────────────────────────────────────────────────────
+robots = PUBLIC / "robots.txt"
+want = f"{ORIGIN}/sitemap.xml"
+if not robots.is_file():
+    find("robots.txt", "missing")
+elif not re.search(rf"^Sitemap:\s*{re.escape(want)}\s*$", robots.read_text(encoding="utf-8"), re.M | re.I):
+    find("robots.txt", f"does not name the sitemap as `Sitemap: {want}`")
+
+# ── vercel.json, for the text versions' headers ──────────────────────────────
+try:
+    vercel = json.loads((ROOT / "vercel.json").read_text(encoding="utf-8"))
+except (OSError, json.JSONDecodeError) as e:
+    vercel = {}
+    find("vercel.json", f"unreadable: {e}")
+
+
+def served_headers(path):
+    """Headers vercel.json sets for an exact source path, lower-cased keys."""
+    out = {}
+    for rule in vercel.get("headers", []):
+        if rule.get("source") == path:
+            for hd in rule.get("headers", []):
+                out[hd.get("key", "").lower()] = hd.get("value", "")
+    return out
+
+
+def text_links(where, path):
+    """A text version (or llms.txt) may hold only absolute links and fragments,
+    and every link to this site must resolve. Returns (ours, elsewhere)."""
+    text = path.read_text(encoding="utf-8")
+    ours = elsewhere = 0
+    for target in re.findall(r"\]\(([^)\s]+)", text):
+        if target.startswith("#") or target.startswith("mailto:"):
+            continue
+        if not re.match(r"[a-zA-Z][a-zA-Z0-9+.-]*:", target):
+            find(where, f"relative link `{target}` — it resolves against the site root, "
+                        f"not the directory it was written in")
+        elif target.startswith(ORIGIN):
+            ours += 1
+            if not built(target):
+                find(where, f"{target} resolves to no built file")
+        else:
+            elsewhere += 1
+    return ours, elsewhere
+
+
+# ── every page ───────────────────────────────────────────────────────────────
+pages = [p for p in sorted(PUBLIC.rglob("*.html")) if p.name != "404.html"]
+texts = 0
+for p in pages:
+    where = p.relative_to(PUBLIC).as_posix()
+    h = parse(p)
+    robots_meta = " ".join(meta(h, "robots")).lower()
+    if "noindex" in robots_meta:
+        continue                                    # not an indexable page
+
+    if len(h.titles) != 1 or not h.titles[0]:
+        find(where, f"{len(h.titles)} <title> element(s); want exactly one, non-empty")
+
+    desc = meta(h, "description")
+    if len(desc) != 1:
+        find(where, f"{len(desc)} meta description(s); want exactly one")
+    elif len(desc[0]) < 50:
+        find(where, f"meta description is {len(desc[0])} characters; want at least 50")
+    elif len(desc[0]) > 160:
+        warn(where, f"meta description is {len(desc[0])} characters; results cut it at about 160")
+
+    canon = [l.get("href", "") for l in rels(h, "canonical")]
+    ogurl = meta(h, "og:url")
+    if len(canon) != 1:
+        find(where, f"{len(canon)} canonical link(s); want exactly one")
+    else:
+        c = canon[0]
+        if not (c == ORIGIN + "/" or c.startswith(ORIGIN + "/")):
+            find(where, f"canonical {c} is not on {ORIGIN}")
+        if ogurl != [c]:
+            find(where, f"og:url {ogurl or 'missing'} does not equal canonical {c}")
+        if locs and c not in locs:
+            find(where, f"canonical {c} is not listed in sitemap.xml")
+
+    for key in ("og:title", "og:description"):
+        if not [v for v in meta(h, key) if v.strip()]:
+            find(where, f"no {key}")
+    img = meta(h, "og:image")
+    if not img or not re.match(r"https://", img[0]):
+        find(where, f"og:image {img or 'missing'} is not an absolute https URL")
+    for key in ("og:image:width", "og:image:height"):
+        if not [v for v in meta(h, key) if v.isdigit()]:
+            find(where, f"no numeric {key}")
+    if meta(h, "twitter:card") != ["summary_large_image"]:
+        find(where, f"twitter:card is {meta(h, 'twitter:card') or 'missing'}; want summary_large_image")
+
+    if not h.ldjson:
+        find(where, "no JSON-LD")
+    for i, raw in enumerate(h.ldjson, 1):
+        try:
+            ld = json.loads(raw)
+        except json.JSONDecodeError as e:
+            find(where, f"JSON-LD block {i} does not parse: {e}")
+            continue
+        for node in ld if isinstance(ld, list) else [ld]:
+            ctx = node.get("@context") if isinstance(node, dict) else None
+            if not (isinstance(ctx, str) and re.fullmatch(r"https?://schema\.org/?", ctx)):
+                find(where, f"JSON-LD block {i} has @context {ctx!r}; want https://schema.org")
+            if not (isinstance(node, dict) and node.get("@type")):
+                find(where, f"JSON-LD block {i} has no @type")
+
+    alts = rels(h, "alternate", type="text/markdown")
+    if not alts:
+        find(where, 'no <link rel="alternate" type="text/markdown"> to a text version')
+    for a in alts:
+        href = a.get("href", "")
+        f = built(href)
+        if not f:
+            find(where, f"text version {href or '(no href)'} is not a built file on {ORIGIN}")
+            continue
+        texts += 1
+        tw = f.relative_to(PUBLIC).as_posix()
+        if f.stat().st_size == 0:
+            find(tw, "empty")
+        text_links(tw, f)
+        path = "/" + tw
+        hd = served_headers(path)
+        if not hd.get("content-type", "").startswith("text/markdown"):
+            find("vercel.json", f"{path} is not served as text/markdown")
+        if len(canon) == 1 and hd.get("link") != f'<{canon[0]}>; rel="canonical"':
+            find("vercel.json", f"{path} has Link {hd.get('link')!r}; want "
+                                f"'<{canon[0]}>; rel=\"canonical\"', the canonical of {where}")
+
+# ── the 404 page ─────────────────────────────────────────────────────────────
+nf = PUBLIC / "404.html"
+if not nf.is_file():
+    find("404.html", "missing")
+else:
+    h = parse(nf)
+    if "noindex" not in " ".join(meta(h, "robots")).lower():
+        find("404.html", "not noindex")
+    if rels(h, "canonical"):
+        find("404.html", "declares a canonical")
+    if meta(h, "og:url"):
+        find("404.html", "declares an og:url")
+
+# ── llms.txt and llms-full.txt ───────────────────────────────────────────────
+llms = PUBLIC / "llms.txt"
+off = 0
+if not llms.is_file():
+    find("llms.txt", "missing")
+else:
+    lines = llms.read_text(encoding="utf-8").splitlines()
+    if not lines or not re.match(r"# \S", lines[0]):
+        find("llms.txt", "does not open with an H1 (`# Name`) — llmstxt.org requires it first")
+    # An H2 section is a list of links, each `- [name](url)` with an optional
+    # `: note`. A line in one that is neither is a list item an agent cannot use.
+    section = None
+    for n, line in enumerate(lines, 1):
+        if line.startswith("## "):
+            section = line[3:].strip()
+        elif section and line.strip() and not re.match(r"- \[[^\]]+\]\([^)\s]+\)(: .+)?$", line):
+            find("llms.txt", f"line {n} in section {section!r} is not `- [name](url): note`")
+    if section is None:
+        find("llms.txt", "has no H2 section of links")
+    ours, off = text_links("llms.txt", llms)
+    if not ours:
+        find("llms.txt", "links to nothing on this site")
+full = PUBLIC / "llms-full.txt"
+if not full.is_file() or not re.match(r"# \S", full.read_text(encoding="utf-8")):
+    find("llms-full.txt", "missing, or does not open with an H1")
+
+for where, msg in findings:
+    print(f"  FAIL  {where}: {msg}")
+for where, msg in warnings:
+    print(f"  warn  {where}: {msg}")
+print(f"\nseo: {len(pages)} page(s) · {texts} text version(s) · {len(locs)} sitemap URL(s)"
+      f" · {off} off-site llms.txt link(s) not fetched")
+print(f"\n{len(findings)} finding(s), {len(warnings)} warning(s)")
+sys.exit(1 if findings else 0)
