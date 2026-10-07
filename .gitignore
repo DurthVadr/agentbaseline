@@ -15,3 +15,6 @@ whitepaper/.build/
 # leave one of these behind; the next build sweeps them, and this keeps one out of
 # a commit in the meantime.
 static/.whitepaper.pdf.new-*
+
+# Lighthouse CI reports, written by `npx @lhci/cli autorun` (lighthouserc.cjs).
+.lighthouseci/
