@@ -1,0 +1,36 @@
+{
+  "artifact": "static/software-factory.pdf",
+  "bytes": 642252,
+  "pages": 25,
+  "sha256": "2ebfca6867f79b4ad58416e7421bf9ea9e76b3d957afd8d7212f8f4a4dd50d4d",
+  "source_date_epoch": "1791892800",
+  "built_by": {
+    "producer": "Skia/PDF m150",
+    "creator": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/150.0.0.0 Safari/537.36",
+    "pandoc": "pandoc 3.10.1"
+  },
+  "inputs": {
+    "bin/build-pdf": "110db2c3ec6160b07311dc45e67f7a715ea22178455ee0f11dae4e7573c2539d",
+    "bin/papers.py": "df768846f1cf258d087fa717818823667694dc7d55470ac5146c771787bbd62a",
+    "bin/print-page.mjs": "119d3f84951a91d113b1b9bc1d22114ab339dbcee5c1f3a025e2c2d51babd47d",
+    "bin/vendor/paged.polyfill.js": "f59f361802416c770d549a647958649af2cf6601999924bc00e4f507dad5269f",
+    "software-factory/contributors.yaml": "477ccf02a550a43ba75e36ec6a28fe7f785db010f70cd79c9f5f2742b251b573",
+    "software-factory/figures/figure-1.svg": "90247f4326b1f6ff0781b1af7d88fc87785f811d0a082734d6ca5c687c2988b8",
+    "software-factory/figures/figure-2.svg": "72962cc3a539d1b01e4c000fb28a6a1c49befb30e4009f0335f38f2830b9c92d",
+    "software-factory/figures/figure-3.svg": "332fc603b033c071ad939f66799416e068713a3d9c4adb27ecc4a9f4b790816d",
+    "software-factory/figures/figure-4.svg": "13e420ec7efb54a41bf2a5b9ebb8aa4ed6c8960a87e47708f27f0d618fdf46aa",
+    "software-factory/figures/figure-5.svg": "2a3cd6dc9a36c60dcddcaf499a04239af6294140626f1a4a8022a05cbce57f18",
+    "software-factory/figures/figure-6.svg": "83fdbe0e902a1237af9230483de9cf333663f94d6e769a5eb383d7079aa72978",
+    "software-factory/software-factory.md": "2e3fc5c91c5d29eae69247ccb444c3971b1f9e4ff9be23b0ad1ba8bdd875de13",
+    "static/fonts/chakra-petch-normal-500-latin.woff2": "adf007cd277ef6dac0c8cecacfb60cc5e24e7c8bcce4db98aa233bd3a88ef5a3",
+    "static/fonts/chakra-petch-normal-600-latin.woff2": "4d6d5f0b31b3a471a843779c4ecada040e5bc291f96bca9805a94293fe8003fa",
+    "static/fonts/figtree-italic-400-latin.woff2": "9341f363343c85f00e5a23573accc776baaf0b59ab2eda0560f206e22ac57c04",
+    "static/fonts/figtree-normal-400-latin.woff2": "8330490a01c60c196eae00b823de8102275aaa5862e7b76a7af21b8745338928",
+    "static/fonts/ibm-plex-mono-normal-400-latin.woff2": "c36f509c0a8f9f85f29cb44bc8701d8a9e0b14c499e77a884f789ead7093a7ac",
+    "static/fonts/ibm-plex-mono-normal-600-latin.woff2": "ad4580d8cb4b5f627c2d18457656732f7f7b070f7837fbc380e08054157e6f6c",
+    "static/fonts/ibm-plex-serif-italic-400-latin.woff2": "9daa6f3da3e4917e5da8537fe9b42a1d764f967e40920ef91cb1b01e069bd241",
+    "static/fonts/ibm-plex-serif-normal-400-latin.woff2": "9fbb32c4c07037bc1e9107ee9cbf3a84662449cb36511138d5adb80e195b9302",
+    "static/fonts/ibm-plex-serif-normal-600-latin.woff2": "d8bf89a58f34027c1ee0b24d4bd66f19a782887980e3ce149519c2c527cac3ce",
+    "static/fonts/ibm-plex-serif-normal-700-latin.woff2": "8d256fda8c12db0d7bbde004f3e844ba23cfaa3e764880b24056d6f0b79d70dd"
+  }
+}
