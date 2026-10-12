@@ -9,7 +9,8 @@
    "y": 18,
    "w": 296,
    "h": 56,
-   "solid": true
+   "solid": true,
+   "sw": 1.25
   },
   {
    "tag": "badgeauth",
@@ -27,7 +28,8 @@
    "y": 96,
    "w": 450,
    "h": 202,
-   "solid": false
+   "solid": false,
+   "sw": 1
   },
   {
    "tag": "req",
@@ -36,7 +38,8 @@
    "y": 160,
    "w": 112,
    "h": 96,
-   "solid": true
+   "solid": true,
+   "sw": 1
   },
   {
    "tag": "wf",
@@ -45,7 +48,8 @@
    "y": 160,
    "w": 100,
    "h": 96,
-   "solid": true
+   "solid": true,
+   "sw": 1
   },
   {
    "tag": "ghost8",
@@ -54,7 +58,8 @@
    "y": 140,
    "w": 164,
    "h": 144,
-   "solid": false
+   "solid": false,
+   "sw": 0.75
   },
   {
    "tag": "ghost4",
@@ -63,7 +68,8 @@
    "y": 136,
    "w": 164,
    "h": 144,
-   "solid": false
+   "solid": false,
+   "sw": 0.75
   },
   {
    "tag": "sbx",
@@ -72,7 +78,8 @@
    "y": 132,
    "w": 164,
    "h": 144,
-   "solid": true
+   "solid": true,
+   "sw": 1.25
   },
   {
    "tag": "badgesbx",
@@ -99,7 +106,8 @@
    "y": 172,
    "w": 104,
    "h": 84,
-   "solid": false
+   "solid": false,
+   "sw": 0.75
   },
   {
    "tag": "pghost3",
@@ -108,7 +116,8 @@
    "y": 169,
    "w": 104,
    "h": 84,
-   "solid": false
+   "solid": false,
+   "sw": 0.75
   },
   {
    "tag": "proxy",
@@ -117,7 +126,8 @@
    "y": 166,
    "w": 104,
    "h": 84,
-   "solid": true
+   "solid": true,
+   "sw": 1.25
   },
   {
    "tag": "badgeproxy",
@@ -135,7 +145,8 @@
    "y": 132,
    "w": 120,
    "h": 44,
-   "solid": true
+   "solid": true,
+   "sw": 1
   },
   {
    "tag": "dest1",
@@ -144,7 +155,8 @@
    "y": 184,
    "w": 120,
    "h": 44,
-   "solid": true
+   "solid": true,
+   "sw": 1
   },
   {
    "tag": "dest2",
@@ -153,7 +165,8 @@
    "y": 236,
    "w": 120,
    "h": 44,
-   "solid": true
+   "solid": true,
+   "sw": 1.25
   },
   {
    "tag": "dest3",
@@ -161,8 +174,9 @@
    "x": 608,
    "y": 288,
    "w": 120,
-   "h": 72,
-   "solid": true
+   "h": 76,
+   "solid": true,
+   "sw": 1.25
   },
   {
    "tag": "badgedest3",
@@ -177,28 +191,31 @@
    "tag": "pr",
    "kind": "card",
    "x": 272,
-   "y": 402,
+   "y": 400,
    "w": 104,
-   "h": 56,
-   "solid": true
+   "h": 60,
+   "solid": true,
+   "sw": 1
   },
   {
    "tag": "appr",
    "kind": "card",
    "x": 396,
-   "y": 402,
+   "y": 400,
    "w": 88,
-   "h": 56,
-   "solid": true
+   "h": 60,
+   "solid": true,
+   "sw": 1
   },
   {
    "tag": "merge",
    "kind": "card",
    "x": 504,
-   "y": 402,
+   "y": 400,
    "w": 92,
-   "h": 56,
-   "solid": true
+   "h": 60,
+   "solid": true,
+   "sw": 1
   },
   {
    "tag": "obs",
@@ -207,7 +224,8 @@
    "y": 516,
    "w": 720,
    "h": 42,
-   "solid": true
+   "solid": true,
+   "sw": 1
   }
  ],
  "links": [
@@ -306,7 +324,7 @@
     ],
     [
      590,
-     324.0
+     326.0
     ]
    ],
    "head": false,
@@ -370,11 +388,11 @@
    "pts": [
     [
      590,
-     324.0
+     326.0
     ],
     [
      608,
-     324.0
+     326.0
     ]
    ],
    "head": true,
@@ -391,15 +409,15 @@
     ],
     [
      516.0,
-     382
+     380
     ],
     [
      324.0,
-     382
+     380
     ],
     [
      324.0,
-     402
+     400
     ]
    ],
    "head": true,
@@ -446,7 +464,7 @@
    "pts": [
     [
      324.0,
-     458
+     460
     ],
     [
      324.0,

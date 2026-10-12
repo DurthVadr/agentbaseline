@@ -9,7 +9,8 @@
    "y": 18,
    "w": 336,
    "h": 52,
-   "solid": true
+   "solid": true,
+   "sw": 1.25
   },
   {
    "tag": "badgeauth",
@@ -27,7 +28,8 @@
    "y": 92,
    "w": 190,
    "h": 66,
-   "solid": true
+   "solid": true,
+   "sw": 1
   },
   {
    "tag": "orch",
@@ -36,7 +38,8 @@
    "y": 222,
    "w": 178,
    "h": 66,
-   "solid": true
+   "solid": true,
+   "sw": 1
   },
   {
    "tag": "exec",
@@ -45,7 +48,8 @@
    "y": 312,
    "w": 178,
    "h": 52,
-   "solid": true
+   "solid": true,
+   "sw": 1
   },
   {
    "tag": "sbx0",
@@ -54,7 +58,8 @@
    "y": 388,
    "w": 178,
    "h": 46,
-   "solid": true
+   "solid": true,
+   "sw": 1.25
   },
   {
    "tag": "badgesbx0",
@@ -81,7 +86,8 @@
    "y": 442,
    "w": 178,
    "h": 46,
-   "solid": true
+   "solid": true,
+   "sw": 1.25
   },
   {
    "tag": "badgesbx1",
@@ -108,7 +114,8 @@
    "y": 496,
    "w": 178,
    "h": 46,
-   "solid": true
+   "solid": true,
+   "sw": 1.25
   },
   {
    "tag": "badgesbx2",
@@ -135,7 +142,8 @@
    "y": 566,
    "w": 178,
    "h": 46,
-   "solid": true
+   "solid": true,
+   "sw": 1
   },
   {
    "tag": "frame",
@@ -144,7 +152,8 @@
    "y": 182,
    "w": 336,
    "h": 446,
-   "solid": false
+   "solid": false,
+   "sw": 1
   },
   {
    "tag": "pghost6",
@@ -153,7 +162,8 @@
    "y": 429,
    "w": 104,
    "h": 84,
-   "solid": false
+   "solid": false,
+   "sw": 0.75
   },
   {
    "tag": "pghost3",
@@ -162,7 +172,8 @@
    "y": 426,
    "w": 104,
    "h": 84,
-   "solid": false
+   "solid": false,
+   "sw": 0.75
   },
   {
    "tag": "proxy",
@@ -171,7 +182,8 @@
    "y": 423,
    "w": 104,
    "h": 84,
-   "solid": true
+   "solid": true,
+   "sw": 1.25
   },
   {
    "tag": "badgeproxy",
@@ -189,7 +201,8 @@
    "y": 652,
    "w": 302,
    "h": 44,
-   "solid": true
+   "solid": true,
+   "sw": 1.25
   },
   {
    "tag": "dest1",
@@ -198,7 +211,8 @@
    "y": 704,
    "w": 302,
    "h": 44,
-   "solid": true
+   "solid": true,
+   "sw": 1.25
   },
   {
    "tag": "badgedest1",
@@ -216,7 +230,8 @@
    "y": 756,
    "w": 302,
    "h": 44,
-   "solid": true
+   "solid": true,
+   "sw": 1
   },
   {
    "tag": "dest3",
@@ -225,7 +240,8 @@
    "y": 808,
    "w": 302,
    "h": 44,
-   "solid": true
+   "solid": true,
+   "sw": 1
   },
   {
    "tag": "out0",
@@ -234,7 +250,8 @@
    "y": 876,
    "w": 336,
    "h": 46,
-   "solid": true
+   "solid": true,
+   "sw": 1
   },
   {
    "tag": "out1",
@@ -243,7 +260,8 @@
    "y": 944,
    "w": 336,
    "h": 46,
-   "solid": true
+   "solid": true,
+   "sw": 1
   },
   {
    "tag": "out2",
@@ -252,7 +270,8 @@
    "y": 1012,
    "w": 336,
    "h": 46,
-   "solid": true
+   "solid": true,
+   "sw": 1
   },
   {
    "tag": "out3",
@@ -261,7 +280,8 @@
    "y": 1080,
    "w": 336,
    "h": 46,
-   "solid": true
+   "solid": true,
+   "sw": 1
   },
   {
    "tag": "obs",
@@ -270,7 +290,8 @@
    "y": 1182,
    "w": 336,
    "h": 46,
-   "solid": true
+   "solid": true,
+   "sw": 1
   }
  ],
  "links": [

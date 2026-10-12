@@ -23,7 +23,9 @@ A figure that is drawn in boxes — the software factory's — also writes
 figure needs on top of 1–4. They read only that manifest, so they cannot change
 what the first paper's figures are held to:
 
-  5. text never straddles a box edge: it is inside a box or clear of it
+  5. text never straddles a box edge: it is inside a box or clear of it; and
+     text inside a card keeps 2 units between its top and bottom (ascent and
+     descent included) and the inner edge of the card's stroke
   6. no connector is drawn through text, a card, or another connector
   7. every connector starts and ends on something — no arrow lands in air
   8. an arrow's last leg is long enough to read as an arrow
@@ -219,6 +221,20 @@ if GEOM.exists():
                 errors.append(f"text straddles a box edge: {a['tag']!r} "
                               f"({a['x']:.0f},{a['y']:.0f} {a['w']:.0f}×{a['h']:.0f}) "
                               f"and {sh['tag']!r} ({sh['x']},{sh['y']} {sh['w']}×{sh['h']})")
+            elif sh["kind"] != "ghost" and inside(a, sh):
+                # Inside: keep clear of the stroke, not just its centre. A box is
+                # drawn half a unit in from its record with its stroke centred
+                # there, so the stroke's inner edge is 0.5 + width/2 in. The
+                # vertical extent is exact (it comes from the type size); the
+                # width is figkit's estimate, already pessimistic, so the sides
+                # keep the plain containment above.
+                inner = 0.5 + sh.get("sw", 1) / 2
+                top = a["y"] - (sh["y"] + inner)
+                bottom = (sh["y"] + sh["h"] - inner) - (a["y"] + a["h"])
+                if min(top, bottom) < 2 - 0.005:
+                    side, gap = ("top", top) if top < bottom else ("bottom", bottom)
+                    errors.append(f"text too close to its card's {side} edge: {a['tag']!r} is "
+                                  f"{gap:.2f} units inside {sh['tag']!r}'s stroke (min 2)")
     # 6a. no connector through text
     for l in links:
         for p, q in segs(l):

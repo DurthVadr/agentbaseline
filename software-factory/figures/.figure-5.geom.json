@@ -9,7 +9,8 @@
    "y": 18,
    "w": 296,
    "h": 56,
-   "solid": true
+   "solid": true,
+   "sw": 1.25
   },
   {
    "tag": "badgeauth",
@@ -27,7 +28,8 @@
    "y": 96,
    "w": 450,
    "h": 262,
-   "solid": false
+   "solid": false,
+   "sw": 1
   },
   {
    "tag": "sig",
@@ -36,7 +38,8 @@
    "y": 152,
    "w": 112,
    "h": 112,
-   "solid": true
+   "solid": true,
+   "sw": 1
   },
   {
    "tag": "orch",
@@ -44,17 +47,19 @@
    "x": 142,
    "y": 132,
    "w": 100,
-   "h": 70,
-   "solid": true
+   "h": 62,
+   "solid": true,
+   "sw": 1
   },
   {
    "tag": "exec",
    "kind": "card",
    "x": 142,
-   "y": 214,
+   "y": 202,
    "w": 100,
-   "h": 70,
-   "solid": true
+   "h": 82,
+   "solid": true,
+   "sw": 1
   },
   {
    "tag": "sbx0",
@@ -63,7 +68,8 @@
    "y": 132.0,
    "w": 172,
    "h": 45.333333333333336,
-   "solid": true
+   "solid": true,
+   "sw": 1.25
   },
   {
    "tag": "badgesbx0",
@@ -90,7 +96,8 @@
    "y": 185.33333333333334,
    "w": 172,
    "h": 45.333333333333336,
-   "solid": true
+   "solid": true,
+   "sw": 1.25
   },
   {
    "tag": "badgesbx1",
@@ -117,7 +124,8 @@
    "y": 238.66666666666669,
    "w": 172,
    "h": 45.333333333333336,
-   "solid": true
+   "solid": true,
+   "sw": 1.25
   },
   {
    "tag": "badgesbx2",
@@ -144,7 +152,8 @@
    "y": 172,
    "w": 104,
    "h": 84,
-   "solid": false
+   "solid": false,
+   "sw": 0.75
   },
   {
    "tag": "pghost3",
@@ -153,7 +162,8 @@
    "y": 169,
    "w": 104,
    "h": 84,
-   "solid": false
+   "solid": false,
+   "sw": 0.75
   },
   {
    "tag": "proxy",
@@ -162,7 +172,8 @@
    "y": 166,
    "w": 104,
    "h": 84,
-   "solid": true
+   "solid": true,
+   "sw": 1.25
   },
   {
    "tag": "badgeproxy",
@@ -180,7 +191,8 @@
    "y": 132,
    "w": 120,
    "h": 44,
-   "solid": true
+   "solid": true,
+   "sw": 1
   },
   {
    "tag": "dest1",
@@ -189,7 +201,8 @@
    "y": 184,
    "w": 120,
    "h": 44,
-   "solid": true
+   "solid": true,
+   "sw": 1
   },
   {
    "tag": "dest2",
@@ -198,7 +211,8 @@
    "y": 236,
    "w": 120,
    "h": 44,
-   "solid": true
+   "solid": true,
+   "sw": 1.25
   },
   {
    "tag": "dest3",
@@ -206,8 +220,9 @@
    "x": 608,
    "y": 288,
    "w": 120,
-   "h": 72,
-   "solid": true
+   "h": 76,
+   "solid": true,
+   "sw": 1.25
   },
   {
    "tag": "badgedest3",
@@ -225,43 +240,48 @@
    "y": 304,
    "w": 172,
    "h": 46,
-   "solid": true
+   "solid": true,
+   "sw": 1
   },
   {
    "tag": "pr",
    "kind": "card",
    "x": 272,
-   "y": 402,
+   "y": 400,
    "w": 104,
-   "h": 56,
-   "solid": true
+   "h": 60,
+   "solid": true,
+   "sw": 1
   },
   {
    "tag": "appr",
    "kind": "card",
    "x": 396,
-   "y": 402,
+   "y": 400,
    "w": 88,
-   "h": 56,
-   "solid": true
+   "h": 60,
+   "solid": true,
+   "sw": 1
   },
   {
    "tag": "deploy",
    "kind": "card",
    "x": 504,
-   "y": 402,
+   "y": 400,
    "w": 92,
-   "h": 56,
-   "solid": true
+   "h": 60,
+   "solid": true,
+   "sw": 1
   },
   {
    "tag": "prod",
    "kind": "card",
    "x": 616,
-   "y": 402,
+   "y": 400,
    "w": 112,
-   "h": 56,
-   "solid": true
+   "h": 60,
+   "solid": true,
+   "sw": 1
   },
   {
    "tag": "obs",
@@ -270,7 +290,8 @@
    "y": 516,
    "w": 720,
    "h": 42,
-   "solid": true
+   "solid": true,
+   "sw": 1
   }
  ],
  "links": [
@@ -335,11 +356,11 @@
    "pts": [
     [
      242,
-     249.0
+     243.0
     ],
     [
      254,
-     249.0
+     243.0
     ]
    ],
    "head": false,
@@ -458,7 +479,7 @@
     ],
     [
      590,
-     324.0
+     326.0
     ]
    ],
    "head": false,
@@ -522,11 +543,11 @@
    "pts": [
     [
      590,
-     324.0
+     326.0
     ],
     [
      608,
-     324.0
+     326.0
     ]
    ],
    "head": true,
@@ -581,15 +602,15 @@
     ],
     [
      516.0,
-     382
+     380
     ],
     [
      324.0,
-     382
+     380
     ],
     [
      324.0,
-     402
+     400
     ]
    ],
    "head": true,
@@ -653,7 +674,7 @@
    "pts": [
     [
      672.0,
-     458
+     460
     ],
     [
      672.0,

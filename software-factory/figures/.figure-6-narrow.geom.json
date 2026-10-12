@@ -9,7 +9,8 @@
    "y": 18,
    "w": 336,
    "h": 66,
-   "solid": true
+   "solid": true,
+   "sw": 1.25
   },
   {
    "tag": "badgeauth",
@@ -27,7 +28,8 @@
    "y": 106,
    "w": 190,
    "h": 66,
-   "solid": true
+   "solid": true,
+   "sw": 1
   },
   {
    "tag": "orch",
@@ -36,7 +38,8 @@
    "y": 236,
    "w": 178,
    "h": 96,
-   "solid": true
+   "solid": true,
+   "sw": 1
   },
   {
    "tag": "sbx",
@@ -45,7 +48,8 @@
    "y": 356,
    "w": 178,
    "h": 132,
-   "solid": true
+   "solid": true,
+   "sw": 1.25
   },
   {
    "tag": "badgesbx",
@@ -72,7 +76,8 @@
    "y": 512,
    "w": 316,
    "h": 60,
-   "solid": true
+   "solid": true,
+   "sw": 1.25
   },
   {
    "tag": "badgeproxy",
@@ -90,7 +95,8 @@
    "y": 196,
    "w": 336,
    "h": 392,
-   "solid": false
+   "solid": false,
+   "sw": 1
   },
   {
    "tag": "dest0",
@@ -99,7 +105,8 @@
    "y": 612,
    "w": 298,
    "h": 44,
-   "solid": true
+   "solid": true,
+   "sw": 1
   },
   {
    "tag": "dest1",
@@ -108,7 +115,8 @@
    "y": 664,
    "w": 298,
    "h": 44,
-   "solid": true
+   "solid": true,
+   "sw": 1
   },
   {
    "tag": "dest2",
@@ -117,7 +125,8 @@
    "y": 716,
    "w": 298,
    "h": 44,
-   "solid": true
+   "solid": true,
+   "sw": 1.25
   },
   {
    "tag": "badgedest2",
@@ -135,7 +144,8 @@
    "y": 784,
    "w": 298,
    "h": 46,
-   "solid": true
+   "solid": true,
+   "sw": 1
   },
   {
    "tag": "out1",
@@ -144,7 +154,8 @@
    "y": 852,
    "w": 336,
    "h": 46,
-   "solid": true
+   "solid": true,
+   "sw": 1
   },
   {
    "tag": "out2",
@@ -153,7 +164,8 @@
    "y": 920,
    "w": 336,
    "h": 46,
-   "solid": true
+   "solid": true,
+   "sw": 1
   },
   {
    "tag": "out3",
@@ -162,7 +174,8 @@
    "y": 988,
    "w": 336,
    "h": 46,
-   "solid": true
+   "solid": true,
+   "sw": 1
   }
  ],
  "links": [

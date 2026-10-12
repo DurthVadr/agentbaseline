@@ -9,7 +9,8 @@
    "y": 18,
    "w": 336,
    "h": 52,
-   "solid": true
+   "solid": true,
+   "sw": 1.25
   },
   {
    "tag": "badgeauth",
@@ -27,7 +28,8 @@
    "y": 92,
    "w": 190,
    "h": 66,
-   "solid": true
+   "solid": true,
+   "sw": 1
   },
   {
    "tag": "wf",
@@ -36,7 +38,8 @@
    "y": 222,
    "w": 178,
    "h": 66,
-   "solid": true
+   "solid": true,
+   "sw": 1
   },
   {
    "tag": "ghost6",
@@ -45,7 +48,8 @@
    "y": 318,
    "w": 172,
    "h": 126,
-   "solid": false
+   "solid": false,
+   "sw": 0.75
   },
   {
    "tag": "ghost3",
@@ -54,7 +58,8 @@
    "y": 315,
    "w": 172,
    "h": 126,
-   "solid": false
+   "solid": false,
+   "sw": 0.75
   },
   {
    "tag": "sbx",
@@ -63,7 +68,8 @@
    "y": 312,
    "w": 172,
    "h": 126,
-   "solid": true
+   "solid": true,
+   "sw": 1.25
   },
   {
    "tag": "badgesbx",
@@ -90,7 +96,8 @@
    "y": 182,
    "w": 336,
    "h": 278,
-   "solid": false
+   "solid": false,
+   "sw": 1
   },
   {
    "tag": "pghost6",
@@ -99,7 +106,8 @@
    "y": 338,
    "w": 104,
    "h": 84,
-   "solid": false
+   "solid": false,
+   "sw": 0.75
   },
   {
    "tag": "pghost3",
@@ -108,7 +116,8 @@
    "y": 335,
    "w": 104,
    "h": 84,
-   "solid": false
+   "solid": false,
+   "sw": 0.75
   },
   {
    "tag": "proxy",
@@ -117,7 +126,8 @@
    "y": 332,
    "w": 104,
    "h": 84,
-   "solid": true
+   "solid": true,
+   "sw": 1.25
   },
   {
    "tag": "badgeproxy",
@@ -135,7 +145,8 @@
    "y": 484,
    "w": 302,
    "h": 44,
-   "solid": true
+   "solid": true,
+   "sw": 1.25
   },
   {
    "tag": "dest1",
@@ -144,7 +155,8 @@
    "y": 536,
    "w": 302,
    "h": 44,
-   "solid": true
+   "solid": true,
+   "sw": 1.25
   },
   {
    "tag": "badgedest1",
@@ -162,7 +174,8 @@
    "y": 588,
    "w": 302,
    "h": 44,
-   "solid": true
+   "solid": true,
+   "sw": 1
   },
   {
    "tag": "dest3",
@@ -171,7 +184,8 @@
    "y": 640,
    "w": 302,
    "h": 44,
-   "solid": true
+   "solid": true,
+   "sw": 1
   },
   {
    "tag": "out0",
@@ -180,7 +194,8 @@
    "y": 708,
    "w": 336,
    "h": 46,
-   "solid": true
+   "solid": true,
+   "sw": 1
   },
   {
    "tag": "out1",
@@ -189,7 +204,8 @@
    "y": 776,
    "w": 336,
    "h": 46,
-   "solid": true
+   "solid": true,
+   "sw": 1
   },
   {
    "tag": "out2",
@@ -198,7 +214,8 @@
    "y": 844,
    "w": 336,
    "h": 46,
-   "solid": true
+   "solid": true,
+   "sw": 1
   },
   {
    "tag": "obs",
@@ -207,7 +224,8 @@
    "y": 946,
    "w": 336,
    "h": 46,
-   "solid": true
+   "solid": true,
+   "sw": 1
   }
  ],
  "links": [

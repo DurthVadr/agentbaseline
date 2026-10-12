@@ -9,7 +9,8 @@
    "y": 48,
    "w": 96,
    "h": 64,
-   "solid": true
+   "solid": true,
+   "sw": 1
   },
   {
    "tag": "design",
@@ -18,7 +19,8 @@
    "y": 48,
    "w": 114,
    "h": 64,
-   "solid": true
+   "solid": true,
+   "sw": 1
   },
   {
    "tag": "inner",
@@ -27,7 +29,8 @@
    "y": 18,
    "w": 432,
    "h": 152,
-   "solid": false
+   "solid": false,
+   "sw": 1
   },
   {
    "tag": "assemble",
@@ -36,7 +39,8 @@
    "y": 48,
    "w": 117.33333333333333,
    "h": 64,
-   "solid": true
+   "solid": true,
+   "sw": 1
   },
   {
    "tag": "build",
@@ -45,7 +49,8 @@
    "y": 48,
    "w": 117.33333333333333,
    "h": 64,
-   "solid": true
+   "solid": true,
+   "sw": 1
   },
   {
    "tag": "verify",
@@ -54,7 +59,8 @@
    "y": 48,
    "w": 117.33333333333333,
    "h": 64,
-   "solid": true
+   "solid": true,
+   "sw": 1
   },
   {
    "tag": "review",
@@ -63,7 +69,8 @@
    "y": 264,
    "w": 140,
    "h": 64,
-   "solid": true
+   "solid": true,
+   "sw": 1
   },
   {
    "tag": "deploy",
@@ -72,7 +79,8 @@
    "y": 264,
    "w": 140,
    "h": 64,
-   "solid": true
+   "solid": true,
+   "sw": 1
   },
   {
    "tag": "prod",
@@ -81,7 +89,8 @@
    "y": 264,
    "w": 140,
    "h": 64,
-   "solid": true
+   "solid": true,
+   "sw": 1
   }
  ],
  "links": [

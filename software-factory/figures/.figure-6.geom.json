@@ -9,7 +9,8 @@
    "y": 18,
    "w": 296,
    "h": 66,
-   "solid": true
+   "solid": true,
+   "sw": 1.25
   },
   {
    "tag": "badgeauth",
@@ -27,7 +28,8 @@
    "y": 106,
    "w": 450,
    "h": 202,
-   "solid": false
+   "solid": false,
+   "sw": 1
   },
   {
    "tag": "sig",
@@ -36,7 +38,8 @@
    "y": 163,
    "w": 112,
    "h": 110,
-   "solid": true
+   "solid": true,
+   "sw": 1
   },
   {
    "tag": "orch",
@@ -45,7 +48,8 @@
    "y": 142,
    "w": 100,
    "h": 110,
-   "solid": true
+   "solid": true,
+   "sw": 1
   },
   {
    "tag": "sbx",
@@ -54,7 +58,8 @@
    "y": 142,
    "w": 172,
    "h": 152,
-   "solid": true
+   "solid": true,
+   "sw": 1.25
   },
   {
    "tag": "badgesbx",
@@ -81,7 +86,8 @@
    "y": 176,
    "w": 104,
    "h": 84,
-   "solid": true
+   "solid": true,
+   "sw": 1.25
   },
   {
    "tag": "badgeproxy",
@@ -99,7 +105,8 @@
    "y": 142,
    "w": 120,
    "h": 60,
-   "solid": true
+   "solid": true,
+   "sw": 1
   },
   {
    "tag": "dest1",
@@ -107,23 +114,25 @@
    "x": 608,
    "y": 210,
    "w": 120,
-   "h": 74,
-   "solid": true
+   "h": 76,
+   "solid": true,
+   "sw": 1
   },
   {
    "tag": "dest2",
    "kind": "guard",
    "x": 608,
-   "y": 292,
+   "y": 294,
    "w": 120,
-   "h": 72,
-   "solid": true
+   "h": 76,
+   "solid": true,
+   "sw": 1.25
   },
   {
    "tag": "badgedest2",
    "kind": "badge",
    "x": 600,
-   "y": 284,
+   "y": 286,
    "w": 16,
    "h": 16,
    "solid": true
@@ -132,37 +141,41 @@
    "tag": "pr",
    "kind": "card",
    "x": 272,
-   "y": 412,
+   "y": 410,
    "w": 104,
-   "h": 56,
-   "solid": true
+   "h": 60,
+   "solid": true,
+   "sw": 1
   },
   {
    "tag": "appr",
    "kind": "card",
    "x": 396,
-   "y": 412,
+   "y": 410,
    "w": 88,
-   "h": 56,
-   "solid": true
+   "h": 60,
+   "solid": true,
+   "sw": 1
   },
   {
    "tag": "deploy",
    "kind": "card",
    "x": 504,
-   "y": 412,
+   "y": 410,
    "w": 116,
-   "h": 56,
-   "solid": true
+   "h": 60,
+   "solid": true,
+   "sw": 1
   },
   {
    "tag": "prod",
    "kind": "card",
    "x": 640,
-   "y": 412,
+   "y": 410,
    "w": 88,
-   "h": 56,
-   "solid": true
+   "h": 60,
+   "solid": true,
+   "sw": 1
   }
  ],
  "links": [
@@ -282,7 +295,7 @@
     ],
     [
      590,
-     328.0
+     332.0
     ]
    ],
    "head": false,
@@ -312,11 +325,11 @@
    "pts": [
     [
      590,
-     247.0
+     248.0
     ],
     [
      608,
-     247.0
+     248.0
     ]
    ],
    "head": false,
@@ -329,11 +342,11 @@
    "pts": [
     [
      590,
-     328.0
+     332.0
     ],
     [
      608,
-     328.0
+     332.0
     ]
    ],
    "head": true,
@@ -350,15 +363,15 @@
     ],
     [
      516.0,
-     392
+     390
     ],
     [
      324.0,
-     392
+     390
     ],
     [
      324.0,
-     412
+     410
     ]
    ],
    "head": true,
@@ -422,7 +435,7 @@
    "pts": [
     [
      684.0,
-     468
+     470
     ],
     [
      684.0,

@@ -218,7 +218,7 @@ class SF(Fig):
                           f'height="{h - 1:g}" rx="4" {fill} '
                           f'stroke="{stroke}" stroke-width="{sw}"{dash}/>')
         self.shapes.append({"tag": tag, "kind": kind, "x": x, "y": y, "w": w, "h": h,
-                            "solid": kind in self.SOLID})
+                            "solid": kind in self.SOLID, "sw": sw})
 
     def badge(self, cx, cy, n, tag):
         """A boundary number: an accent disc with the numeral knocked out. It
@@ -344,8 +344,8 @@ class K:
     MID = 200
     PROXY = (456, 158, 560, 242)
     LANE = (296, 342)
-    EXIT_Y = 374              # pull requests leave through the proxy along here
-    OUT = (394, 450)
+    EXIT_Y = 372              # pull requests leave through the proxy along here
+    OUT = (392, 452)          # tall enough to keep a two-line gloss off the bottom stroke
     PR = (264, 368)
     APPROVAL = (388, 476)
     SLOT3 = (496, 588)
@@ -420,8 +420,9 @@ def card_h(gloss, name=""):
     """A destination card's height: one name line and one gloss line is 44;
     each further line adds its leading."""
     names = len(name) if isinstance(name, (list, tuple)) else 1
-    # even heights, so every fan branch lands on a whole unit
-    return 44 + 16 * (names - 1) + 14 * max(len(gloss) - 1, 0)
+    # each further line at its leading (15 for names, 14.5 for glosses),
+    # rounded up to even units so every fan branch lands on a whole unit
+    return 44 + 16 * (names - 1) + 16 * max(len(gloss) - 1, 0)
 
 
 def skel_dest(f, dest=DEST, k=K, px1=None):
@@ -564,9 +565,9 @@ def level3(f):
     f.node(K.A[0], K.MID - 56, K.A[1] - K.A[0], 112, ["Signals and", "requests"],
            ["incidents,", "scanner", "findings,", "evals"], tag="sig")
     # the orchestrator plans; the execution layer starts agents
-    ob = (K.B[0], K.ROW[0], K.B[1] - K.B[0], 70)
+    ob = (K.B[0], K.ROW[0], K.B[1] - K.B[0], 62)
     f.node(*ob, ["Orchestrator", "agent"], ["preflight"], kind="agent", tag="orch")
-    eb = (K.B[0], K.ROW[0] + 82, K.B[1] - K.B[0], K.ROW[1] - K.ROW[0] - 82)
+    eb = (K.B[0], K.ROW[0] + 70, K.B[1] - K.B[0], K.ROW[1] - K.ROW[0] - 70)
     f.node(*eb, ["Execution", "layer"], ["starts each", "agent"], tag="exec")
     f.link([(K.A[1], K.ROW[0] + 35), (K.B[0], K.ROW[0] + 35)], tag="takes")
     # the proposal goes up to the authorization service — never straight to a grant

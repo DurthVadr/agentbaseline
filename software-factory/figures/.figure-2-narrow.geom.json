@@ -9,7 +9,8 @@
    "y": 18,
    "w": 348,
    "h": 152,
-   "solid": true
+   "solid": true,
+   "sw": 1
   },
   {
    "tag": "task",
@@ -18,7 +19,8 @@
    "y": 64,
    "w": 328,
    "h": 99,
-   "solid": true
+   "solid": true,
+   "sw": 1
   },
   {
    "tag": "dlg",
@@ -27,7 +29,8 @@
    "y": 110,
    "w": 308,
    "h": 46,
-   "solid": true
+   "solid": true,
+   "sw": 1
   },
   {
    "tag": "auth",
@@ -36,7 +39,8 @@
    "y": 200,
    "w": 348,
    "h": 70,
-   "solid": true
+   "solid": true,
+   "sw": 1.25
   },
   {
    "tag": "badgeauth",
@@ -54,7 +58,8 @@
    "y": 314,
    "w": 198,
    "h": 132,
-   "solid": true
+   "solid": true,
+   "sw": 1.25
   },
   {
    "tag": "badgesbx",
@@ -81,7 +86,8 @@
    "y": 338,
    "w": 98,
    "h": 84,
-   "solid": true
+   "solid": true,
+   "sw": 1.25
   },
   {
    "tag": "badgeproxy",
@@ -99,7 +105,8 @@
    "y": 474,
    "w": 348,
    "h": 44,
-   "solid": true
+   "solid": true,
+   "sw": 1
   },
   {
    "tag": "badgelg1",
