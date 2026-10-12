@@ -50,13 +50,13 @@ WASH = "#F1F2EC"
 
 # ── type, sized for the PDF column ───────────────────────────────────────────
 # Every figure is drawn on a 720-unit content width (360 for phones) and set on
-# a canvas MARGIN wider on every side, so no stroke meets the canvas edge. At
-# 6.5 in the 736-unit canvas prints at 0.636 pt a unit; the smallest run here
-# (11.25) prints at 7.15 pt.
+# a canvas MARGIN wider on every side, so no stroke meets the canvas edge. The
+# PDF prints the 736-unit canvas 425.2 pt wide (measured; see bin/check-figure),
+# 0.578 pt a unit, so the smallest run here (12.25) prints at 7.08 pt and a name
+# (12.5) at 7.22 pt. On the page the same 12.25 is never under 11 px.
 W = 720
 MARGIN = 8
-PRINT_IN, MIN_PT = 6.5, 7.0          # checked by bin/check-figure
-NAME, GLOSS, LAB, NUM = 12.5, 11.25, 11.25, 11.25
+NAME, GLOSS, LAB, NUM = 12.5, 12.25, 12.25, 12.25
 PAD = 10                              # card inset
 
 # ── what each figure says, in words ──────────────────────────────────────────
@@ -107,7 +107,7 @@ ALT = {
        "could widen the task; the fix ships through approval and a small first deploy, and the "
        "error rate afterward confirms it or starts the next run.",
 }
-LS = 0.06                             # label tracking (em)
+LS = 0.04                             # label tracking (em)
 
 
 class SF(Fig):
@@ -268,12 +268,12 @@ class SF(Fig):
         for l in self.links:
             l["pts"] = [(x + m, y + m) for x, y in l["pts"]]
         self.W, self.H = cw, ch
+        # print size is bin/check-figure's to decide (rule 9); the phone
+        # check still reads this manifest
         meta = {"W": self.W, "H": self.H, "shapes": self.shapes, "links": self.links,
                 "margin": m}
         if self.narrow:
             meta["phone"] = {"display_px": 343, "min_px": 10}
-        else:
-            meta["print"] = {"width_in": PRINT_IN, "min_pt": MIN_PT}
         super().write(name, out_dir=HERE)
         (HERE / f".{name}.geom.json").write_text(json.dumps(meta, indent=1), encoding="utf-8")
 
@@ -294,7 +294,7 @@ class K:
     B = (134, 234)
     BUS_B = 246
     C = (264, 436)
-    D = (460, 560)
+    D = (456, 560)
     BUS_E = 582
     E = (600, 720)
     AUTH = (264, 10, 560, 66)
@@ -304,12 +304,12 @@ class K:
     LABY = 108
     ROW = (124, 276)
     MID = 200
-    PROXY = (460, 158, 560, 242)
+    PROXY = (456, 158, 560, 242)
     LANE = (296, 342)
     EXIT_Y = 374              # pull requests leave through the proxy along here
     OUT = (394, 450)
-    PR = (264, 364)
-    APPROVAL = (384, 476)
+    PR = (264, 368)
+    APPROVAL = (388, 476)
     SLOT3 = (496, 588)
     SLOT4 = (608, 720)
     LOOPY = 492
@@ -374,7 +374,7 @@ DEST = [  # (name, gloss lines, kind, boundary)
     ("Source control", ["the repository"], "card", None),
     ("Services", ["the task needs"], "card", None),
     ("Model gateway", ["approved models"], "guard", None),
-    ("Admission point", ["approved, scanned", "packages"], "guard", 2),
+    ("Admission point", ["approved,", "scanned", "packages"], "guard", 2),
 ]
 
 
@@ -489,7 +489,7 @@ def level1(f):
     f.node(K.A[0], K.MID - 40, K.A[1] - K.A[0], 80, "Developer",
            ["directs the", "agent, reviews", "its output"], tag="dev")
     sx0, sy0, sx1, sy1 = sandbox_one(f, "Sandbox", "Coding agent",
-                                     ["profile in its harness,", "workflow in a skill"])
+                                     ["profile in its", "harness, workflow", "in a skill"])
     f.link([(K.A[1], K.MID), (sx0, K.MID)], tag="directs")
     skel_proxy(f)
     f.link([(sx1, K.MID), (K.PROXY[0], K.MID)], tag="traffic")
@@ -537,7 +537,7 @@ def level3(f):
     f.node(*eb, ["Execution", "layer"], ["starts each", "agent"], tag="exec")
     f.link([(K.A[1], K.ROW[0] + 35), (K.B[0], K.ROW[0] + 35)], tag="takes")
     # the proposal goes up to the authorization service — never straight to a grant
-    pxp = K.B[1] - 8
+    pxp = K.B[1] - 3
     ay = mid((K.AUTH[1], K.AUTH[3]))
     f.link([(pxp, K.ROW[0]), (pxp, ay), (K.AUTH[0], ay)], tag="propose")
     f.gloss(pxp - 8 - f.width("proposes profile", "gloss"), 34, "proposes profile", "propose.l1")
@@ -682,14 +682,14 @@ def figure6():
     f = SF("sf6", W, k.H, CAPTION[6], ALT[6])
     skel_auth(f, k, FIG6_AUTH)
     skel_frame(f, "The factory", k=k)
-    f.node(k.A[0], k.MID - 48, k.A[1] - k.A[0], 96, ["Production", "alert"],
-           ["elevated errors", "in a payments", "service"], tag="sig")
+    f.node(k.A[0], k.MID - 55, k.A[1] - k.A[0], 110, ["Production", "alert"],
+           ["elevated", "errors in a", "payments", "service"], tag="sig")
     ob = (k.B[0], k.ROW[0], k.B[1] - k.B[0], 110)
     f.node(*ob, ["Orchestrator", "agent"], ["proposes a", "task for an", "incident", "agent"],
            kind="agent", tag="orch")
     f.link([(k.A[1], k.ROW[0] + 46), (k.B[0], k.ROW[0] + 46)], tag="takes")
     # what the task asks for rides on the proposal, into the authorization service
-    pxp = k.B[1] - 8
+    pxp = k.B[1] - 3
     ay = mid((k.AUTH[1], k.AUTH[3]))
     f.link([(pxp, k.ROW[0]), (pxp, ay), (k.AUTH[0], ay)], tag="propose")
     for i, s in enumerate(("read the service's logs,", "last hour, one pull request")):
@@ -709,23 +709,23 @@ def figure6():
     # wanting more is a request for a new decision, never a grant
     ux = x1 - 40
     f.link([(ux, y0), (ux, k.AUTH[3])], tag="wider")
-    f.gloss(ux - 8 - f.width("asks for a new decision", "gloss"), k.GRANT_Y,
-            "asks for a new decision", "wider.l")
+    f.gloss(ux - 8 - f.width("needs a new decision", "gloss"), k.GRANT_Y,
+            "needs a new decision", "wider.l")
     skel_proxy(f, ("enforces it,", "attaches", "credentials"), k=k)
     f.link([(x1, k.MID), (k.PROXY[0], k.MID)], tag="traffic")
     skel_dest(f, [(["Payments", "service logs"], ["last hour only"], "card", None),
-                  (["Authentication", "service logs"], ["blocked: outside", "the task"],
+                  (["Authentication", "service logs"], ["blocked, not", "in the task"],
                    "blocked", None),
-                  ("Admission point", ["serves the", "approved library"], "guard", 2)],
+                  ("Admission point", ["serves the", "approved", "library"], "guard", 2)],
               blocked_note=False, k=k)
     skel_pr_exit(f, k=k)
-    slots = [(264, 364), (384, 470), (490, 600), (620, 720)]
+    slots = [(264, 368), (388, 476), (496, 612), (632, 720)]
     out_card(f, slots[0], "Pull request", ["one, as", "granted"], "pr", k=k)
     out_card(f, slots[1], "Approval", ["a person or", "automatic"], "appr", k=k)
     out_card(f, slots[2], "Deploy", ["small share of", "traffic first"], "deploy", k=k)
     out_card(f, slots[3], "Production", ["error rate", "afterward"], "prod", k=k)
     out_chain(f, slots, k=k)
-    outer_loop(f, mid(slots[3]), k.MID + 48, "confirms the fix or starts the next run", k=k)
+    outer_loop(f, mid(slots[3]), k.MID + 55, "confirms the fix or starts the next run", k=k)
     f.set_height(k.LOOPY + 8)
     f.write("figure-6")
 
@@ -739,8 +739,8 @@ def figure1():
     f = SF("sf1", W, 340, CAPTION[1], ALT[1])
     y0, h = 40, 64
     ym = y0 + h / 2
-    f.node(28, y0, 96, h, "Inputs", ["a prompt, PRD", "or ticket"], tag="in")
-    f.node(148, y0, 114, h, "Design", ["sets the limits", "in advance"], tag="design")
+    f.node(28, y0, 96, h, "Inputs", ["prompt, PRD", "or ticket"], tag="in")
+    f.node(148, y0, 114, h, "Design", ["sets limits", "in advance"], tag="design")
     f.link([(124, ym), (148, ym)], tag="a1")
     gx0, gx1 = 288, W
     f.box(gx0, 10, gx1 - gx0, 152, "zone", "inner")
@@ -769,7 +769,7 @@ def figure1():
     bm = b0 + h / 2
     f.node(rx[0], b0, rw, h, "Review", ["of the change"], tag="review")
     f.node(rx[1], b0, rw, h, "Deploy", ["under approval", "policy"], tag="deploy")
-    f.node(rx[2], b0, rw, h, "Production", ["sends back signals,", "such as incidents"],
+    f.node(rx[2], b0, rw, h, "Production", ["sends back signals", "such as incidents"],
            tag="prod")
     vx = mid((rx[0], rx[0] + rw)) + 20
     f.link([(vx, 162), (vx, b0)], tag="passes")
@@ -807,8 +807,8 @@ class N:
     AUTH = (24, 10, 360, 62)
     A = (24, 214)
     IN = (36, 214)        # inside the frame: orchestration, sandboxes, monitoring
-    PROXY = (232, 330)
-    BUS = 345
+    PROXY = (232, 336)
+    BUS = 348
     DEST = (24, 326)
     GX = 74               # where the vertical arrows run
 
@@ -838,13 +838,13 @@ def narrow_level(n, title, desc):
         y += 66 + 24
     elif n == 3:
         oy = y
-        f.node(ix0, y, ix1 - ix0, 52, "Orchestrator agent", ["preflight: proposes scope"],
-               kind="agent", tag="orch")
+        f.node(ix0, y, ix1 - ix0, 66, "Orchestrator agent",
+               ["preflight: proposes", "profile and scope"], kind="agent", tag="orch")
         f.link([(N.GX, prev), (N.GX, y)], tag="takes")
         f.link([(ix1, oy + 26), (ix1 + 12, oy + 26), (ix1 + 12, N.AUTH[3])], tag="propose")
-        y += 52 + 24
+        y += 66 + 24
         f.node(ix0, y, ix1 - ix0, 52, "Execution layer", ["starts each agent"], tag="exec")
-        f.link([(N.GX, oy + 52), (N.GX, y)], tag="plans")
+        f.link([(N.GX, oy + 66), (N.GX, y)], tag="plans")
         prev = y + 52
         y += 52 + 24
     if n == 3:
@@ -866,7 +866,7 @@ def narrow_level(n, title, desc):
         f.link([(N.GX + 60, y), (N.GX + 60, y - 24)], tag="watch")
         y += 46 + 16
     else:
-        sh = 118
+        sh = 132
         if n == 2:  # a fresh sandbox per run
             for d in (6, 3):
                 f.box(ix0 + d, y + d, ix1 - ix0 - 6, sh - 6, "ghost", f"ghost{d}")
@@ -875,13 +875,14 @@ def narrow_level(n, title, desc):
         f.badge(ix0, y, 3, "sbx")
         f.lab(ix0 + PAD + 4, y + 24, "Sandbox per run" if n == 2 else "Sandbox", "sbx.l")
         f.name(ix0 + PAD + 4, y + 50, "Coding agent", "sbx.n")
-        f.gloss(ix0 + PAD + 4, y + 66, "own identity and profile" if n == 2 else
-                "profile in its harness", "sbx.g")
-        f.loop_glyph(ix0 + PAD + 11, y + 86, "sbx.loop")
-        f.gloss(ix0 + PAD + 26, y + 90, "inner loop,", "sbx.lp0")
-        f.gloss(ix0 + PAD + 26, y + 104.5, "until it passes", "sbx.lp1")
+        for i, g_ in enumerate(["own identity", "and profile"] if n == 2 else
+                               ["profile in its harness,", "workflow in a skill"]):
+            f.gloss(ix0 + PAD + 4, y + 66 + i * 14.5, g_, f"sbx.g{i}")
+        f.loop_glyph(ix0 + PAD + 11, y + 100, "sbx.loop")
+        f.gloss(ix0 + PAD + 26, y + 104, "inner loop,", "sbx.lp0")
+        f.gloss(ix0 + PAD + 26, y + 118.5, "until it passes", "sbx.lp1")
         f.link([(N.GX, prev), (N.GX, y)], tag="into")
-        sb_mid = y + 56
+        sb_mid = y + 62
         y += sh + 16
     fy1 = y
     f.box(N.X0, fy0, N.X1 - N.X0, fy1 - fy0, "zone", "frame")
@@ -901,7 +902,7 @@ def narrow_level(n, title, desc):
     y = fy1 + 24
     ys = []
     for i, (nm, g, kind, num) in enumerate(order):
-        gl = [", ".join(g).replace(", packages", " packages")]
+        gl = [" ".join(g)]                      # one line: "approved, scanned packages"
         f.node(N.DEST[0], y, N.DEST[1] - N.DEST[0], 44, nm, gl, kind=kind, num=num,
                tag=f"dest{i}")
         ys.append(y + 22)
@@ -1076,7 +1077,7 @@ def figure6_narrow():
     # asking for more: up the corridor to the authorization service
     cx = ix1 + 12
     f.link([(ix1, sy0 + 24), (cx, sy0 + 24), (cx, y1)], tag="wider")
-    f.gloss(cx + 8, oy + 20, "asks for", "wider.l0")
+    f.gloss(cx + 8, oy + 20, "needs", "wider.l0")
     f.gloss(cx + 8, oy + 34.5, "a new", "wider.l1")
     f.gloss(cx + 8, oy + 49, "decision", "wider.l2")
     y = sy0 + sh + 24

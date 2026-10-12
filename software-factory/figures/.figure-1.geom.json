@@ -297,9 +297,5 @@
    "free": false
   }
  ],
- "margin": 8,
- "print": {
-  "width_in": 6.5,
-  "min_pt": 7.0
- }
+ "margin": 8
 }

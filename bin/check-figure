@@ -27,8 +27,8 @@ what the first paper's figures are held to:
   6. no connector is drawn through text, a card, or another connector
   7. every connector starts and ends on something — no arrow lands in air
   8. an arrow's last leg is long enough to read as an arrow
-  9. text stays legible at the size it is shown: 7 pt across a 6.5 in PDF
-     column, or 10 px across a phone's 343 px column
+  9. text stays legible at the size it is shown: 7 pt at the PDF's figure
+     width (measured, set below), or 10 px across a phone's 343 px column
  10. nothing touches the canvas edge: every box, text run and connector keeps
      at least 6 units of air, so no stroke is clipped and every figure sits
      in the same margin
@@ -45,6 +45,16 @@ if NAME.endswith(".svg"):
     NAME = SVG.stem
     BOXES = SVG.parent / f".{NAME}.boxes.json"
 GEOM = SVG.parent / f".{NAME}.geom.json"
+
+# ── the sizes a boxed figure is shown at (rule 9) ────────────────────────────
+# Print: measured from the built PDF, not assumed. `bin/build-pdf --paper
+# software-factory --draft` on 12 Oct 2026 (A4, 30 mm side margins): in Figure 3,
+# "Runtime" (canvas x 282) and "Source" (canvas x 618) start 194.13 pt apart, and
+# "Developer" (x 18) to "Source" is 346.67 pt over 600 units — 0.5778 pt a unit
+# both ways, so the 736-unit canvas prints 425.24 pt, the 150 mm text column. An
+# earlier version of this rule assumed a 6.5 in (468 pt) column and so passed
+# text that prints at 6.5 pt.
+PRINT_WIDTH_PT, MIN_PT = 425.2, 7.0
 
 if not BOXES.exists():
     sys.exit("no box manifest — run whitepaper/figures/build-figure-1.py first")
@@ -237,14 +247,14 @@ if GEOM.exists():
             if leg < 18:
                 errors.append(f"arrow {l['tag']!r} ends in a {leg:.0f}px leg — "
                               f"too short to read as an arrow")
-    # 9. legible at the size it is shown
-    if "print" in geom:
-        pt = geom["print"]["width_in"] * 72 / W
-        for a in boxes:
-            size = a["h"] / 1.02 * pt
-            if size < geom["print"]["min_pt"] - 0.005:
-                errors.append(f"text too small in print: {a['tag']!r} is {size:.2f} pt "
-                              f"across a {geom['print']['width_in']} in column")
+    # 9. legible at the size it is shown. Print: every wide figure, at the
+    #    PDF's measured figure width. Phone: where the manifest asks for it.
+    if not NAME.endswith("-narrow"):
+        k = PRINT_WIDTH_PT / W
+        small = [a for a in boxes if a["h"] / 1.02 * k < MIN_PT - 0.005]
+        for a in small:
+            errors.append(f"text too small in print: {a['tag']!r} is {a['h'] / 1.02 * k:.2f} pt "
+                          f"across the PDF's {PRINT_WIDTH_PT} pt figure width")
     if "phone" in geom:
         k = geom["phone"]["display_px"] / W
         for a in boxes:
