@@ -1,6 +1,6 @@
 {
  "W": 376,
- "H": 792,
+ "H": 882,
  "shapes": [
   {
    "tag": "auth",
@@ -156,6 +156,42 @@
    "h": 46,
    "solid": true,
    "sw": 1
+  },
+  {
+   "tag": "badgelg1",
+   "kind": "badge",
+   "x": 32,
+   "y": 830,
+   "w": 16,
+   "h": 16,
+   "solid": true
+  },
+  {
+   "tag": "badgelg2",
+   "kind": "badge",
+   "x": 180.5612244897959,
+   "y": 830,
+   "w": 16,
+   "h": 16,
+   "solid": true
+  },
+  {
+   "tag": "badgelg3",
+   "kind": "badge",
+   "x": 32,
+   "y": 854,
+   "w": 16,
+   "h": 16,
+   "solid": true
+  },
+  {
+   "tag": "badgelg4",
+   "kind": "badge",
+   "x": 180.5612244897959,
+   "y": 854,
+   "w": 16,
+   "h": 16,
+   "solid": true
   }
  ],
  "links": [

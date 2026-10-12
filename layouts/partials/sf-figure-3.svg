@@ -67,6 +67,19 @@
   <path d="M316 452 L316 492 L36 492 L36 240" fill="none" stroke="var(--fig-soft,var(--soft))" stroke-width="1.1" stroke-dasharray="4 3" marker-end="url(#sf3-s)"/>
   <text x="66" y="468" font-family="'Chakra Petch','Avenir Next',sans-serif" font-size="12.25" fill="var(--fig-soft,var(--soft))" font-weight="500" letter-spacing="0.04em">OUTER LOOP</text>
   <text x="66" y="484" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.25" fill="var(--fig-soft,var(--soft))" font-weight="400">the developer drives the next run</text>
+  <text x="400" y="404" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.25" fill="var(--fig-ink,var(--ink))" font-weight="400">Enforced outside the agent’s loop:</text>
+  <circle cx="408" cy="424" r="8" fill="var(--fig-accent,var(--accent))"/>
+  <text x="404.7" y="427.9" font-family="'IBM Plex Mono',ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="12.25" fill="var(--fig-plate,var(--paper))" font-weight="600">1</text>
+  <text x="422" y="428" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.25" fill="var(--fig-soft,var(--soft))" font-weight="400">Identity and access</text>
+  <circle cx="554.31" cy="424" r="8" fill="var(--fig-accent,var(--accent))"/>
+  <text x="551.01" y="427.9" font-family="'IBM Plex Mono',ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="12.25" fill="var(--fig-plate,var(--paper))" font-weight="600">2</text>
+  <text x="568.31" y="428" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.25" fill="var(--fig-soft,var(--soft))" font-weight="400">Supply chain</text>
+  <circle cx="408" cy="448" r="8" fill="var(--fig-accent,var(--accent))"/>
+  <text x="404.7" y="451.9" font-family="'IBM Plex Mono',ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="12.25" fill="var(--fig-plate,var(--paper))" font-weight="600">3</text>
+  <text x="422" y="452" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.25" fill="var(--fig-soft,var(--soft))" font-weight="400">Sandbox</text>
+  <circle cx="554.31" cy="448" r="8" fill="var(--fig-accent,var(--accent))"/>
+  <text x="551.01" y="451.9" font-family="'IBM Plex Mono',ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="12.25" fill="var(--fig-plate,var(--paper))" font-weight="600">4</text>
+  <text x="568.31" y="452" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.25" fill="var(--fig-soft,var(--soft))" font-weight="400">Network</text>
   <rect x="0.5" y="508.5" width="719" height="41" rx="4" fill="none" stroke="var(--fig-rule,var(--baseline))" stroke-width="1"/>
   <text x="10" y="534" font-family="Figtree,'Avenir Next','Helvetica Neue',sans-serif" font-size="12.5" fill="var(--fig-ink,var(--ink))" font-weight="600">Observability</text>
   <text x="119.0625" y="534" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.25" fill="var(--fig-soft,var(--soft))" font-weight="400">harness logs, identity and proxy records, reviewed by the developer</text>

@@ -148,6 +148,42 @@
    "sw": 1
   },
   {
+   "tag": "badgelg1",
+   "kind": "badge",
+   "x": 408,
+   "y": 424,
+   "w": 16,
+   "h": 16,
+   "solid": true
+  },
+  {
+   "tag": "badgelg2",
+   "kind": "badge",
+   "x": 554.31,
+   "y": 424,
+   "w": 16,
+   "h": 16,
+   "solid": true
+  },
+  {
+   "tag": "badgelg3",
+   "kind": "badge",
+   "x": 408,
+   "y": 448,
+   "w": 16,
+   "h": 16,
+   "solid": true
+  },
+  {
+   "tag": "badgelg4",
+   "kind": "badge",
+   "x": 554.31,
+   "y": 448,
+   "w": 16,
+   "h": 16,
+   "solid": true
+  },
+  {
    "tag": "obs",
    "kind": "floor",
    "x": 8,

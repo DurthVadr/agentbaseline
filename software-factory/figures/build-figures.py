@@ -535,6 +535,9 @@ def level1(f):
     skel_pr_exit(f)
     out_card(f, K.PR, "Pull request", ["the developer", "reviews it"], "pr")
     outer_loop(f, mid(K.PR), K.MID + 40, "the developer drives the next run")
+    # Figure 3 is the first to draw all four boundaries, so it keys all four,
+    # in the corner Levels 2 and 3 fill with approval and merge
+    key_grid(f, K.APPROVAL[0] + 12, K.OUT[0] + 12)
     floor(f, "harness logs, identity and proxy records, reviewed by the developer")
 
 
@@ -671,6 +674,28 @@ def legend(f, x, y, width, marks=((1, "Identity and access"), (3, "Sandbox"), (4
         f.gloss(bx + 22, by, s_, f"lg{n}.t")
         bx += 22 + measured(s_) + KEY_GAP
     return by + 6
+
+
+ALL_MARKS = ((1, "Identity and access"), (2, "Supply chain"), (3, "Sandbox"), (4, "Network"))
+
+
+def key_grid(f, x, y, marks=ALL_MARKS, cols=2):
+    """Figure 2's key in a block: its heading, then the marks in a grid, each
+    column as wide as its widest measured name, one gap between. For a figure
+    whose free space is a corner rather than a line."""
+    k = f.gs / GLOSS
+    head = "Enforced outside the agent’s loop:"
+    f.text(x, y, head, f.gs, C["ink"], tag="lg.h")
+    f.boxes[-1]["w"] = KEY_W[head] * k + 1
+    colw = [max(22 + KEY_W[s_] * k for _, s_ in marks[c::cols]) for c in range(cols)]
+    for i, (n, s_) in enumerate(marks):
+        r, c = divmod(i, cols)
+        bx = x + sum(colw[:c]) + KEY_GAP * c
+        by = y + 24 * (r + 1)
+        f.badge(bx + 8, by - 4, n, f"lg{n}")
+        f.gloss(bx + 22, by, s_, f"lg{n}.t")
+        f.boxes[-1]["w"] = KEY_W[s_] * k + 1
+    return y + 24 * ((len(marks) + cols - 1) // cols) + 6
 
 
 def figure2():
@@ -983,7 +1008,11 @@ def narrow_level(n, title, desc):
     f.box(N.X0, y, N.X1 - N.X0, 46, "floor", "obs")
     f.name(N.X0 + PAD, y + 20, "Observability", "obs.n")
     f.gloss(N.X0 + PAD, y + 36, obs, "obs.g")
-    f.set_height(y + 48)
+    y += 46
+    if n == 1:  # as the wide Figure 3: the first figure to draw all four boundaries
+        f.rule(y + 14, N.X0, N.X1)
+        y = key_grid(f, N.X0, y + 36)
+    f.set_height(y + 2)
     f.write(f"figure-{n + 2}-narrow")
 
 

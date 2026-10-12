@@ -1,5 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 376 792" role="img" aria-label="A developer directs one coding agent in a sandbox on their machine or a remote environment, and every request it makes goes through a default-deny egress proxy that enforces the authorization service's decision. The agent can reach source control, the services its task needs, a model gateway and approved packages, and nothing else the developer can reach; its pull request goes back to the developer.">
-  <defs><marker id="sf3n-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="var(--fig-faint,var(--faint))"/></marker><marker id="sf3n-g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="var(--fig-accent,var(--accent))"/></marker><marker id="sf3n-s" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="var(--fig-soft,var(--soft))"/></marker></defs>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 376 882" role="img" aria-label="A developer directs one coding agent in a sandbox on their machine or a remote environment, and every request it makes goes through a default-deny egress proxy that enforces the authorization service's decision. The agent can reach source control, the services its task needs, a model gateway and approved packages, and nothing else the developer can reach; its pull request goes back to the developer.">
+  <defs><marker id="sf3n-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="var(--fig-faint,var(--faint))"/></marker><marker id="sf3n-g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="var(--fig-accent,var(--accent))"/></marker><marker id="sf3n-s" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="var(--fig-soft,var(--soft))"/></marker><linearGradient id="sf3n-fadeE4E5E124x360" gradientUnits="userSpaceOnUse" x1="24" y1="0" x2="360" y2="0"><stop offset="0" stop-color="var(--fig-hair,var(--line))" stop-opacity="0"/><stop offset="0.06" stop-color="var(--fig-hair,var(--line))" stop-opacity="1"/><stop offset="0.82" stop-color="var(--fig-hair,var(--line))" stop-opacity="1"/><stop offset="1" stop-color="var(--fig-hair,var(--line))" stop-opacity="0"/></linearGradient></defs>
   <g transform="translate(8 8)">
   <rect x="24.5" y="10.5" width="335" height="51" rx="4" fill="none" stroke="var(--fig-accent,var(--accent))" stroke-width="1.25"/>
   <circle cx="24" cy="10" r="8" fill="var(--fig-accent,var(--accent))"/>
@@ -63,5 +63,19 @@
   <rect x="24.5" y="728.5" width="335" height="45" rx="4" fill="none" stroke="var(--fig-rule,var(--baseline))" stroke-width="1"/>
   <text x="34" y="748" font-family="Figtree,'Avenir Next','Helvetica Neue',sans-serif" font-size="12.5" fill="var(--fig-ink,var(--ink))" font-weight="600">Observability</text>
   <text x="34" y="764" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.5" fill="var(--fig-soft,var(--soft))" font-weight="400">harness logs, identity and proxy records</text>
+  <line x1="24" y1="788" x2="360" y2="788" stroke="url(#sf3n-fadeE4E5E124x360)" stroke-width="1"/>
+  <text x="24" y="810" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.5" fill="var(--fig-ink,var(--ink))" font-weight="400">Enforced outside the agent’s loop:</text>
+  <circle cx="32" cy="830" r="8" fill="var(--fig-accent,var(--accent))"/>
+  <text x="28.7" y="833.9" font-family="'IBM Plex Mono',ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="12.5" fill="var(--fig-plate,var(--paper))" font-weight="600">1</text>
+  <text x="46" y="834" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.5" fill="var(--fig-soft,var(--soft))" font-weight="400">Identity and access</text>
+  <circle cx="180.5612244897959" cy="830" r="8" fill="var(--fig-accent,var(--accent))"/>
+  <text x="177.2612244897959" y="833.9" font-family="'IBM Plex Mono',ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="12.5" fill="var(--fig-plate,var(--paper))" font-weight="600">2</text>
+  <text x="194.5612244897959" y="834" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.5" fill="var(--fig-soft,var(--soft))" font-weight="400">Supply chain</text>
+  <circle cx="32" cy="854" r="8" fill="var(--fig-accent,var(--accent))"/>
+  <text x="28.7" y="857.9" font-family="'IBM Plex Mono',ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="12.5" fill="var(--fig-plate,var(--paper))" font-weight="600">3</text>
+  <text x="46" y="858" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.5" fill="var(--fig-soft,var(--soft))" font-weight="400">Sandbox</text>
+  <circle cx="180.5612244897959" cy="854" r="8" fill="var(--fig-accent,var(--accent))"/>
+  <text x="177.2612244897959" y="857.9" font-family="'IBM Plex Mono',ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="12.5" fill="var(--fig-plate,var(--paper))" font-weight="600">4</text>
+  <text x="194.5612244897959" y="858" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.5" fill="var(--fig-soft,var(--soft))" font-weight="400">Network</text>
   </g>
   </svg>
