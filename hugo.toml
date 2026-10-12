@@ -122,8 +122,8 @@ disableKinds = ["taxonomy", "term", "RSS", "section"]
 # If the published PDF is not ready at cut-over, delete the stand-in rather
 # than ship it; the links go with it.
 [params.softwareFactory]
-  # The one paragraph that says what the paper is, shown on the homepage and
-  # at the top of its page. One value, so the two cannot drift.
+  # The homepage's one line about the second paper, in its section after the
+  # baseline's own paper. The paper's page writes its own opening.
   summary       = "The Secure Software Factory applies Agent Baseline to AI agents that turn tickets into tested code and, more and more, ship it. Version 1 is open for comment."
   # The paper's own front matter (software-factory.md, line 3: "Version 1,
   # October 13, 2026"). The page's title block states them; check-copy holds

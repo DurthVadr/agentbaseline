@@ -420,20 +420,17 @@
 
   <h2 id="authors">Who wrote it</h2>
   <div class="prose">
-    {{- /* The homepage's second credits line, without its "Reference
-           architecture" opener — this page is the reference architecture.
-           Same surname order, same rule: only confirmed people render, the
-           yaml's statement when none has; the spike's showUnconfirmed shows
-           the rest marked ⟡, with a visually hidden note. */ -}}
+    {{- /* The paper's byline, in surname order. Only confirmed people
+           render; the yaml's statement when none has. The second paper's
+           authors are credited here only, not on the baseline's homepage. */ -}}
     {{- with hugo.Data.sfcontributors }}
     {{- $sfa := sort (where .contributors "confirmed" true) "sortkey" }}
-    {{- if $.Site.Params.softwareFactory.showUnconfirmed }}{{ $sfa = sort .contributors "sortkey" }}{{ end }}
     {{- with $sfa }}
     <p>Drafted by&#32;
     {{- $n := len . }}
     {{- range $i, $c := . }}
     {{- if $i }}{{ if eq (add $i 1) $n }} and {{ else }}, {{ end }}{{ end }}
-    {{- .name }}<sup class="aff">{{ .affiliation }}{{ if not .confirmed }}<span aria-hidden="true">&#8288;⟡</span>{{ end }}</sup>{{ if not .confirmed }}<span class="sr-only"> (affiliation unconfirmed)</span>{{ end }}
+    {{- .name }}<sup class="aff">{{ .affiliation }}</sup>
     {{- end }}.</p>
     {{- else }}
     <p>{{ .statement }}</p>
