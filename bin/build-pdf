@@ -1266,7 +1266,13 @@ def build_software_factory(paper, draft):
                   if colon else html.escape(title))
     names = [f"{html.escape(n)}<sup>{html.escape(a)}</sup>" if a else html.escape(n)
              for n, a in fm["people"]]
-    byline = ("Drafted by " + (", ".join(names[:-1]) + " and " + names[-1]
+    # The last name is joined as the paper joins it. Its byline has a serial
+    # comma ("…Ramakrishnan (Mastercard), and Aaron Stanley…"); the cover used
+    # the white paper's plain " and " and dropped it, so the cover did not
+    # print what the paper says.
+    serial = re.search(r",\s+and\s+[^,]+$", fm["byline"]) is not None
+    last = (", and " if serial and len(names) > 2 else " and ")
+    byline = ("Drafted by " + (", ".join(names[:-1]) + last + names[-1]
                                if len(names) > 1 else names[0]) + ".")
 
     doc = f"""<!doctype html>
