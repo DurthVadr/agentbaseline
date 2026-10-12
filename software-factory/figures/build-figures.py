@@ -605,23 +605,41 @@ def scope_nest(f, x0, y0, x1, y1):
     f.gloss(x0 + 30, y0 + 129, "only narrows it further", "dlg.g")
 
 
+# The key's own text, measured: Chrome, the site's IBM Plex Serif 400 at 12.25
+# units (GLOSS), getComputedTextLength (12 Oct 2026). The key is spaced by these,
+# with one constant gap. Spaced by the checker's deliberately pessimistic
+# estimate, which overstates long phrases (+24 units on "Identity and access")
+# and slightly understates short capitalised words, evenly meant items came out
+# about three times further apart in one place than another.
+KEY_W = {"Enforced outside the agent's loop:": 194.81, "Identity and access": 110.31,
+         "Supply chain": 75.2, "Sandbox": 50.2, "Network": 49.3}
+KEY_GAP = 14
+
+
 def legend(f, x, y, width, marks=((1, "Identity and access"), (3, "Sandbox"), (4, "Network"))):
     """The key, once, for the one thing a reader can't read off the drawing:
     the numbered marks are boundaries, enforced outside the agent's loop. It
     keys only the boundaries the figure draws. The arrows that matter carry
     their own labels, and the shaded fill is named where it is drawn ("the
-    agent, untrusted"), so neither needs a key. One line wide, two narrow."""
+    agent, untrusted"), so neither needs a key. One line wide, two narrow,
+    each item placed by its measured width and one gap."""
+    def measured(s_):
+        if s_ not in KEY_W:
+            raise SystemExit(f"legend: measure {s_!r} (KEY_W) before keying it")
+        f.boxes[-1]["w"] = KEY_W[s_] + 1        # the run as drawn, plus a unit
+        return KEY_W[s_]
+
     f.rule(y - 18, x, x + width)
     head = "Enforced outside the agent's loop:"
-    w = f.text(x, y, head, GLOSS, C["ink"], tag="lg.h")
-    bx, by = x + w + 14, y
-    need = sum(22 + f.width(s_, "gloss") + 10 for _, s_ in marks) - 10
+    f.text(x, y, head, GLOSS, C["ink"], tag="lg.h")
+    bx, by = x + measured(head) + KEY_GAP, y
+    need = sum(22 + KEY_W[s_] for _, s_ in marks) + KEY_GAP * (len(marks) - 1)
     if bx + need > x + width:
         bx, by = x, y + 24
     for n, s_ in marks:
         f.badge(bx + 8, by - 4, n, f"lg{n}")
         f.gloss(bx + 22, by, s_, f"lg{n}.t")
-        bx += 22 + f.width(s_, "gloss") + 10
+        bx += 22 + measured(s_) + KEY_GAP
     return by + 6
 
 

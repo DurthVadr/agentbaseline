@@ -51,11 +51,11 @@
   <circle cx="20" cy="568" r="8" fill="var(--fig-accent,var(--accent))"/>
   <text x="16.7" y="571.9" font-family="'IBM Plex Mono',ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="12.25" fill="var(--fig-plate,var(--paper))" font-weight="600">1</text>
   <text x="34" y="572" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.25" fill="var(--fig-soft,var(--soft))" font-weight="400">Identity and access</text>
-  <circle cx="185.83124999999998" cy="568" r="8" fill="var(--fig-accent,var(--accent))"/>
-  <text x="182.53124999999997" y="571.9" font-family="'IBM Plex Mono',ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="12.25" fill="var(--fig-plate,var(--paper))" font-weight="600">3</text>
-  <text x="199.83124999999998" y="572" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.25" fill="var(--fig-soft,var(--soft))" font-weight="400">Sandbox</text>
-  <circle cx="267.1375" cy="568" r="8" fill="var(--fig-accent,var(--accent))"/>
-  <text x="263.8375" y="571.9" font-family="'IBM Plex Mono',ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="12.25" fill="var(--fig-plate,var(--paper))" font-weight="600">4</text>
-  <text x="281.1375" y="572" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.25" fill="var(--fig-soft,var(--soft))" font-weight="400">Network</text>
+  <circle cx="166.31" cy="568" r="8" fill="var(--fig-accent,var(--accent))"/>
+  <text x="163.01" y="571.9" font-family="'IBM Plex Mono',ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="12.25" fill="var(--fig-plate,var(--paper))" font-weight="600">3</text>
+  <text x="180.31" y="572" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.25" fill="var(--fig-soft,var(--soft))" font-weight="400">Sandbox</text>
+  <circle cx="252.51" cy="568" r="8" fill="var(--fig-accent,var(--accent))"/>
+  <text x="249.20999999999998" y="571.9" font-family="'IBM Plex Mono',ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="12.25" fill="var(--fig-plate,var(--paper))" font-weight="600">4</text>
+  <text x="266.51" y="572" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.25" fill="var(--fig-soft,var(--soft))" font-weight="400">Network</text>
   </g>
   </svg>

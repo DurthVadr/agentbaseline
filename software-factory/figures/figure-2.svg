@@ -52,14 +52,14 @@
   <path d="M560 210 L600 210" fill="none" stroke="#797D79" stroke-width="1.1" marker-end="url(#sf2-a)"/>
   <line x1="0" y1="306" x2="720" y2="306" stroke="url(#sf2-fadeE4E5E10x720)" stroke-width="1"/>
   <text x="0" y="324" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.25" fill="#1A1C1A" font-weight="400">Enforced outside the agent's loop:</text>
-  <circle cx="261.48749999999995" cy="320" r="8" fill="#5A7A00"/>
-  <text x="258.18749999999994" y="323.9" font-family="'IBM Plex Mono',ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="12.25" fill="#FFFFFF" font-weight="600">1</text>
-  <text x="275.48749999999995" y="324" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.25" fill="#5A5E5A" font-weight="400">Identity and access</text>
-  <circle cx="427.31874999999997" cy="320" r="8" fill="#5A7A00"/>
-  <text x="424.01874999999995" y="323.9" font-family="'IBM Plex Mono',ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="12.25" fill="#FFFFFF" font-weight="600">3</text>
-  <text x="441.31874999999997" y="324" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.25" fill="#5A5E5A" font-weight="400">Sandbox</text>
-  <circle cx="508.62499999999994" cy="320" r="8" fill="#5A7A00"/>
-  <text x="505.32499999999993" y="323.9" font-family="'IBM Plex Mono',ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="12.25" fill="#FFFFFF" font-weight="600">4</text>
-  <text x="522.625" y="324" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.25" fill="#5A5E5A" font-weight="400">Network</text>
+  <circle cx="216.81" cy="320" r="8" fill="#5A7A00"/>
+  <text x="213.51" y="323.9" font-family="'IBM Plex Mono',ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="12.25" fill="#FFFFFF" font-weight="600">1</text>
+  <text x="230.81" y="324" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.25" fill="#5A5E5A" font-weight="400">Identity and access</text>
+  <circle cx="363.12" cy="320" r="8" fill="#5A7A00"/>
+  <text x="359.82" y="323.9" font-family="'IBM Plex Mono',ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="12.25" fill="#FFFFFF" font-weight="600">3</text>
+  <text x="377.12" y="324" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.25" fill="#5A5E5A" font-weight="400">Sandbox</text>
+  <circle cx="449.32" cy="320" r="8" fill="#5A7A00"/>
+  <text x="446.02" y="323.9" font-family="'IBM Plex Mono',ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="12.25" fill="#FFFFFF" font-weight="600">4</text>
+  <text x="463.32" y="324" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.25" fill="#5A5E5A" font-weight="400">Network</text>
   </g>
   </svg>
