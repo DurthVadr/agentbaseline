@@ -149,10 +149,6 @@ disableKinds = ["taxonomy", "term", "RSS", "section"]
   # "Three levels of autonomy" (software-factory/levels.yaml). Set false and
   # the band leaves in one line.
   showLevels    = true
-  # ⟡ SPIKE ONLY. Renders a labelled placeholder where a paper figure has not
-  #   been drawn yet (partials/sf-figure-N.svg). False, a missing figure fails
-  #   the build. Must be false before anything ships.
-  figuresPending = true
 
 # The event strip and the closing block render only while `until` is in the
 # future AT BUILD TIME. The site is static, so after `until` passes they stay
