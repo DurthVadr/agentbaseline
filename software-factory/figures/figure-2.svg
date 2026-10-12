@@ -2,7 +2,7 @@
   <title id="sf2-t">The agent proposes, policy authorizes, and infrastructure enforces</title>
   <desc id="sf2-d">An agent in a sandbox, holding no credentials, proposes the scope it needs; the runtime authorization service decides within the bounds of the agent's profile, its task and any delegation. The egress proxy enforces that decision and attaches the credentials, so only authorized operations reach anything downstream.</desc>
   <rect width="736" height="410" fill="#FFFFFF"/>
-  <defs><marker id="sf2-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#797D79"/></marker><marker id="sf2-g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#5A7A00"/></marker><marker id="sf2-s" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#5A5E5A"/></marker><linearGradient id="fadeE4E5E10x720" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="720" y2="0"><stop offset="0" stop-color="#E4E5E1" stop-opacity="0"/><stop offset="0.06" stop-color="#E4E5E1" stop-opacity="1"/><stop offset="0.82" stop-color="#E4E5E1" stop-opacity="1"/><stop offset="1" stop-color="#E4E5E1" stop-opacity="0"/></linearGradient></defs>
+  <defs><marker id="sf2-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#797D79"/></marker><marker id="sf2-g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#5A7A00"/></marker><marker id="sf2-s" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#5A5E5A"/></marker><linearGradient id="sf2-fadeE4E5E10x720" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="720" y2="0"><stop offset="0" stop-color="#E4E5E1" stop-opacity="0"/><stop offset="0.06" stop-color="#E4E5E1" stop-opacity="1"/><stop offset="0.82" stop-color="#E4E5E1" stop-opacity="1"/><stop offset="1" stop-color="#E4E5E1" stop-opacity="0"/></linearGradient></defs>
   <g transform="translate(8 8)">
   <rect x="264.5" y="10.5" width="295" height="65" rx="4" fill="none" stroke="#5A7A00" stroke-width="1.25"/>
   <circle cx="264" cy="10" r="8" fill="#5A7A00"/>
@@ -49,7 +49,7 @@
   <text x="610" y="219.5" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.25" fill="#5A5E5A" font-weight="400">operations</text>
   <text x="610" y="234.0" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.25" fill="#5A5E5A" font-weight="400">reach it</text>
   <path d="M560 210 L600 210" fill="none" stroke="#797D79" stroke-width="1.1" marker-end="url(#sf2-a)"/>
-  <line x1="0" y1="312" x2="720" y2="312" stroke="url(#fadeE4E5E10x720)" stroke-width="1"/>
+  <line x1="0" y1="312" x2="720" y2="312" stroke="url(#sf2-fadeE4E5E10x720)" stroke-width="1"/>
   <rect x="0.5" y="319.5" width="27" height="15" rx="4" fill="none" stroke="#5A7A00" stroke-width="1.25"/>
   <text x="40" y="331" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.25" fill="#1A1C1A" font-weight="400">Enforced outside the agent's loop, numbered by the boundary it holds</text>
   <circle cx="48" cy="352" r="8" fill="#5A7A00"/>

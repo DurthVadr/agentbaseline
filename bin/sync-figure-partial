@@ -83,3 +83,24 @@ for src in (sorted(SF.glob("figure-*.svg")) if SF.exists() else []):
     out = ROOT / "layouts" / "partials" / f"sf-{src.stem}.svg"
     out.write_text(s, encoding="utf-8")
     print(f"wrote layouts/partials/{out.name}")
+
+# Every id in every software factory partial is unique across all of them, and
+# every url(#…) and aria reference resolves inside its own drawing. The page
+# inlines several figures (and both compositions of each, one hidden); a shared
+# id makes url(#…) resolve to the first copy, which may be the hidden one.
+_sf_parts = sorted((ROOT / "layouts" / "partials").glob("sf-figure-*.svg"))
+_seen, _bad = {}, []
+for _p in _sf_parts:
+    _s = _p.read_text(encoding="utf-8")
+    _ids = re.findall(r'\sid="([^"]+)"', _s)
+    for _i in _ids:
+        if _i in _seen:
+            _bad.append(f"id {_i!r} in {_p.name} is also in {_seen[_i]}")
+        _seen.setdefault(_i, _p.name)
+    for _r in re.findall(r'url\(#([^)]+)\)', _s) + re.findall(r'aria-(?:labelledby|describedby)="([^"]+)"', _s):
+        for _ref in _r.split():
+            if _ref not in _ids:
+                _bad.append(f"{_p.name} refers to #{_ref}, which it does not define")
+if _bad:
+    raise SystemExit("software factory partials:\n  " + "\n  ".join(_bad))
+print(f"ids unique across {len(_sf_parts)} software factory partials ({len(_seen)} ids)")

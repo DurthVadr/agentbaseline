@@ -139,6 +139,22 @@ class SF(Fig):
         self.parts[3] = f'<rect width="{self.W}" height="{h}" fill="{C["plate"]}"/>'
         self.H = h
 
+    def rule(self, y, x1, x2, colour=None):
+        """figkit's fading rule, its gradient id prefixed with this figure's
+        key. figkit names it by colour and span alone, so two figures on one
+        page that draw a rule over the same span would share an id, url(#…)
+        would resolve to the first copy, and when that copy sat in a hidden
+        variant or tab the rule would vanish. The first paper's figures keep
+        figkit's ids; only these figures are renamed."""
+        c = colour or C["hair"]
+        old = f'fade{c.lstrip("#")}{int(x1)}x{int(x2)}'
+        new = f"{self.key}-{old}"
+        super().rule(y, x1, x2, colour)
+        self.parts[-1] = self.parts[-1].replace(f"url(#{old})", f"url(#{new})")
+        if old in self._defs:
+            markup = self._defs.pop(old).replace(f'id="{old}"', f'id="{new}"')
+            self._defs.setdefault(new, markup)
+
     # ── text in the page's four voices ──
     def name(self, x, y, s, tag, size=NAME):
         return self.text(x, y, s, size, C["ink"], "600", tag=tag, face="head")
