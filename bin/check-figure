@@ -151,6 +151,14 @@ if present:
                           f"ranges or none, not some")
 
 # 5–9. boxed figures only: geometry the text manifest cannot see.
+# A boxed figure (the software factory's) must carry its geometry manifest:
+# without it rules 5–10 have nothing to read, and a run of rules 1–4 alone
+# would print the same clean pass as the full check.
+BOXED = "software-factory" in SVG.parts and "figures" in SVG.parts
+if BOXED and not GEOM.exists():
+    errors.append(f"no geometry manifest ({GEOM.name}): a boxed figure is held to rules 5–10, "
+                  f"which read it — rebuild with software-factory/figures/build-figures.py")
+
 if GEOM.exists():
     geom = json.loads(GEOM.read_text(encoding="utf-8"))
     shapes, links = geom["shapes"], geom["links"]
@@ -300,7 +308,8 @@ if GEOM.exists():
                               f"({x:.0f},{y:.0f})")
                 break
 
-print(f"{NAME}: {W}×{H} · {len(boxes)} text runs")
+print(f"{NAME}: {W}×{H} · {len(boxes)} text runs"
+      + (f" · rules 1–{10 if GEOM.exists() else 4}" if BOXED else ""))
 for e in errors:
     print(f"  ERROR  {e}")
 print(f"\n{len(errors)} error(s)")
