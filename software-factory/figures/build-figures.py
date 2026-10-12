@@ -33,7 +33,7 @@ manifest bin/check-figure reads and a geometry manifest for the checks that
 only boxed figures need (containment, connectors that land, nothing drawn
 through text).
 """
-import json, math, pathlib, sys
+import json, math, pathlib, re, sys
 
 HERE = pathlib.Path(__file__).resolve().parent
 ROOT = HERE.parents[1]
@@ -49,9 +49,14 @@ GUARD = "#5A7A00"
 WASH = "#F1F2EC"
 
 # ── type, sized for the PDF column ───────────────────────────────────────────
+# Every figure is drawn on a 720-unit content width (360 for phones) and set on
+# a canvas MARGIN wider on every side, so no stroke meets the canvas edge. At
+# 6.5 in the 736-unit canvas prints at 0.636 pt a unit; the smallest run here
+# (11.25) prints at 7.15 pt.
 W = 720
+MARGIN = 8
 PRINT_IN, MIN_PT = 6.5, 7.0          # checked by bin/check-figure
-NAME, GLOSS, LAB, NUM = 12.5, 11.25, 11, 11
+NAME, GLOSS, LAB, NUM = 12.5, 11.25, 11.25, 11.25
 PAD = 10                              # card inset
 LS = 0.06                             # label tracking (em)
 
@@ -194,7 +199,28 @@ class SF(Fig):
                             "w": 2 * r + 6, "h": 2 * r + 6, "solid": False})
 
     def write(self, name):
-        meta = {"W": self.W, "H": self.H, "shapes": self.shapes, "links": self.links}
+        """Set the drawing on its canvas: MARGIN of air on every side, the
+        content translated into it, and every manifest coordinate moved with
+        it so the checker sees the canvas the reader does."""
+        m = MARGIN
+        cw, ch = self.W + 2 * m, int(math.ceil(self.H)) + 2 * m
+        self.parts[0] = re.sub(r'viewBox="0 0 [\d.]+ [\d.]+" width="[\d.]+" height="[\d.]+"',
+                               f'viewBox="0 0 {cw} {ch}" width="{cw}" height="{ch}"',
+                               self.parts[0])
+        self.parts[3] = f'<rect width="{cw}" height="{ch}" fill="{C["plate"]}"/>'
+        self.parts.insert(4, f'<g transform="translate({m} {m})">')
+        self.parts.append("</g>")
+        for b in self.boxes:
+            b["x"] += m
+            b["y"] += m
+        for sh in self.shapes:
+            sh["x"] += m
+            sh["y"] += m
+        for l in self.links:
+            l["pts"] = [(x + m, y + m) for x, y in l["pts"]]
+        self.W, self.H = cw, ch
+        meta = {"W": self.W, "H": self.H, "shapes": self.shapes, "links": self.links,
+                "margin": m}
         if self.narrow:
             meta["phone"] = {"display_px": 343, "min_px": 10}
         else:

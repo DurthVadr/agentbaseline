@@ -29,6 +29,9 @@ what the first paper's figures are held to:
   8. an arrow's last leg is long enough to read as an arrow
   9. text stays legible at the size it is shown: 7 pt across a 6.5 in PDF
      column, or 10 px across a phone's 343 px column
+ 10. nothing touches the canvas edge: every box, text run and connector keeps
+     at least 6 units of air, so no stroke is clipped and every figure sits
+     in the same margin
 """
 import json, re, sys, pathlib
 
@@ -251,6 +254,24 @@ if GEOM.exists():
     for sh in shapes:
         if sh["x"] < -T or sh["y"] < -T or sh["x"] + sh["w"] > W + T or sh["y"] + sh["h"] > H + T:
             errors.append(f"box outside canvas: {sh['tag']!r}")
+    # 10. a margin of air on every side
+    EDGE = 6
+    def near_edge(x0, y0, x1, y1):
+        return x0 < EDGE - T or y0 < EDGE - T or x1 > W - EDGE + T or y1 > H - EDGE + T
+    for sh in shapes:
+        if near_edge(sh["x"], sh["y"], sh["x"] + sh["w"], sh["y"] + sh["h"]):
+            errors.append(f"box touches the canvas edge: {sh['tag']!r} "
+                          f"({sh['x']:.0f},{sh['y']:.0f} {sh['w']:.0f}×{sh['h']:.0f}) — "
+                          f"keep {EDGE} units clear")
+    for a in boxes:
+        if near_edge(a["x"], a["y"], a["x"] + a["w"], a["y"] + a["h"]):
+            errors.append(f"text touches the canvas edge: {a['tag']!r}")
+    for l in links:
+        for x, y in l["pts"]:
+            if near_edge(x, y, x, y):
+                errors.append(f"connector touches the canvas edge: {l['tag']!r} at "
+                              f"({x:.0f},{y:.0f})")
+                break
 
 print(f"{NAME}: {W}×{H} · {len(boxes)} text runs")
 for e in errors:

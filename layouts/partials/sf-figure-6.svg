@@ -1,17 +1,18 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 516" role="img" aria-labelledby="sf6-t sf6-d">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 736 532" role="img" aria-labelledby="sf6-t sf6-d">
   <title id="sf6-t">Only a new authorization decision can widen a task</title>
   <desc id="sf6-d">A production alert reports elevated errors in the payments service. The orchestrator agent proposes a task and an incident profile; the runtime authorization service grants the task the payments service's logs for the last hour and one pull request, and the egress proxy enforces that grant. When the incident agent reaches for the authentication service's logs, the proxy blocks the call; only a new authorization decision could widen the task. The fix uses a library admitted through the supply chain and leaves as a pull request that approval policy routes; the deploy reaches a small share of traffic first, and the error rate afterwards confirms the fix or starts the next run.</desc>
   <defs><marker id="sf6-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="var(--fig-faint,var(--faint))"/></marker><marker id="sf6-g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="var(--fig-accent,var(--accent))"/></marker><marker id="sf6-s" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="var(--fig-soft,var(--soft))"/></marker></defs>
+  <g transform="translate(8 8)">
   <rect x="264.5" y="10.5" width="295" height="71" rx="4" fill="none" stroke="var(--fig-accent,var(--accent))" stroke-width="1.25"/>
   <circle cx="264" cy="10" r="8" fill="var(--fig-accent,var(--accent))"/>
-  <text x="260.7" y="13.9" font-family="'IBM Plex Mono',ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="11" fill="var(--fig-plate,var(--paper))" font-weight="600">1</text>
+  <text x="260.7" y="13.9" font-family="'IBM Plex Mono',ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="11.25" fill="var(--fig-plate,var(--paper))" font-weight="600">1</text>
   <text x="274" y="31" font-family="Figtree,'Avenir Next','Helvetica Neue',sans-serif" font-size="12.5" fill="var(--fig-ink,var(--ink))" font-weight="600">Runtime authorization service</text>
   <text x="274" y="47.0" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="11.25" fill="var(--fig-soft,var(--soft))" font-weight="400">profile: read logs, open pull requests</text>
   <text x="274" y="61.5" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="11.25" fill="var(--fig-soft,var(--soft))" font-weight="400">task: payments logs, last hour; one PR</text>
   <path d="M510 82 L510 174" fill="none" stroke="var(--fig-accent,var(--accent))" stroke-width="1.25" stroke-dasharray="5 3" marker-end="url(#sf6-g)"/>
   <text x="518.0" y="96" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="11.25" fill="var(--fig-soft,var(--soft))" font-weight="400">authorized scope</text>
   <rect x="122.5" y="104.5" width="449" height="201" rx="4" fill="none" stroke="var(--fig-faint,var(--faint))" stroke-width="1" stroke-dasharray="4 3"/>
-  <text x="134" y="124" font-family="'Chakra Petch','Avenir Next',sans-serif" font-size="11" fill="var(--fig-soft,var(--soft))" font-weight="500" letter-spacing="0.06em">THE FACTORY</text>
+  <text x="134" y="124" font-family="'Chakra Petch','Avenir Next',sans-serif" font-size="11.25" fill="var(--fig-soft,var(--soft))" font-weight="500" letter-spacing="0.06em">THE FACTORY</text>
   <rect x="0.5" y="140.5" width="111" height="91" rx="4" fill="none" stroke="var(--fig-rule,var(--baseline))" stroke-width="1"/>
   <text x="10" y="161" font-family="Figtree,'Avenir Next','Helvetica Neue',sans-serif" font-size="12.5" fill="var(--fig-ink,var(--ink))" font-weight="600">Alert</text>
   <text x="10" y="177.0" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="11.25" fill="var(--fig-soft,var(--soft))" font-weight="400">elevated errors</text>
@@ -29,8 +30,8 @@
   <text x="166.25" y="40.0" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="11.25" fill="var(--fig-soft,var(--soft))" font-weight="400">proposes</text>
   <rect x="264.5" y="140.5" width="171" height="151" rx="4" fill="var(--fig-wash,var(--wash))" stroke="var(--fig-accent,var(--accent))" stroke-width="1.25"/>
   <circle cx="264" cy="140" r="8" fill="var(--fig-accent,var(--accent))"/>
-  <text x="260.7" y="143.9" font-family="'IBM Plex Mono',ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="11" fill="var(--fig-plate,var(--paper))" font-weight="600">3</text>
-  <text x="278" y="164" font-family="'Chakra Petch','Avenir Next',sans-serif" font-size="11" fill="var(--fig-soft,var(--soft))" font-weight="500" letter-spacing="0.06em">SANDBOX</text>
+  <text x="260.7" y="143.9" font-family="'IBM Plex Mono',ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="11.25" fill="var(--fig-plate,var(--paper))" font-weight="600">3</text>
+  <text x="278" y="164" font-family="'Chakra Petch','Avenir Next',sans-serif" font-size="11.25" fill="var(--fig-soft,var(--soft))" font-weight="500" letter-spacing="0.06em">SANDBOX</text>
   <text x="278" y="192" font-family="Figtree,'Avenir Next','Helvetica Neue',sans-serif" font-size="12.5" fill="var(--fig-ink,var(--ink))" font-weight="600">Incident agent</text>
   <text x="278" y="208" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="11.25" fill="var(--fig-soft,var(--soft))" font-weight="400">configured from</text>
   <text x="278" y="222.5" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="11.25" fill="var(--fig-soft,var(--soft))" font-weight="400">its profile</text>
@@ -42,7 +43,7 @@
   <text x="258.625" y="96" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="11.25" fill="var(--fig-soft,var(--soft))" font-weight="400">requests wider scope</text>
   <rect x="460.5" y="174.5" width="99" height="83" rx="4" fill="none" stroke="var(--fig-accent,var(--accent))" stroke-width="1.25"/>
   <circle cx="460" cy="174" r="8" fill="var(--fig-accent,var(--accent))"/>
-  <text x="456.7" y="177.9" font-family="'IBM Plex Mono',ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="11" fill="var(--fig-plate,var(--paper))" font-weight="600">4</text>
+  <text x="456.7" y="177.9" font-family="'IBM Plex Mono',ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="11.25" fill="var(--fig-plate,var(--paper))" font-weight="600">4</text>
   <text x="470" y="195" font-family="Figtree,'Avenir Next','Helvetica Neue',sans-serif" font-size="12.5" fill="var(--fig-ink,var(--ink))" font-weight="600">Egress proxy</text>
   <text x="470" y="211.0" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="11.25" fill="var(--fig-soft,var(--soft))" font-weight="400">enforces it,</text>
   <text x="470" y="225.5" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="11.25" fill="var(--fig-soft,var(--soft))" font-weight="400">attaches</text>
@@ -58,7 +59,7 @@
   <text x="610" y="257.5" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="11.25" fill="var(--fig-soft,var(--soft))" font-weight="400">outside the task</text>
   <rect x="600.5" y="272.5" width="119" height="57" rx="4" fill="none" stroke="var(--fig-accent,var(--accent))" stroke-width="1.25"/>
   <circle cx="600" cy="272" r="8" fill="var(--fig-accent,var(--accent))"/>
-  <text x="596.7" y="275.9" font-family="'IBM Plex Mono',ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="11" fill="var(--fig-plate,var(--paper))" font-weight="600">2</text>
+  <text x="596.7" y="275.9" font-family="'IBM Plex Mono',ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="11.25" fill="var(--fig-plate,var(--paper))" font-weight="600">2</text>
   <text x="610" y="293" font-family="Figtree,'Avenir Next','Helvetica Neue',sans-serif" font-size="12.5" fill="var(--fig-ink,var(--ink))" font-weight="600">Admission point</text>
   <text x="610" y="309.0" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="11.25" fill="var(--fig-soft,var(--soft))" font-weight="400">serves the</text>
   <text x="610" y="323.5" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="11.25" fill="var(--fig-soft,var(--soft))" font-weight="400">approved library</text>
@@ -90,6 +91,7 @@
   <path d="M470 438 L490 438" fill="none" stroke="var(--fig-faint,var(--faint))" stroke-width="1.1" marker-end="url(#sf6-a)"/>
   <path d="M600 438 L620 438" fill="none" stroke="var(--fig-faint,var(--faint))" stroke-width="1.1" marker-end="url(#sf6-a)"/>
   <path d="M670 466 L670 508 L56 508 L56 232" fill="none" stroke="var(--fig-soft,var(--soft))" stroke-width="1.1" stroke-dasharray="4 3" marker-end="url(#sf6-s)"/>
-  <text x="66.0" y="502" font-family="'Chakra Petch','Avenir Next',sans-serif" font-size="11" fill="var(--fig-soft,var(--soft))" font-weight="500" letter-spacing="0.06em">OUTER LOOP</text>
-  <text x="153.2" y="502" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="11.25" fill="var(--fig-soft,var(--soft))" font-weight="400">the error rate confirms the fix or starts the next run</text>
+  <text x="66.0" y="502" font-family="'Chakra Petch','Avenir Next',sans-serif" font-size="11.25" fill="var(--fig-soft,var(--soft))" font-weight="500" letter-spacing="0.06em">OUTER LOOP</text>
+  <text x="155.0" y="502" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="11.25" fill="var(--fig-soft,var(--soft))" font-weight="400">the error rate confirms the fix or starts the next run</text>
+  </g>
   </svg>

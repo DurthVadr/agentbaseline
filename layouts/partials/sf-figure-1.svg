@@ -1,7 +1,8 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 308" role="img" aria-labelledby="sf1-t sf1-d">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 736 324" role="img" aria-labelledby="sf1-t sf1-d">
   <title id="sf1-t">Work loops until it passes, and problems feed back to design</title>
   <desc id="sf1-d">Work arrives as a prompt, a PRD or a ticket, and design sets its limits. The inner loop assembles what the task needs, builds the change in a sandbox and verifies it, repeating until the work passes. Review and approval policy decide what deploys. The outer loop feeds review, evals and production feedback back into design, and production sends back signals that start new work.</desc>
   <defs><marker id="sf1-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="var(--fig-faint,var(--faint))"/></marker><marker id="sf1-g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="var(--fig-accent,var(--accent))"/></marker><marker id="sf1-s" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="var(--fig-soft,var(--soft))"/></marker></defs>
+  <g transform="translate(8 8)">
   <rect x="0.5" y="40.5" width="103" height="63" rx="4" fill="none" stroke="var(--fig-rule,var(--baseline))" stroke-width="1"/>
   <text x="10" y="61" font-family="Figtree,'Avenir Next','Helvetica Neue',sans-serif" font-size="12.5" fill="var(--fig-ink,var(--ink))" font-weight="600">Inputs</text>
   <text x="10" y="77.0" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="11.25" fill="var(--fig-soft,var(--soft))" font-weight="400">a prompt, PRD</text>
@@ -12,8 +13,8 @@
   <text x="138" y="91.5" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="11.25" fill="var(--fig-soft,var(--soft))" font-weight="400">in advance</text>
   <path d="M104 72 L128 72" fill="none" stroke="var(--fig-faint,var(--faint))" stroke-width="1.1" marker-end="url(#sf1-a)"/>
   <rect x="276.5" y="10.5" width="443" height="151" rx="4" fill="none" stroke="var(--fig-faint,var(--faint))" stroke-width="1" stroke-dasharray="4 3"/>
-  <text x="288" y="28" font-family="'Chakra Petch','Avenir Next',sans-serif" font-size="11" fill="var(--fig-soft,var(--soft))" font-weight="500" letter-spacing="0.06em">INNER LOOP</text>
-  <text x="375.2" y="28" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="11.25" fill="var(--fig-soft,var(--soft))" font-weight="400">repeats until the work passes</text>
+  <text x="288" y="28" font-family="'Chakra Petch','Avenir Next',sans-serif" font-size="11.25" fill="var(--fig-soft,var(--soft))" font-weight="500" letter-spacing="0.06em">INNER LOOP</text>
+  <text x="377.0" y="28" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="11.25" fill="var(--fig-soft,var(--soft))" font-weight="400">repeats until the work passes</text>
   <rect x="288.5" y="40.5" width="120.333" height="63" rx="4" fill="none" stroke="var(--fig-rule,var(--baseline))" stroke-width="1"/>
   <text x="298.0" y="61" font-family="Figtree,'Avenir Next','Helvetica Neue',sans-serif" font-size="12.5" fill="var(--fig-ink,var(--ink))" font-weight="600">Assemble</text>
   <text x="298.0" y="77.0" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="11.25" fill="var(--fig-soft,var(--soft))" font-weight="400">what the task</text>
@@ -49,9 +50,10 @@
   <path d="M580 272 L552 272" fill="none" stroke="var(--fig-faint,var(--faint))" stroke-width="1.1" marker-end="url(#sf1-a)"/>
   <path d="M412 272 L384 272" fill="none" stroke="var(--fig-faint,var(--faint))" stroke-width="1.1" marker-end="url(#sf1-a)"/>
   <path d="M244 260 L189 260 L189 104" fill="none" stroke="var(--fig-soft,var(--soft))" stroke-width="1.1" stroke-dasharray="4 3" marker-end="url(#sf1-s)"/>
-  <text x="101.8" y="150" font-family="'Chakra Petch','Avenir Next',sans-serif" font-size="11" fill="var(--fig-soft,var(--soft))" font-weight="500" letter-spacing="0.06em">OUTER LOOP</text>
+  <text x="99.99999999999999" y="150" font-family="'Chakra Petch','Avenir Next',sans-serif" font-size="11.25" fill="var(--fig-soft,var(--soft))" font-weight="500" letter-spacing="0.06em">OUTER LOOP</text>
   <text x="96.90625000000001" y="166" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="11.25" fill="var(--fig-soft,var(--soft))" font-weight="400">feedback goes</text>
   <text x="90.43750000000001" y="180.5" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="11.25" fill="var(--fig-soft,var(--soft))" font-weight="400">back to design</text>
   <path d="M244 288 L40 288 L40 104" fill="none" stroke="var(--fig-soft,var(--soft))" stroke-width="1.1" stroke-dasharray="4 3" marker-end="url(#sf1-s)"/>
   <text x="48" y="282" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="11.25" fill="var(--fig-soft,var(--soft))" font-weight="400">signals start new work</text>
+  </g>
   </svg>

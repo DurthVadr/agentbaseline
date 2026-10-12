@@ -1,7 +1,8 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 604" role="img" aria-labelledby="sf1n-t sf1n-d">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 376 620" role="img" aria-labelledby="sf1n-t sf1n-d">
   <title id="sf1n-t">Work loops until it passes, and problems feed back to design</title>
   <desc id="sf1n-d">Inputs, then design, then the inner loop of assemble, build and verify, repeated until the work passes; then review, deploy under approval policy, and production. The outer loop feeds review, evals and production feedback back into design, and production's signals start new work.</desc>
   <defs><marker id="sf1n-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="var(--fig-faint,var(--faint))"/></marker><marker id="sf1n-g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="var(--fig-accent,var(--accent))"/></marker><marker id="sf1n-s" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="var(--fig-soft,var(--soft))"/></marker></defs>
+  <g transform="translate(8 8)">
   <rect x="40.5" y="10.5" width="319" height="45" rx="4" fill="none" stroke="var(--fig-rule,var(--baseline))" stroke-width="1"/>
   <text x="50" y="31" font-family="Figtree,'Avenir Next','Helvetica Neue',sans-serif" font-size="12.5" fill="var(--fig-ink,var(--ink))" font-weight="600">Inputs</text>
   <text x="50" y="47.0" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="11.25" fill="var(--fig-soft,var(--soft))" font-weight="400">a prompt, a PRD or a ticket</text>
@@ -10,7 +11,7 @@
   <text x="50" y="99" font-family="Figtree,'Avenir Next','Helvetica Neue',sans-serif" font-size="12.5" fill="var(--fig-ink,var(--ink))" font-weight="600">Design</text>
   <text x="50" y="115.0" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="11.25" fill="var(--fig-soft,var(--soft))" font-weight="400">sets the limits, in advance</text>
   <path d="M80 124 L80 146" fill="none" stroke="var(--fig-faint,var(--faint))" stroke-width="1.1" marker-end="url(#sf1n-a)"/>
-  <text x="52" y="168" font-family="'Chakra Petch','Avenir Next',sans-serif" font-size="11" fill="var(--fig-soft,var(--soft))" font-weight="500" letter-spacing="0.06em">INNER LOOP</text>
+  <text x="52" y="168" font-family="'Chakra Petch','Avenir Next',sans-serif" font-size="11.25" fill="var(--fig-soft,var(--soft))" font-weight="500" letter-spacing="0.06em">INNER LOOP</text>
   <rect x="52.5" y="182.5" width="273" height="45" rx="4" fill="none" stroke="var(--fig-rule,var(--baseline))" stroke-width="1"/>
   <text x="62" y="203" font-family="Figtree,'Avenir Next','Helvetica Neue',sans-serif" font-size="12.5" fill="var(--fig-ink,var(--ink))" font-weight="600">Assemble</text>
   <text x="62" y="219.0" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="11.25" fill="var(--fig-soft,var(--soft))" font-weight="400">what the task needs</text>
@@ -39,4 +40,5 @@
   <path d="M80 532 L80 554" fill="none" stroke="var(--fig-faint,var(--faint))" stroke-width="1.1" marker-end="url(#sf1n-a)"/>
   <path d="M40 570 L22 570 L22 101 L40 101" fill="none" stroke="var(--fig-soft,var(--soft))" stroke-width="1.1" stroke-dasharray="4 3" marker-end="url(#sf1n-s)"/>
   <path d="M40 586 L6 586 L6 33 L40 33" fill="none" stroke="var(--fig-soft,var(--soft))" stroke-width="1.1" stroke-dasharray="4 3" marker-end="url(#sf1n-s)"/>
+  </g>
   </svg>
