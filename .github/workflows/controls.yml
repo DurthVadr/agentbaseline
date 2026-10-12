@@ -19,6 +19,15 @@ jobs:
         run: |
           (cd whitepaper/figures && python3 build-figure-1.py)
           python3 bin/check-figure
+      # The reference architecture's figures are generated too: the committed
+      # SVGs and the page's inlined partials must be what the generator makes,
+      # and every one must pass the same geometry check.
+      - name: Reference architecture figures — current, and geometry
+        run: |
+          python3 software-factory/figures/build-figures.py
+          python3 bin/sync-figure-partial
+          git diff --exit-code -- software-factory/figures layouts/partials
+          for f in software-factory/figures/figure-*.svg; do python3 bin/check-figure "$f"; done
       - name: Copy — repeated phrasing, dead titles, contradictions
         run: |
           hugo --gc --minify
