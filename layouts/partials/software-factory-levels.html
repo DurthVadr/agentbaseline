@@ -60,14 +60,25 @@
     .mx-step:nth-child(1) { margin-top:36px; }
     .mx-step:nth-child(2) { margin-top:18px; }
     .mx-step .nm { font-family:var(--head); font-size:12.5px; letter-spacing:0;
-      text-transform:none; hyphens:auto; overflow-wrap:anywhere; }
+      text-transform:none; hyphens:auto; }
   }
 
+  /* Under 360px a third of the row is under 90px, and "Orchestrated" is
+     76px: trim the padding and the size rather than break the word. */
+  @media (max-width:359px) {
+    .mx-step { padding-inline:5px; }
+    .mx-step .nm { font-size:12px; }
+  }
   /* A level: its heading (hidden while tabbed: the step names it), its
      one-line lead, then its drawing. */
   .mx .lvp + .lvp { margin-top:52px; }
   .mx.is-tabbed .lvp + .lvp { margin-top:0; }
-  .mx .lvp:focus-visible { outline:2px solid var(--link); outline-offset:6px; }
+  /* The panel is focusable (the tabs pattern), but its box is the 680px
+     column while the drawing inside is 880px, so a ring on the panel cut
+     through the figure. Ring the lead and the drawing instead. */
+  .mx .lvp:focus-visible { outline:none; }
+  .mx .lvp:focus-visible > .lead, .mx .lvp:focus-visible > figure.sff {
+    outline:2px solid var(--link); outline-offset:6px; }
   .mx .lvp h3 { margin:0 0 6px; font-family:var(--labelfont); font-weight:500;
     font-size:13.5px; line-height:1.4; letter-spacing:.08em; text-transform:uppercase;
     color:var(--ink); display:flex; align-items:baseline; gap:10px; }
@@ -86,13 +97,14 @@
   }
 </style>
 <div class="mx" data-tabs>
-  <p class="mx-hint" id="levels-hint">Select a level to see who runs the factory.</p>
+  <p class="mx-hint" id="levels-hint">Select a level.</p>
   <div class="mx-steps" data-tablist aria-label="Levels of autonomy" aria-describedby="levels-hint" hidden>
   {{- range $i, $l := $levels }}{{ $n := add $i 1 }}
     <button type="button" class="mx-step" id="lv-tab-{{ $n }}" data-tab aria-controls="level-{{ $n }}"><span class="n">Level {{ $n }}</span><span class="nm">{{ $l.name }}</span></button>
   {{- end }}
   </div>
   {{- range $i, $l := $levels }}{{ $n := add $i 1 }}
+  {{- if not (and $l.name $l.lead $l.figure $l.caption) }}{{ errorf "software-factory/levels.yaml: level %d needs name, lead, figure and caption" $n }}{{ end }}
   <section class="lvp" id="level-{{ $n }}" aria-labelledby="level-{{ $n }}-h">
     <h3 id="level-{{ $n }}-h"><span class="n">Level {{ $n }}</span> {{ $l.name }}</h3>
     <p class="lead">{{ $l.lead }}</p>

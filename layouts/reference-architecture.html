@@ -24,6 +24,11 @@
 <link rel="stylesheet" href="/css/fonts.css">
 <link rel="preload" href="/fonts/figtree-normal-400-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/ibm-plex-serif-normal-400-latin.woff2" as="font" type="font/woff2" crossorigin>
+{{/* The sticky bar is set in Chakra Petch and Plex Mono; swapping them in
+     late changed its height on phones and moved the whole sheet (CLS 0.13). */}}
+<link rel="preload" href="/fonts/chakra-petch-normal-500-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/chakra-petch-normal-600-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/ibm-plex-mono-normal-400-latin.woff2" as="font" type="font/woff2" crossorigin>
 {{/* External and synchronous: the deployment CSP allows script-src 'self'
      only, and the stored theme must apply before first paint. */}}
 <script src="/js/theme.js"></script>
@@ -208,6 +213,8 @@
     display:flex; gap:12px 32px; flex-wrap:wrap; justify-content:space-between; }
   footer .sig { font-family:var(--labelfont); letter-spacing:.12em;
     text-transform:uppercase; }
+  /* Underlined: in the footer's faint text, colour alone was 1.02:1. */
+  footer a { text-decoration:underline; text-underline-offset:2px; }
 
   /* Sections are numbered so a reader can point at one — the same reason the
      controls carry identifiers. The counter is CSS, so the copy stays clean. */
@@ -221,7 +228,9 @@
   h2::before { content:counter(sec, decimal-leading-zero); color:var(--accent);
     font-family:var(--mono); letter-spacing:.02em; font-weight:500; }
   /* Hanging punctuation: the mark lives in the margin, the text on the datum. */
-  @media (min-width:720px) {
+  /* 800, not 720: between 720 and ~740 the hanging numeral started left of
+     the viewport and the sheet's overflow-x:clip cut it. */
+  @media (min-width:800px) {
     h2::before { position:absolute; right:calc(100% + 14px); white-space:nowrap; }
   }
   h2::after { content:""; flex:1; height:1px; background:var(--line);
@@ -237,7 +246,7 @@
      voice, quiet as a footnote mark. */
   sup.aff { font-family:var(--labelfont); font-weight:500; font-size:10px;
     letter-spacing:.07em; text-transform:uppercase; color:var(--faint);
-    line-height:0; margin-left:3px; }
+    line-height:0; margin-left:3px; white-space:nowrap; }
   .sr-only { position:absolute; width:1px; height:1px; padding:0; margin:-1px;
     overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0; }
 
@@ -274,10 +283,13 @@
 
   /* Sections are anchors under a sticky bar that wraps to two or three
      rows below about 1235px, so the margin steps down with it. */
-  h2[id], figure.sff[id], .lvp[id] { scroll-margin-top:190px; }
-  @media (min-width:455px)  { h2[id], figure.sff[id], .lvp[id] { scroll-margin-top:150px; } }
-  @media (min-width:580px)  { h2[id], figure.sff[id], .lvp[id] { scroll-margin-top:110px; } }
-  @media (min-width:1235px) { h2[id], figure.sff[id], .lvp[id] { scroll-margin-top:64px; } }
+  /* On the scroller, not the targets: scroll-margin on targets clears the
+     sticky bar for anchor jumps only, and keyboard focus could still land a
+     control wholly under it (WCAG 2.4.11). scroll-padding covers both. */
+  html { scroll-padding-top:190px; }
+  @media (min-width:455px)  { html { scroll-padding-top:150px; } }
+  @media (min-width:580px)  { html { scroll-padding-top:110px; } }
+  @media (min-width:1235px) { html { scroll-padding-top:64px; } }
 
   /* The four boundaries: a numbered list, each number in the same circled
      mark the paper's figures use for that boundary, so the list is the key
@@ -321,6 +333,12 @@
   @media (max-width:799px) {
     .sff-d.has-n .sff-w { display:none; }
     .sff-d.has-n .sff-n { display:block; max-width:440px; margin:0 auto; }
+  }
+  /* Phones: the drawing takes the screen less an 8px edge, not the 28px
+     gutters, so its smallest text holds 10px at 320 (bin/check-figure checks
+     the narrow drawings at 304px, which is this width at 320). */
+  @media (max-width:479px) {
+    figure.sff { width:calc(100vw - 16px); }
   }
   figure.sff > figcaption { margin-top:16px; font-size:15px; line-height:1.55;
     color:var(--soft); }
@@ -398,10 +416,9 @@
   <div class="prose">
     {{/* The page's own opening, not the homepage's line: what a factory is
          and what this architecture does about it. */}}
-    <p>A software factory uses AI agents to turn a prompt, a ticket or a specification
-    into tested code, and increasingly to deploy and operate it. Its agents decide what to
-    do next and act on real systems, so this architecture keeps what an agent decides apart
-    from what it is allowed to do. The agent proposes, policy authorizes, and
+    <p>A software factory uses AI agents to turn a prompt, ticket or specification into
+    tested code, and increasingly to deploy and operate it. This architecture keeps what an
+    agent decides apart from what it may do: the agent proposes, policy authorizes, and
     infrastructure enforces.</p>
   </div>
 
@@ -409,12 +426,11 @@
   <div class="prose">
     {{/* What the paper teaches first: the agent keeps its room to work, and
          what it can actually do is enforced outside its own decisions. */}}
-    <p>An agent needs room to reason and try things. A secure factory gives it that
-    room, and enforces what the agent can actually do from outside the agent’s own
-    decisions. Four boundaries do the enforcing, and each one holds whether the agent
-    cooperates or not.</p>
+    <p>An agent needs room to reason and try things. Four boundaries enforce what it can
+    actually do, from outside its own decisions, whether it cooperates or not.</p>
   </div>
   {{ partial "software-factory-boundaries.html" $bd.boundaries }}
+  {{- if not (and $bd.figure $bd.figure.n $bd.figure.caption) }}{{ errorf "software-factory/boundaries.yaml: `figure` needs n and caption" }}{{ end }}
   {{ partial "sf-figure.html" (dict "n" $bd.figure.n "caption" $bd.figure.caption) }}
   <div class="prose after-fig">
     {{/* The paper's "A factory in action", cut to the moment that shows the
@@ -423,9 +439,8 @@
          software is acceptable, the boundaries what agents may do). */}}
     <p>Take an incident agent allowed to read one service’s logs for the last hour. If it
     decides it needs another service’s logs, the proxy blocks the request until a new
-    authorization decision grants them. Tests are a separate question: the factory’s loops
-    decide whether the software is good enough, and the boundaries decide what agents may
-    do. Code can pass every test and still come from an agent that reached too far.</p>
+    authorization decision grants them. Tests are a separate check: code can pass every one
+    and still come from an agent that reached too far.</p>
   </div>
   {{- if $sf.showLevels }}
   <h2 id="levels">Three levels of autonomy</h2>
@@ -433,8 +448,8 @@
     {{/* The paper's claim, plainly: who decides the next step changes; the
          boundaries don't. */}}
     <p>The three levels differ in who chooses the next step: a developer, a predefined
-    workflow, or an agent. The four boundaries stay the same at every level. What grows is
-    how much the infrastructure around them does that a person used to supervise.</p>
+    workflow, or an agent. The four boundaries stay the same. What grows is the share of
+    supervision the infrastructure takes over from people.</p>
   </div>
   {{ partial "software-factory-levels.html" $levels }}
   {{- end }}
@@ -443,14 +458,12 @@
     {{/* Why to read the paper, not a list of its contents: it starts from what
          went wrong (Recent incidents: PocketOS; Hugging Face) and names the
          control each one was missing. */}}
-    <p>The paper starts from real failures, including an agent that deleted a production
-    database in nine seconds and another that got past the controls meant to contain it
-    and tried to hide its tracks, and names the control each one was missing. It then shows what to build at
-    each level of autonomy, and maps the architecture to Agent Baseline’s outcomes and
-    controls.</p>
+    <p>The paper starts from real failures, like an agent that deleted a production
+    database in nine seconds, and names the control each one lacked. It then shows what to
+    build at each level, mapped to Agent Baseline’s controls.</p>
     <p class="ctas">
       {{ if fileExists (printf "static/%s" $sf.pdf) }}<a class="primary" href="/{{ $sf.pdf }}">Read the paper (PDF)</a> · {{ end }}
-      {{ if fileExists (printf "%s/%s" $sf.source $sf.paper) }}<a href="{{ .Site.Params.repo }}/blob/main/{{ $sf.source }}/{{ $sf.paper }}">Source on GitHub</a> · {{ end }}
+      {{ if fileExists (printf "%s/%s" $sf.source $sf.paper) }}<a href="{{ .Site.Params.repo }}/blob/main/{{ $sf.source }}/{{ $sf.paper }}?plain=1">Source on GitHub</a> · {{ end }}
       <a href="{{ .Site.Params.repo }}/issues/new?template={{ $sf.template }}">Share feedback</a>
     </p>
   </div>
@@ -466,7 +479,8 @@
     <p>Drafted by&#32;
     {{- $n := len . }}
     {{- range $i, $c := . }}
-    {{- if $i }}{{ if eq (add $i 1) $n }} and {{ else }}, {{ end }}{{ end }}
+    {{- if not (and .name .affiliation) }}{{ errorf "software-factory/contributors.yaml: contributor %d needs name and affiliation" (add $i 1) }}{{ end }}
+    {{- if $i }}{{ if eq (add $i 1) $n }}{{ if gt $n 2 }},{{ end }} and {{ else }}, {{ end }}{{ end }}
     {{- .name }}<sup class="aff">{{ .affiliation }}</sup>
     {{- end }}.</p>
     {{- else }}

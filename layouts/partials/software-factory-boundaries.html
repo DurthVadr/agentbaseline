@@ -4,6 +4,7 @@
        the page's sheet. */ -}}
 <ol class="bd">
   {{- range $i, $b := . }}
+  {{- if not (and $b.name $b.covers) }}{{ errorf "software-factory/boundaries.yaml: boundary %d needs name and covers" (add $i 1) }}{{ end }}
   <li class="bd-i"><span class="bd-n" aria-hidden="true">{{ add $i 1 }}</span><span class="bd-t"><span class="bd-nm">{{ $b.name }}</span> <span class="bd-c">{{ $b.covers }}</span></span></li>
   {{- end }}
 </ol>

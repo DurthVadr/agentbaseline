@@ -289,6 +289,80 @@ if _sf.exists():
         if not _sd or _norm(_sd.group(1)) != _norm(_alt):
             findings.append(("contra", f"{_rel}: its <desc> is not the paper's alt text"))
 
+# ── 3c-sexies · the page's copies of the paper's words are the paper's ──────
+# The page lists the four boundaries, captions its figures and names the levels
+# from software-factory/boundaries.yaml and levels.yaml. Those are copies of
+# the paper's headings and captions; edit one and the page and the PDF say two
+# things. Quotes are compared normalised (the page sets ’, the source ').
+def _q(x):
+    return " ".join(x.replace("\u2019", "'").replace("\u2018", "'")
+                     .replace("\u201c", '"').replace("\u201d", '"').split())
+_bd = ROOT / "software-factory" / "boundaries.yaml"
+_lv = ROOT / "software-factory" / "levels.yaml"
+if _sf.exists():
+    _src = _sf.read_text(encoding="utf-8")
+    _caps = {int(n): c for c, n in re.findall(
+        r'^!\[([^\]]+)\]\(figures/figure-(\d+)\.svg\)', _src, re.M)}
+    _h2 = {_q(h) for h in re.findall(r"^## (.+?)(?:\s*\{#[^}]*\})?$", _src, re.M)}
+    for _f, _need in ((_bd, "boundaries"), (_lv, "levels")):
+        if not _f.exists():
+            findings.append(("contra", f"software-factory/{_f.name} is missing — the page "
+                                       f"renders its {_need} from it"))
+    if _bd.exists():
+        _y = _bd.read_text(encoding="utf-8")
+        _pairs = re.findall(r"^  - name: (.+)\n    covers: (.+)$", _y, re.M)
+        if len(_pairs) != 4:
+            findings.append(("contra", f"boundaries.yaml: {len(_pairs)} name/covers pairs "
+                                       f"read, the paper has four boundaries"))
+        for _n, _c in _pairs:
+            if _q(f"{_n}: {_c}") not in _h2:
+                findings.append(("contra", f"boundaries.yaml: “{_n}: {_c}” is not a heading "
+                                           f"of software-factory.md"))
+        _fm = re.search(r"^figure:\n  n: (\d+)\n  caption: (.+)$", _y, re.M)
+        if not _fm:
+            findings.append(("contra", "boundaries.yaml: no figure n/caption read"))
+        elif _q(_fm.group(2)) != _q(_caps.get(int(_fm.group(1)), "")):
+            findings.append(("contra", f"boundaries.yaml: Figure {_fm.group(1)}'s caption is "
+                                       f"not the paper's"))
+    if _lv.exists():
+        _y = _lv.read_text(encoding="utf-8")
+        _lvls = re.findall(r"^  - name: (.+)\n    lead: .+\n    figure: (\d+)\n    caption: (.+)$",
+                           _y, re.M)
+        if len(_lvls) != 3:
+            findings.append(("contra", f"levels.yaml: {len(_lvls)} levels read, the paper has three"))
+        for _i, (_n, _fn, _c) in enumerate(_lvls, 1):
+            if _q(f"Level {_i}: {_n} Factory") not in _h2:
+                findings.append(("contra", f"levels.yaml: level {_i} “{_n}” is not the paper's "
+                                           f"“Level {_i}: … Factory” heading"))
+            if _q(_c) != _q(_caps.get(int(_fn), "")):
+                findings.append(("contra", f"levels.yaml: Figure {_fn}'s caption is not the paper's"))
+
+# ── 3c-septies · the reference architecture is no longer than the homepage ──
+# The owner's rule for the second paper's page: send readers to the paper,
+# don't read it to them. Words in <main>, without inline SVG, scripts, styles
+# and templates, and without the homepage's event block, which expires: the
+# page must not outgrow the homepage it sits under once the launch is over.
+def _main_words(path, drop_event=False):
+    t = path.read_text(encoding="utf-8")
+    m = re.search(r"<main\b.*?</main>", t, re.S)
+    if not m:
+        return None
+    t = m.group(0)
+    if drop_event:
+        t = re.sub(r'<aside[^>]*class="?meetup\b.*?</aside>', " ", t, flags=re.S)
+    t = re.sub(r"<(svg|script|style|template)\b[^>]*>.*?</\1>", " ", t, flags=re.S)
+    return len(html.unescape(re.sub(r"<[^>]+>", " ", t)).split())
+_ix_p = ROOT / "public" / "index.html"
+_ra_p = ROOT / "public" / "reference-architecture" / "index.html"
+if _ix_p.exists() and _ra_p.exists():
+    _wh, _wr = _main_words(_ix_p, drop_event=True), _main_words(_ra_p)
+    if _wh is None or _wr is None:
+        findings.append(("contra", "a page has no <main>, so its length cannot be compared"))
+    elif _wr > _wh:
+        findings.append(("contra", f"/reference-architecture is {_wr} words, longer than the "
+                                   f"homepage's {_wh} (event block excluded) — read the paper, "
+                                   f"don't read it to them"))
+
 # ── 3c-ter · the reference architecture must render its data rows ──────────
 # Locate sections by their stable IDs so heading edits cannot bypass this check.
 _ra = ROOT / "public" / "reference-architecture" / "index.html"

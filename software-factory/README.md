@@ -10,9 +10,10 @@ site renders from it.
   same drawings (`bin/sync-figure-partial`), so the two can't disagree.
 - `boundaries.yaml` — the four security boundaries as the page lists them, in the paper's
   words, and the figure shown with them.
-- `levels.yaml` — the three levels of autonomy as the page shows them, one at a time: each
-  level's opening sentence, its row of the paper's level table, and its figure. Rendered
-  only while `params.softwareFactory.showLevels` is true.
+- `levels.yaml` — the three levels of autonomy as the page shows them, one at a time: the
+  paper's name for each level, one plain sentence of the page's own saying who chooses the
+  next step, and the paper's figure for the level with its caption. Rendered only while
+  `params.softwareFactory.showLevels` is true.
 - `contributors.yaml` — the authors, from the paper's byline. Nothing renders with
   `confirmed: false`.
 
