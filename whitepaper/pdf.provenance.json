@@ -10,9 +10,9 @@
     "pandoc": "pandoc 3.10.1"
   },
   "inputs": {
-    "bin/build-pdf": "110db2c3ec6160b07311dc45e67f7a715ea22178455ee0f11dae4e7573c2539d",
+    "bin/build-pdf": "77a8a13bf9b1776c819d20d3c13c84d0ca66b0a45819f6e42681ccb538a951eb",
     "bin/controls_source.py": "ade276753e0ac230bfde2e0836c4abe74cab4b9c2e5accd586c3cd8a2f156b9d",
-    "bin/papers.py": "df768846f1cf258d087fa717818823667694dc7d55470ac5146c771787bbd62a",
+    "bin/papers.py": "ac0594f45c4810fabe6d7b840ce8b5916a88d4da68e8e609f0d444bd9404ed1c",
     "bin/print-page.mjs": "119d3f84951a91d113b1b9bc1d22114ab339dbcee5c1f3a025e2c2d51babd47d",
     "bin/vendor/paged.polyfill.js": "f59f361802416c770d549a647958649af2cf6601999924bc00e4f507dad5269f",
     "static/fonts/chakra-petch-normal-500-latin.woff2": "adf007cd277ef6dac0c8cecacfb60cc5e24e7c8bcce4db98aa233bd3a88ef5a3",
