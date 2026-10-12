@@ -15,11 +15,12 @@ file it so that it lands somewhere useful.
 what's wrong and, where you can, what would make it right. "This is not implementable in a
 regulated environment" is a good issue. So is "this reads like a vendor datasheet."
 
-**Comment on the reference architecture** — open an issue through the software-factory form,
-which labels it, and name the primitive (Identity and access, Supply chain, Network, Runtime
-isolation, Orchestration) or maturity level you are disputing. The paper has no control
-identifiers of its own, and its source has not landed in this repository yet, so comment is by
-issue only.
+**Comment on The Secure Software Factory** — open an issue through the software-factory form,
+which labels it, and name the part you are disputing: one of the four boundaries (identity and
+access, supply chain, sandbox, network), execution and observability, or a level of autonomy.
+The paper has no identifiers of its own; where its appendix maps to a baseline control, cite
+that identifier. Its source is `software-factory/software-factory.md`, but the text changes
+only when the working group changes the paper, so comment by issue, not pull request.
 
 **File a crosswalk** — map these controls to a framework you already run: NIST AI RMF, ISO
 42001, OWASP, CIS, SOC 2. One pull request per framework, into `crosswalks/`. This is the

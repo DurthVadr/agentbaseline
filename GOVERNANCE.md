@@ -24,8 +24,8 @@ asking another company's permission.
 
 ## How changes happen
 
-1. **Comment.** Open an issue against a specific control identifier, or, for the reference
-   architecture, the primitive or maturity level. Disagreement is the point
+1. **Comment.** Open an issue against a specific control identifier, or, for The Secure
+   Software Factory, the section or level of autonomy. Disagreement is the point
    of a public draft.
 2. **Discuss.** Substantive changes are discussed in the open before a pull request. The
    community Slack is for conversation; a change is proposed in an issue, where it is public

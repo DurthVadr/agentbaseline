@@ -1,4 +1,4 @@
-/* Tabs for the maturity levels on /reference-architecture. Deferred and
+/* Tabs for the levels of autonomy on /reference-architecture. Deferred and
    external, like logo-menu.js: the deployment CSP allows script-src 'self'
    and nothing inline.
 

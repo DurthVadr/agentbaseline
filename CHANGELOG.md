@@ -9,16 +9,14 @@ never reused.
 ## [Unreleased]
 
 ### Added
-- The reference architecture, which applies the baseline to the software factory: its own page at
-  `/reference-architecture` in the homepage's shape — the paper's front matter and its own
-  sentence mapping the six outcomes to the factory, then the five signals a secure factory
-  shows, the workflow figure, the three maturity levels drawn as a curve, the downloads and
-  the authors — pointing at the paper rather than retelling it; a section on the homepage; a second PDF under Artifacts
-  (`/software-factory.pdf`, source in `/software-factory`); feedback filed through an issue
-  form that carries the `software-factory` label. The bar's pill now points at it; comment on
-  the baseline closed on 30 September 2026. CONTRIBUTING says how to comment on it: by issue,
-  naming a primitive or maturity level. The second credits line renders only confirmed
-  contributors and falls back to a working-group statement. *(2026-10-06)*
+- *The Secure Software Factory: A Reference Architecture*, version 1 (13 October 2026), a
+  second paper that applies the baseline to AI agents that write and ship code. Its source is
+  `software-factory/software-factory.md`; its PDF is `/software-factory.pdf`, listed under
+  Artifacts after the baseline's. Its page, `/reference-architecture`, shows the paper's four
+  security boundaries and three levels of autonomy with the paper's figures, and its eleven
+  authors. The homepage links it in a section after the white paper, and the bar's pill points
+  at it until 27 October. Comments go through an issue form that applies the
+  `software-factory` label; CONTRIBUTING says how. *(2026-10-13, Matthew Creager, Keycard)*
 - The community Slack is linked from the utility bar on every page and, on the homepage,
   from the review section, with the invite address in one place in `hugo.toml`.
   CONTRIBUTING and GOVERNANCE say what belongs in Slack and what belongs in an issue, and
@@ -32,10 +30,9 @@ never reused.
   Figtree face to render. *(2026-09-18)*
 
 ### Changed
-- The reference architecture page uses more direct descriptions of its controls and
-  security signals, without repeating section counts. The maturity selector now includes
-  a selection hint and an accent tint on hover while keeping its stepped design.
-  *(2026-10-07, Matthew Creager, Keycard)*
+- Comment on v1.0-draft closed on 30 September 2026, so the bar no longer shows a deadline,
+  the pages' descriptions no longer ask for comment, and the homepage's review section says
+  where the comments went: the issues. *(2026-10-13, Matthew Creager, Keycard)*
 - The catalogue is rebuilt from Appendix A of the paper as it landed in this repository —
   the appendix declares itself the canonical naming and requirement set, and the body prose
   now agrees with it. 35 controls across the six outcomes: `CON` narrows to 4 controls,

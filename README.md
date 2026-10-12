@@ -10,19 +10,20 @@ body as it matures.
 |---|---|
 | **Status** | `v1.0-draft` — not a standard, no conformance programme |
 | **Identifiers** | not yet frozen; they freeze at `v1.0`. See [VERSIONING.md](VERSIONING.md) before citing |
-| **Comment** | closed on the baseline 30 September 2026; open on the [reference architecture](https://agentbaseline.org/reference-architecture) |
+| **Comment** | closed 30 September 2026 |
 | **Source of truth** | [`whitepaper/controls.yaml`](whitepaper/controls.yaml) |
 
 An agent's behaviour is not settled before it ships: an end user reprograms it at runtime,
 in natural language. This baseline defines what has to be true to run one safely, by outcome
 rather than by product category.
 
-**Built on it: the [reference architecture](https://agentbaseline.org/reference-architecture)** applies the six
-outcomes to the software factory: five primitives, three maturity levels, source in
-[`software-factory/`](software-factory/).
-
 **The argument, in full: [agentbaseline.org](https://agentbaseline.org)**
 — why product categories do not map to the problem, and the three questions the six answer.
+
+Built on the baseline: [The Secure Software Factory: A Reference
+Architecture](https://agentbaseline.org/reference-architecture), version 1 (13 October 2026).
+It applies the baseline to AI agents that write and ship code: four security boundaries that
+hold at three levels of autonomy. Source in [`software-factory/`](software-factory/).
 
 ## The six outcomes
 
@@ -85,6 +86,7 @@ authors have not yet met their own rule. Tracked as issue #1.
 | Path | |
 |---|---|
 | [`whitepaper/`](whitepaper/) | The paper, the controls, and the figure |
+| [`software-factory/`](software-factory/) | The Secure Software Factory, the second paper, built on the baseline |
 | [`crosswalks/`](crosswalks/) | Mappings to NIST, ISO, OWASP and CIS — wanted, and better written from outside |
 | [`docs/decisions/`](docs/decisions/) | Decision records, including why identifiers carry no prefix |
 | [`bin/`](bin/) | Generators, and the checks that keep them honest |
