@@ -76,6 +76,15 @@ for p in SOURCES:
     if p.exists():
         corpus[p.relative_to(ROOT).as_posix()] = prose(p)
 
+# The built pages are required. Each has a layout, so after a build each must be
+# in public/; one that is not has not been checked, and skipping it used to look
+# exactly like passing it. A `draft: true` on /reference-architecture took its
+# prose and its row counts out of the check and --strict still exited 0, on 7
+# sources instead of 8. Collected here and enforced at the end, after the other
+# checks have run, so the report still says everything else it found.
+UNBUILT = [p.relative_to(ROOT).as_posix() for p in SOURCES
+           if ROOT / "public" in p.parents and not p.exists()]
+
 # ── 0 · the built output must come from this configuration ───────────────────
 # Every check below that reads public/ is only as good as the build that made
 # it. A `hugo server` left running rewrites public/ continuously with a
@@ -283,7 +292,11 @@ if _sf.exists():
 # ── 3c-ter · the reference architecture must render its data rows ──────────
 # Locate sections by their stable IDs so heading edits cannot bypass this check.
 _ra = ROOT / "public" / "reference-architecture" / "index.html"
-if _ra.exists():
+if not _ra.exists():
+    findings.append(("count", "/reference-architecture was not built "
+                              "(public/reference-architecture/index.html is missing), so its "
+                              "boundary and level rows were not counted"))
+else:
     _h = _ra.read_text(encoding="utf-8")
     for _id, _row, _want in (
         ("boundaries", r'<li class="?bd-i\b', 4),
@@ -333,4 +346,10 @@ print(f"copy: {len(corpus)} sources · {len(allsent)} sentences")
 for kind, msg in findings:
     print(f"  {kind.upper():<7}{msg}")
 print(f"\n{len(findings)} finding(s)")
-sys.exit(1 if findings and STRICT else 0)
+if UNBUILT:
+    sys.stdout.flush()
+    print(f"\nNOT BUILT: {', '.join(UNBUILT)}\n"
+          f"  These pages have layouts and must be in the build; a page that is not "
+          f"built is not checked, which is not a pass. Run `hugo --gc --minify`, and check "
+          f"the page's front matter for `draft: true` or a changed route.", file=sys.stderr)
+sys.exit(1 if UNBUILT or (findings and STRICT) else 0)
