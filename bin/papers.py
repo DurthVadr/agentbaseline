@@ -6,11 +6,13 @@ artifacts to). The checks used to name static/whitepaper.pdf and its manifest in
 their own constants; a second paper with a second copy of those constants in each
 script is how a check ends up guarding one artifact while the other drifts.
 
-`required` says what an absent artifact means. The white paper is the site's
-handout and must always be in the tree. The reference architecture's PDF is linked
-only through fileExists-guarded templates, so a checkout without it renders no dead
-link — absence is a state the site handles, not a defect. A PDF that is present is
-held to its source either way.
+`required` says what an absent artifact means, and both papers are required. The
+reference architecture's PDF was optional while it did not exist yet: the site
+links it only through fileExists-guarded templates, so a checkout without it
+rendered no dead link. Now that it is published, that guard is the failure: delete
+the PDF and its manifest and every gate still passed while all five links to it
+quietly left the site. A missing PDF is a defect for either paper, and a PDF that
+is present is held to its source.
 """
 import pathlib
 
@@ -29,7 +31,7 @@ PAPERS = {
         "out": ROOT / "static" / "software-factory.pdf",
         "provenance": ROOT / "software-factory" / "pdf.provenance.json",
         "work": ROOT / "software-factory" / ".build",
-        "required": False,
+        "required": True,
     },
 }
 
