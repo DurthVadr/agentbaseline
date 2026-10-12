@@ -136,20 +136,22 @@ jobs:
             exit 1
           }
           echo "deterministic: $(stat -c%s /tmp/a.pdf) bytes, twice"
-      # The reference architecture, the same way, once its PDF is committed. Until
-      # then there is nothing to hold deterministic, and its build cannot run: it
-      # refuses missing figures and unwritten alt text, which is the state the
-      # source is in until the figures land. Committing the PDF commits the
-      # figures (check-sf-pdf requires every recorded input to exist), so from
-      # that commit on this step always runs.
+      # The reference architecture, the same way. With its PDF committed, the
+      # non-draft build that made it is the one held deterministic. Without it,
+      # this step used to exit 0 having built nothing, so none of the paper's
+      # render path ran in CI: its stylesheet, --outline, the /Info update, the
+      # glossary and table rewriting. A draft build exercises all of that, so it
+      # is built twice as a draft and compared. A build that fails fails the step.
       - name: Two builds of the reference architecture produce one file
         run: |
-          if [ ! -f static/software-factory.pdf ]; then
-            echo "static/software-factory.pdf is not committed; nothing to build twice"
-            exit 0
+          if [ -f static/software-factory.pdf ]; then
+            draft=""
+          else
+            echo "static/software-factory.pdf is not committed; building it twice as a draft"
+            draft="--draft"
           fi
-          python3 bin/build-pdf --paper software-factory --out /tmp/sf-a.pdf --provenance /tmp/sf-a.json
-          python3 bin/build-pdf --paper software-factory --out /tmp/sf-b.pdf --provenance /tmp/sf-b.json
+          python3 bin/build-pdf --paper software-factory $draft --out /tmp/sf-a.pdf --provenance /tmp/sf-a.json
+          python3 bin/build-pdf --paper software-factory $draft --out /tmp/sf-b.pdf --provenance /tmp/sf-b.json
           cmp /tmp/sf-a.pdf /tmp/sf-b.pdf || {
             echo "::error::the reference architecture's build is not deterministic — two builds of identical source differ"
             cmp -l /tmp/sf-a.pdf /tmp/sf-b.pdf | head -40
