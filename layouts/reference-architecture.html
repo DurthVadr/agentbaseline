@@ -14,10 +14,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Reference architecture — Agent Baseline</title>
-<meta name="description" content="{{ .Site.Params.softwareFactory.summary }}">
+<title>The Secure Software Factory: A Reference Architecture — Agent Baseline</title>
+<meta name="description" content="Four security boundaries for software factories, where AI agents turn tickets into tested code, enforced outside the agent at every level of autonomy.">
 <link rel="canonical" href="{{ strings.TrimSuffix "/" .Permalink }}">
-{{ partial "social-meta.html" (dict "ctx" . "title" "Reference architecture — Agent Baseline" "desc" "The reference architecture applies Agent Baseline to the software factory, where AI agents turn a ticket or request into tested code. It defines four security boundaries that hold at every level of autonomy.") }}
+{{ partial "social-meta.html" (dict "ctx" . "title" "The Secure Software Factory: A Reference Architecture" "desc" "Four security boundaries for software factories, where AI agents turn tickets into tested code, enforced outside the agent at every level of autonomy. Built on Agent Baseline.") }}
 <link rel="icon" href="/icon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="/icon-512.png">
 <link rel="icon" href="/icon-512.png" sizes="512x512" type="image/png">
@@ -295,6 +295,7 @@
     .sff-d.has-n .sff-w { display:none; }
     .sff-d.has-n .sff-n { display:block; }
   }
+  .sff-int { display:block; width:100%; height:auto; border-radius:4px; }
   .sff-ph { display:flex; align-items:center; justify-content:center;
     aspect-ratio:16 / 9; border:1px dashed var(--faint); color:var(--faint);
     font-family:var(--labelfont); font-size:12px; letter-spacing:.08em;
@@ -363,13 +364,18 @@
     <dl class="tb">
       <div class="cell"><dt>Builds on</dt><dd><a href="/controls">Agent Baseline’s six outcomes</a></dd></div>
       <div class="cell"><dt>Subject</dt><dd>The software factory</dd></div>
-      <div class="cell"><dt>Factory output</dt><dd>Tested code</dd></div>
+      <div class="cell"><dt>Version</dt><dd>{{ $sf.version }} · {{ $sf.published }}</dd></div>
       <div class="cell"><dt>Status</dt><dd>Open for comment{{ with $sf.commentsUntil }} until {{ . }}{{ end }}</dd></div>
     </dl>
   </header>
 
   <div class="prose">
-    <p>{{ $sf.summary }}</p>
+    {{/* The page's own opening, not the homepage's line: what a factory is
+         and what this architecture does about it. */}}
+    <p>A software factory uses AI agents to turn a prompt, a ticket or a specification
+    into tested code, and more and more to deploy and run what it builds. Its agents
+    decide what to do next and act on real systems. This architecture controls what they
+    can actually do, whatever they decide, at every level of autonomy.</p>
   </div>
 
   <h2 id="boundaries">Four boundaries</h2>
@@ -401,13 +407,13 @@
          went wrong (Recent incidents: PocketOS; Hugging Face) and names the
          control each one was missing. */}}
     <p>The paper starts from real failures, including an agent that deleted a production
-    database in nine seconds and another that escaped its sandbox and tried to hide its
-    tracks, and names the control each one was missing. It then shows what to build at
+    database in nine seconds and another that got past the controls meant to contain it
+    and tried to hide its tracks, and names the control each one was missing. It then shows what to build at
     each level of autonomy, and maps the architecture to Agent Baseline’s outcomes and
     controls.</p>
     <p class="ctas">
       {{ if fileExists (printf "static/%s" $sf.pdf) }}<a href="/{{ $sf.pdf }}">Download the PDF</a> · {{ end }}
-      {{ if fileExists (printf "%s/%s" $sf.source $sf.paper) }}<a href="{{ .Site.Params.repo }}/tree/main/{{ $sf.source }}">View the source</a> · {{ end }}
+      {{ if fileExists (printf "%s/%s" $sf.source $sf.paper) }}<a href="{{ .Site.Params.repo }}/blob/main/{{ $sf.source }}/{{ $sf.paper }}">View the source</a> · {{ end }}
       <a href="{{ .Site.Params.repo }}/issues/new?template={{ $sf.template }}">Share feedback</a>
     </p>
   </div>

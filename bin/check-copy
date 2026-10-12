@@ -27,8 +27,23 @@ SOURCES = [
     ROOT / "PROVENANCE.md", ROOT / "CONTRIBUTING.md",
 ]
 
+# Pages checked for their own prose only: the text inside <main>. The two
+# original pages are read whole, as they always were, with the narrow chrome
+# exemption below. A page added later shares their masthead, event strip and
+# footer, so read whole it would repeat that chrome by construction, and the
+# only ways to quiet that are to widen the exemption (which also stops the
+# near-duplicate check comparing sentences within a page) or to drop the page.
+# Reading only its <main> checks everything written for it, against both
+# original pages in full, and leaves every rule for those pages unchanged.
+MAIN_ONLY = {ROOT / "public" / "reference-architecture" / "index.html"}
+
 def prose(path):
     t = path.read_text(encoding="utf-8")
+    if path in MAIN_ONLY:
+        m = re.search(r"<main\b.*?</main>", t, re.S)
+        if not m:
+            sys.exit(f"{path.relative_to(ROOT)}: no <main> — refusing to check an empty page")
+        t = m.group(0)
     if path.suffix == ".html":
         t = re.sub(r"<(script|style|svg)[^>]*>.*?</\1>", " ", t, flags=re.S)
         t = re.sub(r"<[^>]+>", " ", t)
@@ -96,15 +111,14 @@ seen = collections.defaultdict(list)
 for name, text in corpus.items():
     for s in sentences(text):
         seen[s.lower().rstrip(".")].append(name)
-# Chrome shared by the pages — the masthead, the event strip, a paragraph one
-# param renders in two places — comes from one partial or one value. That is one
-# thing shown twice, not prose written twice, which is the same reasoning the
-# near-duplicate check already uses for the roster. Narrow on purpose: it only
-# forgives a sentence appearing once each in some of these files and nowhere
-# else; the same sentence twice in one file is still a repeat.
-_CHROME = {"public/index.html", "public/controls/index.html", "public/reference-architecture/index.html"}
+# Chrome shared by both pages — the masthead, the event strip — renders the same
+# sentence twice from one partial. That is one thing shown twice, not prose
+# written twice, which is the same reasoning the near-duplicate check already
+# uses for the roster. Narrow on purpose: it only forgives a sentence appearing
+# in exactly those two files and nowhere else.
+_CHROME = {"public/index.html", "public/controls/index.html"}
 for s, where in seen.items():
-    if set(where) <= _CHROME and len(set(where)) == len(where):
+    if set(where) == _CHROME and len(set(where)) == len(where):
         continue
     if len(where) > 1:
         findings.append(("repeat", f"“{s[:78]}…” appears in {', '.join(sorted(set(where)))}"
@@ -119,10 +133,9 @@ for i, (n1, s1) in enumerate(allsent):
             continue
         if abs(len(s1) - len(s2)) > max(len(s1), len(s2)) * 0.6:
             continue
-        # the roster and /controls/ render the same outcome from one source, and
-        # the pages share one chrome — that is one fact shown twice, not prose
-        # written twice
-        if {n1, n2} <= _CHROME:
+        # the roster and /controls/ render the same outcome from one source —
+        # that is one fact shown twice, not prose written twice
+        if {n1, n2} == {"public/index.html", "public/controls/index.html"}:
             continue
         r = difflib.SequenceMatcher(None, s1.lower(), s2.lower()).ratio()
         if r > 0.72:
@@ -214,6 +227,33 @@ if _wp.exists() and _cfg.exists():
             findings.append(("contra", f"the {_label} disagrees between the paper and the "
                                        f"site — whitepaper.md says “{_pm.group(1)}”, "
                                        f"hugo.toml says “{_cm.group(1)}”"))
+
+# ── 3c-quater · the reference architecture's version and date are the paper's ─
+# The page's title block states them from hugo.toml; the paper states them on
+# its third line ("Version 1, October 13, 2026"). Two copies of one fact.
+_sf = ROOT / "software-factory" / "software-factory.md"
+if _sf.exists() and _cfg.exists():
+    _sm = re.search(r"^Version (\S+), ([A-Z][a-z]+) (\d{1,2}), (\d{4})$",
+                    _sf.read_text(encoding="utf-8"), re.M)
+    _c = _cfg.read_text(encoding="utf-8")
+    _blk = re.search(r"^\[params\.softwareFactory\]\n(.*?)(?=^\[)", _c, re.M | re.S)
+    _blk = _blk.group(1) if _blk else ""
+    _cv = re.search(r'^\s*version\s*=\s*"([^"]+)"', _blk, re.M)
+    _cp = re.search(r'^\s*published\s*=\s*"([^"]+)"', _blk, re.M)
+    if not _sm:
+        findings.append(("contra", "software-factory.md: no \"Version N, Month D, YYYY\" line, "
+                                   "so the page's version and date have nothing to agree with"))
+    elif not (_cv and _cp):
+        findings.append(("contra", "hugo.toml: [params.softwareFactory] needs `version` and "
+                                   "`published`, which the page's title block states"))
+    else:
+        _want_v, _want_p = _sm.group(1), f"{_sm.group(3)} {_sm.group(2)} {_sm.group(4)}"
+        if _cv.group(1) != _want_v:
+            findings.append(("contra", f"the reference architecture's version disagrees — the paper "
+                                       f"says “{_want_v}”, hugo.toml says “{_cv.group(1)}”"))
+        if _cp.group(1) != _want_p:
+            findings.append(("contra", f"the reference architecture's date disagrees — the paper "
+                                       f"says “{_want_p}”, hugo.toml says “{_cp.group(1)}”"))
 
 # ── 3c-ter · the reference architecture must render its data rows ──────────
 # Locate sections by their stable IDs so heading edits cannot bypass this check.

@@ -1,7 +1,8 @@
 {{/* The three levels of autonomy, one at a time. The paper's point is that
      the four boundaries stay the same at every level and what changes is who
      decides the next step, so each level is the paper's own drawing of the
-     factory at that level, with the row of the paper's level table above it.
+     factory at that level, under one sentence saying who decides what
+     happens next.
 
      Above the levels, three steps that climb from left to right, one per
      level, lowest first. With static/js/tabs.js they are the level tabs and
@@ -56,7 +57,7 @@
   }
 
   /* A level: its heading (hidden while tabbed: the step names it), its
-     one-line lead, the paper's level-table row, then its drawing. */
+     one-line lead, then its drawing. */
   .mx .lvp + .lvp { margin-top:52px; }
   .mx.is-tabbed .lvp + .lvp { margin-top:0; }
   .mx .lvp:focus-visible { outline:2px solid var(--link); outline-offset:6px; }
@@ -68,18 +69,6 @@
   .mx.is-tabbed .lvp h3 { position:absolute; width:1px; height:1px; padding:0;
     margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0; }
   .mx .lead { font-size:19px; line-height:1.5; color:var(--ink); margin:0 0 18px; }
-  /* The level-table row: three datum cells, as in the title block. */
-  .mx dl.lv { display:grid; grid-template-columns:repeat(3,minmax(0,1fr));
-    margin:0 0 8px; border-top:1px solid var(--line); border-bottom:1px solid var(--line); }
-  .mx dl.lv > div { padding:10px 14px 12px 0; min-width:0; }
-  .mx dl.lv > div + div { padding-left:14px; border-left:1px solid var(--line); }
-  .mx dl.lv dt { font-family:var(--labelfont); font-weight:500; font-size:11px;
-    line-height:1.4; letter-spacing:.09em; text-transform:uppercase; color:var(--faint); }
-  .mx dl.lv dd { margin:4px 0 0; font-size:15px; line-height:1.5; color:var(--ink); }
-  @media (max-width:559px) {
-    .mx dl.lv { grid-template-columns:minmax(0,1fr); }
-    .mx dl.lv > div + div { padding-left:0; border-left:0; border-top:1px solid var(--line); }
-  }
   /* Print shows every level, as without the script. */
   @media print {
     .mx-steps, .mx.is-tabbed .mx-hint { display:none; }
@@ -100,11 +89,6 @@
   <section class="lvp" id="level-{{ $n }}" aria-labelledby="level-{{ $n }}-h">
     <h3 id="level-{{ $n }}-h"><span class="n">Level {{ $n }}</span> {{ $l.name }}</h3>
     <p class="lead">{{ $l.lead }}</p>
-    <dl class="lv">
-      <div><dt>Orchestrator</dt><dd>{{ $l.orchestrator }}</dd></div>
-      <div><dt>Execution layer</dt><dd>{{ $l.execution }}</dd></div>
-      <div><dt>New architectural challenge</dt><dd>{{ $l.challenge }}</dd></div>
-    </dl>
     {{ partial "sf-figure.html" (dict "n" $l.figure "caption" $l.caption) }}
   </section>
   {{- end }}

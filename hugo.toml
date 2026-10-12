@@ -124,7 +124,12 @@ disableKinds = ["taxonomy", "term", "RSS", "section"]
 [params.softwareFactory]
   # The one paragraph that says what the paper is, shown on the homepage and
   # at the top of its page. One value, so the two cannot drift.
-  summary       = "A software factory uses AI agents to turn a ticket or request into tested code, and more and more to ship and run it. This reference architecture applies Agent Baseline to the factory: four security boundaries that control what agents can do, whatever they decide, from a factory a developer steers to one where agents find and ship their own work."
+  summary       = "The Secure Software Factory applies Agent Baseline to AI agents that turn tickets into tested code and, more and more, ship it. Version 1 is open for comment."
+  # The paper's own front matter (software-factory.md, line 3: "Version 1,
+  # October 13, 2026"). The page's title block states them; check-copy holds
+  # them to the paper.
+  version       = "1"
+  published     = "13 October 2026"
   pdf           = "software-factory.pdf"
   source        = "software-factory"
   # The paper's markdown inside `source`. Checked with fileExists like `pdf`,

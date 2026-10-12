@@ -21,7 +21,14 @@
     {{- end }}
   </div>
   {{- else if site.Params.softwareFactory.figuresPending }}
+  {{- $interim := printf "software-factory/interim/figure-%d.png" .n }}
+  {{- if fileExists (printf "static/%s" $interim) }}
+  {{/* ⟡ SPIKE ONLY: the authors' raster original, shown until the vector
+       drawing lands. Never committed; never shipped (figuresPending). */}}
+  <img class="sff-int" src="/{{ $interim }}" alt="" loading="lazy">
+  {{- else }}
   <div class="sff-ph">Figure {{ .n }} is being drawn</div>
+  {{- end }}
   {{- else }}
   {{- errorf "layouts/partials/%s is missing: the paper's Figure %d has not been drawn (run bin/sync-figure-partial), and params.softwareFactory.figuresPending is false" $wide .n }}
   {{- end }}
