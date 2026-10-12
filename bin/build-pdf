@@ -541,6 +541,9 @@ figcaption::before { content:"Figure " counter(fig); font-family:"Chakra Petch",
 /* The recent incidents carry their source as a link on the heading; in a
    heading the link is the heading, so it takes the heading's colour. */
 h3 a { color:inherit; border-bottom:none; }
+/* An incident's date after its name, as a datum. */
+h3.incident .when { font-family:"IBM Plex Mono",monospace; font-weight:400; font-size:7.5pt;
+  letter-spacing:.02em; text-transform:none; color:var(--faint); margin-left:.6mm; }
 /* A bolded term links to its definition. The bold already marks it, and an
    underline under two dozen terms would read as two dozen citations. */
 a.term { border-bottom:none; }
@@ -591,6 +594,10 @@ h1 + p { orphans:4; }
 /* A list item is one requirement. Split across a page, its last line sat
    alone at the head of the next page with no bullet to say what it was. */
 li { break-inside:avoid; }
+/* sf_keep_lists(): a label head and its first two items, then the rest. */
+.keep { break-inside:avoid; }
+.keep > ul.lead { margin-bottom:0; }
+ul.cont { margin-top:0; }
 
 /* ── reference architecture: tables ───────────────────────────────────── */
 /* pandoc's equal column widths are dropped and each table gets its own: a
@@ -609,6 +616,10 @@ table.t-levels td:first-child, table.t-outcomes td:first-child,
 table.t-controls td:first-child { font-family:"Figtree",sans-serif; font-weight:500;
   font-size:9pt; color:var(--ink); }
 table.t-outcomes th:nth-child(1) { width:20%; }
+/* Balanced lines suit a narrow cell; in these wide ones they stopped every
+   line well short of the column, so it read as narrower than it is. */
+table.t-outcomes td + td, table.t-controls td + td { text-wrap:pretty; }
+table.t-outcomes a.oc { color:inherit; }
 table.t-controls th:nth-child(1) { width:27%; }
 
 /* How the factory deepens across levels: one block per row, the component as
@@ -617,17 +628,26 @@ table.t-controls th:nth-child(1) { width:27%; }
    few words a line, and a row that broke across a page left a level's text
    with no component above it — the Appendix A failure. A block never splits. */
 .deepen { margin:4mm 0 2mm; }
-.deepen .row { break-inside:avoid; margin:0 0 3.5mm; border-top:.5pt solid var(--rule); }
+/* The key: the table's own head, once. Label voice like a th, then each
+   level's name beside its number, in the grid the entries use. */
+.deepen .key { margin:0 0 3mm; }
+.deepen .key .k0 { text-align-last:left;
+  font-family:"Chakra Petch",sans-serif; font-size:7pt; font-weight:600;
+  letter-spacing:.1em; text-transform:uppercase; color:var(--faint); text-align:left;
+  padding:0 0 1.6mm; margin:0 0 1.2mm; border-bottom:.5pt solid var(--rule); }
+.deepen .key .lv { border-top:none; padding:.2mm 0; }
+.deepen .key dd { font-family:"Figtree",sans-serif; font-size:8.5pt; color:var(--soft);
+  line-height:1.4; text-wrap:wrap; }
+.deepen .row { break-inside:avoid; margin:0 0 3mm; border-top:.5pt solid var(--rule); }
 .deepen .comp { font-family:"Figtree",sans-serif; font-weight:600; font-size:10pt;
-  line-height:1.3; margin:0; padding:2.2mm 0 1.6mm; text-align:left; }
+  line-height:1.3; margin:0; padding:1.8mm 0 1.2mm; text-align:left; }
 .deepen dl { margin:0; }
-.deepen .lv { display:grid; grid-template-columns:31mm 1fr; gap:0 4mm;
+.deepen .lv { display:grid; grid-template-columns:19mm 1fr; gap:0 4mm;
   padding:1.6mm 0 1.8mm; border-top:.4pt solid var(--line); }
 .deepen dt { font-family:"IBM Plex Mono",monospace; font-weight:600; font-size:8pt;
   color:var(--accent); letter-spacing:.01em; padding-top:.3mm; }
-.deepen dt span { display:block; font-family:"Figtree",sans-serif; font-weight:400;
-  font-size:7.5pt; letter-spacing:0; color:var(--faint); line-height:1.3; margin-top:.4mm; }
-.deepen dd { margin:0; font-size:9pt; line-height:1.55; text-align:left; }
+.deepen dd { margin:0; font-size:9pt; line-height:1.55; text-align:left;
+  text-wrap:balance; }
 
 /* ── reference architecture: definitions ──────────────────────────────── */
 /* A glossary, not a run of bold-led paragraphs: the term in the margin, so
@@ -991,6 +1011,13 @@ def sf_tables(body):
         seen.append(kind)
         if kind == "deepen":
             return deepen(t, head)
+        if kind == "t-outcomes":
+            # Each outcome names the section of the controls page that defines it,
+            # anchored there by its name in lower case, as on the site's own pages.
+            # Only in the PDF: the paper's source and the site page are untouched.
+            t = re.sub(r"(<tr\b[^>]*>\s*<td\b[^>]*>)\s*(Discover|Constrain|Authorize|Observe|Validate|Respond)\s*(</td>)",
+                       lambda c: f'{c.group(1)}<a class="oc" href="https://agentbaseline.org/controls#'
+                                 f'{c.group(2).lower()}">{c.group(2)}</a>{c.group(3)}', t)
         if kind == "t-threat":
             t = re.sub(r"(<td\b[^>]*>)\s*(Untrusted|Trusted)\s*(</td>)",
                        lambda c: f'{c.group(1)}<span class="trust {c.group(2).lower()}">'
@@ -1007,7 +1034,13 @@ def sf_tables(body):
 
 
 def deepen(table, head):
-    """The four-column levels table as one unsplittable block per row."""
+    """The four-column levels table as one unsplittable block per row.
+
+    The table's head is set once, as a key above the blocks: what the first
+    column holds and each level's full name. Repeated in every block, the
+    names took three lines of the margin beside a one-line description, so the
+    level, not what it said, set the height of nearly every entry; and the
+    first column's heading was not printed at all."""
     if len(head) != 4:
         sys.exit(f"'How the factory deepens across levels' has {len(head)} columns, not 4 "
                  f"(a component and three levels); update deepen() to match.")
@@ -1017,15 +1050,20 @@ def deepen(table, head):
         lead, _, rest = text.partition(":")
         levels.append((html.escape(lead.strip()), html.escape(" ".join(rest.split()))))
     rows = re.findall(r"<tr\b[^>]*>(.*?)</tr>", re.search(r"<tbody>(.*?)</tbody>", table, re.S).group(1), re.S)
-    out = ['<div class="deepen">']
-    for r in rows:
+    first = html.escape(html.unescape(re.sub(r"<[^>]+>", "", head[0])).strip())
+    out = ['<div class="deepen">', f'<dl class="key"><div class="k0">{first}</div>']
+    out += [f'<div class="lv"><dt>{lead}</dt><dd>{rest}</dd></div>' for lead, rest in levels]
+    out.append("</dl>")
+    # The key is a table head: it never ends a page without the first entry.
+    out.insert(1, '<div class="keep">')
+    for n, r in enumerate(rows):
         c = cells(r, "td")
         if len(c) != 4:
             sys.exit(f"a row of 'How the factory deepens across levels' has {len(c)} cells: {c[:1]}")
         out.append(f'<div class="row"><p class="comp">{c[0]}</p><dl>')
         for (lead, rest), text in zip(levels, c[1:]):
-            out.append(f'<div class="lv"><dt>{lead}<span>{rest}</span></dt><dd>{text}</dd></div>')
-        out.append("</dl></div>")
+            out.append(f'<div class="lv"><dt>{lead}</dt><dd>{text}</dd></div>')
+        out.append("</dl></div>" + ("</div>" if n == 0 else ""))
     out.append("</div>")
     return "\n".join(out)
 
@@ -1059,6 +1097,57 @@ def sf_inline_figures(body):
             return f'<svg{attrs} role="img" aria-label="{alt.group(1) if alt else ""}">'
         return re.sub(r"<svg\b([^>]*)>", root, svg, count=1)
     return re.sub(r'<img\b[^>]*\bsrc="file://[^"]*\.svg"[^>]*>', one, body)
+
+
+def sf_incidents(body):
+    """Each recent incident's date in its own voice, after its name.
+
+    The heads read "PocketOS, April 2026", all in the label voice, so a name and
+    a date ran together in one string of capitals. The text is unchanged; what
+    follows the first comma that leads to a year is set as a datum, as dates
+    are on the cover and in the foot. A head without a date is left whole.
+    """
+    m = re.search(r'<h2 id="recent-incidents"[^>]*>.*?</h2>(.*?)(?=<h[12][\s>]|\Z)', body, re.S)
+    if not m:
+        return body
+
+    def dated(x):
+        opening = x.group(1).replace("<h3", '<h3 class="incident"', 1)
+        return (f'{opening}{x.group(2)}, <span class="when">{x.group(3)}</span>'
+                f'{x.group(4) or ""}{x.group(5)}')
+
+    def head(h):
+        return re.sub(r"(<h3\b[^>]*>(?:<a\b[^>]*>)?)([^<]*?),\s+([^<,]*\d{4}[^<]*)(</a>)?(</h3>)",
+                      dated, h.group(0))
+    section = re.sub(r"<h3\b.*?</h3>", head, m.group(1), flags=re.S)
+    return body[:m.start(1)] + section + body[m.end(1):]
+
+
+def sf_keep_lists(body):
+    """A label head over a list keeps its first two items with it.
+
+    break-after:avoid on the head binds it to the list's first item only, so a
+    head could close a page with one requirement under it and the rest overleaf.
+    A keep rule on the items themselves is what CSS offers, and Paged.js does not
+    honour it: on the appendix lists it pushed whole sections to the next page
+    and left a head at a foot with nothing under it. So the head and the first
+    two items are set as one unbreakable group, and the list continues in a
+    second <ul> with no space between, which reads as the same list.
+    """
+    def one(m):
+        items = re.findall(r"<li>.*?</li>", m.group(2), re.S)
+        if len(items) < 3 or any("<ul" in i or "<ol" in i for i in items):
+            return m.group(0)
+        return (f'<div class="keep">{m.group(1)}<ul class="lead">{"".join(items[:2])}</ul></div>'
+                f'<ul class="cont">{"".join(items[2:])}</ul>')
+    body = re.sub(r"(<h3\b[^>]*>(?:(?!</h3>).)*</h3>)\s*<ul>\s*((?:(?!</ul>).)*?)\s*</ul>",
+                  one, body, flags=re.S)
+    # A section head directly over a label head is one unit too. Paged.js keeps
+    # a head with the block after it, but not a chain of two: "Implementation
+    # reference" was left alone at the foot of a page with its first label head
+    # and paragraph overleaf.
+    return re.sub(r"(<h2\b[^>]*>(?:(?!</h2>).)*</h2>)\s*(<h3\b[^>]*>(?:(?!</h3>).)*</h3>)",
+                  r'<div class="keep">\1\2</div>', body, flags=re.S)
 
 
 def sf_glossary(body):
@@ -1138,6 +1227,8 @@ def build_software_factory(paper, draft):
     body = sf_inline_figures(body)
     body = sf_tables(body)
     body, _ = sf_glossary(body)
+    body = sf_keep_lists(body)
+    body = sf_incidents(body)
     body = re.sub(r"<p><strong>(Invariants?):</strong>",
                   r'<p class="invariant"><strong>\1:</strong>', body)
 
