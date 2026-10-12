@@ -636,10 +636,18 @@
 
   <div class="prose">
     <p>{{ $sf.summary }}</p>
+    {{/* "Download the PDF" and "Share feedback" are the baseline's links, in
+         the section above. Here the same two read "its PDF" and "on it",
+         after the link that names the paper, so no two links on the page
+         share a name and none reads as the baseline's. A screen reader's
+         links list hears each without the row around it, so the paper's
+         name follows in .sr-only; the visible words still lead the name
+         (WCAG 2.5.3). Spelled out in full, the row ran to two lines at 1440
+         and the section was no longer smaller than the baseline's. */}}
     <p class="ctas">
       <a href="/reference-architecture">Read the reference architecture</a> ·
-      {{ if fileExists (printf "static/%s" $sf.pdf) }}<a href="/{{ $sf.pdf }}">Download the PDF</a> · {{ end }}
-      <a href="{{ $.Site.Params.repo }}/issues/new?template={{ $sf.template }}">Share feedback</a>
+      {{ if fileExists (printf "static/%s" $sf.pdf) }}<a href="/{{ $sf.pdf }}">Download its PDF<span class="sr-only"> (the reference architecture)</span></a> · {{ end }}
+      <a href="{{ $.Site.Params.repo }}/issues/new?template={{ $sf.template }}">Comment on it<span class="sr-only"> (the reference architecture)</span></a>
     </p>
   </div>
   {{- end }}
