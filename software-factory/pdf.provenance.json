@@ -1,12 +1,12 @@
 {
   "artifact": "static/software-factory.pdf",
-  "bytes": 644957,
-  "pages": 25,
-  "sha256": "f1fc4ead10faa0c62c73048f0b6bb4f80bd3fceb686f6373848a2ca9a445a595",
+  "bytes": 651946,
+  "pages": 27,
+  "sha256": "cd33f4108454d846f7fe3d5a7b7965cc94c74a08dcc0078146ac2ce61250ebf2",
   "source_date_epoch": "1791892800",
   "built_by": {
-    "producer": "Skia/PDF m150",
-    "creator": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/150.0.0.0 Safari/537.36",
+    "producer": "Skia/PDF m154",
+    "creator": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/154.0.0.0 Safari/537.36",
     "pandoc": "pandoc 3.10.1"
   },
   "inputs": {
@@ -17,11 +17,11 @@
     "software-factory/contributors.yaml": "477ccf02a550a43ba75e36ec6a28fe7f785db010f70cd79c9f5f2742b251b573",
     "software-factory/figures/figure-1.svg": "ed8183c3d93aa171393f01b0425f0e2eb562466189af624b9f238b9fcde2347c",
     "software-factory/figures/figure-2.svg": "494b3178c26f4a0d9816888f1ef81643a790cfbda8c427c9a89f3a6b34d8de53",
-    "software-factory/figures/figure-3.svg": "0c17b31f682d6c902385b2c0d47d82088c828fa4be56a084548e2c6c4b10895d",
-    "software-factory/figures/figure-4.svg": "0805636f3e79f93a33eff1c8c05de2a6778ec69e67592f48701c2e9ef286f41c",
-    "software-factory/figures/figure-5.svg": "a291dfe85e2b81db6907b090ad6ca0a10edf929efe91e4adf40dd212d40f3b77",
+    "software-factory/figures/figure-3.svg": "23f76135b2e2177b9fa21835788f59363dba190fc5b1e2eced6012f94ec5b9cd",
+    "software-factory/figures/figure-4.svg": "7fa0a65c76794448b14e44cfb347a552fcdd046c44fae06761bf3ba62bf166a6",
+    "software-factory/figures/figure-5.svg": "143b17ad59fb55d25fa30f6d2d3f4fe14b824c7296a14530d635fe0704b5ffdf",
     "software-factory/figures/figure-6.svg": "650c399b68c534050d97ca329683fbc06a1cedaf33401fc63760384a400088a2",
-    "software-factory/software-factory.md": "2e3fc5c91c5d29eae69247ccb444c3971b1f9e4ff9be23b0ad1ba8bdd875de13",
+    "software-factory/software-factory.md": "36ab4f9675435887952af34d10f76dca553f341122df1259c123c19de89a9f4f",
     "static/fonts/chakra-petch-normal-500-latin.woff2": "adf007cd277ef6dac0c8cecacfb60cc5e24e7c8bcce4db98aa233bd3a88ef5a3",
     "static/fonts/chakra-petch-normal-600-latin.woff2": "4d6d5f0b31b3a471a843779c4ecada040e5bc291f96bca9805a94293fe8003fa",
     "static/fonts/figtree-italic-400-latin.woff2": "9341f363343c85f00e5a23573accc776baaf0b59ab2eda0560f206e22ac57c04",
