@@ -158,7 +158,16 @@ def cut_section(text, heading_re):
     return text[:m.start()] + text[end:], text[m.start():end]
 
 
+PANDOC_VERSION = []
+
+
 def pandoc(md, work):
+    """The paper as HTML. pandoc's version is kept for the manifest: the paper-2
+    rewrites below depend on the shape of its HTML (<colgroup>, <thead>, alt=),
+    and a different pandoc is a different build even with every input unchanged."""
+    if not PANDOC_VERSION:
+        v = subprocess.run(["pandoc", "--version"], capture_output=True, text=True, check=True)
+        PANDOC_VERSION.append(v.stdout.splitlines()[0].strip())
     work.mkdir(exist_ok=True)
     (work / "paper.md").write_text(md, encoding="utf-8")
     return subprocess.run(
@@ -909,6 +918,52 @@ def sf_front_matter(md, src):
             "people": people}
 
 
+def sf_contributors(people):
+    """Refuse a byline that names anyone contributors.yaml has not confirmed.
+
+    The byline is printed from the paper's own first lines, on the cover and in
+    /Author. contributors.yaml is where a person's consent to be listed, and
+    their affiliation, is recorded: the site's page prints only `confirmed: true`
+    entries, and the white paper's cover does the same. Read from the paper
+    alone, a withdrawn name stayed on the PDF's cover after it had left the site,
+    and the PDF was not even stale, because the yaml was not an input. It is
+    recorded now, and every byline name must be in it, confirmed, with the same
+    affiliation, or the build stops and says who.
+
+    The file holds one entry per line, `- { name: …, affiliation: …, … }`, or the
+    white paper's block form; both are read.
+    """
+    path = ROOT / "software-factory" / "contributors.yaml"
+    if not path.exists():
+        sys.exit(f"{rel(path)} is missing; the byline cannot be checked against it.")
+    text = record(path).read_text(encoding="utf-8")
+    body = text.split("contributors:", 1)[1] if "contributors:" in text else ""
+    entries = []
+    for blk in re.split(r"\n(?=\s*- )", body):
+        blk = blk.strip()
+        if not blk.startswith("-"):
+            continue
+        flow = re.fullmatch(r"-\s*\{(.*)\}\s*(?:#.*)?", blk, re.S)
+        pairs = (re.findall(r"(\w+)\s*:\s*([^,]+?)\s*(?:,|$)", flow.group(1)) if flow else
+                 re.findall(r"^[ \t-]*(\w+):[ \t]*(.+?)[ \t]*$", blk, re.M))
+        entries.append({k: v.strip().strip('"\'') for k, v in pairs})
+    known = {e.get("name"): e for e in entries if e.get("name")}
+    wrong = []
+    for name, aff in people:
+        e = known.get(name)
+        if e is None:
+            wrong.append(f"{name}: not in {rel(path)}")
+        elif e.get("confirmed", "").lower() != "true":
+            wrong.append(f"{name}: confirmed is {e.get('confirmed') or 'missing'}, not true")
+        elif e.get("affiliation", "") != aff:
+            wrong.append(f"{name}: the byline says {aff!r}, {rel(path)} says {e.get('affiliation')!r}")
+    if wrong:
+        sys.exit("the byline names people contributors.yaml does not confirm as printed:\n" +
+                 "".join(f"    {w}\n" for w in wrong) +
+                 "The cover and /Author print the byline, and nothing is published unconfirmed. "
+                 "Fix the paper's byline or the yaml, whichever is wrong.")
+
+
 def slug(text):
     return re.sub(r"[^a-z0-9]+", "-", text.lower()).strip("-")
 
@@ -1013,8 +1068,14 @@ def sf_glossary(body):
     paragraph of another shape would otherwise be dropped from a list it does not
     belong in, or silently left as the one plain paragraph among the entries.
     """
-    m = re.search(r'(<h2 id="definitions">.*?</h2>)(.*?)(?=<h[12][\s>])', body, re.S)
+    # The section runs to the next h1 or h2, or to the end of the document: as
+    # the last section it used to match nothing, and the glossary, its links and
+    # the refusal below were all skipped without a word.
+    m = re.search(r'(<h2 id="definitions"[^>]*>.*?</h2>)(.*?)(?=<h[12][\s>]|\Z)', body, re.S)
     if not m:
+        if 'id="definitions"' in body:
+            sys.exit("found the Definitions heading but could not read its section; "
+                     "update sf_glossary() rather than print it as plain paragraphs.")
         return body, {}
     entries, terms = [], {}
     rest = m.group(2)
@@ -1059,6 +1120,7 @@ def build_software_factory(paper, draft):
     src = paper["src"]
     md = record(src).read_text(encoding="utf-8")
     fm = sf_front_matter(md, src)
+    sf_contributors(fm["people"])
     body = pandoc(md, paper["work"])
 
     # The title, the version line and the byline are the cover's. Each must be
@@ -1218,6 +1280,18 @@ def render(name, out, provenance, draft=False):
             sys.exit(f"PDF FAILED\n{r.stdout}\n{r.stderr}")
         print(f"  {r.stdout.strip()}")
         blob = tmp.read_bytes()
+        # The rule fonts() enforces for the text, held for the whole file: every
+        # face the PDF embeds is one of FACES. A figure loaded as an image once
+        # printed in Avenir Next, Charter and Menlo with nothing to say so. Checked
+        # before the move, so a refused render never replaces the tracked file.
+        embedded = set(re.findall(rb"/(?:BaseFont|FontName)\s*/(?:[A-Z]{6}\+)?([A-Za-z0-9]+)", blob))
+        allowed = {fam.replace(" ", "").encode() for fam, *_ in FACES}
+        if not embedded or embedded - allowed:
+            sys.exit(f"the render embeds " +
+                     (", ".join(sorted(f.decode() for f in embedded - allowed))
+                      if embedded else "no font this can read") +
+                     f", outside the site's faces ({', '.join(sorted(a.decode() for a in allowed))}). "
+                     f"Something is drawing text in a system font; {rel(out)} was not written.")
         os.replace(tmp, out)
     finally:
         tmp.unlink(missing_ok=True)
@@ -1228,6 +1302,21 @@ def render(name, out, provenance, draft=False):
     if provenance:
         write_provenance(provenance, out, blob, pages, env["SOURCE_DATE_EPOCH"], draft)
         print(f"wrote {rel(provenance)}  {len(INPUTS)} recorded input(s)")
+
+
+def same_path(a, b):
+    """Whether two paths name one file, as the filesystem resolves them.
+
+    samefile when both exist. Otherwise the resolved paths compared without case,
+    which on a case-sensitive volume refuses a little more than it must, and
+    never less: a guard that errs here errs towards refusing."""
+    a, b = pathlib.Path(a), pathlib.Path(b)
+    try:
+        if a.exists() and b.exists():
+            return os.path.samefile(a, b)
+    except OSError:
+        pass
+    return str(a.resolve()).casefold() == str(b.resolve()).casefold()
 
 
 def pdf_string(blob, key):
@@ -1259,7 +1348,8 @@ def write_provenance(path, out, blob, pages, epoch, draft=False):
         "sha256": hashlib.sha256(blob).hexdigest(),
         "source_date_epoch": epoch,
         "built_by": {"producer": pdf_string(blob, "Producer"),
-                     "creator": pdf_string(blob, "Creator")},
+                     "creator": pdf_string(blob, "Creator"),
+                     "pandoc": PANDOC_VERSION[0] if PANDOC_VERSION else ""},
         "inputs": dict(sorted(INPUTS.items())),
     }
     if draft:
@@ -1290,14 +1380,25 @@ if __name__ == "__main__":
     paper = PAPERS[args.paper]
     out = args.out if args.out is not None else paper["out"]
     prov = args.provenance
-    if prov is None and out.resolve() == paper["out"].resolve():
+    if prov is None and same_path(out, paper["out"]):
         prov = paper["provenance"]
-    # A draft is for looking at. Written to the tracked path it would be one
-    # `git add` from publishing a stamped, unfinished paper with a manifest that
-    # check-pdf-current accepts, so it is refused here rather than caught later.
-    if args.draft and (out.resolve() == paper["out"].resolve() or
-                       (prov is not None and prov.resolve() == paper["provenance"].resolve())):
-        sys.exit(f"--draft cannot write {rel(paper['out'])} or its manifest. Pass --out "
-                 f"(and --provenance, if you want one) somewhere else.")
+    # Two ways to put the wrong file at a tracked path, both refused here rather
+    # than caught later. A draft is for looking at: written to any paper's
+    # tracked path it would be one `git add` from publishing a stamped, unfinished
+    # paper. And one paper's render written over the other's artifact or manifest
+    # is a self-consistent pair that describes the wrong document. The paths are
+    # compared as the filesystem sees them, not as strings: on a case-insensitive
+    # volume static/WHITEPAPER.pdf is static/whitepaper.pdf, and the string
+    # comparison this replaced let a draft through by that route.
+    for other, p in PAPERS.items():
+        for kind, tracked, given in (("PDF", p["out"], out), ("manifest", p["provenance"], prov)):
+            if given is None or not same_path(given, tracked):
+                continue
+            if args.draft:
+                sys.exit(f"--draft cannot write {rel(tracked)}, a tracked {kind}. Pass --out "
+                         f"(and --provenance, if you want one) somewhere else.")
+            if other != args.paper:
+                sys.exit(f"--paper {args.paper} cannot write {rel(tracked)}: that is the tracked "
+                         f"{kind} of {other}.")
     preflight()
     render(args.paper, out, prov, args.draft)
