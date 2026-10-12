@@ -101,8 +101,12 @@ def rebuild(name):
 SCRIPTS = ("bin/build-pdf", "bin/print-page.mjs", "bin/papers.py",
            "bin/vendor/paged.polyfill.js")
 # What one paper reads that the other does not. The white paper's Appendix A is
-# generated from the catalogue, by the reader in controls_source.py.
-EXTRA = {"whitepaper": ("whitepaper/controls.yaml", "bin/controls_source.py")}
+# generated from the catalogue, by the reader in controls_source.py. Each paper's
+# contributors.yaml decides who its cover may name, so a manifest that left it out
+# stayed "current" after a contributor in the byline was withdrawn.
+EXTRA = {"whitepaper": ("whitepaper/controls.yaml", "bin/controls_source.py",
+                        "whitepaper/contributors.yaml"),
+         "software-factory": ("software-factory/contributors.yaml",)}
 # An image's alt text or caption, allowing one level of nested brackets.
 ALT = r"!\[((?:[^\[\]]|\[[^\[\]]*\])*)\]"
 
