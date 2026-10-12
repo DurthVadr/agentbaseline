@@ -260,11 +260,14 @@
     <p class="note">Everything here is three pages: the overview, the
     {{ len $cat.controls }} controls behind the six outcomes, and the software factory
     reference architecture.</p>
+    {{/* The site serves two papers, so the PDF link says whose it is, and sits
+         with the baseline's links, ahead of the second paper's. After "Read the
+         reference architecture" a bare "Download the PDF" read as that paper's. */}}
     <p class="ctas">
       <a href="/">Go to the overview</a> ·
       <a href="/controls">Browse the controls</a> ·
+      {{ if fileExists "static/whitepaper.pdf" }}<a href="/whitepaper.pdf">Download the white paper (PDF)</a> · {{ end }}
       <a href="/reference-architecture">Read the reference architecture</a>
-      {{ if fileExists "static/whitepaper.pdf" }}· <a href="/whitepaper.pdf">Download the PDF</a>{{ end }}
     </p>
   </div>
 
