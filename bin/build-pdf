@@ -471,29 +471,34 @@ th { font-family:"Chakra Petch",sans-serif; font-size:7pt; font-weight:600;
 CSS = PAGE_CSS + SHARED_CSS
 
 # ── the reference architecture's page furniture ─────────────────────────────
-# The head reads as the site's crumb does, "Agent Baseline / Reference
-# architecture": the baseline first, this document under it. That is the
-# hierarchy the page states, and the one wording the site already uses for it.
-# It sits opposite the section name, so the head is a two-cell strip in the
-# label voice — where a drawing carries its title. It was in the foot first,
-# where it shared the line with the version and wrapped to two lines in a
-# third of the measure.
+# The head names this document, opposite the section the page is in, in the
+# label voice: where a drawing carries its title. It used to read as the site's
+# crumb, "Agent Baseline / Reference architecture", which a reader, or a
+# summarizer, can take as "Agent Baseline's reference architecture", and the
+# baseline is not one. The relation is stated instead, in the foot, where the
+# white paper's foot names Agent Baseline: "Builds on Agent Baseline", the
+# words of the cover's title block. The version and date sit at the centre of
+# the foot, where the white paper keeps its version, and the folio at right.
 #
-# The foot is the document's datum — version and date, in the mono voice a
-# title block uses for values — and the page number, as in the white paper.
+# The section is the one in force at the top of the page (string(…, start)).
+# Chapters run on, so a page often opens in one and starts another; the head
+# names where the reader is on arriving, not what begins near the foot.
 SF_PAGE_CSS = """
 @page {
   size: A4; margin: 22mm 30mm 20mm;
-  @top-left     { content: "Agent Baseline / Reference architecture";
+  @top-left     { content: "@TITLE@";
                   font-family:"Chakra Petch",sans-serif; font-weight:500;
                   font-size:7pt; letter-spacing:.13em; text-transform:uppercase;
                   color:#8C8878; white-space:nowrap; }
-  @top-right    { content: string(section); font-family:"Chakra Petch",sans-serif;
+  @top-right    { content: string(section, start); font-family:"Chakra Petch",sans-serif;
                   font-size:7.5pt; letter-spacing:.13em; text-transform:uppercase;
                   color:#B0AB99; white-space:nowrap; }
-  @bottom-left  { content: "Version @VERSION@ · @DATE@";
+  @bottom-left  { content: "Builds on Agent Baseline";
                   font-family:"IBM Plex Mono",monospace; font-size:7.5pt;
                   letter-spacing:.06em; color:#8C8878; white-space:nowrap; }
+  @bottom-center{ content: "Version @VERSION@ · @DATE@";
+                  font-family:"IBM Plex Mono",monospace; font-size:7.5pt;
+                  letter-spacing:.06em; color:#B0AB99; white-space:nowrap; }
   @bottom-right { content: counter(page); font-family:"IBM Plex Mono",monospace;
                   font-size:8pt; font-weight:600; color:#5C5850; }
 }
@@ -511,10 +516,17 @@ SF_CSS = """
    as on the reference-architecture page rather than four statements. The
    kicker names Agent Baseline first and in the accent, the rest in the soft
    voice, so the parent is the thing the eye lands on. */
+/* The cover is a drawing sheet: the kicker and title at the head, the title
+   block at the foot, above the sheet's lower rule, where a drawing keeps it.
+   Set under the title, as the white paper's tenets are, it left the lower half
+   of the sheet empty; anchored to the foot, the white between title and block
+   is the sheet's, not a gap. */
+.cover { display:flex; flex-direction:column; }
+.cover .meta { margin:0; }
 .cover .mark { color:var(--soft); }
 .cover .mark .parent { color:var(--accent); }
 .covertitle .sub { color:var(--soft); }
-.cover .tb { display:grid; grid-template-columns:repeat(4,auto) 1fr; margin:0 0 10mm;
+.cover .tb { display:grid; grid-template-columns:repeat(4,auto) 1fr; margin:auto 0 8mm;
   border-top:.4pt solid var(--rule); border-bottom:.4pt solid var(--rule); }
 .cover .tb .cell { padding:3.2mm 6mm 3.4mm 0; margin:0; }
 .cover .tb .cell + .cell { border-left:.4pt solid var(--line); padding-left:4mm; }
@@ -1237,8 +1249,10 @@ def build_software_factory(paper, draft):
     FONTS = fonts()
 
     date = f"{fm['date'].day} {fm['date']:%B %Y}"
+    running = fm["title"].partition(": ")[0].replace("\\", "\\\\").replace('"', '\\"')
     css = (SF_PAGE_CSS + SHARED_CSS + SF_CSS).replace("@VERSION@", fm["version"]) \
-                                             .replace("@DATE@", date)
+                                             .replace("@DATE@", date) \
+                                             .replace("@TITLE@", running)
     if draft:
         css += DRAFT_CSS
 
@@ -1294,7 +1308,9 @@ def build_software_factory(paper, draft):
         # bytes, so these are asked for here rather than made the default.
         "print_args": ["--outline",
                        "--meta", f"Author={', '.join(n for n, _ in fm['people'])}",
-                       "--meta", "Subject=Agent Baseline, applied to the software factory"],
+                       "--meta", "Subject=Agent Baseline, applied to the software factory",
+                       "--meta", "Keywords=Agent Baseline; software factory; reference architecture; "
+                                 "AI agents; agent security"],
         "summary": f"{len(figs)} figures · {len(toc)} contents entries"
                    + (" · DRAFT" if draft else ""),
     }
