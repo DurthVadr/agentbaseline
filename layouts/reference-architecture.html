@@ -36,8 +36,11 @@
     --paper:#FBF9F3; --ink:#221F18; --soft:#5C5850; --faint:#736E60;
     --line:#E6E2D7; --link:#5A7A00; --link-hover:#3F5400; --visited:#66713F; --mark:#B3541E;
     --wash:#F4F1E8; --accent:#5A7A00; --baseline:#D9D4C6;
+    /* --fig-rule is darker here than on the homepage: these figures draw
+       meaning in outlines (Figure 2's profile, task and delegation nest),
+       so the outlines hold 3:1 against the page (3.3:1 light, 3.4:1 dark). */
     --fig-ink:#1C1A14; --fig-soft:#5F5B51; --fig-faint:#7E7969;
-    --fig-hair:#E6E2D7; --fig-rule:#CCC7B9; --fig-accent:#5A7A00;
+    --fig-hair:#E6E2D7; --fig-rule:#8F8A7C; --fig-accent:#5A7A00;
     --serif: "IBM Plex Serif",Charter,"Iowan Old Style",Georgia,serif;
     --labelfont: "Chakra Petch","Avenir Next",sans-serif;
     --head: "Figtree","Avenir Next","Helvetica Neue",sans-serif;
@@ -48,20 +51,20 @@
       --line:#2E302D; --link:#C6F13F; --link-hover:#DCFF66; --visited:#ABB584; --mark:#E08050;
       --wash:#1D1F1C; --accent:#C6F13F; --baseline:#333531;
       --fig-ink:#DDDEDA; --fig-soft:#A2A6A2; --fig-faint:#868A86;
-      --fig-hair:#333533; --fig-rule:#454745; --fig-accent:#C6F13F; }
+      --fig-hair:#333533; --fig-rule:#6A6D69; --fig-accent:#C6F13F; }
   }
   :root[data-theme="light"] { --paper:#FBF9F3; --ink:#221F18; --soft:#5C5850;
     --faint:#736E60; --line:#E6E2D7; --link:#5A7A00; --link-hover:#3F5400;
     --visited:#66713F; --mark:#B3541E; --wash:#F4F1E8; --accent:#5A7A00;
     --baseline:#D9D4C6;
     --fig-ink:#1C1A14; --fig-soft:#5F5B51; --fig-faint:#7E7969;
-    --fig-hair:#E6E2D7; --fig-rule:#CCC7B9; --fig-accent:#5A7A00; }
+    --fig-hair:#E6E2D7; --fig-rule:#8F8A7C; --fig-accent:#5A7A00; }
   :root[data-theme="dark"] { --paper:#151714; --ink:#E6E7E3; --soft:#A7ABA7;
     --faint:#8B8F8B; --line:#2E302D; --link:#C6F13F; --link-hover:#DCFF66;
     --visited:#ABB584; --mark:#E08050; --wash:#1D1F1C; --accent:#C6F13F;
     --baseline:#333531;
     --fig-ink:#DDDEDA; --fig-soft:#A2A6A2; --fig-faint:#868A86;
-    --fig-hair:#333533; --fig-rule:#454745; --fig-accent:#C6F13F; }
+    --fig-hair:#333533; --fig-rule:#6A6D69; --fig-accent:#C6F13F; }
 
   *,*::before,*::after { box-sizing: border-box; }
   body { margin:0; background:var(--paper); color:var(--ink);
@@ -183,6 +186,11 @@
      field labels get on the controls page. Mono, because it is a datum. */
   .status { font-family:var(--mono); font-size:12px; color:var(--faint);
     letter-spacing:.06em; margin:0 0 14px; }
+  /* The paper's title, under the page's: the h1's face at a quieter size and
+     colour, so the short name leads and the full name reads as its title. */
+  .subtitle { font-family:var(--head); font-weight:500;
+    font-size:clamp(20px,2.6vw,25px); line-height:1.25; letter-spacing:-0.01em;
+    color:var(--soft); margin:12px 0 0; text-wrap:balance; }
 
   .prose p { margin:0 0 18px; }
   .prose .note { color:var(--soft); font-size:16px; }
@@ -301,7 +309,7 @@
       --faint:#736E60; --line:#E6E2D7; --link:#5A7A00; --wash:#F4F1E8;
       --accent:#5A7A00; --baseline:#D9D4C6;
       --fig-ink:#1C1A14; --fig-soft:#5F5B51; --fig-faint:#7E7969;
-      --fig-hair:#E6E2D7; --fig-rule:#CCC7B9; --fig-accent:#5A7A00; }
+      --fig-hair:#E6E2D7; --fig-rule:#8F8A7C; --fig-accent:#5A7A00; }
   }
   figure.sff { margin:8px 0 0; position:relative; left:50%; transform:translateX(-50%);
     width:min(880px, calc(100vw - 2 * clamp(28px,4vw,56px))); }
@@ -375,6 +383,10 @@
          produces, and where the paper stands. */}}
     <p class="status">Agent Baseline, applied to the software factory</p>
     <h1>Reference architecture</h1>
+    {{/* The paper's own title, under the page's short name: searches and AI
+         answers find "Secure Software Factory" here, not only the 2022 CNCF
+         paper of a similar name. */}}
+    <p class="subtitle">The Secure Software Factory</p>
     <dl class="tb">
       <div class="cell"><dt>Builds on</dt><dd><a href="/controls">Agent Baseline’s six outcomes</a></dd></div>
       <div class="cell"><dt>Subject</dt><dd>The software factory</dd></div>

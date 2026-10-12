@@ -157,7 +157,7 @@ disableKinds = ["taxonomy", "term", "RSS", "section"]
 [params.event]
   id    = "sf-show-and-tell-2026"
   label = "Live · New York"
-  say   = "Secure Software Factory Show and Tell, 13 October at Elsie Rooftop, during AI Engineer NYC. Bring the factory a hard question."
+  say   = "Secure Software Factory Show and Tell, 13 October at Elsie Rooftop. Bring the factory a hard question."
   cta   = "RSVP"
   url   = "https://luma.com/keycard-rg1c"
   # RFC 3339 with the New York offset. A bare date is parsed as midnight UTC,
@@ -169,8 +169,8 @@ disableKinds = ["taxonomy", "term", "RSS", "section"]
   until = "2026-10-14T06:00:00-04:00"
   # The closing block renders from the same table, so the strip and the block
   # expire together and can never disagree about the event.
-  pull  = "Filing an issue is the durable way to disagree with this. Being in the room is the faster one."
-  when  = "Tuesday 13 October 2026 · 5:30–8:30 pm · launch night, during AI Engineer NYC"
+  pull  = "Filing an issue is the durable way to disagree with a paper. Being in the room is the faster one."
+  when  = "Tuesday 13 October 2026 · from 5:30 pm · launch night"
   where = "Elsie Rooftop, 1412 Broadway, New York"
   what  = "Secure Software Factory Show and Tell"
-  who   = "A panel of the paper's authors and the co-author of OAuth 2.0, moderated by its editor, then live demos from Keycard, Docker, Braintrust and Socket"
+  who   = "A panel moderated by Allie Howe, with Dick Hardt, co-author of OAuth 2.0, and speakers from Keycard, Socket, Docker and Braintrust, then live demos"
