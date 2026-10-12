@@ -288,14 +288,21 @@
   /* The paper's figures (partial sf-figure.html), captioned as the PDF
      captions them. The drawing takes the page's colours through the --fig-*
      tokens; the narrow composition replaces the wide one on phones. */
-  figure.sff { margin:8px 0 0; }
+  /* Wider than the prose column. The drawings are set for the PDF column,
+     and at 680px their smallest text came out near 10px; at 880px it is
+     about 13.5px. Centred on the column from whatever contains it (the level
+     tabs sit inside the column), never wider than the sheet's gutters allow.
+     Below 800px the narrow composition takes over, capped at 440px. */
+  figure.sff { margin:8px 0 0; position:relative; left:50%; transform:translateX(-50%);
+    width:min(880px, calc(100vw - 2 * clamp(28px,4vw,56px))); }
+  figure.sff > figcaption { max-width:680px; margin-inline:auto; }
   .prose.after-fig { margin-top:28px; }
   .ctas a.primary { font-weight:600; }
   .sff-d svg { display:block; width:100%; height:auto; }
   .sff-d.has-n .sff-n { display:none; }
-  @media (max-width:559px) {
+  @media (max-width:799px) {
     .sff-d.has-n .sff-w { display:none; }
-    .sff-d.has-n .sff-n { display:block; }
+    .sff-d.has-n .sff-n { display:block; max-width:440px; margin:0 auto; }
   }
   .sff-int { display:block; width:100%; height:auto; border-radius:4px; }
   .sff-ph { display:flex; align-items:center; justify-content:center;

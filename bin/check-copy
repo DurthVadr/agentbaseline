@@ -255,6 +255,31 @@ if _sf.exists() and _cfg.exists():
             findings.append(("contra", f"the reference architecture's date disagrees — the paper "
                                        f"says “{_want_p}”, hugo.toml says “{_cp.group(1)}”"))
 
+# ── 3c-quinquies · each figure says what the paper says it says ─────────────
+# The paper's source gives every figure a caption and alt text; the generated
+# SVG carries the same two as its <title> and <desc>, which the page inlines.
+# Two copies of each, so they are held together here: the PDF and the page
+# must not describe one drawing two ways.
+if _sf.exists():
+    _src = _sf.read_text(encoding="utf-8")
+    _figs = re.findall(r'^!\[([^\]]+)\]\((figures/[^)]+\.svg)\)\{alt="([^"]*)"\}', _src, re.M)
+    if not _figs:
+        findings.append(("contra", "software-factory.md: no figures with alt text found — "
+                                   "the figure syntax changed, so this check reads nothing"))
+    for _cap, _rel, _alt in _figs:
+        _svg = _sf.parent / _rel
+        if not _svg.exists():
+            findings.append(("contra", f"software-factory.md cites {_rel}, which does not exist"))
+            continue
+        _t = _svg.read_text(encoding="utf-8")
+        _st = re.search(r"<title[^>]*>(.*?)</title>", _t, re.S)
+        _sd = re.search(r"<desc[^>]*>(.*?)</desc>", _t, re.S)
+        _norm = lambda x: " ".join(html.unescape(x).split())
+        if not _st or _norm(_st.group(1)) != _norm(_cap):
+            findings.append(("contra", f"{_rel}: its <title> is not the paper's caption “{_cap[:60]}…”"))
+        if not _sd or _norm(_sd.group(1)) != _norm(_alt):
+            findings.append(("contra", f"{_rel}: its <desc> is not the paper's alt text"))
+
 # ── 3c-ter · the reference architecture must render its data rows ──────────
 # Locate sections by their stable IDs so heading edits cannot bypass this check.
 _ra = ROOT / "public" / "reference-architecture" / "index.html"

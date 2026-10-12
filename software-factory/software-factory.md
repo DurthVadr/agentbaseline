@@ -26,7 +26,7 @@ Software factories have existed for decades, but running them with agents is new
 
 A **software factory** is an agentic system that turns a prompt, a ticket, or a specification into tested code for an existing codebase, using one agent or several, and increasingly deploys and maintains what it builds. Scoping a factory to a specific codebase and use is part of its design, and the organization running it remains accountable for what it produces. It's assembled from agents and their harnesses, models, skills, tools and Model Context Protocol (MCP) servers, dependencies, and **blueprints**, and each agent works under a **profile** for the kind of job it does, such as incident response. Its skills and context capture the organization's policies, practices, and workflows, so what good looks like for each kind of work can be reused across developers, workflows, and models.
 
-![Work loops until it passes, and problems feed back to design](figures/figure-1.svg){alt="TODO: alt text for Figure 1"}
+![Work loops until it passes, and problems feed back to design](figures/figure-1.svg){alt="Work arrives as a prompt, a requirements document or a ticket, design sets its limits, and an inner loop assembles, builds in a sandbox and verifies the change until it passes. After review and a deploy under approval policy, an outer loop carries review, evals and production feedback back to design, and production signals start new work."}
 
 Work arrives as a prompt, a product requirements document (PRD), or a ticket, and design sets its limits, such as which profiles agents can be given. The **inner loop** assembles what the task needs, builds the change inside a sandbox, and verifies it against the organization's engineering and security standards, repeating until the work passes. The **outer loop** feeds review, evals, and production feedback back into design, both to send the work around again and to improve the factory itself, including its skills, tools, models, and workflows. Approved changes deploy under the organization's **approval policy**, and in the most advanced factories, production sends back **signals**, such as incidents, that start new work.
 
@@ -69,7 +69,7 @@ This boundary acts twice in every run, first checking that whoever is asking may
 
 The **runtime authorization service**, never the agent, decides what access each task gets, using trusted context, the profile, delegation, and policy. A conventional authorization system decides whether an incident agent may read production logs at all, while the authorization service decides that, for this incident, it may read one service's logs for one hour, and requires approval or denies the request when the task doesn't justify it.
 
-![The agent proposes, policy authorizes, and infrastructure enforces](figures/figure-2.svg){alt="TODO: alt text for Figure 2"}
+![The agent proposes, policy authorizes, and infrastructure enforces](figures/figure-2.svg){alt="An agent in a sandbox, holding no credentials, proposes the scope it needs; the runtime authorization service decides within the bounds of the agent's profile, its task and any delegation. The egress proxy enforces that decision and attaches the credentials, so only authorized operations reach anything downstream."}
 
 Credentials stay at the egress proxy, so an agent never holds one. Scoped access still doesn't make every authorized action harmless, so high-impact actions need approval, every grant is recorded with who authorized it, and grants can be revoked at any time. These were the controls missing in [PocketOS](https://x.com/lifeofjer/status/2048103471019434248) and ["Let's land #118"](https://www.thatsjet.com/blog/insecure-defaults-excessive-agency/).
 
@@ -129,19 +129,19 @@ How much of the work a factory takes on by itself depends on its **orchestrator*
 
 ## Level 1: Human-Orchestrated Factory
 
-![Level 1, where a developer gives an agent room to work without giving it everything the developer can reach](figures/figure-3.svg){alt="TODO: alt text for Figure 3"}
+![Level 1, where a developer gives an agent room to work without giving it everything the developer can reach](figures/figure-3.svg){alt="A developer directs one coding agent in a sandbox on their machine or a remote environment, and every request it makes goes through a default-deny egress proxy that enforces the authorization service's decision. The agent can reach source control, the services its task needs, a model gateway and approved packages, and nothing else the developer can reach; its pull request goes back to the developer."}
 
 The developer directs a coding agent and reviews its output, but the agent still makes its own decisions inside the inner loop. Its sandbox can reach the working repository, approved package registries, and the specific development services the task needs, which gives it room to edit code, install dependencies, run tests, and open pull requests without inheriting everything the developer can access. That leaves the developer reviewing the result instead of approving each command. Its profile usually lives in the **agent harness** and its workflow in a **skill**, while the four boundaries enforce what it can reach and do.
 
 ## Level 2: Workflow-Orchestrated Factory
 
-![Level 2, where a workflow orchestrates](figures/figure-4.svg){alt="TODO: alt text for Figure 4"}
+![Level 2, where a workflow orchestrates](figures/figure-4.svg){alt="A request, event, schedule or ticket starts a workflow on CI/CD, a step runner or Temporal, which runs a coding agent in a fresh sandbox, behind its own proxy, for each run; the pull request goes through approval to merge, and review feedback starts the next run. The authorization service, proxy and destinations are the same as at Level 1."}
 
 The factory becomes a shared service that starts work from requests, events, schedules, or tickets. It gets its own identity and acts for the requester when there is one; every run gets a fresh sandbox, and review feedback drives the next run until the pull request is ready. Evals and run metrics across many runs show where the factory needs to improve, and because it's shared, those improvements reach everyone using it, or as [Shopify](https://shopify.engineering/under-the-river) puts it, "one person's hard-won fix becomes the next person's starting point."
 
 ## Level 3: Agent-Orchestrated Factory
 
-![Level 3, where an agent orchestrates but can't grant itself access](figures/figure-5.svg){alt="TODO: alt text for Figure 5"}
+![Level 3, where an agent orchestrates but can't grant itself access](figures/figure-5.svg){alt="An orchestrator agent turns signals and requests into tasks and proposes each one's profile and scope to the authorization service, which alone grants access; the execution layer starts each agent in its own sandbox, and a monitoring agent watches from outside and flags new work. Changes go through approval and deploy to production, whose signals start the next work, inside the same boundaries as Levels 1 and 2."}
 
 An agent now decides what happens next, which is the most consequential change. The factory turns signals such as incidents and scanner findings into work, and in a **preflight** step the orchestrator agent proposes a profile and task scope for each piece, while the authorization service independently decides what each task gets.
 
@@ -151,7 +151,7 @@ Level 3 is also the path toward a **dark factory**, one that runs with no human 
 
 # A factory in action
 
-![Only a new authorization decision can widen a task](figures/figure-6.svg){alt="TODO: alt text for Figure 6"}
+![Only a new authorization decision can widen a task](figures/figure-6.svg){alt="A production alert leads the orchestrator to propose a task for an incident agent, one service's logs for the last hour and one pull request, which the authorization service checks against policy and the alert's source. When the agent reaches for another service's logs, the proxy blocks the call, because only a new authorization decision could widen the task; the fix ships through approval and a small first deploy, and the error rate afterward confirms it or starts the next run."}
 
 A production alert reports elevated errors in a payments service, and the orchestrator proposes a task for an incident agent with read access to the service's logs for the last hour and permission to open one pull request. The authorization service checks that request against policy for that kind of incident and the alert's authenticated source, and the egress proxy attaches credentials only to the requests it grants.
 
