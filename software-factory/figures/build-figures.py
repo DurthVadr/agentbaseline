@@ -268,12 +268,10 @@ class SF(Fig):
         for l in self.links:
             l["pts"] = [(x + m, y + m) for x, y in l["pts"]]
         self.W, self.H = cw, ch
-        # print size is bin/check-figure's to decide (rule 9); the phone
-        # check still reads this manifest
+        # where the figure is shown, and how small that makes its text, is
+        # bin/check-figure's to decide (rule 9), not this manifest's
         meta = {"W": self.W, "H": self.H, "shapes": self.shapes, "links": self.links,
                 "margin": m}
-        if self.narrow:
-            meta["phone"] = {"display_px": 343, "min_px": 10}
         super().write(name, out_dir=HERE)
         (HERE / f".{name}.geom.json").write_text(json.dumps(meta, indent=1), encoding="utf-8")
 

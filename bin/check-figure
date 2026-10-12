@@ -27,8 +27,11 @@ what the first paper's figures are held to:
   6. no connector is drawn through text, a card, or another connector
   7. every connector starts and ends on something — no arrow lands in air
   8. an arrow's last leg is long enough to read as an arrow
-  9. text stays legible at the size it is shown: 7 pt at the PDF's figure
-     width (measured, set below), or 10 px across a phone's 343 px column
+  9. text stays legible at every size the figure is shown, whatever the
+     figure's own data says: 7 pt at the PDF's figure width, and 10 px at the
+     narrowest width the page shows it (a phone's 343 px column for a narrow
+     variant, or for a wide figure that has none; the page's narrowest wide
+     slot otherwise). The widths are measured facts, set below.
  10. nothing touches the canvas edge: every box, text run and connector keeps
      at least 6 units of air, so no stroke is clipped and every figure sits
      in the same margin
@@ -55,6 +58,11 @@ GEOM = SVG.parent / f".{NAME}.geom.json"
 # earlier version of this rule assumed a 6.5 in (468 pt) column and so passed
 # text that prints at 6.5 pt.
 PRINT_WIDTH_PT, MIN_PT = 425.2, 7.0
+# Screen: a 375 px phone less 16 px gutters each side is 343 px, the width every
+# narrow variant (and any wide figure without one) is shown at. A wide figure
+# with a narrow variant is shown only from 800 px up (reference-architecture's
+# `.sff` rules), where its slot is 800 − 2 × 32 = 736 px at its narrowest.
+PHONE_PX, WIDE_MIN_PX, MIN_PX = 343, 736, 10.0
 
 if not BOXES.exists():
     sys.exit("no box manifest — run whitepaper/figures/build-figure-1.py first")
@@ -247,20 +255,29 @@ if GEOM.exists():
             if leg < 18:
                 errors.append(f"arrow {l['tag']!r} ends in a {leg:.0f}px leg — "
                               f"too short to read as an arrow")
-    # 9. legible at the size it is shown. Print: every wide figure, at the
-    #    PDF's measured figure width. Phone: where the manifest asks for it.
-    if not NAME.endswith("-narrow"):
-        k = PRINT_WIDTH_PT / W
-        small = [a for a in boxes if a["h"] / 1.02 * k < MIN_PT - 0.005]
-        for a in small:
-            errors.append(f"text too small in print: {a['tag']!r} is {a['h'] / 1.02 * k:.2f} pt "
-                          f"across the PDF's {PRINT_WIDTH_PT} pt figure width")
-    if "phone" in geom:
-        k = geom["phone"]["display_px"] / W
-        for a in boxes:
-            size = a["h"] / 1.02 * k
-            if size < geom["phone"]["min_px"] - 0.005:
-                errors.append(f"text too small on a phone: {a['tag']!r} is {size:.1f} px")
+    # 9. legible at every size it is shown — decided here, never by the
+    #    figure's own manifest, so no figure can opt out by omission
+    narrow = NAME.endswith("-narrow")
+    has_narrow = (SVG.parent / f"{NAME}-narrow.svg").exists()
+    shown = []
+    if not narrow:
+        shown.append(("in print", PRINT_WIDTH_PT / W, MIN_PT, "pt",
+                      f"across the PDF's {PRINT_WIDTH_PT} pt figure width"))
+    if narrow or not has_narrow:
+        shown.append(("on a phone", PHONE_PX / W, MIN_PX, "px",
+                      f"across a {PHONE_PX} px phone column"
+                      + ("" if narrow else " (this figure has no narrow variant)")))
+    else:
+        shown.append(("on the page", WIDE_MIN_PX / W, MIN_PX, "px",
+                      f"in the page's narrowest wide slot, {WIDE_MIN_PX} px"))
+    for where, k, least, unit, at in shown:
+        worst = min(boxes, key=lambda a: a["h"])
+        size = worst["h"] / 1.02 * k
+        if size < least - 0.005:
+            small = [a["tag"] for a in boxes if a["h"] / 1.02 * k < least - 0.005]
+            errors.append(f"text too small {where}: {len(small)} run(s), smallest "
+                          f"{worst['tag']!r} at {size:.2f} {unit} {at} (min {least:g} {unit}); "
+                          f"e.g. {', '.join(map(repr, small[:4]))}")
     for sh in shapes:
         if sh["x"] < -T or sh["y"] < -T or sh["x"] + sh["w"] > W + T or sh["y"] + sh["h"] > H + T:
             errors.append(f"box outside canvas: {sh['tag']!r}")

@@ -277,9 +277,5 @@
    "free": true
   }
  ],
- "margin": 8,
- "phone": {
-  "display_px": 343,
-  "min_px": 10
- }
+ "margin": 8
 }
