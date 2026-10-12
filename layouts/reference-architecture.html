@@ -289,6 +289,8 @@
      captions them. The drawing takes the page's colours through the --fig-*
      tokens; the narrow composition replaces the wide one on phones. */
   figure.sff { margin:8px 0 0; }
+  .prose.after-fig { margin-top:28px; }
+  .ctas a.primary { font-weight:600; }
   .sff-d svg { display:block; width:100%; height:auto; }
   .sff-d.has-n .sff-n { display:none; }
   @media (max-width:559px) {
@@ -373,9 +375,10 @@
     {{/* The page's own opening, not the homepage's line: what a factory is
          and what this architecture does about it. */}}
     <p>A software factory uses AI agents to turn a prompt, a ticket or a specification
-    into tested code, and more and more to deploy and run what it builds. Its agents
-    decide what to do next and act on real systems. This architecture controls what they
-    can actually do, whatever they decide, at every level of autonomy.</p>
+    into tested code, and increasingly to deploy and operate it. Its agents decide what to
+    do next and act on real systems, so this architecture keeps what an agent decides apart
+    from what it is allowed to do. The agent proposes, policy authorizes, and
+    infrastructure enforces.</p>
   </div>
 
   <h2 id="boundaries">Four boundaries</h2>
@@ -389,15 +392,25 @@
   </div>
   {{ partial "software-factory-boundaries.html" $bd.boundaries }}
   {{ partial "sf-figure.html" (dict "n" $bd.figure.n "caption" $bd.figure.caption) }}
+  <div class="prose after-fig">
+    {{/* The paper's "A factory in action", cut to the moment that shows the
+         separation, then the line that keeps tested code and the boundaries
+         from reading as one thing (paper: the loops decide whether the
+         software is acceptable, the boundaries what agents may do). */}}
+    <p>Take an incident agent allowed to read one service’s logs for the last hour. If it
+    decides it needs another service’s logs, the proxy blocks the request until a new
+    authorization decision grants them. Tests are a separate question: the factory’s loops
+    decide whether the software is good enough, and the boundaries decide what agents may
+    do. Code can pass every test and still come from an agent that reached too far.</p>
+  </div>
   {{- if $sf.showLevels }}
   <h2 id="levels">Three levels of autonomy</h2>
   <div class="prose">
     {{/* The paper's claim, plainly: who decides the next step changes; the
          boundaries don't. */}}
-    <p>A factory takes on more of the work by itself as what decides the next step
-    changes, from a developer to a predefined workflow to an agent. The four boundaries
-    stay the same at every level. What grows is how much the infrastructure around them
-    does that a person used to supervise.</p>
+    <p>The three levels differ in who chooses the next step: a developer, a predefined
+    workflow, or an agent. The four boundaries stay the same at every level. What grows is
+    how much the infrastructure around them does that a person used to supervise.</p>
   </div>
   {{ partial "software-factory-levels.html" $levels }}
   {{- end }}
@@ -412,8 +425,8 @@
     each level of autonomy, and maps the architecture to Agent Baseline’s outcomes and
     controls.</p>
     <p class="ctas">
-      {{ if fileExists (printf "static/%s" $sf.pdf) }}<a href="/{{ $sf.pdf }}">Download the PDF</a> · {{ end }}
-      {{ if fileExists (printf "%s/%s" $sf.source $sf.paper) }}<a href="{{ .Site.Params.repo }}/blob/main/{{ $sf.source }}/{{ $sf.paper }}">View the source</a> · {{ end }}
+      {{ if fileExists (printf "static/%s" $sf.pdf) }}<a class="primary" href="/{{ $sf.pdf }}">Read the paper (PDF)</a> · {{ end }}
+      {{ if fileExists (printf "%s/%s" $sf.source $sf.paper) }}<a href="{{ .Site.Params.repo }}/blob/main/{{ $sf.source }}/{{ $sf.paper }}">Source on GitHub</a> · {{ end }}
       <a href="{{ .Site.Params.repo }}/issues/new?template={{ $sf.template }}">Share feedback</a>
     </p>
   </div>
