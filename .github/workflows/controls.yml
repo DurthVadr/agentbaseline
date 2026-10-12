@@ -21,12 +21,20 @@ jobs:
           python3 bin/check-figure
       # The reference architecture's figures are generated too: the committed
       # SVGs and the page's inlined partials must be what the generator makes,
-      # and every one must pass the same geometry check.
+      # and every one must pass the same geometry check. `git diff` sees only
+      # tracked files, so a figure or partial the generator writes that nobody
+      # committed passed it; anything untracked in either folder fails as well.
       - name: Reference architecture figures — current, and geometry
         run: |
           python3 software-factory/figures/build-figures.py
           python3 bin/sync-figure-partial
           git diff --exit-code -- software-factory/figures layouts/partials
+          untracked=$(git status --porcelain --untracked-files=all -- software-factory/figures layouts/partials)
+          if [ -n "$untracked" ]; then
+            echo "::error::the figure generator wrote files that are not committed — commit them or stop generating them"
+            echo "$untracked"
+            exit 1
+          fi
           for f in software-factory/figures/figure-*.svg; do python3 bin/check-figure "$f"; done
       - name: Copy — repeated phrasing, dead titles, contradictions
         run: |
