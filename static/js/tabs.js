@@ -10,7 +10,12 @@
 
    The tabs follow the ARIA tabs pattern with automatic activation: arrow
    keys move between the steps and select as they go, Home and End go to
-   the first and last, and only the selected step is in the tab order. */
+   the first and last, and only the selected step is in the tab order.
+   Arrows with a modifier are left alone: Alt+Left and Cmd+Left are Back.
+
+   A link to anything inside a level (#level-3, #figure-5) opens that level
+   and scrolls to the target, on load and on every hash change; otherwise
+   the target would be hidden and the page would stay at the top. */
 (function () {
   var roots = document.querySelectorAll('[data-tabs]');
   Array.prototype.forEach.call(roots, function (root) {
@@ -33,6 +38,7 @@
       panel.tabIndex = 0;
       tab.addEventListener('click', function () { select(i, false); });
       tab.addEventListener('keydown', function (e) {
+        if (e.altKey || e.metaKey || e.ctrlKey) return;
         var to = null, last = tabs.length - 1;
         if (e.key === 'ArrowRight') to = i === last ? 0 : i + 1;
         else if (e.key === 'ArrowLeft') to = i === 0 ? last : i - 1;
@@ -54,8 +60,31 @@
       if (focus) tabs[n].focus();
     }
 
-    select(0, false);
+    /* The level holding the element the URL's fragment names, or -1. */
+    function target() {
+      var id = location.hash.slice(1);
+      if (!id) return null;
+      try { id = decodeURIComponent(id); } catch (err) { return null; }
+      var el = document.getElementById(id);
+      if (!el) return null;
+      for (var i = 0; i < panels.length; i++) {
+        if (panels[i] === el || panels[i].contains(el)) return { n: i, el: el };
+      }
+      return null;
+    }
+
+    var start = target();
+    select(start ? start.n : 0, false);
     list.hidden = false;
     root.classList.add('is-tabbed');
+    /* Hiding the other levels moved the target after the browser scrolled
+       to it, so scroll again. */
+    if (start) start.el.scrollIntoView();
+    window.addEventListener('hashchange', function () {
+      var t = target();
+      if (!t) return;
+      select(t.n, false);
+      t.el.scrollIntoView();
+    });
   });
 })();

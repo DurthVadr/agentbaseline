@@ -45,6 +45,13 @@
     color:var(--paper); cursor:default; }
   .mx-step[aria-selected="true"] .nm { color:var(--paper); }
   .mx-step:focus-visible { outline:2px solid var(--link); outline-offset:2px; z-index:1; }
+  /* Forced colours replace the fill that marks the selected step, so mark it
+     with the system's own selection colours there. */
+  @media (forced-colors: active) {
+    .mx-step[aria-selected="true"] { forced-color-adjust:none; background:Highlight;
+      color:HighlightText; border-top-color:Highlight; }
+    .mx-step[aria-selected="true"] .nm { color:HighlightText; }
+  }
   .mx-step[aria-selected="true"]:focus-visible { outline-color:var(--ink); }
   /* Phones: the steps keep climbing; the names drop the caps so the longest
      word fits a third of a 320px screen. */
@@ -53,7 +60,7 @@
     .mx-step:nth-child(1) { margin-top:36px; }
     .mx-step:nth-child(2) { margin-top:18px; }
     .mx-step .nm { font-family:var(--head); font-size:12.5px; letter-spacing:0;
-      text-transform:none; hyphens:auto; }
+      text-transform:none; hyphens:auto; overflow-wrap:anywhere; }
   }
 
   /* A level: its heading (hidden while tabbed: the step names it), its

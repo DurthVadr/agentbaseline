@@ -118,14 +118,16 @@
   /* The one tinted block in the chrome, and only in a launch window: the pill
      (partials/pill.html). Soft treatment — accent text on a translucent wash
      of itself. */
+  /* Text in --link-hover, not --accent: accent on its own 12% wash was
+     4.06:1 at 11px in light mode, under AA; this is 6.9:1 (6.0:1 hovered). */
   .utility a.closes, .utility a.closes:visited {
     background:color-mix(in srgb, var(--accent) 12%, transparent);
-    color:var(--accent); font-family:var(--labelfont); font-weight:500;
+    color:var(--link-hover); font-family:var(--labelfont); font-weight:500;
     font-size:11px; letter-spacing:.06em; padding:3px 8px;
     border-radius:3px; }
   .utility a.closes:hover {
     background:color-mix(in srgb, var(--accent) 22%, transparent);
-    color:var(--accent); }
+    color:var(--link-hover); }
   /* The room's link wears its mark and the accent, and no wash: the pill
      stays the one tinted block in the chrome. Inline, not flex, so the
      bar's baseline alignment sees this link's text baseline like the others'.

@@ -266,10 +266,10 @@
 
   /* Sections are anchors under a sticky bar that wraps to two or three
      rows below about 1235px, so the margin steps down with it. */
-  h2[id] { scroll-margin-top:190px; }
-  @media (min-width:455px)  { h2[id] { scroll-margin-top:150px; } }
-  @media (min-width:580px)  { h2[id] { scroll-margin-top:110px; } }
-  @media (min-width:1235px) { h2[id] { scroll-margin-top:64px; } }
+  h2[id], figure.sff[id], .lvp[id] { scroll-margin-top:190px; }
+  @media (min-width:455px)  { h2[id], figure.sff[id], .lvp[id] { scroll-margin-top:150px; } }
+  @media (min-width:580px)  { h2[id], figure.sff[id], .lvp[id] { scroll-margin-top:110px; } }
+  @media (min-width:1235px) { h2[id], figure.sff[id], .lvp[id] { scroll-margin-top:64px; } }
 
   /* The four boundaries: a numbered list, each number in the same circled
      mark the paper's figures use for that boundary, so the list is the key
@@ -293,6 +293,16 @@
      about 13.5px. Centred on the column from whatever contains it (the level
      tabs sit inside the column), never wider than the sheet's gutters allow.
      Below 800px the narrow composition takes over, capped at 440px. */
+  /* Paper is white whatever the screen's theme: print the light tokens, or a
+     dark theme prints pale figure text on white and the sandbox wash as a
+     solid block. */
+  @media print {
+    :root, :root[data-theme] { --paper:#FBF9F3; --ink:#221F18; --soft:#5C5850;
+      --faint:#736E60; --line:#E6E2D7; --link:#5A7A00; --wash:#F4F1E8;
+      --accent:#5A7A00; --baseline:#D9D4C6;
+      --fig-ink:#1C1A14; --fig-soft:#5F5B51; --fig-faint:#7E7969;
+      --fig-hair:#E6E2D7; --fig-rule:#CCC7B9; --fig-accent:#5A7A00; }
+  }
   figure.sff { margin:8px 0 0; position:relative; left:50%; transform:translateX(-50%);
     width:min(880px, calc(100vw - 2 * clamp(28px,4vw,56px))); }
   figure.sff > figcaption { max-width:680px; margin-inline:auto; }
