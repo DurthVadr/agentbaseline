@@ -49,8 +49,21 @@ It does prove that the paper's source, controls.yaml and contributors.yaml where
 it reads them, the figures, the fonts and the scripts that turn them into a PDF
 are all at the versions the committed PDF was made from — which is exactly "nobody edited the paper and
 forgot to rebuild", and "nobody hand-patched the PDF".
+
+That proof is only as good as the list of inputs it is checked against, and that
+list used to be the manifest's own. A manifest is checked against what it
+records, so one that recorded the wrong paper's inputs, or none, was checked
+against the wrong things or nothing: the white paper built to the reference
+architecture's paths passed as the reference architecture, and kept passing while
+software-factory.md was edited; a hand-written manifest with `"inputs": {}`
+passed for any file. So the inputs a manifest must record are now also computed
+from the tree, independently of the manifest — the paper's own source, every
+figure it references, the four files that render it, every font face the build
+embeds and, for the white paper, the catalogue its appendix is generated from —
+and a manifest that leaves one out, names another paper, records no browser or
+no pages is refused before any digest is compared.
 """
-import argparse, hashlib, json, pathlib, re, sys
+import argparse, ast, hashlib, json, pathlib, re, sys
 
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
 from papers import PAPERS
@@ -71,13 +84,183 @@ def rel(p):
     return p.relative_to(ROOT).as_posix()
 
 
+def rebuild(name):
+    paper = PAPERS[name]
+    flag = "" if name == "whitepaper" else f" --paper {name}"
+    return (f"Run `python3 bin/build-pdf{flag}` and commit {rel(paper['out'])} together "
+            f"with {rel(paper['provenance'])}.")
+
+
+# ── what a manifest for this paper must record, computed from the tree ───────
+# The floor, not the whole list: the build records everything it opens, and a
+# manifest may name more than this. It may not name less. Each entry is here
+# because leaving it out is a way to pass the wrong PDF: the source ties the
+# manifest to its paper, the figures and fonts are drawn into the page, and the
+# four scripts are the stylesheet, the cover, the normalisation, the table of
+# papers and the paginator.
+SCRIPTS = ("bin/build-pdf", "bin/print-page.mjs", "bin/papers.py",
+           "bin/vendor/paged.polyfill.js")
+# What one paper reads that the other does not. The white paper's Appendix A is
+# generated from the catalogue, by the reader in controls_source.py.
+EXTRA = {"whitepaper": ("whitepaper/controls.yaml", "bin/controls_source.py")}
+# An image's alt text or caption, allowing one level of nested brackets.
+ALT = r"!\[((?:[^\[\]]|\[[^\[\]]*\])*)\]"
+
+
+def faces():
+    """The font files bin/build-pdf embeds, from its FACES table, or None.
+
+    Parsed rather than imported, so this check never runs the build to learn
+    what the build reads. A table that has moved or changed shape is None, which
+    the caller reports: a font floor that silently became empty is the gap this
+    closes.
+    """
+    for node in ast.parse((ROOT / "bin" / "build-pdf").read_text(encoding="utf-8")).body:
+        targets = (node.targets if isinstance(node, ast.Assign) else
+                   [node.target] if isinstance(node, ast.AnnAssign) else [])
+        if not any(isinstance(t, ast.Name) and t.id == "FACES" for t in targets):
+            continue
+        try:
+            rows = ast.literal_eval(node.value)
+        except ValueError:
+            return None
+        if not rows or not all(isinstance(r, tuple) and r and isinstance(r[-1], str)
+                               for r in rows):
+            return None
+        return sorted({f"static/fonts/{r[-1]}" for r in rows})
+    return None
+
+
+def figures(src):
+    """(repo paths, problems): every image the paper's source references.
+
+    Read from the markdown, since this check runs without pandoc: inline images,
+    reference-style images and raw <img> tags. Comments and fenced code are not
+    rendered, so what is in them is not read by the build either. A target with
+    a colon is a URL, which bin/build-pdf leaves alone, so it is skipped here too.
+    """
+    text = src.read_text(encoding="utf-8")
+    text = re.sub(r"<!--.*?-->", " ", text, flags=re.S)
+    text = re.sub(r"^ {0,3}(`{3,}|~{3,}).*?^ {0,3}\1", " ", text, flags=re.S | re.M)
+    defs = {k.strip().lower(): v for k, v in
+            re.findall(r"^ {0,3}\[([^\]]+)\]:[ \t]*<?([^\s>]+)", text, re.M)}
+    targets = [t for _, t in re.findall(ALT + r"\(\s*<?([^\s)>]+)", text)]
+    for alt, label in re.findall(ALT + r"(?!\()(?:\[([^\]]*)\])?", text):
+        key = (label or alt).strip().lower()
+        if key in defs:
+            targets.append(defs[key])
+    targets += re.findall(r"<img\b[^>]*?\bsrc=[\"']([^\"']+)[\"']", text, re.I)
+
+    found, problems = [], []
+    for t in targets:
+        if ":" in t:
+            continue
+        p = (src.parent / t).resolve()
+        if ROOT not in p.parents:
+            problems.append(f"{rel(src)} references {t}, which is outside the repository, "
+                            f"so no manifest can record it and nothing here can say whether "
+                            f"the PDF's copy of it is current.")
+        else:
+            found.append(rel(p))
+    return found, problems
+
+
+def floor(name):
+    """(the inputs a manifest of this paper must record, problems computing them)."""
+    src = PAPERS[name]["src"]
+    need, problems = [rel(src)], []
+    if src.exists():
+        figs, bad = figures(src)
+        need += figs
+        problems += bad
+    else:
+        problems.append(f"{rel(src)} is missing, so neither the paper nor the figures it "
+                        f"references can be required of the manifest.")
+    need += SCRIPTS
+    fonts = faces()
+    if fonts is None:
+        problems.append("bin/build-pdf has no FACES table this check can read, so the font "
+                        "faces the PDF embeds cannot be required of its manifest. Refusing "
+                        "rather than checking less: update faces() in bin/check-pdf-current "
+                        "to wherever the table now lives.")
+    else:
+        need += fonts
+    need += EXTRA.get(name, ())
+    return list(dict.fromkeys(need)), problems
+
+
+def identity(name, manifest):
+    """Problems that make this manifest not a description of this paper's build.
+
+    Asked before any digest, because digests only prove that a manifest agrees
+    with the files it names. These prove it names this paper's files. Shared with
+    bin/check-pdf-reproducible, which must not rebuild against a manifest that
+    describes something else and then diagnose the difference as nondeterminism.
+    """
+    paper = PAPERS[name]
+    prov, out, REBUILD = rel(paper["provenance"]), rel(paper["out"]), rebuild(name)
+
+    # The manifest names its own artifact. A manifest written by a build that
+    # went somewhere else (`--out` a scratch path) and was then copied into place
+    # describes that other file, not this one.
+    if manifest.get("artifact") != out:
+        return [f"{prov} describes {manifest.get('artifact')!r}, not {out} — it was "
+                f"written by a build to another path and copied in. {REBUILD}"]
+    # A draft accepts figures whose alt text is unwritten and stamps every page.
+    # bin/build-pdf refuses to write one to the tracked path; this catches one
+    # that arrived by a copy.
+    if manifest.get("draft"):
+        return [f"{out} is a draft build (figures' alt text unwritten, every page "
+                f"stamped). {REBUILD}"]
+
+    problems = []
+    if "paper" in manifest and manifest["paper"] != name:
+        problems.append(f"{prov} says it is the manifest of {manifest['paper']!r}, not of "
+                        f"{name!r}. {REBUILD}")
+    by = manifest.get("built_by")
+    if not (isinstance(by, dict) and all(isinstance(by.get(k), str) and by[k].strip()
+                                         for k in ("producer", "creator"))):
+        problems.append(f"{prov} does not say which browser built {out}: `built_by` needs "
+                        f"a producer and a creator. The build reads both back out of the "
+                        f"PDF it wrote, so a manifest without them was not written by the "
+                        f"build. {REBUILD}")
+    pages = manifest.get("pages")
+    if not (isinstance(pages, int) and not isinstance(pages, bool) and pages > 0):
+        problems.append(f"{prov} records {pages!r} pages. A build that wrote a PDF wrote at "
+                        f"least one page. {REBUILD}")
+    if not (isinstance(manifest.get("bytes"), int)
+            and re.fullmatch(r"[0-9a-f]{64}", str(manifest.get("sha256", "")))):
+        problems.append(f"{prov} has no `bytes` and `sha256` for {out}, so nothing ties it "
+                        f"to the file. {REBUILD}")
+    inputs = manifest.get("inputs")
+    if not isinstance(inputs, dict):
+        problems.append(f"{prov} has no `inputs` table. {REBUILD}")
+        inputs = {}
+
+    need, bad = floor(name)
+    problems += bad
+    missing = [r for r in need if r not in inputs]
+    if missing:
+        problems.append(f"These are inputs of the {name} build, computed from the tree, and "
+                        f"{prov} does not record them:\n" +
+                        "".join(f"    {r}\n" for r in missing) +
+                        "  A manifest is checked only against what it records, so one that "
+                        "leaves out the paper's source, its figures, its fonts or the files "
+                        "that render it can call a PDF of something else current. " + REBUILD)
+    foreign = [rel(PAPERS[o][k]) for o in PAPERS if o != name
+               for k in ("src", "out", "provenance") if rel(PAPERS[o][k]) in inputs]
+    if foreign:
+        problems.append(f"{prov} records another paper's files as inputs:\n" +
+                        "".join(f"    {r}\n" for r in foreign) +
+                        f"  It describes a build of that paper, not of {name}. {REBUILD}")
+    return problems
+
+
 def check(name):
     """(problems, report) for one paper. report is printed when there are none."""
     paper = PAPERS[name]
     provenance, out = paper["provenance"], paper["out"]
-    flag = "" if name == "whitepaper" else f" --paper {name}"
-    REBUILD = (f"Run `python3 bin/build-pdf{flag}` and commit {rel(out)} together "
-               f"with {rel(provenance)}.")
+    REBUILD = rebuild(name)
 
     if not provenance.exists():
         if not paper["required"] and not out.exists():
@@ -97,20 +280,12 @@ def check(name):
         manifest = json.loads(provenance.read_text(encoding="utf-8"))
     except json.JSONDecodeError as e:
         return [f"{rel(provenance)} is not readable JSON: {e}"], []
+    if not isinstance(manifest, dict):
+        return [f"{rel(provenance)} is not a manifest (a JSON object). {REBUILD}"], []
 
-    # The manifest names its own artifact. A manifest written by a build that
-    # went somewhere else (`--out` a scratch path) and was then copied into place
-    # describes that other file, not this one.
-    if manifest.get("artifact") != rel(out):
-        return [f"{rel(provenance)} describes {manifest.get('artifact')!r}, not "
-                f"{rel(out)} — it was written by a build to another path and copied "
-                f"in. {REBUILD}"], []
-    # A draft accepts figures whose alt text is unwritten and stamps every page.
-    # bin/build-pdf refuses to write one to the tracked path; this catches one
-    # that arrived by a copy.
-    if manifest.get("draft"):
-        return [f"{rel(out)} is a draft build (figures' alt text unwritten, every "
-                f"page stamped). {REBUILD}"], []
+    wrong = identity(name, manifest)
+    if wrong:
+        return wrong, []
 
     PDF = ROOT / manifest["artifact"]
     if not PDF.exists():
@@ -125,7 +300,7 @@ def check(name):
     # only the first of them sends the reader looking in one place for one of several
     # reasons the artifact is behind.
     moved, gone = [], []
-    for r, digest in manifest.get("inputs", {}).items():
+    for r, digest in manifest["inputs"].items():
         p = ROOT / r
         if not p.exists():
             gone.append(r)
@@ -171,19 +346,21 @@ def check(name):
     # toolchain strings back out of the artifact so that when they disagree the
     # message can say which browser, rather than leaving a reviewer to diff a
     # megabyte of binary to find out.
+    # `built_by` is required above, so an artifact that carries no such string,
+    # or a different one, is a mismatch rather than nothing to compare.
     for key in ("producer", "creator"):
-        want = manifest.get("built_by", {}).get(key, "")
+        want = manifest["built_by"][key]
         got = pdf_string(blob, key.capitalize())
-        if want and got and want != got:
+        if want != got:
             problems.append(f"the artifact's /{key.capitalize()} is not the one recorded:\n"
                             f"    manifest: {want}\n"
-                            f"    artifact: {got}\n"
+                            f"    artifact: {got or '(none)'}\n"
                             f"  The committed PDF and the committed manifest came from "
                             f"different builds. {REBUILD}")
 
     return problems, [
         f"pdf: current · {manifest['artifact']} · {manifest['bytes']:,} bytes · "
-        f"{manifest['pages']} pages · {len(manifest.get('inputs', {}))} inputs verified",
+        f"{manifest['pages']} pages · {len(manifest['inputs'])} inputs verified",
         f"     built by {manifest['built_by']['producer']}"]
 
 

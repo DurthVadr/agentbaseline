@@ -72,12 +72,22 @@ exist and the only copy of it was in a temporary directory that died with the
 process. It now builds somewhere else entirely, via `bin/build-pdf --out`, so
 there is no window to lose it in.
 """
-import argparse, hashlib, json, pathlib, re, subprocess, sys, tempfile
+import argparse, hashlib, importlib.machinery, importlib.util, json, pathlib, re, \
+    subprocess, sys, tempfile
 
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
 from papers import PAPERS
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
+
+# bin/check-pdf-current decides whether a manifest describes this paper's build
+# at all, and that question comes before this one. Loaded rather than copied, so
+# the two cannot drift into different answers. Its name has a hyphen, hence the
+# explicit loader.
+_loader = importlib.machinery.SourceFileLoader(
+    "check_pdf_current", str(ROOT / "bin" / "check-pdf-current"))
+current = importlib.util.module_from_spec(importlib.util.spec_from_loader(_loader.name, _loader))
+_loader.exec_module(current)
 
 # Distinct from 1 so a caller can tell "this machine cannot answer the question"
 # from "the answer is no". A gate that exits 0 when it could not check is how a
@@ -102,6 +112,15 @@ def judge(name):
         return 1, (f"{PROVENANCE.relative_to(ROOT)} is missing — run "
                    f"`python3 bin/build-pdf{flag}` first.")
     manifest = json.loads(PROVENANCE.read_text(encoding="utf-8"))
+    # A manifest of the other paper, or of nothing, matches its own inputs and its
+    # own artifact, so every check below would pass and the rebuild would then
+    # differ from the committed file for a reason that has nothing to do with
+    # determinism — and be reported as a varying stamp to normalise away.
+    wrong = current.identity(name, manifest) if isinstance(manifest, dict) else \
+        [f"{PROVENANCE.relative_to(ROOT)} is not a manifest (a JSON object)."]
+    if wrong:
+        return 1, ("NOT THIS PAPER'S MANIFEST — cannot judge reproducibility against it.\n"
+                   + "\n".join(wrong))
     PDF = ROOT / manifest["artifact"]
     if not PDF.exists():
         return 1, f"{manifest['artifact']} is missing — run `python3 bin/build-pdf{flag}`"

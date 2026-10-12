@@ -12,7 +12,11 @@ Behaviour when the PDF is absent is unchanged — it passes. The site links the
 PDF only through fileExists-guarded templates, so with no file there is no link.
 A PDF that is present must have software-factory/pdf.provenance.json describing
 it, every input recorded there must be unchanged, and it must not be a draft. The
-stand-in has no manifest, so it is refused like any other unexplained file.
+manifest must also record this paper's own inputs — software-factory.md, every
+figure it references, the files that render it and the fonts it embeds — which
+are computed from the tree, not taken from the manifest: the white paper built to
+this paper's paths had a manifest that matched itself perfectly and passed here.
+The stand-in has no manifest, so it is refused like any other unexplained file.
 """
 import os, pathlib, sys
 
