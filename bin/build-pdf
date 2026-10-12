@@ -589,8 +589,11 @@ td { text-wrap:balance; }
    fragmentation, so a heading carried to the top of a page lines up with the
    text block. Paged.js keeps it, which set every such h2 9mm low and cost a
    page at the end of the appendix. The first element in a page's content box
-   is the first child of its wrapper, so this reaches exactly those. */
-.pagedjs_page_content > div > :first-child { margin-top:0; }
+   is the first child of its wrapper, so this reaches exactly those, and the
+   first child of a keep group (sf_keep_lists) that opens a page: a head set in
+   one was the exception, "Implementation reference" 9mm low on its page. */
+.pagedjs_page_content > div > :first-child,
+.pagedjs_page_content > div > .keep:first-child > :first-child { margin-top:0; }
 
 /* Chapters run on. The white paper opens every chapter on a new page; this
    paper's chapters are a third of a page to a page and a half, so that rule
