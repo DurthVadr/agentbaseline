@@ -54,24 +54,24 @@
   <text x="610" y="155" font-family="Figtree,'Avenir Next','Helvetica Neue',sans-serif" font-size="12.5" fill="var(--fig-ink,var(--ink))" font-weight="600">Payments</text>
   <text x="610" y="170" font-family="Figtree,'Avenir Next','Helvetica Neue',sans-serif" font-size="12.5" fill="var(--fig-ink,var(--ink))" font-weight="600">service logs</text>
   <text x="610" y="186.0" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.25" fill="var(--fig-soft,var(--soft))" font-weight="400">last hour only</text>
-  <rect x="600.5" y="202.5" width="119" height="75" rx="4" fill="none" stroke="var(--fig-rule,var(--baseline))" stroke-width="1" stroke-dasharray="3 3"/>
-  <text x="610" y="223" font-family="Figtree,'Avenir Next','Helvetica Neue',sans-serif" font-size="12.5" fill="var(--fig-ink,var(--ink))" font-weight="600">Authentication</text>
-  <text x="610" y="238" font-family="Figtree,'Avenir Next','Helvetica Neue',sans-serif" font-size="12.5" fill="var(--fig-ink,var(--ink))" font-weight="600">service logs</text>
-  <text x="610" y="254.0" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.25" fill="var(--fig-soft,var(--soft))" font-weight="400">blocked, not</text>
-  <text x="610" y="268.5" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.25" fill="var(--fig-soft,var(--soft))" font-weight="400">in the task</text>
-  <rect x="600.5" y="286.5" width="119" height="75" rx="4" fill="none" stroke="var(--fig-accent,var(--accent))" stroke-width="1.25"/>
-  <circle cx="600" cy="286" r="8" fill="var(--fig-accent,var(--accent))"/>
-  <text x="596.7" y="289.9" font-family="'IBM Plex Mono',ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="12.25" fill="var(--fig-plate,var(--paper))" font-weight="600">2</text>
-  <text x="610" y="307" font-family="Figtree,'Avenir Next','Helvetica Neue',sans-serif" font-size="12.5" fill="var(--fig-ink,var(--ink))" font-weight="600">Admission point</text>
-  <text x="610" y="323.0" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.25" fill="var(--fig-soft,var(--soft))" font-weight="400">serves the</text>
-  <text x="610" y="337.5" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.25" fill="var(--fig-soft,var(--soft))" font-weight="400">approved</text>
-  <text x="610" y="352.0" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.25" fill="var(--fig-soft,var(--soft))" font-weight="400">library</text>
+  <rect x="600.5" y="206.5" width="119" height="75" rx="4" fill="none" stroke="var(--fig-rule,var(--baseline))" stroke-width="1" stroke-dasharray="3 3"/>
+  <text x="610" y="227" font-family="Figtree,'Avenir Next','Helvetica Neue',sans-serif" font-size="12.5" fill="var(--fig-ink,var(--ink))" font-weight="600">Authentication</text>
+  <text x="610" y="242" font-family="Figtree,'Avenir Next','Helvetica Neue',sans-serif" font-size="12.5" fill="var(--fig-ink,var(--ink))" font-weight="600">service logs</text>
+  <text x="610" y="258.0" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.25" fill="var(--fig-soft,var(--soft))" font-weight="400">blocked, not</text>
+  <text x="610" y="272.5" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.25" fill="var(--fig-soft,var(--soft))" font-weight="400">in the task</text>
+  <rect x="600.5" y="294.5" width="119" height="75" rx="4" fill="none" stroke="var(--fig-accent,var(--accent))" stroke-width="1.25"/>
+  <circle cx="600" cy="294" r="8" fill="var(--fig-accent,var(--accent))"/>
+  <text x="596.7" y="297.9" font-family="'IBM Plex Mono',ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="12.25" fill="var(--fig-plate,var(--paper))" font-weight="600">2</text>
+  <text x="610" y="315" font-family="Figtree,'Avenir Next','Helvetica Neue',sans-serif" font-size="12.5" fill="var(--fig-ink,var(--ink))" font-weight="600">Admission point</text>
+  <text x="610" y="331.0" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.25" fill="var(--fig-soft,var(--soft))" font-weight="400">serves the</text>
+  <text x="610" y="345.5" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.25" fill="var(--fig-soft,var(--soft))" font-weight="400">approved</text>
+  <text x="610" y="360.0" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.25" fill="var(--fig-soft,var(--soft))" font-weight="400">library</text>
   <path d="M560 210 L582 210" fill="none" stroke="var(--fig-faint,var(--faint))" stroke-width="1.1"/>
-  <path d="M582 164 L582 324" fill="none" stroke="var(--fig-faint,var(--faint))" stroke-width="1.1"/>
+  <path d="M582 164 L582 332" fill="none" stroke="var(--fig-faint,var(--faint))" stroke-width="1.1"/>
   <path d="M582 164 L600 164" fill="none" stroke="var(--fig-faint,var(--faint))" stroke-width="1.1" marker-end="url(#sf6-a)"/>
-  <path d="M582 240 L600 240" fill="none" stroke="var(--fig-faint,var(--faint))" stroke-width="1.1"/>
-  <path d="M598.5 233 L598.5 247" stroke="var(--fig-accent,var(--accent))" stroke-width="2"/>
-  <path d="M582 324 L600 324" fill="none" stroke="var(--fig-faint,var(--faint))" stroke-width="1.1" marker-end="url(#sf6-a)"/>
+  <path d="M582 244 L600 244" fill="none" stroke="var(--fig-faint,var(--faint))" stroke-width="1.1"/>
+  <path d="M598.5 237 L598.5 251" stroke="var(--fig-accent,var(--accent))" stroke-width="2"/>
+  <path d="M582 332 L600 332" fill="none" stroke="var(--fig-faint,var(--faint))" stroke-width="1.1" marker-end="url(#sf6-a)"/>
   <path d="M508 252 L508 382 L316 382 L316 402" fill="none" stroke="var(--fig-faint,var(--faint))" stroke-width="1.1" marker-end="url(#sf6-a)"/>
   <rect x="264.5" y="402.5" width="103" height="59" rx="4" fill="none" stroke="var(--fig-rule,var(--baseline))" stroke-width="1"/>
   <text x="274" y="423" font-family="Figtree,'Avenir Next','Helvetica Neue',sans-serif" font-size="12.5" fill="var(--fig-ink,var(--ink))" font-weight="600">Pull request</text>

@@ -68,6 +68,10 @@ NAME, GLOSS, LAB, NUM = 12.5, 12.25, 12.25, 12.25
 # 12.5 units, 10.1 px there. bin/check-figure holds both.
 NARROW_TYPE = 12.5
 PAD = 10                              # card inset
+# Cards that carry a boundary badge on their corner stack this far apart: the
+# badge's radius (8) plus the 2 units bin/check-figure keeps it clear of the
+# card above, plus 2 of air.
+STACK = 12
 
 # ── what each figure says, in words ──────────────────────────────────────────
 # CAPTION is the paper's, verbatim; it is each drawing's <title>. ALT is the
@@ -433,7 +437,7 @@ def skel_dest(f, dest=DEST, k=K, px1=None):
         h = card_h(g, n)
         f.node(k.E[0], y, k.E[1] - k.E[0], h, n, g, kind=kind, num=num, tag=f"dest{i}")
         ys.append((y + h / 2, kind))
-        y += h + 8
+        y += h + STACK
     f.link([(px1 or k.PROXY[2], k.MID), (k.BUS_E, k.MID)], head=False, tag="bus.in",
            group="bus")
     f.link([(k.BUS_E, ys[0][0]), (k.BUS_E, ys[-1][0])], head=False, tag="bus", group="bus")
@@ -503,10 +507,10 @@ def sandbox_one(f, label, name, gloss, loop=("inner loop,", "until it passes"),
 def sandbox_three(f, k=K):
     """Level 3: several agents, each in its own sandbox with its own profile."""
     x0, x1 = k.C
-    hh = (k.ROW[1] - k.ROW[0] - 16) / 3
+    hh = (k.ROW[1] - k.ROW[0] - 2 * STACK) / 3
     mids = []
     for i in range(3):
-        y0 = k.ROW[0] + i * (hh + 8)
+        y0 = k.ROW[0] + i * (hh + STACK)
         f.box(x0, y0, x1 - x0, hh, "sandbox", f"sbx{i}")
         f.badge(x0, y0, 3, f"sbx{i}")
         f.name(x0 + PAD + 4, y0 + 20, f"Agent, task {i + 1}", f"sbx{i}.n")
@@ -897,12 +901,12 @@ def narrow_level(n, title, desc):
             if i == 0:
                 f.link([(N.GX, prev), (N.GX, y)], tag="starts")
             mids.append(y + 23)
-            y += 46 + 8
+            y += 46 + STACK
         sb_mid = mids[1]
         y += 16
         f.node(ix0, y, ix1 - ix0, 46, "Monitoring agent", ["watches, never grants"],
                kind="agent", tag="mon")
-        f.link([(N.GX + 60, y), (N.GX + 60, y - 24)], tag="watch")
+        f.link([(N.GX + 60, y), (N.GX + 60, y - 16 - STACK)], tag="watch")
         y += 46 + 16
     else:
         sh = 132
@@ -945,8 +949,8 @@ def narrow_level(n, title, desc):
         f.node(N.DEST[0], y, N.DEST[1] - N.DEST[0], 44, nm, gl, kind=kind, num=num,
                tag=f"dest{i}")
         ys.append(y + 22)
-        y += 44 + 8
-    sc_bottom = y - 8
+        y += 44 + STACK
+    sc_bottom = y - STACK
     f.link([(N.PROXY[1], sb_mid), (N.BUS, sb_mid)], head=False, tag="bus.in", group="bus")
     f.link([(N.BUS, sb_mid), (N.BUS, ys[-1])], head=False, tag="bus", group="bus")
     for i, yy in enumerate(ys):
@@ -1143,7 +1147,7 @@ def figure6_narrow():
     for i, (nm, g, kind, num) in enumerate(dests):
         f.node(dx0, y, dx1 - dx0, 44, nm, g, kind=kind, num=num, tag=f"dest{i}")
         ys.append((y + 22, kind))
-        y += 44 + 8
+        y += 44 + STACK
     pry = y + 16
     f.node(dx0, pry, dx1 - dx0, 46, "Pull request", ["one, as granted"], tag="out0")
     f.link([(bus, py0 + 60), (bus, pry + 23)], head=False, tag="bus", group="bus")

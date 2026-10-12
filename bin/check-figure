@@ -34,6 +34,8 @@ what the first paper's figures are held to:
      narrowest width the page shows it (a phone's 343 px column for a narrow
      variant, or for a wide figure that has none; the page's narrowest wide
      slot otherwise). The widths are measured facts, set below.
+ 11. a boundary badge keeps 2 units clear of every other box's edge, so a
+     number on one card never touches the card stacked above it
  10. nothing touches the canvas edge: every box, text run and connector keeps
      at least 6 units of air, so no stroke is clipped and every figure sits
      in the same margin
@@ -308,6 +310,25 @@ if GEOM.exists():
     for sh in shapes:
         if sh["x"] < -T or sh["y"] < -T or sh["x"] + sh["w"] > W + T or sh["y"] + sh["h"] > H + T:
             errors.append(f"box outside canvas: {sh['tag']!r}")
+    # 11. a badge's disc clears every edge but its own card's (and that card's
+    #     stack, drawn behind it). Distance is from the disc's centre to the
+    #     nearest edge of the other box, less the radius.
+    import math
+    for b in [x for x in shapes if x["kind"] == "badge"]:
+        own = b["tag"][len("badge"):]
+        cx, cy, r = b["x"] + b["w"] / 2, b["y"] + b["h"] / 2, b["w"] / 2
+        for sh in shapes:
+            if sh is b or sh["tag"] == own or sh["kind"] in ("ghost", "glyph"):
+                continue
+            x0, y0, x1, y1 = sh["x"], sh["y"], sh["x"] + sh["w"], sh["y"] + sh["h"]
+            if x0 < cx < x1 and y0 < cy < y1:
+                d = min(cx - x0, x1 - cx, cy - y0, y1 - cy)
+            else:
+                d = math.hypot(max(x0 - cx, 0, cx - x1), max(y0 - cy, 0, cy - y1))
+            if d - r < 2 - 0.005:
+                errors.append(f"badge too close to another box: {b['tag']!r} is "
+                              f"{d - r:.2f} units from {sh['tag']!r} (min 2)")
+
     # 10. a margin of air on every side
     EDGE = 6
     def near_edge(x0, y0, x1, y1):

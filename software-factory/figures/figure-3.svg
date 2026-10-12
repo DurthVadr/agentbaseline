@@ -43,25 +43,25 @@
   <rect x="600.5" y="124.5" width="119" height="43" rx="4" fill="none" stroke="#8F8A7C" stroke-width="1"/>
   <text x="610" y="145" font-family="Figtree,'Avenir Next','Helvetica Neue',sans-serif" font-size="12.5" fill="#1A1C1A" font-weight="600">Source control</text>
   <text x="610" y="161.0" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.25" fill="#5A5E5A" font-weight="400">the repository</text>
-  <rect x="600.5" y="176.5" width="119" height="43" rx="4" fill="none" stroke="#8F8A7C" stroke-width="1"/>
-  <text x="610" y="197" font-family="Figtree,'Avenir Next','Helvetica Neue',sans-serif" font-size="12.5" fill="#1A1C1A" font-weight="600">Services</text>
-  <text x="610" y="213.0" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.25" fill="#5A5E5A" font-weight="400">the task needs</text>
-  <rect x="600.5" y="228.5" width="119" height="43" rx="4" fill="none" stroke="#5A7A00" stroke-width="1.25"/>
-  <text x="610" y="249" font-family="Figtree,'Avenir Next','Helvetica Neue',sans-serif" font-size="12.5" fill="#1A1C1A" font-weight="600">Model gateway</text>
-  <text x="610" y="265.0" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.25" fill="#5A5E5A" font-weight="400">approved models</text>
-  <rect x="600.5" y="280.5" width="119" height="75" rx="4" fill="none" stroke="#5A7A00" stroke-width="1.25"/>
-  <circle cx="600" cy="280" r="8" fill="#5A7A00"/>
-  <text x="596.7" y="283.9" font-family="'IBM Plex Mono',ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="12.25" fill="#FFFFFF" font-weight="600">2</text>
-  <text x="610" y="301" font-family="Figtree,'Avenir Next','Helvetica Neue',sans-serif" font-size="12.5" fill="#1A1C1A" font-weight="600">Admission point</text>
-  <text x="610" y="317.0" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.25" fill="#5A5E5A" font-weight="400">approved,</text>
-  <text x="610" y="331.5" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.25" fill="#5A5E5A" font-weight="400">scanned</text>
-  <text x="610" y="346.0" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.25" fill="#5A5E5A" font-weight="400">packages</text>
+  <rect x="600.5" y="180.5" width="119" height="43" rx="4" fill="none" stroke="#8F8A7C" stroke-width="1"/>
+  <text x="610" y="201" font-family="Figtree,'Avenir Next','Helvetica Neue',sans-serif" font-size="12.5" fill="#1A1C1A" font-weight="600">Services</text>
+  <text x="610" y="217.0" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.25" fill="#5A5E5A" font-weight="400">the task needs</text>
+  <rect x="600.5" y="236.5" width="119" height="43" rx="4" fill="none" stroke="#5A7A00" stroke-width="1.25"/>
+  <text x="610" y="257" font-family="Figtree,'Avenir Next','Helvetica Neue',sans-serif" font-size="12.5" fill="#1A1C1A" font-weight="600">Model gateway</text>
+  <text x="610" y="273.0" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.25" fill="#5A5E5A" font-weight="400">approved models</text>
+  <rect x="600.5" y="292.5" width="119" height="75" rx="4" fill="none" stroke="#5A7A00" stroke-width="1.25"/>
+  <circle cx="600" cy="292" r="8" fill="#5A7A00"/>
+  <text x="596.7" y="295.9" font-family="'IBM Plex Mono',ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="12.25" fill="#FFFFFF" font-weight="600">2</text>
+  <text x="610" y="313" font-family="Figtree,'Avenir Next','Helvetica Neue',sans-serif" font-size="12.5" fill="#1A1C1A" font-weight="600">Admission point</text>
+  <text x="610" y="329.0" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.25" fill="#5A5E5A" font-weight="400">approved,</text>
+  <text x="610" y="343.5" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.25" fill="#5A5E5A" font-weight="400">scanned</text>
+  <text x="610" y="358.0" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.25" fill="#5A5E5A" font-weight="400">packages</text>
   <path d="M560 200 L582 200" fill="none" stroke="#797D79" stroke-width="1.1"/>
-  <path d="M582 146 L582 318" fill="none" stroke="#797D79" stroke-width="1.1"/>
+  <path d="M582 146 L582 330" fill="none" stroke="#797D79" stroke-width="1.1"/>
   <path d="M582 146 L600 146" fill="none" stroke="#797D79" stroke-width="1.1" marker-end="url(#sf3-a)"/>
-  <path d="M582 198 L600 198" fill="none" stroke="#797D79" stroke-width="1.1" marker-end="url(#sf3-a)"/>
-  <path d="M582 250 L600 250" fill="none" stroke="#797D79" stroke-width="1.1" marker-end="url(#sf3-a)"/>
-  <path d="M582 318 L600 318" fill="none" stroke="#797D79" stroke-width="1.1" marker-end="url(#sf3-a)"/>
+  <path d="M582 202 L600 202" fill="none" stroke="#797D79" stroke-width="1.1" marker-end="url(#sf3-a)"/>
+  <path d="M582 258 L600 258" fill="none" stroke="#797D79" stroke-width="1.1" marker-end="url(#sf3-a)"/>
+  <path d="M582 330 L600 330" fill="none" stroke="#797D79" stroke-width="1.1" marker-end="url(#sf3-a)"/>
   <path d="M508 242 L508 372 L316 372 L316 392" fill="none" stroke="#797D79" stroke-width="1.1" marker-end="url(#sf3-a)"/>
   <rect x="264.5" y="392.5" width="103" height="59" rx="4" fill="none" stroke="#8F8A7C" stroke-width="1"/>
   <text x="274" y="413" font-family="Figtree,'Avenir Next','Helvetica Neue',sans-serif" font-size="12.5" fill="#1A1C1A" font-weight="600">Pull request</text>

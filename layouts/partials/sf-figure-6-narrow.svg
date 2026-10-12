@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 376 1100" role="img" aria-label="A production alert leads the orchestrator to propose a task for an incident agent, one service's logs for the last hour and one pull request, which the authorization service checks against policy and the alert's source. When the agent reaches for another service's logs, the proxy blocks the call, because only a new authorization decision could widen the task; the fix ships through approval and a small first deploy, and the error rate afterward confirms it or starts the next run.">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 376 1112" role="img" aria-label="A production alert leads the orchestrator to propose a task for an incident agent, one service's logs for the last hour and one pull request, which the authorization service checks against policy and the alert's source. When the agent reaches for another service's logs, the proxy blocks the call, because only a new authorization decision could widen the task; the fix ships through approval and a small first deploy, and the error rate afterward confirms it or starts the next run.">
   <defs><marker id="sf6n-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="var(--fig-faint,var(--faint))"/></marker><marker id="sf6n-g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="var(--fig-accent,var(--accent))"/></marker><marker id="sf6n-s" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="var(--fig-soft,var(--soft))"/></marker></defs>
   <g transform="translate(8 8)">
   <rect x="24.5" y="10.5" width="335" height="65" rx="4" fill="none" stroke="var(--fig-accent,var(--accent))" stroke-width="1.25"/>
@@ -45,38 +45,38 @@
   <rect x="24.5" y="604.5" width="297" height="43" rx="4" fill="none" stroke="var(--fig-rule,var(--baseline))" stroke-width="1"/>
   <text x="34" y="625" font-family="Figtree,'Avenir Next','Helvetica Neue',sans-serif" font-size="12.5" fill="var(--fig-ink,var(--ink))" font-weight="600">Payments service logs</text>
   <text x="34" y="641.0" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.5" fill="var(--fig-soft,var(--soft))" font-weight="400">last hour only</text>
-  <rect x="24.5" y="656.5" width="297" height="43" rx="4" fill="none" stroke="var(--fig-rule,var(--baseline))" stroke-width="1" stroke-dasharray="3 3"/>
-  <text x="34" y="677" font-family="Figtree,'Avenir Next','Helvetica Neue',sans-serif" font-size="12.5" fill="var(--fig-ink,var(--ink))" font-weight="600">Authentication service logs</text>
-  <text x="34" y="693.0" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.5" fill="var(--fig-soft,var(--soft))" font-weight="400">blocked: outside the task</text>
-  <rect x="24.5" y="708.5" width="297" height="43" rx="4" fill="none" stroke="var(--fig-accent,var(--accent))" stroke-width="1.25"/>
-  <circle cx="24" cy="708" r="8" fill="var(--fig-accent,var(--accent))"/>
-  <text x="20.7" y="711.9" font-family="'IBM Plex Mono',ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="12.5" fill="var(--fig-plate,var(--paper))" font-weight="600">2</text>
-  <text x="34" y="729" font-family="Figtree,'Avenir Next','Helvetica Neue',sans-serif" font-size="12.5" fill="var(--fig-ink,var(--ink))" font-weight="600">Admission point</text>
-  <text x="34" y="745.0" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.5" fill="var(--fig-soft,var(--soft))" font-weight="400">serves the approved library</text>
-  <rect x="24.5" y="776.5" width="297" height="45" rx="4" fill="none" stroke="var(--fig-rule,var(--baseline))" stroke-width="1"/>
-  <text x="34" y="797" font-family="Figtree,'Avenir Next','Helvetica Neue',sans-serif" font-size="12.5" fill="var(--fig-ink,var(--ink))" font-weight="600">Pull request</text>
-  <text x="34" y="813.0" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.5" fill="var(--fig-soft,var(--soft))" font-weight="400">one, as granted</text>
-  <path d="M342 564 L342 799" fill="none" stroke="var(--fig-faint,var(--faint))" stroke-width="1.1"/>
+  <rect x="24.5" y="660.5" width="297" height="43" rx="4" fill="none" stroke="var(--fig-rule,var(--baseline))" stroke-width="1" stroke-dasharray="3 3"/>
+  <text x="34" y="681" font-family="Figtree,'Avenir Next','Helvetica Neue',sans-serif" font-size="12.5" fill="var(--fig-ink,var(--ink))" font-weight="600">Authentication service logs</text>
+  <text x="34" y="697.0" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.5" fill="var(--fig-soft,var(--soft))" font-weight="400">blocked: outside the task</text>
+  <rect x="24.5" y="716.5" width="297" height="43" rx="4" fill="none" stroke="var(--fig-accent,var(--accent))" stroke-width="1.25"/>
+  <circle cx="24" cy="716" r="8" fill="var(--fig-accent,var(--accent))"/>
+  <text x="20.7" y="719.9" font-family="'IBM Plex Mono',ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="12.5" fill="var(--fig-plate,var(--paper))" font-weight="600">2</text>
+  <text x="34" y="737" font-family="Figtree,'Avenir Next','Helvetica Neue',sans-serif" font-size="12.5" fill="var(--fig-ink,var(--ink))" font-weight="600">Admission point</text>
+  <text x="34" y="753.0" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.5" fill="var(--fig-soft,var(--soft))" font-weight="400">serves the approved library</text>
+  <rect x="24.5" y="788.5" width="297" height="45" rx="4" fill="none" stroke="var(--fig-rule,var(--baseline))" stroke-width="1"/>
+  <text x="34" y="809" font-family="Figtree,'Avenir Next','Helvetica Neue',sans-serif" font-size="12.5" fill="var(--fig-ink,var(--ink))" font-weight="600">Pull request</text>
+  <text x="34" y="825.0" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.5" fill="var(--fig-soft,var(--soft))" font-weight="400">one, as granted</text>
+  <path d="M342 564 L342 811" fill="none" stroke="var(--fig-faint,var(--faint))" stroke-width="1.1"/>
   <path d="M342 626 L322 626" fill="none" stroke="var(--fig-faint,var(--faint))" stroke-width="1.1" marker-end="url(#sf6n-a)"/>
-  <path d="M342 678 L322 678" fill="none" stroke="var(--fig-faint,var(--faint))" stroke-width="1.1"/>
-  <path d="M320.5 671 L320.5 685" stroke="var(--fig-accent,var(--accent))" stroke-width="2"/>
-  <path d="M342 730 L322 730" fill="none" stroke="var(--fig-faint,var(--faint))" stroke-width="1.1" marker-end="url(#sf6n-a)"/>
-  <path d="M342 799 L322 799" fill="none" stroke="var(--fig-faint,var(--faint))" stroke-width="1.1" marker-end="url(#sf6n-a)"/>
-  <path d="M74 822 L74 844" fill="none" stroke="var(--fig-faint,var(--faint))" stroke-width="1.1" marker-end="url(#sf6n-a)"/>
-  <rect x="24.5" y="844.5" width="335" height="45" rx="4" fill="none" stroke="var(--fig-rule,var(--baseline))" stroke-width="1"/>
-  <text x="34" y="865" font-family="Figtree,'Avenir Next','Helvetica Neue',sans-serif" font-size="12.5" fill="var(--fig-ink,var(--ink))" font-weight="600">Approval</text>
-  <text x="34" y="881.0" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.5" fill="var(--fig-soft,var(--soft))" font-weight="400">a person or automatic</text>
-  <path d="M74 890 L74 912" fill="none" stroke="var(--fig-faint,var(--faint))" stroke-width="1.1" marker-end="url(#sf6n-a)"/>
-  <rect x="24.5" y="912.5" width="335" height="45" rx="4" fill="none" stroke="var(--fig-rule,var(--baseline))" stroke-width="1"/>
-  <text x="34" y="933" font-family="Figtree,'Avenir Next','Helvetica Neue',sans-serif" font-size="12.5" fill="var(--fig-ink,var(--ink))" font-weight="600">Deploy</text>
-  <text x="34" y="949.0" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.5" fill="var(--fig-soft,var(--soft))" font-weight="400">small share of traffic first</text>
-  <path d="M74 958 L74 980" fill="none" stroke="var(--fig-faint,var(--faint))" stroke-width="1.1" marker-end="url(#sf6n-a)"/>
-  <rect x="24.5" y="980.5" width="335" height="45" rx="4" fill="none" stroke="var(--fig-rule,var(--baseline))" stroke-width="1"/>
-  <text x="34" y="1001" font-family="Figtree,'Avenir Next','Helvetica Neue',sans-serif" font-size="12.5" fill="var(--fig-ink,var(--ink))" font-weight="600">Production</text>
-  <text x="34" y="1017.0" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.5" fill="var(--fig-soft,var(--soft))" font-weight="400">error rate afterward</text>
-  <path d="M74 1026 L74 1050 L4 1050 L4 131 L24 131" fill="none" stroke="var(--fig-soft,var(--soft))" stroke-width="1.1" stroke-dasharray="4 3" marker-end="url(#sf6n-s)"/>
-  <text x="84" y="1042" font-family="'Chakra Petch','Avenir Next',sans-serif" font-size="12.5" fill="var(--fig-soft,var(--soft))" font-weight="500" letter-spacing="0.04em">OUTER LOOP</text>
-  <text x="84" y="1064" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.5" fill="var(--fig-soft,var(--soft))" font-weight="400">confirms the fix or</text>
-  <text x="84" y="1078.5" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.5" fill="var(--fig-soft,var(--soft))" font-weight="400">starts the next run</text>
+  <path d="M342 682 L322 682" fill="none" stroke="var(--fig-faint,var(--faint))" stroke-width="1.1"/>
+  <path d="M320.5 675 L320.5 689" stroke="var(--fig-accent,var(--accent))" stroke-width="2"/>
+  <path d="M342 738 L322 738" fill="none" stroke="var(--fig-faint,var(--faint))" stroke-width="1.1" marker-end="url(#sf6n-a)"/>
+  <path d="M342 811 L322 811" fill="none" stroke="var(--fig-faint,var(--faint))" stroke-width="1.1" marker-end="url(#sf6n-a)"/>
+  <path d="M74 834 L74 856" fill="none" stroke="var(--fig-faint,var(--faint))" stroke-width="1.1" marker-end="url(#sf6n-a)"/>
+  <rect x="24.5" y="856.5" width="335" height="45" rx="4" fill="none" stroke="var(--fig-rule,var(--baseline))" stroke-width="1"/>
+  <text x="34" y="877" font-family="Figtree,'Avenir Next','Helvetica Neue',sans-serif" font-size="12.5" fill="var(--fig-ink,var(--ink))" font-weight="600">Approval</text>
+  <text x="34" y="893.0" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.5" fill="var(--fig-soft,var(--soft))" font-weight="400">a person or automatic</text>
+  <path d="M74 902 L74 924" fill="none" stroke="var(--fig-faint,var(--faint))" stroke-width="1.1" marker-end="url(#sf6n-a)"/>
+  <rect x="24.5" y="924.5" width="335" height="45" rx="4" fill="none" stroke="var(--fig-rule,var(--baseline))" stroke-width="1"/>
+  <text x="34" y="945" font-family="Figtree,'Avenir Next','Helvetica Neue',sans-serif" font-size="12.5" fill="var(--fig-ink,var(--ink))" font-weight="600">Deploy</text>
+  <text x="34" y="961.0" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.5" fill="var(--fig-soft,var(--soft))" font-weight="400">small share of traffic first</text>
+  <path d="M74 970 L74 992" fill="none" stroke="var(--fig-faint,var(--faint))" stroke-width="1.1" marker-end="url(#sf6n-a)"/>
+  <rect x="24.5" y="992.5" width="335" height="45" rx="4" fill="none" stroke="var(--fig-rule,var(--baseline))" stroke-width="1"/>
+  <text x="34" y="1013" font-family="Figtree,'Avenir Next','Helvetica Neue',sans-serif" font-size="12.5" fill="var(--fig-ink,var(--ink))" font-weight="600">Production</text>
+  <text x="34" y="1029.0" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.5" fill="var(--fig-soft,var(--soft))" font-weight="400">error rate afterward</text>
+  <path d="M74 1038 L74 1062 L4 1062 L4 131 L24 131" fill="none" stroke="var(--fig-soft,var(--soft))" stroke-width="1.1" stroke-dasharray="4 3" marker-end="url(#sf6n-s)"/>
+  <text x="84" y="1054" font-family="'Chakra Petch','Avenir Next',sans-serif" font-size="12.5" fill="var(--fig-soft,var(--soft))" font-weight="500" letter-spacing="0.04em">OUTER LOOP</text>
+  <text x="84" y="1076" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.5" fill="var(--fig-soft,var(--soft))" font-weight="400">confirms the fix or</text>
+  <text x="84" y="1090.5" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.5" fill="var(--fig-soft,var(--soft))" font-weight="400">starts the next run</text>
   </g>
   </svg>
