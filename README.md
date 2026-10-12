@@ -102,6 +102,7 @@ python3 bin/sync-figure-partial                # theme-aware copy for the site
 python3 bin/render-controls                    # CONTROLS.md
 hugo --gc --minify                             # the site, into public/
 python3 bin/build-pdf                          # the PDF, via pandoc and Chrome
+python3 bin/build-pdf --paper software-factory # the reference architecture's PDF
 python3 bin/build-social                       # the 1200x630 card
 ```
 
@@ -115,13 +116,17 @@ python3 bin/check-copy          # repeated phrasing, dead titles, self-contradic
 python3 bin/check-appendix      # Appendix A still agrees with the catalogue
 python3 bin/check-bindings      # templates only read fields the catalogue has
 python3 bin/check-js            # scripts parse, source and minified
-python3 bin/check-pdf-current   # the committed PDF is the one this source builds
+python3 bin/check-pdf-current   # each committed PDF is the one its source builds
 ```
 
 `check-pdf-current` needs nothing but Python. It compares the tree against
 `whitepaper/pdf.provenance.json`, which `bin/build-pdf` writes as it renders — the digest
 of every file the render read, and of the PDF it produced. **Edit the paper and you must
 rebuild: commit `static/whitepaper.pdf` and `whitepaper/pdf.provenance.json` together.**
+The reference architecture is the same with `--paper software-factory`, committing
+`static/software-factory.pdf` and `software-factory/pdf.provenance.json`. Its build refuses a
+missing figure, and alt text that is empty or a TODO unless `--draft`, which stamps every
+page and cannot write the tracked PDF.
 
 ```sh
 python3 bin/check-pdf-reproducible   # two builds of this source produce the same bytes

@@ -56,8 +56,11 @@ jobs:
       # the manifest bin/build-pdf writes instead — digests of every file the render
       # read, and of the PDF it produced. No browser, no pandoc, under a second.
       - name: The committed PDF is the one this source builds
-        run: python3 bin/check-pdf-current
-      - name: The second paper's PDF is not the stand-in
+        run: python3 bin/check-pdf-current --paper whitepaper
+      # The reference architecture's PDF, held to its own manifest the same way.
+      # Absent passes (its links are fileExists-guarded); present must be the
+      # non-draft build of the source in the tree.
+      - name: The reference architecture's PDF is the one its source builds
         run: python3 bin/check-sf-pdf
 
   # Determinism is the other half of the question and it needs the browser, so it
@@ -116,3 +119,23 @@ jobs:
             exit 1
           }
           echo "deterministic: $(stat -c%s /tmp/a.pdf) bytes, twice"
+      # The reference architecture, the same way, once its PDF is committed. Until
+      # then there is nothing to hold deterministic, and its build cannot run: it
+      # refuses missing figures and unwritten alt text, which is the state the
+      # source is in until the figures land. Committing the PDF commits the
+      # figures (check-sf-pdf requires every recorded input to exist), so from
+      # that commit on this step always runs.
+      - name: Two builds of the reference architecture produce one file
+        run: |
+          if [ ! -f static/software-factory.pdf ]; then
+            echo "static/software-factory.pdf is not committed; nothing to build twice"
+            exit 0
+          fi
+          python3 bin/build-pdf --paper software-factory --out /tmp/sf-a.pdf --provenance /tmp/sf-a.json
+          python3 bin/build-pdf --paper software-factory --out /tmp/sf-b.pdf --provenance /tmp/sf-b.json
+          cmp /tmp/sf-a.pdf /tmp/sf-b.pdf || {
+            echo "::error::the reference architecture's build is not deterministic — two builds of identical source differ"
+            cmp -l /tmp/sf-a.pdf /tmp/sf-b.pdf | head -40
+            exit 1
+          }
+          echo "deterministic: $(stat -c%s /tmp/sf-a.pdf) bytes, twice"
