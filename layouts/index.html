@@ -481,6 +481,12 @@
   .allcontrols a:hover { color:var(--link-hover); }
 
   .prose p { margin:0 0 18px; }
+  /* A link inside running prose is underlined: colour alone does not mark it,
+     and in the dark theme the link green is 1.05:1 against the body text
+     (WCAG 1.4.1). The label-voice rows, .ctas and .allcontrols, are links
+     and nothing else, so they keep their plain set. */
+  .prose p:not(.ctas):not(.allcontrols) a { text-decoration:underline;
+    text-underline-offset:2px; }
   .prose .note { color:var(--soft); font-size:16px; }
 
   /* The footer mirrors the title block — a document closes the way it opens.
