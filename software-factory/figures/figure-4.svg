@@ -71,10 +71,7 @@
   <path d="M582 198 L600 198" fill="none" stroke="#797D79" stroke-width="1.1" marker-end="url(#sf4-a)"/>
   <path d="M582 250 L600 250" fill="none" stroke="#797D79" stroke-width="1.1" marker-end="url(#sf4-a)"/>
   <path d="M582 316 L600 316" fill="none" stroke="#797D79" stroke-width="1.1" marker-end="url(#sf4-a)"/>
-  <text x="600" y="370" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.25" fill="#5A5E5A" font-weight="400">everything else</text>
-  <text x="600" y="384.5" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.25" fill="#5A5E5A" font-weight="400">is blocked</text>
   <path d="M508 242 L508 374 L316 374 L316 394" fill="none" stroke="#797D79" stroke-width="1.1" marker-end="url(#sf4-a)"/>
-  <text x="357.125" y="368" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.25" fill="#5A5E5A" font-weight="400">opens a pull request</text>
   <rect x="264.5" y="394.5" width="103" height="55" rx="4" fill="none" stroke="#CBCDC8" stroke-width="1"/>
   <text x="274" y="415" font-family="Figtree,'Avenir Next','Helvetica Neue',sans-serif" font-size="12.5" fill="#1A1C1A" font-weight="600">Pull request</text>
   <text x="274" y="431.0" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.25" fill="#5A5E5A" font-weight="400">reviewed</text>

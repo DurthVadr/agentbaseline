@@ -76,7 +76,6 @@
   <path d="M598.5 232 L598.5 246" stroke="#5A7A00" stroke-width="2"/>
   <path d="M582 320 L600 320" fill="none" stroke="#797D79" stroke-width="1.1" marker-end="url(#sf6-a)"/>
   <path d="M508 252 L508 384 L316 384 L316 404" fill="none" stroke="#797D79" stroke-width="1.1" marker-end="url(#sf6-a)"/>
-  <text x="357.125" y="378" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.25" fill="#5A5E5A" font-weight="400">opens a pull request</text>
   <rect x="264.5" y="404.5" width="103" height="55" rx="4" fill="none" stroke="#CBCDC8" stroke-width="1"/>
   <text x="274" y="425" font-family="Figtree,'Avenir Next','Helvetica Neue',sans-serif" font-size="12.5" fill="#1A1C1A" font-weight="600">Pull request</text>
   <text x="274" y="441.0" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.25" fill="#5A5E5A" font-weight="400">one, as</text>

@@ -1,6 +1,6 @@
 {
  "W": 736,
- "H": 410,
+ "H": 346,
  "shapes": [
   {
    "tag": "auth",
@@ -102,28 +102,10 @@
    "solid": true
   },
   {
-   "tag": "lg.guard",
-   "kind": "guard",
-   "x": 8,
-   "y": 327,
-   "w": 28,
-   "h": 16,
-   "solid": true
-  },
-  {
    "tag": "badgelg1",
    "kind": "badge",
-   "x": 48,
-   "y": 352,
-   "w": 16,
-   "h": 16,
-   "solid": true
-  },
-  {
-   "tag": "badgelg2",
-   "kind": "badge",
-   "x": 223.83124999999998,
-   "y": 352,
+   "x": 261.48749999999995,
+   "y": 320,
    "w": 16,
    "h": 16,
    "solid": true
@@ -131,8 +113,8 @@
   {
    "tag": "badgelg3",
    "kind": "badge",
-   "x": 350.35625,
-   "y": 352,
+   "x": 427.31874999999997,
+   "y": 320,
    "w": 16,
    "h": 16,
    "solid": true
@@ -140,18 +122,9 @@
   {
    "tag": "badgelg4",
    "kind": "badge",
-   "x": 441.66249999999997,
-   "y": 352,
+   "x": 508.62499999999994,
+   "y": 320,
    "w": 16,
-   "h": 16,
-   "solid": true
-  },
-  {
-   "tag": "lg.wash",
-   "kind": "agent",
-   "x": 8,
-   "y": 385,
-   "w": 28,
    "h": 16,
    "solid": true
   }
@@ -245,40 +218,6 @@
    "head": true,
    "group": null,
    "free": false
-  },
-  {
-   "tag": "lg.flow",
-   "kind": "flow",
-   "pts": [
-    [
-     254,
-     392
-    ],
-    [
-     282,
-     392
-    ]
-   ],
-   "head": true,
-   "group": null,
-   "free": true
-  },
-  {
-   "tag": "lg.grant",
-   "kind": "grant",
-   "pts": [
-    [
-     460,
-     392
-    ],
-    [
-     488,
-     392
-    ]
-   ],
-   "head": true,
-   "group": null,
-   "free": true
   }
  ],
  "margin": 8

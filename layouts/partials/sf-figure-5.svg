@@ -88,8 +88,6 @@
   <path d="M582 198 L600 198" fill="none" stroke="var(--fig-faint,var(--faint))" stroke-width="1.1" marker-end="url(#sf5-a)"/>
   <path d="M582 250 L600 250" fill="none" stroke="var(--fig-faint,var(--faint))" stroke-width="1.1" marker-end="url(#sf5-a)"/>
   <path d="M582 316 L600 316" fill="none" stroke="var(--fig-faint,var(--faint))" stroke-width="1.1" marker-end="url(#sf5-a)"/>
-  <text x="600" y="370" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.25" fill="var(--fig-soft,var(--soft))" font-weight="400">everything else</text>
-  <text x="600" y="384.5" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.25" fill="var(--fig-soft,var(--soft))" font-weight="400">is blocked</text>
   <rect x="264.5" y="296.5" width="171" height="45" rx="4" fill="var(--fig-wash,var(--wash))" stroke="var(--fig-rule,var(--baseline))" stroke-width="1"/>
   <text x="274" y="317" font-family="Figtree,'Avenir Next','Helvetica Neue',sans-serif" font-size="12.5" fill="var(--fig-ink,var(--ink))" font-weight="600">Monitoring agent</text>
   <text x="274" y="333.0" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.25" fill="var(--fig-soft,var(--soft))" font-weight="400">watches, never grants</text>
@@ -97,7 +95,6 @@
   <path d="M264 319 L80 319 L80 256" fill="none" stroke="var(--fig-faint,var(--faint))" stroke-width="1.1" marker-end="url(#sf5-a)"/>
   <text x="155.38750000000002" y="313.0" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.25" fill="var(--fig-soft,var(--soft))" font-weight="400">flags new work</text>
   <path d="M508 242 L508 374 L316 374 L316 394" fill="none" stroke="var(--fig-faint,var(--faint))" stroke-width="1.1" marker-end="url(#sf5-a)"/>
-  <text x="357.125" y="368" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.25" fill="var(--fig-soft,var(--soft))" font-weight="400">opens a pull request</text>
   <rect x="264.5" y="394.5" width="103" height="55" rx="4" fill="none" stroke="var(--fig-rule,var(--baseline))" stroke-width="1"/>
   <text x="274" y="415" font-family="Figtree,'Avenir Next','Helvetica Neue',sans-serif" font-size="12.5" fill="var(--fig-ink,var(--ink))" font-weight="600">Pull request</text>
   <text x="274" y="431.0" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.25" fill="var(--fig-soft,var(--soft))" font-weight="400">reviewed</text>

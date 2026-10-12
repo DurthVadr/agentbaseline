@@ -400,7 +400,7 @@ def card_h(gloss, name=""):
     return 44 + 16 * (names - 1) + 14 * max(len(gloss) - 1, 0)
 
 
-def skel_dest(f, dest=DEST, blocked_note=True, k=K, px1=None):
+def skel_dest(f, dest=DEST, k=K, px1=None):
     """The proxy's one way out, fanned to the destinations it allows."""
     ys = []
     y = k.ROW[0]
@@ -415,9 +415,6 @@ def skel_dest(f, dest=DEST, blocked_note=True, k=K, px1=None):
     for i, (yy, kind) in enumerate(ys):
         f.link([(k.BUS_E, yy), (k.E[0], yy)], tag=f"bus.{i}", group="bus",
                bar=(kind == "blocked"))
-    if blocked_note:
-        f.gloss(k.E[0], y + 10, "everything else", "blocked1")
-        f.gloss(k.E[0], y + 24.5, "is blocked", "blocked2")
     return y
 
 
@@ -427,8 +424,6 @@ def skel_pr_exit(f, k=K, bottom=None):
     yy = k.EXIT_Y
     f.link([(px, bottom or k.PROXY[3]), (px, yy), (mid(k.PR), yy), (mid(k.PR), k.OUT[0])],
            tag="pr.exit")
-    f.gloss(px - 10 - f.width("opens a pull request", "gloss"), yy - 6, "opens a pull request",
-            "pr.exit.l")
 
 
 def outer_loop(f, start_x, end_y, gloss, k=K):
@@ -610,38 +605,24 @@ def scope_nest(f, x0, y0, x1, y1):
     f.gloss(x0 + 30, y0 + 129, "only narrows it further", "dlg.g")
 
 
-def legend(f, x, y, width):
-    """The legend, once: what the colour, the fill, the numbers and the two
-    kinds of line mean. Wraps to the width it is given."""
+def legend(f, x, y, width, marks=((1, "Identity and access"), (3, "Sandbox"), (4, "Network"))):
+    """The key, once, for the one thing a reader can't read off the drawing:
+    the numbered marks are boundaries, enforced outside the agent's loop. It
+    keys only the boundaries the figure draws. The arrows that matter carry
+    their own labels, and the shaded fill is named where it is drawn ("the
+    agent, untrusted"), so neither needs a key. One line wide, two narrow."""
     f.rule(y - 18, x, x + width)
-    f.box(x, y - 11, 28, 16, "guard", "lg.guard")
-    lines = (["Enforced outside the agent's loop, numbered by the boundary it holds"]
-             if width > 600 else ["Enforced outside the agent's loop,", "numbered by the boundary"])
-    for i, s in enumerate(lines):
-        f.text(x + 40, y + 1 + i * 15, s, GLOSS, C["ink"], tag=f"lg.g{i}")
-    y += (len(lines) - 1) * 15 + 26
-    bx, by = x + 40, y
-    for n, s in ((1, "Identity and access"), (2, "Supply chain"), (3, "Sandbox"), (4, "Network")):
-        w = 22 + f.width(s, "gloss")
-        if bx + w > x + width:
-            bx, by = x + 40, by + 24
+    head = "Enforced outside the agent's loop:"
+    w = f.text(x, y, head, GLOSS, C["ink"], tag="lg.h")
+    bx, by = x + w + 14, y
+    need = sum(22 + f.width(s_, "gloss") + 10 for _, s_ in marks) - 10
+    if bx + need > x + width:
+        bx, by = x, y + 24
+    for n, s_ in marks:
         f.badge(bx + 8, by - 4, n, f"lg{n}")
-        f.gloss(bx + 22, by, s, f"lg{n}.t")
-        bx += w + 20
-    y = by + 32
-    f.box(x, y - 11, 28, 16, "agent", "lg.wash")
-    f.text(x + 40, y + 1, "Untrusted agent execution", GLOSS, C["ink"], tag="lg.wash.t")
-    if width > 600:
-        sx = [x + 246, x + 452]
-        ys = [y, y]
-    else:
-        sx = [x, x]
-        ys = [y + 26, y + 50]
-    f.link([(sx[0], ys[0] - 4), (sx[0] + 28, ys[0] - 4)], tag="lg.flow", free=True)
-    f.text(sx[0] + 40, ys[0] + 1, "Request or traffic", GLOSS, C["ink"], tag="lg.flow.t")
-    f.link([(sx[1], ys[1] - 4), (sx[1] + 28, ys[1] - 4)], "grant", tag="lg.grant", free=True)
-    f.text(sx[1] + 40, ys[1] + 1, "Authorization decision", GLOSS, C["ink"], tag="lg.grant.t")
-    return ys[1] + 6
+        f.gloss(bx + 22, by, s_, f"lg{n}.t")
+        bx += 22 + f.width(s_, "gloss") + 10
+    return by + 6
 
 
 def figure2():
@@ -664,7 +645,8 @@ def figure2():
     f.badge(sx0, y0, 3, "sbx")
     f.lab(sx0 + PAD + 4, y0 + 24, "Sandbox", "sbx.l")
     f.name(sx0 + PAD + 4, y0 + 52, "Agent", "sbx.n")
-    f.gloss(sx0 + PAD + 4, y0 + 68, "holds no credentials", "sbx.g")
+    f.gloss(sx0 + PAD + 4, y0 + 68, "untrusted, and holds", "sbx.g0")
+    f.gloss(sx0 + PAD + 4, y0 + 82.5, "no credentials", "sbx.g1")
     gy = y1 - 30
     f.loop_glyph(sx0 + PAD + 11, gy - 4, "sbx.loop")
     f.gloss(sx0 + PAD + 26, gy, "free to reason", "sbx.lp0")
@@ -678,7 +660,7 @@ def figure2():
     f.node(K.E[0], k.PROXY[1], K.E[1] - K.E[0], k.PROXY[3] - k.PROXY[1], "Downstream",
            ["only authorized", "operations", "reach it"], tag="down")
     f.link([(k.PROXY[2], k.MID), (K.E[0], k.MID)], tag="out")
-    end = legend(f, 0, y1 + 44, W)
+    end = legend(f, 0, y1 + 38, W)
     f.set_height(end)
     f.write("figure-2")
 
@@ -731,7 +713,7 @@ def figure6():
                   (["Authentication", "service logs"], ["blocked, not", "in the task"],
                    "blocked", None),
                   ("Admission point", ["serves the", "approved", "library"], "guard", 2)],
-              blocked_note=False, k=k)
+              k=k)
     skel_pr_exit(f, k=k)
     slots = [(264, 368), (388, 476), (496, 612), (632, 720)]
     out_card(f, slots[0], "Pull request", ["one, as", "granted"], "pr", k=k)
@@ -774,7 +756,6 @@ def figure1():
     ly = y0 + h + 24
     f.link([(mid((xs[2], xs[2] + cw)), y0 + h), (mid((xs[2], xs[2] + cw)), ly),
             (mid((xs[0], xs[0] + cw)), ly), (mid((xs[0], xs[0] + cw)), y0 + h)], tag="again")
-    f.gloss(xs[1] + 6, ly + 18, "until it passes", "again.l")
     f.gloss(xs[0], 186, "Assembled from agents and harnesses, models, skills,", "blocks1")
     f.gloss(xs[0], 200.5, "tools and MCP servers, dependencies and blueprints", "blocks2")
     # out of the loop, right to left: review → deploy → production
@@ -926,8 +907,7 @@ def narrow_level(n, title, desc):
     f.link([(N.BUS, sb_mid), (N.BUS, ys[-1])], head=False, tag="bus", group="bus")
     for i, yy in enumerate(ys):
         f.link([(N.BUS, yy), (N.DEST[1], yy)], tag=f"bus.{i}", group="bus")
-    f.gloss(N.GX + 40, y + 8, "Everything else is blocked.", "blocked")
-    y += 24
+    y += 16
     outs = {1: [("Pull request", "the developer reviews it")],
             2: [("Pull request", "reviewed until ready"), ("Approval", "a person or automatic"),
                 ("Merge", "approved changes")],
@@ -1023,20 +1003,22 @@ def figure2_narrow():
            kind="guard", num=1, tag="auth")
     sy0 = ay0 + 70 + 44
     sx0, sx1 = X, 210
-    f.box(sx0, sy0, sx1 - sx0, 118, "sandbox", "sbx")
+    sh = 132
+    f.box(sx0, sy0, sx1 - sx0, sh, "sandbox", "sbx")
     f.badge(sx0, sy0, 3, "sbx")
     f.lab(sx0 + PAD + 4, sy0 + 24, "Sandbox", "sbx.l")
     f.name(sx0 + PAD + 4, sy0 + 50, "Agent", "sbx.n")
-    f.gloss(sx0 + PAD + 4, sy0 + 66, "holds no credentials", "sbx.g")
-    f.loop_glyph(sx0 + PAD + 11, sy0 + 88, "sbx.loop")
-    f.gloss(sx0 + PAD + 26, sy0 + 92, "free to reason", "sbx.lp0")
-    f.gloss(sx0 + PAD + 26, sy0 + 106.5, "and try things", "sbx.lp1")
+    f.gloss(sx0 + PAD + 4, sy0 + 66, "untrusted, and holds", "sbx.g0")
+    f.gloss(sx0 + PAD + 4, sy0 + 80.5, "no credentials", "sbx.g1")
+    f.loop_glyph(sx0 + PAD + 11, sy0 + 100, "sbx.loop")
+    f.gloss(sx0 + PAD + 26, sy0 + 104, "free to reason", "sbx.lp0")
+    f.gloss(sx0 + PAD + 26, sy0 + 118.5, "and try things", "sbx.lp1")
     ux = 150
     f.link([(ux, sy0), (ux, ay0 + 70)], tag="propose")
     f.gloss(ux - 8 - f.width("proposes scope", "gloss"), ay0 + 70 + 26, "proposes scope",
             "propose.l")
     px0, px1 = 232, 330
-    py0 = sy0 + 17
+    py0 = sy0 + 24
     f.node(px0, py0, px1 - px0, 84, "Egress proxy", ["enforces it,", "attaches", "credentials"],
            kind="guard", num=4, tag="proxy")
     gx = mid((px0, px1))
@@ -1044,11 +1026,11 @@ def figure2_narrow():
     f.gloss(gx - 8 - f.width("authorized", "gloss"), ay0 + 70 + 20, "authorized", "grant.l0")
     f.gloss(gx - 8 - f.width("scope", "gloss"), ay0 + 70 + 34.5, "scope", "grant.l1")
     f.link([(sx1, py0 + 42), (px0, py0 + 42)], tag="request")
-    dy0 = sy0 + 118 + 28
+    dy0 = sy0 + sh + 28
     f.node(X, dy0, NW - X, 44, "Downstream", ["only authorized operations reach it"],
            tag="down")
     f.link([(gx, py0 + 84), (gx, dy0)], tag="out")
-    end = legend(f, X, dy0 + 44 + 46, NW - X)
+    end = legend(f, X, dy0 + 44 + 38, NW - X)
     f.set_height(end)
     f.write("figure-2-narrow")
 
