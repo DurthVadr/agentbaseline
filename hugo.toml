@@ -123,8 +123,10 @@ disableKinds = ["taxonomy", "term", "RSS", "section"]
 # than ship it; the links go with it.
 [params.softwareFactory]
   # The homepage's one line about the second paper, in its section after the
-  # baseline's own paper. The paper's page writes its own opening.
-  summary       = "The Secure Software Factory applies Agent Baseline to AI agents that turn tickets into tested code and, more and more, ship it. Version 1 is open for comment."
+  # baseline's own paper. The paper's page writes its own opening. Keep it
+  # shorter than the white paper's line above it (19 words) and on one line
+  # at the 680px measure, so the section stays smaller than the baseline's.
+  summary       = "The Secure Software Factory applies Agent Baseline to agents that ship code."
   # The paper's own front matter (software-factory.md, line 3: "Version 1,
   # October 13, 2026"). The page's title block states them; check-copy holds
   # them to the paper.
