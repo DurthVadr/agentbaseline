@@ -4,23 +4,23 @@
   <rect width="376" height="620" fill="#FFFFFF"/>
   <defs><marker id="sf1n-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#797D79"/></marker><marker id="sf1n-g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#5A7A00"/></marker><marker id="sf1n-s" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#5A5E5A"/></marker></defs>
   <g transform="translate(8 8)">
-  <rect x="40.5" y="10.5" width="319" height="45" rx="4" fill="none" stroke="#CBCDC8" stroke-width="1"/>
+  <rect x="40.5" y="10.5" width="319" height="45" rx="4" fill="none" stroke="#8F8A7C" stroke-width="1"/>
   <text x="50" y="31" font-family="Figtree,'Avenir Next','Helvetica Neue',sans-serif" font-size="12.5" fill="#1A1C1A" font-weight="600">Inputs</text>
   <text x="50" y="47.0" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.25" fill="#5A5E5A" font-weight="400">a prompt, a PRD or a ticket</text>
   <path d="M80 56 L80 78" fill="none" stroke="#797D79" stroke-width="1.1" marker-end="url(#sf1n-a)"/>
-  <rect x="40.5" y="78.5" width="319" height="45" rx="4" fill="none" stroke="#CBCDC8" stroke-width="1"/>
+  <rect x="40.5" y="78.5" width="319" height="45" rx="4" fill="none" stroke="#8F8A7C" stroke-width="1"/>
   <text x="50" y="99" font-family="Figtree,'Avenir Next','Helvetica Neue',sans-serif" font-size="12.5" fill="#1A1C1A" font-weight="600">Design</text>
   <text x="50" y="115.0" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.25" fill="#5A5E5A" font-weight="400">sets the limits, in advance</text>
   <path d="M80 124 L80 146" fill="none" stroke="#797D79" stroke-width="1.1" marker-end="url(#sf1n-a)"/>
   <text x="52" y="168" font-family="'Chakra Petch','Avenir Next',sans-serif" font-size="12.25" fill="#5A5E5A" font-weight="500" letter-spacing="0.04em">INNER LOOP</text>
-  <rect x="52.5" y="182.5" width="273" height="45" rx="4" fill="none" stroke="#CBCDC8" stroke-width="1"/>
+  <rect x="52.5" y="182.5" width="273" height="45" rx="4" fill="none" stroke="#8F8A7C" stroke-width="1"/>
   <text x="62" y="203" font-family="Figtree,'Avenir Next','Helvetica Neue',sans-serif" font-size="12.5" fill="#1A1C1A" font-weight="600">Assemble</text>
   <text x="62" y="219.0" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.25" fill="#5A5E5A" font-weight="400">what the task needs</text>
-  <rect x="52.5" y="250.5" width="273" height="45" rx="4" fill="none" stroke="#CBCDC8" stroke-width="1"/>
+  <rect x="52.5" y="250.5" width="273" height="45" rx="4" fill="none" stroke="#8F8A7C" stroke-width="1"/>
   <text x="62" y="271" font-family="Figtree,'Avenir Next','Helvetica Neue',sans-serif" font-size="12.5" fill="#1A1C1A" font-weight="600">Build</text>
   <text x="62" y="287.0" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.25" fill="#5A5E5A" font-weight="400">the change, in a sandbox</text>
   <path d="M92 228 L92 250" fill="none" stroke="#797D79" stroke-width="1.1" marker-end="url(#sf1n-a)"/>
-  <rect x="52.5" y="318.5" width="273" height="45" rx="4" fill="none" stroke="#CBCDC8" stroke-width="1"/>
+  <rect x="52.5" y="318.5" width="273" height="45" rx="4" fill="none" stroke="#8F8A7C" stroke-width="1"/>
   <text x="62" y="339" font-family="Figtree,'Avenir Next','Helvetica Neue',sans-serif" font-size="12.5" fill="#1A1C1A" font-weight="600">Verify</text>
   <text x="62" y="355.0" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.25" fill="#5A5E5A" font-weight="400">against the standards</text>
   <path d="M92 296 L92 318" fill="none" stroke="#797D79" stroke-width="1.1" marker-end="url(#sf1n-a)"/>
@@ -28,14 +28,14 @@
   <text x="52" y="384" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.25" fill="#5A5E5A" font-weight="400">repeats until the work passes</text>
   <rect x="40.5" y="146.5" width="319" height="249" rx="4" fill="none" stroke="#797D79" stroke-width="1" stroke-dasharray="4 3"/>
   <path d="M80 396 L80 418" fill="none" stroke="#797D79" stroke-width="1.1" marker-end="url(#sf1n-a)"/>
-  <rect x="40.5" y="418.5" width="319" height="45" rx="4" fill="none" stroke="#CBCDC8" stroke-width="1"/>
+  <rect x="40.5" y="418.5" width="319" height="45" rx="4" fill="none" stroke="#8F8A7C" stroke-width="1"/>
   <text x="50" y="439" font-family="Figtree,'Avenir Next','Helvetica Neue',sans-serif" font-size="12.5" fill="#1A1C1A" font-weight="600">Review</text>
   <text x="50" y="455.0" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.25" fill="#5A5E5A" font-weight="400">and evals</text>
-  <rect x="40.5" y="486.5" width="319" height="45" rx="4" fill="none" stroke="#CBCDC8" stroke-width="1"/>
+  <rect x="40.5" y="486.5" width="319" height="45" rx="4" fill="none" stroke="#8F8A7C" stroke-width="1"/>
   <text x="50" y="507" font-family="Figtree,'Avenir Next','Helvetica Neue',sans-serif" font-size="12.5" fill="#1A1C1A" font-weight="600">Deploy</text>
   <text x="50" y="523.0" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.25" fill="#5A5E5A" font-weight="400">under approval policy</text>
   <path d="M80 464 L80 486" fill="none" stroke="#797D79" stroke-width="1.1" marker-end="url(#sf1n-a)"/>
-  <rect x="40.5" y="554.5" width="319" height="45" rx="4" fill="none" stroke="#CBCDC8" stroke-width="1"/>
+  <rect x="40.5" y="554.5" width="319" height="45" rx="4" fill="none" stroke="#8F8A7C" stroke-width="1"/>
   <text x="50" y="575" font-family="Figtree,'Avenir Next','Helvetica Neue',sans-serif" font-size="12.5" fill="#1A1C1A" font-weight="600">Production</text>
   <text x="50" y="591.0" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.25" fill="#5A5E5A" font-weight="400">sends back signals</text>
   <path d="M80 532 L80 554" fill="none" stroke="#797D79" stroke-width="1.1" marker-end="url(#sf1n-a)"/>

@@ -4,13 +4,13 @@
   <rect width="376" height="594" fill="#FFFFFF"/>
   <defs><marker id="sf2n-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#797D79"/></marker><marker id="sf2n-g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#5A7A00"/></marker><marker id="sf2n-s" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#5A5E5A"/></marker><linearGradient id="sf2n-fadeE4E5E112x360" gradientUnits="userSpaceOnUse" x1="12" y1="0" x2="360" y2="0"><stop offset="0" stop-color="#E4E5E1" stop-opacity="0"/><stop offset="0.06" stop-color="#E4E5E1" stop-opacity="1"/><stop offset="0.82" stop-color="#E4E5E1" stop-opacity="1"/><stop offset="1" stop-color="#E4E5E1" stop-opacity="0"/></linearGradient></defs>
   <g transform="translate(8 8)">
-  <rect x="12.5" y="10.5" width="347" height="151" rx="4" fill="none" stroke="#CBCDC8" stroke-width="1"/>
+  <rect x="12.5" y="10.5" width="347" height="151" rx="4" fill="none" stroke="#8F8A7C" stroke-width="1"/>
   <text x="22" y="31" font-family="Figtree,'Avenir Next','Helvetica Neue',sans-serif" font-size="12.5" fill="#1A1C1A" font-weight="600">Profile</text>
   <text x="22" y="47" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.25" fill="#5A5E5A" font-weight="400">the most it can ever do</text>
-  <rect x="22.5" y="56.5" width="327" height="98" rx="4" fill="none" stroke="#CBCDC8" stroke-width="1"/>
+  <rect x="22.5" y="56.5" width="327" height="98" rx="4" fill="none" stroke="#8F8A7C" stroke-width="1"/>
   <text x="32" y="77" font-family="Figtree,'Avenir Next','Helvetica Neue',sans-serif" font-size="12.5" fill="#1A1C1A" font-weight="600">Task</text>
   <text x="32" y="93" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.25" fill="#5A5E5A" font-weight="400">narrows it to the work</text>
-  <rect x="32.5" y="102.5" width="307" height="45" rx="4" fill="none" stroke="#CBCDC8" stroke-width="1"/>
+  <rect x="32.5" y="102.5" width="307" height="45" rx="4" fill="none" stroke="#8F8A7C" stroke-width="1"/>
   <text x="42" y="123" font-family="Figtree,'Avenir Next','Helvetica Neue',sans-serif" font-size="12.5" fill="#1A1C1A" font-weight="600">Delegation</text>
   <text x="42" y="139" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.25" fill="#5A5E5A" font-weight="400">only narrows it further</text>
   <path d="M60 162 L60 192" fill="none" stroke="#797D79" stroke-width="1.1" marker-end="url(#sf2n-a)"/>
@@ -45,7 +45,7 @@
   <text x="202.5625" y="282" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.25" fill="#5A5E5A" font-weight="400">authorized</text>
   <text x="237.78125" y="296.5" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.25" fill="#5A5E5A" font-weight="400">scope</text>
   <path d="M210 372 L232 372" fill="none" stroke="#797D79" stroke-width="1.1" marker-end="url(#sf2n-a)"/>
-  <rect x="12.5" y="466.5" width="347" height="43" rx="4" fill="none" stroke="#CBCDC8" stroke-width="1"/>
+  <rect x="12.5" y="466.5" width="347" height="43" rx="4" fill="none" stroke="#8F8A7C" stroke-width="1"/>
   <text x="22" y="487" font-family="Figtree,'Avenir Next','Helvetica Neue',sans-serif" font-size="12.5" fill="#1A1C1A" font-weight="600">Downstream</text>
   <text x="22" y="503.0" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.25" fill="#5A5E5A" font-weight="400">only authorized operations reach it</text>
   <path d="M281 414 L281 466" fill="none" stroke="#797D79" stroke-width="1.1" marker-end="url(#sf2n-a)"/>

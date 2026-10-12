@@ -51,7 +51,8 @@ for name in ("figure-1", "figure-1-narrow"):
 # first paper's partials cannot change because of anything below.
 SF_TOKENS = [("#1A1C1A", "--fig-ink", "--ink"), ("#5A5E5A", "--fig-soft", "--soft"),
              ("#797D79", "--fig-faint", "--faint"), ("#E4E5E1", "--fig-hair", "--line"),
-             ("#CBCDC8", "--fig-rule", "--baseline"), ("#5A7A00", "--fig-accent", "--accent"),
+             ("#CBCDC8", "--fig-rule", "--baseline"), ("#8F8A7C", "--fig-rule", "--baseline"),
+             ("#5A7A00", "--fig-accent", "--accent"),
              ("#F1F2EC", "--fig-wash", "--wash"), ("#FFFFFF", "--fig-plate", "--paper")]
 SF = ROOT / "software-factory" / "figures"
 for src in (sorted(SF.glob("figure-*.svg")) if SF.exists() else []):

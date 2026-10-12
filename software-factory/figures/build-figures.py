@@ -47,6 +47,12 @@ from figkit import Fig, C  # noqa: E402
 # their fixed ink too: the PNG, the PDF and the light page then agree.
 GUARD = "#5A7A00"
 WASH = "#F1F2EC"
+# Card outlines. figkit's rule (#CBCDC8) is 1.6:1 on white, too faint for
+# outlines that carry meaning, such as Figure 2's profile ⊃ task ⊃ delegation
+# nest. These figures use the reference-architecture page's own --fig-rule,
+# 3.45:1 on white (WCAG 1.4.11's 3:1), and the partials map it back to that
+# token. The first paper keeps figkit's rule.
+RULE = "#8F8A7C"
 
 # ── type, sized for the PDF column ───────────────────────────────────────────
 # Every figure is drawn on a 720-unit content width (360 for phones) and set on
@@ -175,14 +181,14 @@ class SF(Fig):
 
     # ── shapes ──
     STYLE = {
-        "card":    ('fill="none"', C["rule"], 1, ""),
+        "card":    ('fill="none"', RULE, 1, ""),
         "guard":   ('fill="none"', GUARD, 1.25, ""),
         "sandbox": (f'fill="{WASH}"', GUARD, 1.25, ""),
-        "agent":   (f'fill="{WASH}"', C["rule"], 1, ""),
+        "agent":   (f'fill="{WASH}"', RULE, 1, ""),
         "ghost":   (f'fill="{C["plate"]}"', GUARD, 0.75, ""),
         "zone":    ('fill="none"', C["faint"], 1, ' stroke-dasharray="4 3"'),
-        "blocked": ('fill="none"', C["rule"], 1, ' stroke-dasharray="3 3"'),
-        "floor":   ('fill="none"', C["rule"], 1, ""),
+        "blocked": ('fill="none"', RULE, 1, ' stroke-dasharray="3 3"'),
+        "floor":   ('fill="none"', RULE, 1, ""),
     }
     SOLID = {"card", "guard", "sandbox", "agent", "blocked", "floor"}
 

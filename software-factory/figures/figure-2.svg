@@ -12,13 +12,13 @@
   <text x="274" y="61.5" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.25" fill="#5A5E5A" font-weight="400">routes high-impact actions to approval</text>
   <path d="M508 76 L508 168" fill="none" stroke="#5A7A00" stroke-width="1.25" stroke-dasharray="5 3" marker-end="url(#sf2-g)"/>
   <text x="516.0" y="126.0" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.25" fill="#5A5E5A" font-weight="400">authorized scope</text>
-  <rect x="0.5" y="134.5" width="233" height="151" rx="4" fill="none" stroke="#CBCDC8" stroke-width="1"/>
+  <rect x="0.5" y="134.5" width="233" height="151" rx="4" fill="none" stroke="#8F8A7C" stroke-width="1"/>
   <text x="10" y="155" font-family="Figtree,'Avenir Next','Helvetica Neue',sans-serif" font-size="12.5" fill="#1A1C1A" font-weight="600">Profile</text>
   <text x="10" y="171" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.25" fill="#5A5E5A" font-weight="400">the most it can ever do</text>
-  <rect x="10.5" y="180.5" width="213" height="98" rx="4" fill="none" stroke="#CBCDC8" stroke-width="1"/>
+  <rect x="10.5" y="180.5" width="213" height="98" rx="4" fill="none" stroke="#8F8A7C" stroke-width="1"/>
   <text x="20" y="201" font-family="Figtree,'Avenir Next','Helvetica Neue',sans-serif" font-size="12.5" fill="#1A1C1A" font-weight="600">Task</text>
   <text x="20" y="217" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.25" fill="#5A5E5A" font-weight="400">narrows it to the work</text>
-  <rect x="20.5" y="226.5" width="193" height="45" rx="4" fill="none" stroke="#CBCDC8" stroke-width="1"/>
+  <rect x="20.5" y="226.5" width="193" height="45" rx="4" fill="none" stroke="#8F8A7C" stroke-width="1"/>
   <text x="30" y="247" font-family="Figtree,'Avenir Next','Helvetica Neue',sans-serif" font-size="12.5" fill="#1A1C1A" font-weight="600">Delegation</text>
   <text x="30" y="263" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.25" fill="#5A5E5A" font-weight="400">only narrows it further</text>
   <path d="M117 134 L117 43 L264 43" fill="none" stroke="#797D79" stroke-width="1.1" marker-end="url(#sf2-a)"/>
@@ -44,7 +44,7 @@
   <text x="466" y="219.5" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.25" fill="#5A5E5A" font-weight="400">attaches</text>
   <text x="466" y="234.0" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.25" fill="#5A5E5A" font-weight="400">credentials</text>
   <path d="M436 210 L456 210" fill="none" stroke="#797D79" stroke-width="1.1" marker-end="url(#sf2-a)"/>
-  <rect x="600.5" y="168.5" width="119" height="83" rx="4" fill="none" stroke="#CBCDC8" stroke-width="1"/>
+  <rect x="600.5" y="168.5" width="119" height="83" rx="4" fill="none" stroke="#8F8A7C" stroke-width="1"/>
   <text x="610" y="189" font-family="Figtree,'Avenir Next','Helvetica Neue',sans-serif" font-size="12.5" fill="#1A1C1A" font-weight="600">Downstream</text>
   <text x="610" y="205.0" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.25" fill="#5A5E5A" font-weight="400">only authorized</text>
   <text x="610" y="219.5" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.25" fill="#5A5E5A" font-weight="400">operations</text>
