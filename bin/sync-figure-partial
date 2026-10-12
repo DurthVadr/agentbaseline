@@ -10,6 +10,16 @@ Two variants: the wide composition and a vertical one for narrow viewports.
 Scaling the wide drawing down makes every label microscopic, so the narrow
 version is a different composition of the same relationships, generated from the
 same names and roles.
+
+Two papers. The first paper's Figure 1 (whitepaper/figures) becomes
+layouts/partials/figure-1(-narrow).svg exactly as it always has. The software
+factory's figures (software-factory/figures/figure-N.svg, and figure-N-narrow.svg
+where there is one) become layouts/partials/sf-figure-N(-narrow).svg with the
+same --fig-* tokens. Those figures also have a wash (untrusted agent execution)
+and numerals knocked out of the accent, so they add --fig-wash and --fig-plate;
+and because a page may set no --fig-* token at all, every var() in them falls
+back to the page's own token for the same role. A fixed ink with no token stops
+the sync rather than shipping a colour that cannot follow the theme.
 """
 import re, pathlib
 
@@ -33,3 +43,28 @@ for name in ("figure-1", "figure-1-narrow"):
                lambda m: f'<a href="/controls#{NAMES[m.group(1)]}">{m.group(0)}</a>', s)
     (ROOT / "layouts" / "partials" / f"{name}.svg").write_text(s, encoding="utf-8")
     print(f"wrote layouts/partials/{name}.svg")
+
+# ── the software factory ─────────────────────────────────────────────────────
+# figkit's inks, plus the accent these figures carry in fixed ink (the site's
+# olive), the wash, and the plate the numerals knock out to; each falls back to
+# the page token that plays the same part. Kept apart from the loop above so the
+# first paper's partials cannot change because of anything below.
+SF_TOKENS = [("#1A1C1A", "--fig-ink", "--ink"), ("#5A5E5A", "--fig-soft", "--soft"),
+             ("#797D79", "--fig-faint", "--faint"), ("#E4E5E1", "--fig-hair", "--line"),
+             ("#CBCDC8", "--fig-rule", "--baseline"), ("#5A7A00", "--fig-accent", "--accent"),
+             ("#F1F2EC", "--fig-wash", "--wash"), ("#FFFFFF", "--fig-plate", "--paper")]
+SF = ROOT / "software-factory" / "figures"
+for src in (sorted(SF.glob("figure-*.svg")) if SF.exists() else []):
+    if not re.fullmatch(r"figure-\d+(-narrow)?", src.stem):
+        continue
+    s = src.read_text(encoding="utf-8")
+    s = re.sub(r'\swidth="\d+"\s+height="\d+"', "", s, count=1)
+    s = re.sub(r'<rect width="\d+" height="\d+" fill="#[0-9A-Fa-f]+"/>\n?\s*', "", s, count=1)
+    for fixed, token, page in SF_TOKENS:
+        s = s.replace(f'"{fixed}"', f'"var({token},var({page}))"')
+    left = sorted(set(re.findall(r'"#[0-9A-Fa-f]{6}"', s)))
+    if left:
+        raise SystemExit(f"{src.name}: fixed ink with no token: {', '.join(left)}")
+    out = ROOT / "layouts" / "partials" / f"sf-{src.stem}.svg"
+    out.write_text(s, encoding="utf-8")
+    print(f"wrote layouts/partials/{out.name}")

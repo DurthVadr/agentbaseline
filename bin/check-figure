@@ -12,6 +12,23 @@ cannot see:
   4. the identifier ranges match controls.yaml
 
 Run after every figure change. bin/snapshot does it automatically.
+
+  bin/check-figure                 the first paper's Figure 1
+  bin/check-figure figure-1-narrow a figure in whitepaper/figures, by name
+  bin/check-figure path/to/x.svg   any generated figure, by path (the box
+                                   manifest .x.boxes.json sits beside it)
+
+A figure that is drawn in boxes — the software factory's — also writes
+.x.geom.json, its shapes and connectors, and is held to the checks such a
+figure needs on top of 1–4. They read only that manifest, so they cannot change
+what the first paper's figures are held to:
+
+  5. text never straddles a box edge: it is inside a box or clear of it
+  6. no connector is drawn through text, a card, or another connector
+  7. every connector starts and ends on something — no arrow lands in air
+  8. an arrow's last leg is long enough to read as an arrow
+  9. text stays legible at the size it is shown: 7 pt across a 6.5 in PDF
+     column, or 10 px across a phone's 343 px column
 """
 import json, re, sys, pathlib
 
@@ -20,6 +37,11 @@ NAME = sys.argv[1] if len(sys.argv) > 1 and not sys.argv[1].startswith("-") else
 BOXES = HERE / "figures" / f".{NAME}.boxes.json"
 SVG = HERE / "figures" / f"{NAME}.svg"
 CAT = HERE / "controls.yaml"
+if NAME.endswith(".svg"):
+    SVG = pathlib.Path(NAME).resolve()
+    NAME = SVG.stem
+    BOXES = SVG.parent / f".{NAME}.boxes.json"
+GEOM = SVG.parent / f".{NAME}.geom.json"
 
 if not BOXES.exists():
     sys.exit("no box manifest — run whitepaper/figures/build-figure-1.py first")
@@ -106,6 +128,129 @@ if present:
         if fam not in {f for f, _ in present}:
             errors.append(f"{fam} range missing — a figure carries all identifier "
                           f"ranges or none, not some")
+
+# 5–9. boxed figures only: geometry the text manifest cannot see.
+if GEOM.exists():
+    geom = json.loads(GEOM.read_text(encoding="utf-8"))
+    shapes, links = geom["shapes"], geom["links"]
+    T = 0.5
+
+    def inside(a, s, tol=T):
+        return (a["x"] >= s["x"] - tol and a["y"] >= s["y"] - tol and
+                a["x"] + a["w"] <= s["x"] + s["w"] + tol and
+                a["y"] + a["h"] <= s["y"] + s["h"] + tol)
+
+    def meets(a, s, inset=0.0):
+        return not (a["x"] + a["w"] <= s["x"] + inset or s["x"] + s["w"] - inset <= a["x"] or
+                    a["y"] + a["h"] <= s["y"] + inset or s["y"] + s["h"] - inset <= a["y"])
+
+    def seg_hits_rect(p, q, r, inset):
+        """Does the axis-parallel segment p→q pass through r shrunk by inset?"""
+        x0, y0 = r["x"] + inset, r["y"] + inset
+        x1, y1 = r["x"] + r["w"] - inset, r["y"] + r["h"] - inset
+        if x1 <= x0 or y1 <= y0:
+            return False
+        (ax, ay), (bx, by) = p, q
+        if ay == by:
+            return y0 < ay < y1 and min(ax, bx) < x1 and max(ax, bx) > x0
+        if ax == bx:
+            return x0 < ax < x1 and min(ay, by) < y1 and max(ay, by) > y0
+        return True  # diagonals are not drawn here; flag any that appear
+
+    def segs(l):
+        return list(zip(l["pts"], l["pts"][1:]))
+
+    def on_rect_edge(pt, s, tol=1.5):
+        x, y = pt
+        inx = s["x"] - tol <= x <= s["x"] + s["w"] + tol
+        iny = s["y"] - tol <= y <= s["y"] + s["h"] + tol
+        return ((inx and (abs(y - s["y"]) <= tol or abs(y - s["y"] - s["h"]) <= tol)) or
+                (iny and (abs(x - s["x"]) <= tol or abs(x - s["x"] - s["w"]) <= tol)))
+
+    def on_seg(pt, p, q, tol=1.0):
+        (x, y), (ax, ay), (bx, by) = pt, p, q
+        return (min(ax, bx) - tol <= x <= max(ax, bx) + tol and
+                min(ay, by) - tol <= y <= max(ay, by) + tol and
+                (abs(ax - bx) <= tol and abs(x - ax) <= tol or
+                 abs(ay - by) <= tol and abs(y - ay) <= tol))
+
+    edged = [s for s in shapes if s["kind"] not in ("glyph", "badge")]
+    # 5. text inside a box or clear of it; nothing on a glyph or a badge's disc
+    for a in boxes:
+        if a["tag"].startswith("#"):          # a badge's numeral sits on its disc
+            continue
+        for sh in shapes:
+            if sh["kind"] in ("glyph", "badge"):
+                if meets(a, sh):
+                    errors.append(f"text on a mark: {a['tag']!r} touches {sh['tag']!r}")
+            elif meets(a, sh) and not inside(a, sh):
+                errors.append(f"text straddles a box edge: {a['tag']!r} "
+                              f"({a['x']:.0f},{a['y']:.0f} {a['w']:.0f}×{a['h']:.0f}) "
+                              f"and {sh['tag']!r} ({sh['x']},{sh['y']} {sh['w']}×{sh['h']})")
+    # 6a. no connector through text
+    for l in links:
+        for p, q in segs(l):
+            for a in boxes:
+                if seg_hits_rect(p, q, a, 0.5):
+                    errors.append(f"connector through text: {l['tag']!r} crosses {a['tag']!r}")
+    # 6b. no connector through a card (its own ends touch only the edge)
+    for l in links:
+        for p, q in segs(l):
+            for sh in shapes:
+                if sh["solid"] and seg_hits_rect(p, q, sh, 1.5):
+                    errors.append(f"connector through a box: {l['tag']!r} crosses {sh['tag']!r}")
+    # 6c. connectors don't cross each other, except within one fan-out
+    for i, l in enumerate(links):
+        for m in links[i + 1:]:
+            if l.get("group") and l.get("group") == m.get("group"):
+                continue
+            for p, q in segs(l):
+                for r, t in segs(m):
+                    hz1, hz2 = p[1] == q[1], r[1] == t[1]
+                    if hz1 == hz2:
+                        continue
+                    h_, v_ = ((p, q), (r, t)) if hz1 else ((r, t), (p, q))
+                    yh, xv = h_[0][1], v_[0][0]
+                    if (min(h_[0][0], h_[1][0]) < xv < max(h_[0][0], h_[1][0]) and
+                            min(v_[0][1], v_[1][1]) < yh < max(v_[0][1], v_[1][1])):
+                        errors.append(f"connectors cross: {l['tag']!r} and {m['tag']!r} "
+                                      f"at ({xv:.0f},{yh:.0f})")
+    # 7. both ends land on a box edge or on another connector (a legend's
+    #    sample stroke is declared free: it stands for a connector, not one)
+    for l in links:
+        if l.get("free"):
+            continue
+        for end in (l["pts"][0], l["pts"][-1]):
+            ok = any(on_rect_edge(end, sh) for sh in edged)
+            ok = ok or any(on_seg(end, p, q) for m in links if m is not l for p, q in segs(m))
+            if not ok:
+                errors.append(f"connector lands in air: {l['tag']!r} at "
+                              f"({end[0]:.0f},{end[1]:.0f})")
+    # 8. an arrow's last leg reads as an arrow
+    for l in links:
+        if l["head"]:
+            (ax, ay), (bx, by) = l["pts"][-2], l["pts"][-1]
+            leg = abs(bx - ax) + abs(by - ay)
+            if leg < 18:
+                errors.append(f"arrow {l['tag']!r} ends in a {leg:.0f}px leg — "
+                              f"too short to read as an arrow")
+    # 9. legible at the size it is shown
+    if "print" in geom:
+        pt = geom["print"]["width_in"] * 72 / W
+        for a in boxes:
+            size = a["h"] / 1.02 * pt
+            if size < geom["print"]["min_pt"] - 0.005:
+                errors.append(f"text too small in print: {a['tag']!r} is {size:.2f} pt "
+                              f"across a {geom['print']['width_in']} in column")
+    if "phone" in geom:
+        k = geom["phone"]["display_px"] / W
+        for a in boxes:
+            size = a["h"] / 1.02 * k
+            if size < geom["phone"]["min_px"] - 0.005:
+                errors.append(f"text too small on a phone: {a['tag']!r} is {size:.1f} px")
+    for sh in shapes:
+        if sh["x"] < -T or sh["y"] < -T or sh["x"] + sh["w"] > W + T or sh["y"] + sh["h"] > H + T:
+            errors.append(f"box outside canvas: {sh['tag']!r}")
 
 print(f"{NAME}: {W}×{H} · {len(boxes)} text runs")
 for e in errors:

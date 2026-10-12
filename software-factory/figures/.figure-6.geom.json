@@ -1,0 +1,449 @@
+{
+ "W": 720,
+ "H": 516,
+ "shapes": [
+  {
+   "tag": "auth",
+   "kind": "guard",
+   "x": 264,
+   "y": 10,
+   "w": 296,
+   "h": 72,
+   "solid": true
+  },
+  {
+   "tag": "badgeauth",
+   "kind": "badge",
+   "x": 256,
+   "y": 2,
+   "w": 16,
+   "h": 16,
+   "solid": true
+  },
+  {
+   "tag": "frame",
+   "kind": "zone",
+   "x": 122,
+   "y": 104,
+   "w": 450,
+   "h": 202,
+   "solid": false
+  },
+  {
+   "tag": "sig",
+   "kind": "card",
+   "x": 0,
+   "y": 140,
+   "w": 112,
+   "h": 92,
+   "solid": true
+  },
+  {
+   "tag": "orch",
+   "kind": "agent",
+   "x": 134,
+   "y": 140,
+   "w": 100,
+   "h": 110,
+   "solid": true
+  },
+  {
+   "tag": "sbx",
+   "kind": "sandbox",
+   "x": 264,
+   "y": 140,
+   "w": 172,
+   "h": 152,
+   "solid": true
+  },
+  {
+   "tag": "badgesbx",
+   "kind": "badge",
+   "x": 256,
+   "y": 132,
+   "w": 16,
+   "h": 16,
+   "solid": true
+  },
+  {
+   "tag": "sbx.loop",
+   "kind": "glyph",
+   "x": 275.5,
+   "y": 248.5,
+   "w": 19.0,
+   "h": 19.0,
+   "solid": false
+  },
+  {
+   "tag": "proxy",
+   "kind": "guard",
+   "x": 460,
+   "y": 174,
+   "w": 100,
+   "h": 84,
+   "solid": true
+  },
+  {
+   "tag": "badgeproxy",
+   "kind": "badge",
+   "x": 452,
+   "y": 166,
+   "w": 16,
+   "h": 16,
+   "solid": true
+  },
+  {
+   "tag": "dest0",
+   "kind": "card",
+   "x": 600,
+   "y": 140,
+   "w": 120,
+   "h": 58,
+   "solid": true
+  },
+  {
+   "tag": "dest1",
+   "kind": "blocked",
+   "x": 600,
+   "y": 206,
+   "w": 120,
+   "h": 58,
+   "solid": true
+  },
+  {
+   "tag": "dest2",
+   "kind": "guard",
+   "x": 600,
+   "y": 272,
+   "w": 120,
+   "h": 58,
+   "solid": true
+  },
+  {
+   "tag": "badgedest2",
+   "kind": "badge",
+   "x": 592,
+   "y": 264,
+   "w": 16,
+   "h": 16,
+   "solid": true
+  },
+  {
+   "tag": "pr",
+   "kind": "card",
+   "x": 264,
+   "y": 410,
+   "w": 100,
+   "h": 56,
+   "solid": true
+  },
+  {
+   "tag": "appr",
+   "kind": "card",
+   "x": 384,
+   "y": 410,
+   "w": 86,
+   "h": 56,
+   "solid": true
+  },
+  {
+   "tag": "deploy",
+   "kind": "card",
+   "x": 490,
+   "y": 410,
+   "w": 110,
+   "h": 56,
+   "solid": true
+  },
+  {
+   "tag": "prod",
+   "kind": "card",
+   "x": 620,
+   "y": 410,
+   "w": 100,
+   "h": 56,
+   "solid": true
+  }
+ ],
+ "links": [
+  {
+   "tag": "grant",
+   "kind": "grant",
+   "pts": [
+    [
+     510.0,
+     82
+    ],
+    [
+     510.0,
+     174
+    ]
+   ],
+   "head": true,
+   "group": null,
+   "free": false
+  },
+  {
+   "tag": "takes",
+   "kind": "flow",
+   "pts": [
+    [
+     112,
+     186
+    ],
+    [
+     134,
+     186
+    ]
+   ],
+   "head": true,
+   "group": null,
+   "free": false
+  },
+  {
+   "tag": "propose",
+   "kind": "flow",
+   "pts": [
+    [
+     226,
+     140
+    ],
+    [
+     226,
+     46.0
+    ],
+    [
+     264,
+     46.0
+    ]
+   ],
+   "head": true,
+   "group": null,
+   "free": false
+  },
+  {
+   "tag": "wider",
+   "kind": "flow",
+   "pts": [
+    [
+     396,
+     140
+    ],
+    [
+     396,
+     82
+    ]
+   ],
+   "head": true,
+   "group": null,
+   "free": false
+  },
+  {
+   "tag": "traffic",
+   "kind": "flow",
+   "pts": [
+    [
+     436,
+     216
+    ],
+    [
+     460,
+     216
+    ]
+   ],
+   "head": true,
+   "group": null,
+   "free": false
+  },
+  {
+   "tag": "bus.in",
+   "kind": "flow",
+   "pts": [
+    [
+     560,
+     216
+    ],
+    [
+     582,
+     216
+    ]
+   ],
+   "head": false,
+   "group": "bus",
+   "free": false
+  },
+  {
+   "tag": "bus",
+   "kind": "flow",
+   "pts": [
+    [
+     582,
+     169.0
+    ],
+    [
+     582,
+     301.0
+    ]
+   ],
+   "head": false,
+   "group": "bus",
+   "free": false
+  },
+  {
+   "tag": "bus.0",
+   "kind": "flow",
+   "pts": [
+    [
+     582,
+     169.0
+    ],
+    [
+     600,
+     169.0
+    ]
+   ],
+   "head": true,
+   "group": "bus",
+   "free": false
+  },
+  {
+   "tag": "bus.1",
+   "kind": "flow",
+   "pts": [
+    [
+     582,
+     235.0
+    ],
+    [
+     600,
+     235.0
+    ]
+   ],
+   "head": false,
+   "group": "bus",
+   "free": false
+  },
+  {
+   "tag": "bus.2",
+   "kind": "flow",
+   "pts": [
+    [
+     582,
+     301.0
+    ],
+    [
+     600,
+     301.0
+    ]
+   ],
+   "head": true,
+   "group": "bus",
+   "free": false
+  },
+  {
+   "tag": "pr.exit",
+   "kind": "flow",
+   "pts": [
+    [
+     510.0,
+     258
+    ],
+    [
+     510.0,
+     390
+    ],
+    [
+     314.0,
+     390
+    ],
+    [
+     314.0,
+     410
+    ]
+   ],
+   "head": true,
+   "group": null,
+   "free": false
+  },
+  {
+   "tag": "out264",
+   "kind": "flow",
+   "pts": [
+    [
+     364,
+     438.0
+    ],
+    [
+     384,
+     438.0
+    ]
+   ],
+   "head": true,
+   "group": null,
+   "free": false
+  },
+  {
+   "tag": "out384",
+   "kind": "flow",
+   "pts": [
+    [
+     470,
+     438.0
+    ],
+    [
+     490,
+     438.0
+    ]
+   ],
+   "head": true,
+   "group": null,
+   "free": false
+  },
+  {
+   "tag": "out490",
+   "kind": "flow",
+   "pts": [
+    [
+     600,
+     438.0
+    ],
+    [
+     620,
+     438.0
+    ]
+   ],
+   "head": true,
+   "group": null,
+   "free": false
+  },
+  {
+   "tag": "outer",
+   "kind": "loop",
+   "pts": [
+    [
+     670.0,
+     466
+    ],
+    [
+     670.0,
+     508
+    ],
+    [
+     56.0,
+     508
+    ],
+    [
+     56.0,
+     232
+    ]
+   ],
+   "head": true,
+   "group": null,
+   "free": false
+  }
+ ],
+ "print": {
+  "width_in": 6.5,
+  "min_pt": 7.0
+ }
+}
