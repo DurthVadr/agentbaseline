@@ -75,7 +75,7 @@ jobs:
       - name: The committed PDF is the one this source builds
         run: python3 bin/check-pdf-current --paper whitepaper
       # The reference architecture's PDF, held to its own manifest the same way.
-      # Absent passes (its links are fileExists-guarded); present must be the
+      # It is published, so it is required: absent fails, and present must be the
       # non-draft build of the source in the tree.
       - name: The reference architecture's PDF is the one its source builds
         run: python3 bin/check-sf-pdf
@@ -136,22 +136,13 @@ jobs:
             exit 1
           }
           echo "deterministic: $(stat -c%s /tmp/a.pdf) bytes, twice"
-      # The reference architecture, the same way. With its PDF committed, the
-      # non-draft build that made it is the one held deterministic. Without it,
-      # this step used to exit 0 having built nothing, so none of the paper's
-      # render path ran in CI: its stylesheet, --outline, the /Info update, the
-      # glossary and table rewriting. A draft build exercises all of that, so it
-      # is built twice as a draft and compared. A build that fails fails the step.
+      # The reference architecture, the same way: the non-draft build that made
+      # its committed PDF is the one held deterministic. Its PDF is required
+      # (check-sf-pdf above fails without it), so there is no draft fallback.
       - name: Two builds of the reference architecture produce one file
         run: |
-          if [ -f static/software-factory.pdf ]; then
-            draft=""
-          else
-            echo "static/software-factory.pdf is not committed; building it twice as a draft"
-            draft="--draft"
-          fi
-          python3 bin/build-pdf --paper software-factory $draft --out /tmp/sf-a.pdf --provenance /tmp/sf-a.json
-          python3 bin/build-pdf --paper software-factory $draft --out /tmp/sf-b.pdf --provenance /tmp/sf-b.json
+          python3 bin/build-pdf --paper software-factory --out /tmp/sf-a.pdf --provenance /tmp/sf-a.json
+          python3 bin/build-pdf --paper software-factory --out /tmp/sf-b.pdf --provenance /tmp/sf-b.json
           cmp /tmp/sf-a.pdf /tmp/sf-b.pdf || {
             echo "::error::the reference architecture's build is not deterministic — two builds of identical source differ"
             cmp -l /tmp/sf-a.pdf /tmp/sf-b.pdf | head -40

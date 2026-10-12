@@ -8,9 +8,8 @@ build (`bin/build-pdf --paper software-factory`) with a provenance manifest, so
 it gets the same proof as the white paper instead: bin/check-pdf-current, for
 this paper.
 
-Behaviour when the PDF is absent is unchanged — it passes. The site links the
-PDF only through fileExists-guarded templates, so with no file there is no link.
-A PDF that is present must have software-factory/pdf.provenance.json describing
+The PDF is published, so it is required (bin/papers.py): an absent PDF fails,
+where it used to pass while the paper was a draft. The PDF must have software-factory/pdf.provenance.json describing
 it, every input recorded there must be unchanged, and it must not be a draft. The
 manifest must also record this paper's own inputs — software-factory.md, every
 figure it references, the files that render it and the fonts it embeds — which
