@@ -517,10 +517,10 @@ SF_CSS = """
 /* ── reference architecture: figures ───────────────────────────────────── */
 /* Captions as a datum row under the drawing: a rule, the figure's number in
    the label voice in its own cell, the caption beside it. The white paper's
-   centred caption under a mono number stays the white paper's. A tall drawing
-   is capped so it and its caption still share a page with something. */
+   centred caption under a mono number stays the white paper's. The drawing
+   is set inline (sf_inline_figures) and fills the measure. */
 figure { margin:6mm 0 7mm; }
-figure img { max-height:150mm; width:auto; }
+figure svg { display:block; width:100%; height:auto; }
 figcaption { display:grid; grid-template-columns:20mm 1fr; gap:0 3mm;
   max-width:none; margin:3mm 0 0; padding-top:2mm; border-top:.4pt solid var(--rule);
   font-size:8.5pt; line-height:1.45; }
@@ -960,6 +960,37 @@ def deepen(table, head):
     return "\n".join(out)
 
 
+def sf_inline_figures(body):
+    """Set each SVG figure into the page itself rather than behind an <img>.
+
+    An SVG loaded as an image is a document of its own and cannot see the page's
+    @font-face rules, so the figures' Figtree, Plex and Chakra Petch fell back to
+    whatever the building machine had: pdffonts listed Avenir Next, Charter and
+    Menlo, the figures printed in faces the site does not use, and they printed
+    in different ones on a different machine. Set inline, a figure takes the
+    embedded faces like the text around it and shares their subsets. The site
+    inlines the same files (bin/sync-figure-partial), and every id in them is
+    already prefixed per figure (sf3-a), so two figures cannot collide.
+
+    The paper's alt text, which figures() has already refused if it is missing
+    or a TODO, becomes the drawing's accessible name. The files are recorded
+    here because the file:// sweep in render() no longer sees them.
+    """
+    def one(m):
+        tag = m.group(0)
+        url = re.search(r'\bsrc="(file://[^"]*)"', tag).group(1)
+        alt = re.search(r'\balt="([^"]*)"', tag)
+        svg = record(pathlib.Path(urllib.request.url2pathname(url[len("file://"):]))) \
+            .read_text(encoding="utf-8")
+        svg = re.sub(r"^\s*<\?xml[^>]*\?>\s*", "", svg)
+
+        def root(r):
+            attrs = re.sub(r'\s(?:width|height|role|aria-labelledby|aria-label)="[^"]*"', "", r.group(1))
+            return f'<svg{attrs} role="img" aria-label="{alt.group(1) if alt else ""}">'
+        return re.sub(r"<svg\b([^>]*)>", root, svg, count=1)
+    return re.sub(r'<img\b[^>]*\bsrc="file://[^"]*\.svg"[^>]*>', one, body)
+
+
 def sf_glossary(body):
     """The Definitions section as a glossary, and every bolded term linked to it.
 
@@ -1027,6 +1058,7 @@ def build_software_factory(paper, draft):
                      f"it in the flow. Check the front matter of {rel(src)}.")
 
     body, figs = figures(body, src, draft)
+    body = sf_inline_figures(body)
     body = sf_tables(body)
     body, _ = sf_glossary(body)
     body = re.sub(r"<p><strong>(Invariants?):</strong>",
