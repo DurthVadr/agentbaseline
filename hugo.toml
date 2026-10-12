@@ -138,10 +138,13 @@ disableKinds = ["taxonomy", "term", "RSS", "section"]
   paper         = "software-factory.md"
   template      = "software-factory.yml"
   commentsUntil = ""
-  # The launch band stops rendering at build time on this date, two weeks
-  # after the 13 October launch, and the pill drops its "New". Same mechanism
-  # as [params.event].until.
-  launchUntil   = "2026-10-27"
+  # The bar's launch pill renders only before this moment, two weeks after
+  # the 13 October launch; after it the bar is the baseline's again. Compared
+  # at build time, like [params.event].until, and with the New York offset for
+  # the same reason (a bare date is midnight UTC, 8 pm the evening before in
+  # New York). The site does not rebuild on its own: redeploy on or after
+  # 27 October or the pill stays up.
+  launchUntil   = "2026-10-27T00:00:00-04:00"
   # The levels band. Level names, leads and table rows follow the paper's
   # "Three levels of autonomy" (software-factory/levels.yaml). Set false and
   # the band leaves in one line.
@@ -150,10 +153,6 @@ disableKinds = ["taxonomy", "term", "RSS", "section"]
   #   been drawn yet (partials/sf-figure-N.svg). False, a missing figure fails
   #   the build. Must be false before anything ships.
   figuresPending = true
-  # ⟡ SPIKE ONLY. Renders contributors with `confirmed: false`, each marked
-  #   ⟡ (the repo's sign for unverified). Must be false before anything ships:
-  #   the site does not publish an affiliation its owner has not agreed to.
-  showUnconfirmed = false
 
 # The event strip and the closing block render only while `until` is in the
 # future AT BUILD TIME. The site is static, so after `until` passes they stay

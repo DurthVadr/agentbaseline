@@ -27,11 +27,11 @@
 <details class="menu">
   <summary>Artifacts {{ partial "icons/caret-down.svg" . }}</summary>
   <ul class="dd">
-    {{- /* Two papers, two rows, no group for them: the white paper and the
-           reference architecture are the same kind of thing. */}}
-    {{ if fileExists "static/whitepaper.pdf" }}<li><a href="/whitepaper.pdf">{{ partial "icons/file-pdf.svg" . }}White paper</a></li>{{ end }}
+    {{- /* Each PDF row is labelled by its paper's name, the baseline first:
+           the second paper is built on the baseline, not a peer of it. */}}
+    {{ if fileExists "static/whitepaper.pdf" }}<li><a href="/whitepaper.pdf">{{ partial "icons/file-pdf.svg" . }}Agent Baseline (PDF)</a></li>{{ end }}
     {{- with .Site.Params.softwareFactory }}
-    {{ if fileExists (printf "static/%s" .pdf) }}<li><a href="/{{ .pdf }}">{{ partial "icons/file-pdf.svg" $ }}Reference architecture</a></li>{{ end }}
+    {{ if fileExists (printf "static/%s" .pdf) }}<li><a href="/{{ .pdf }}">{{ partial "icons/file-pdf.svg" $ }}Secure Software Factory (PDF)</a></li>{{ end }}
     {{- end }}
     <li><a href="{{ .Site.Params.repo }}/blob/main/whitepaper/controls.yaml">{{ partial "icons/file-code.svg" . }}controls.yaml</a></li>
     <li><a href="{{ .Site.Params.repo }}">{{ partial "icons/git-branch.svg" . }}repository</a></li>
