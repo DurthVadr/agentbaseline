@@ -120,10 +120,13 @@ class Head(html.parser.HTMLParser):
         self.titles, self.meta, self.links, self.ldjson = [], [], [], []
         self._in = None
         self._buf = []
+        self._svg = 0  # a <title> inside inline SVG names the drawing, not the page
 
     def handle_starttag(self, tag, attrs):
         a = {k: (v or "") for k, v in attrs}
-        if tag == "title":
+        if tag == "svg":
+            self._svg += 1
+        elif tag == "title" and not self._svg:
             self._in, self._buf = "title", []
         elif tag == "script" and a.get("type", "").lower() == "application/ld+json":
             self._in, self._buf = "ld", []
@@ -137,7 +140,9 @@ class Head(html.parser.HTMLParser):
             self._buf.append(data)
 
     def handle_endtag(self, tag):
-        if tag == "title" and self._in == "title":
+        if tag == "svg" and self._svg:
+            self._svg -= 1
+        elif tag == "title" and self._in == "title":
             self.titles.append("".join(self._buf).strip())
             self._in = None
         elif tag == "script" and self._in == "ld":
