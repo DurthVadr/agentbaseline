@@ -62,6 +62,21 @@ for src in (sorted(SF.glob("figure-*.svg")) if SF.exists() else []):
     s = re.sub(r'<rect width="\d+" height="\d+" fill="#[0-9A-Fa-f]+"/>\n?\s*', "", s, count=1)
     for fixed, token, page in SF_TOKENS:
         s = s.replace(f'"{fixed}"', f'"var({token},var({page}))"')
+    # One accessible name, the alt text, as an <img>'s alt would give. The
+    # standalone SVG names itself by title and desc together, which on the page
+    # read the description twice and repeated the visible figcaption; naming it
+    # by the desc alone still leaves Chrome exposing the desc a second time as
+    # the description (tested in its accessibility tree). So the partial drops
+    # <title> (the figcaption carries the caption) and <desc>, and names the
+    # drawing with aria-label. The committed SVG keeps both; check-copy holds
+    # them to the paper.
+    _desc = re.search(r'<desc id="[^"]+">(.*?)</desc>\n?\s*', s, re.S)
+    if not _desc:
+        raise SystemExit(f"{src.name}: no <desc>, so no alt text to name the drawing by")
+    _alt = " ".join(_desc.group(1).split()).replace('"', "&quot;")
+    s = re.sub(r'<title id="[^"]+">.*?</title>\n?\s*', "", s, count=1, flags=re.S)
+    s = s.replace(_desc.group(0), "", 1)
+    s = re.sub(r'aria-labelledby="[^"]+"', f'aria-label="{_alt}"', s, count=1)
     left = sorted(set(re.findall(r'"#[0-9A-Fa-f]{6}"', s)))
     if left:
         raise SystemExit(f"{src.name}: fixed ink with no token: {', '.join(left)}")
