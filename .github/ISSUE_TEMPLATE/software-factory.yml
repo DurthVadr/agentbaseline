@@ -3,16 +3,15 @@ description: Comment on the second paper, the reference architecture for the sof
 labels: ["software-factory"]
 body:
   - type: dropdown
-    id: primitive
+    id: boundary
     attributes:
-      label: Primitive
-      description: Leave blank if the comment cuts across the paper. These are the names in software-factory/primitives.yaml.
+      label: Boundary
+      description: Leave blank if the comment cuts across the paper. These are the paper's four security boundaries, as named in software-factory/boundaries.yaml.
       options:
         - Identity and access
         - Supply chain
+        - Sandbox
         - Network
-        - Runtime isolation
-        - Orchestration
     validations:
       required: false
   - type: textarea

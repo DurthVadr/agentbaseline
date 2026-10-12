@@ -221,8 +221,8 @@ _ra = ROOT / "public" / "reference-architecture" / "index.html"
 if _ra.exists():
     _h = _ra.read_text(encoding="utf-8")
     for _id, _row, _want in (
-        ("signals", r'<li class="?sig\b', 5),
-        ("maturity", r'<section class="?lvp\b', 3),
+        ("boundaries", r'<li class="?bd-i\b', 4),
+        ("levels", r'<section class="?lvp\b', 3),
     ):
         _m = re.search(r'<h2\b[^>]*\bid=["\']?' + re.escape(_id)
                        + r'(?:["\']|(?=[\s>]))[^>]*>(.*?)(?=<h2\b|</main>)', _h, re.S)

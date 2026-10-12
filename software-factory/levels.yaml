@@ -1,0 +1,29 @@
+# The three levels of autonomy, as the page shows them, one at a time.
+# Source: software-factory.md, "Three levels of autonomy". `lead` is the
+# section's opening sentence for the level, without its "At Level N,"; the
+# level table gives `orchestrator`, `execution` and `challenge` word for word.
+# `figure` is the paper's figure for the level and `caption` its caption, so the
+# page and the PDF number and caption the same drawing the same way. Change the
+# paper first, then this file.
+levels:
+  - name: Human-Orchestrated
+    lead: Agents work within a developer's workflow.
+    orchestrator: The developer
+    execution: The developer, through the agent harness
+    challenge: Securing an agent under a developer's supervision
+    figure: 3
+    caption: Level 1, where a developer gives an agent room to work without giving it everything the developer can reach
+  - name: Workflow-Orchestrated
+    lead: The factory becomes shared infrastructure that teams operate and improve together.
+    orchestrator: A predefined workflow
+    execution: A durable system, such as CI/CD or Temporal
+    challenge: Securing shared execution and delegated access
+    figure: 4
+    caption: Level 2, where a workflow orchestrates
+  - name: Agent-Orchestrated
+    lead: Agents start and coordinate work themselves, including in response to production signals.
+    orchestrator: An orchestrator agent, or a workflow that uses one for judgment calls
+    execution: The same durable system
+    challenge: Keeping an agent's plans from becoming its permissions
+    figure: 5
+    caption: Level 3, where an agent orchestrates but can't grant itself access

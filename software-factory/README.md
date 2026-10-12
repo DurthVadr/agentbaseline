@@ -1,18 +1,20 @@
 # Reference architecture — source
 
-What the site renders for the second paper, and where the rest lives.
+The second paper, "The Secure Software Factory: A Reference Architecture", and what the
+site renders from it.
 
-- `primitives.yaml` — the five primitives and the Agent Baseline outcomes each supports, from
-  the paper's primitive tables.
-- `signals.yaml` — the paper's "Measuring the Factory" table, as the five signals a secure
-  factory shows and what each replaces.
-- `maturity.yaml` — the five stages and the three maturity levels: for each level, where it
-  runs, who coordinates the agents, and what it does at each stage. Rendered one level at a
-  time, only while `params.softwareFactory.showMaturity` is true.
-- `contributors.yaml` — the authors. Nothing renders with `confirmed: false`.
+- `software-factory.md` — the paper. Its text is the working group's final document, word
+  for word; change it here only to match a change the working group makes. `bin/build-pdf
+  --paper software-factory` renders it to `/software-factory.pdf`.
+- `figures/` — the paper's figures, generated. The PDF prints them and the page inlines the
+  same drawings (`bin/sync-figure-partial`), so the two can't disagree.
+- `boundaries.yaml` — the four security boundaries as the page lists them, in the paper's
+  words, and the figure shown with them.
+- `levels.yaml` — the three levels of autonomy as the page shows them, one at a time: each
+  level's opening sentence, its row of the paper's level table, and its figure. Rendered
+  only while `params.softwareFactory.showLevels` is true.
+- `contributors.yaml` — the authors, from the paper's byline. Nothing renders with
+  `confirmed: false`.
 
-The paper's text is drafted in the working group's document and published as
-`/software-factory.pdf`. Its source lands here as `software-factory.md` when the working group
-moves it into this repository; until it does, the site shows no "View the source" link.
 Comments go in as issues through the software-factory form, which carries the
 `software-factory` label.

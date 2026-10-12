@@ -28,14 +28,11 @@ disableKinds = ["taxonomy", "term", "RSS", "section"]
   source = "whitepaper/contributors.yaml"
   target = "data/contributors.yaml"
 [[module.mounts]]
-  source = "software-factory/primitives.yaml"
-  target = "data/primitives.yaml"
+  source = "software-factory/boundaries.yaml"
+  target = "data/sfboundaries.yaml"
 [[module.mounts]]
-  source = "software-factory/maturity.yaml"
-  target = "data/maturity.yaml"
-[[module.mounts]]
-  source = "software-factory/signals.yaml"
-  target = "data/sfsignals.yaml"
+  source = "software-factory/levels.yaml"
+  target = "data/sflevels.yaml"
 [[module.mounts]]
   source = "software-factory/contributors.yaml"
   target = "data/sfcontributors.yaml"
@@ -127,7 +124,7 @@ disableKinds = ["taxonomy", "term", "RSS", "section"]
 [params.softwareFactory]
   # The one paragraph that says what the paper is, shown on the homepage and
   # at the top of its page. One value, so the two cannot drift.
-  summary       = "A software factory uses AI agents to turn a ticket or request into a tested pull request for human review. This reference architecture applies Agent Baseline’s security controls to that workflow as it grows from a local agent to a cloud factory coordinated by an orchestrator."
+  summary       = "A software factory uses AI agents to turn a ticket or request into tested code, and more and more to ship and run it. This reference architecture applies Agent Baseline to the factory: four security boundaries that control what agents can do, whatever they decide, from a factory a developer steers to one where agents find and ship their own work."
   pdf           = "software-factory.pdf"
   source        = "software-factory"
   # The paper's markdown inside `source`. Checked with fileExists like `pdf`,
@@ -140,11 +137,14 @@ disableKinds = ["taxonomy", "term", "RSS", "section"]
   # after the 13 October launch, and the pill drops its "New". Same mechanism
   # as [params.event].until.
   launchUntil   = "2026-10-27"
-  # The maturity band. Level names and marks follow the paper's Maturity
-  # Model, unchanged between Draft 2 (15 September) and Draft 3 (5 October).
-  # Set false if the section reopens before launch; the band leaves in one
-  # line.
-  showMaturity  = true
+  # The levels band. Level names, leads and table rows follow the paper's
+  # "Three levels of autonomy" (software-factory/levels.yaml). Set false and
+  # the band leaves in one line.
+  showLevels    = true
+  # ⟡ SPIKE ONLY. Renders a labelled placeholder where a paper figure has not
+  #   been drawn yet (partials/sf-figure-N.svg). False, a missing figure fails
+  #   the build. Must be false before anything ships.
+  figuresPending = true
   # ⟡ SPIKE ONLY. Renders contributors with `confirmed: false`, each marked
   #   ⟡ (the repo's sign for unverified). Must be false before anything ships:
   #   the site does not publish an affiliation its owner has not agreed to.
