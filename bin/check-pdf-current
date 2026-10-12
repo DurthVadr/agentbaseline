@@ -5,10 +5,9 @@
     python3 bin/check-pdf-current --paper software-factory  # one of them
 
 Both papers are held to the same rules, from the one table in bin/papers.py. The
-white paper's PDF must be in the tree. The reference architecture's may be absent
-— the site links it only through fileExists-guarded templates, so a checkout
-without it renders no dead link — but a PDF that is present must have a manifest
-that describes it, built from the source in the tree, and not as a draft. That
+papers marked required there — both, now the reference architecture is
+published — must have their PDF in the tree, with a manifest that describes it,
+built from the source in the tree, and not as a draft. That
 replaces the stand-in check bin/check-sf-pdf used to make, which refused one
 known placeholder by its digest and would have passed any other wrong file.
 

@@ -194,8 +194,9 @@
      since a name never splits, the cell ran past the block's rules and, at
      320, past the viewport. Stacked, the cell takes the full width and its
      list wraps between names. The reference architecture's title block
-     stacks the same way. */
-  @media (max-width:374px) {
+     stacks the same way, below 480px: from 375 to 413 the two-column block
+     came back and squeezed the Catalogue cell. */
+  @media (max-width:479px) {
     dl.tb { grid-template-columns:1fr; }
     dl.tb .cell:nth-child(n) { border-left:none; padding-left:0; }
     dl.tb .cell:nth-child(n+2) { border-top:1px solid var(--line); }
@@ -274,6 +275,8 @@
     border-top:1px solid var(--line); padding-top:16px;
     font-family:var(--mono); font-size:11.5px; color:var(--faint); line-height:1.9;
     display:flex; gap:12px 32px; flex-wrap:wrap; justify-content:space-between; }
+  /* Underlined: in the footer's faint text, colour alone was 1.02:1. */
+  footer a { text-decoration:underline; text-underline-offset:2px; }
   footer .sig { font-family:var(--labelfont); letter-spacing:.12em;
     text-transform:uppercase; }
 </style>

@@ -337,6 +337,34 @@ if _sf.exists():
             if _q(_c) != _q(_caps.get(int(_fn), "")):
                 findings.append(("contra", f"levels.yaml: Figure {_fn}'s caption is not the paper's"))
 
+# The YAML checks above read the source with line regexes, so a value folded
+# onto a continuation line could slip past them. The rendered page is what a
+# reader sees, and Hugo has already parsed the YAML into it: hold that too, in
+# order and one for one, against the paper.
+_ra_pg = ROOT / "public" / "reference-architecture" / "index.html"
+if _sf.exists() and _ra_pg.exists():
+    _src = _sf.read_text(encoding="utf-8")
+    _pg = _ra_pg.read_text(encoding="utf-8")
+    _txt = lambda x: _q(html.unescape(re.sub(r"<[^>]+>", " ", x)))
+    _sec = re.search(r"^# The four security boundaries\n(.*?)(?=^# )", _src, re.M | re.S)
+    _want_bd = [_q(h) for h in re.findall(r"^## (.+?)(?:\s*\{#[^}]*\})?$", _sec.group(1), re.M)] if _sec else []
+    _got_bd = [_txt(f"{a}: {b}") for a, b in re.findall(
+        r'class="?bd-nm"?>(.*?)</span>\s*<span class="?bd-c"?>(.*?)</span>', _pg, re.S)]
+    if not _want_bd or _got_bd != _want_bd:
+        findings.append(("contra", f"/reference-architecture lists the boundaries as {_got_bd}, "
+                                   f"the paper's headings are {_want_bd}"))
+    _want_lv = [_q(n) for n in re.findall(r"^## Level \d: (.+?) Factory$", _src, re.M)]
+    _got_lv = [_txt(n) for n in re.findall(r'class="?nm"?>(.*?)</span>', _pg, re.S)]
+    if not _want_lv or _got_lv != _want_lv:
+        findings.append(("contra", f"/reference-architecture names the levels {_got_lv}, "
+                                   f"the paper names them {_want_lv}"))
+    _caps_src = {int(n): _q(c) for c, n in re.findall(
+        r'^!\[([^\]]+)\]\(figures/figure-(\d+)\.svg\)', _src, re.M)}
+    for _n, _c in re.findall(r'<figcaption><span class="?fn"?>Figure (\d+)</span>(.*?)</figcaption>', _pg, re.S):
+        if _txt(_c) != _caps_src.get(int(_n)):
+            findings.append(("contra", f"/reference-architecture captions Figure {_n} "
+                                       f"“{_txt(_c)}”, not the paper's caption"))
+
 # ── 3c-septies · the reference architecture is no longer than the homepage ──
 # The owner's rule for the second paper's page: send readers to the paper,
 # don't read it to them. Words in <main>, without inline SVG, scripts, styles

@@ -26,6 +26,9 @@ jobs:
       # committed passed it; anything untracked in either folder fails as well.
       - name: Reference architecture figures — current, and geometry
         run: |
+          # From nothing: a committed figure the generator no longer makes
+          # then shows as a deletion instead of surviving on disk.
+          rm -f software-factory/figures/figure-*.svg software-factory/figures/.figure-*.json layouts/partials/sf-figure-*.svg
           python3 software-factory/figures/build-figures.py
           python3 bin/sync-figure-partial
           git diff --exit-code -- software-factory/figures layouts/partials

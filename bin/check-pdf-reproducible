@@ -6,9 +6,8 @@
 
 Each paper is judged on its own, from the one table in bin/papers.py, and the
 exit code is the worst of them: 1 if any paper is not reproducible or not
-current, else 2 if this machine could not judge one, else 0. The reference
-architecture's PDF may be absent (see bin/check-pdf-current); a paper with no
-committed PDF has nothing to reproduce and is skipped with a note.
+current, else 2 if this machine could not judge one, else 0. Both papers' PDFs
+are required (bin/papers.py, bin/check-pdf-current), so both are rebuilt.
 
 The PDF is committed, which is what makes the repo the product: the paper, the
 page and the artifact version together. It is also what makes this check
