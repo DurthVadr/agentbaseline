@@ -494,7 +494,7 @@ def sandbox_three(f, k=K):
 # ── Level 1 ──────────────────────────────────────────────────────────────────
 def level1(f):
     skel_auth(f)
-    skel_frame(f, "Developer's machine", "or a remote environment")
+    skel_frame(f, "Developer’s machine", "or a remote environment")
     f.node(K.A[0], K.MID - 40, K.A[1] - K.A[0], 80, "Developer",
            ["directs the", "agent, reviews", "its output"], tag="dev")
     sx0, sy0, sx1, sy1 = sandbox_one(f, "Sandbox", "Coding agent",
@@ -597,10 +597,10 @@ def scope_nest(f, x0, y0, x1, y1):
     f.box(x0, y0, x1 - x0, y1 - y0, "card", "prof")
     f.name(x0 + PAD, y0 + 21, "Profile", "prof.n")
     f.gloss(x0 + PAD, y0 + 37, "the most it can ever do", "prof.g")
-    f.box(x0 + 10, y0 + 46, x1 - x0 - 20, y1 - y0 - 56, "card", "task")
+    f.box(x0 + 10, y0 + 46, x1 - x0 - 20, y1 - y0 - 53, "card", "task")
     f.name(x0 + 20, y0 + 67, "Task", "task.n")
     f.gloss(x0 + 20, y0 + 83, "narrows it to the work", "task.g")
-    f.box(x0 + 20, y0 + 92, x1 - x0 - 40, y1 - y0 - 112, "card", "dlg")
+    f.box(x0 + 20, y0 + 92, x1 - x0 - 40, y1 - y0 - 106, "card", "dlg")
     f.name(x0 + 30, y0 + 113, "Delegation", "dlg.n")
     f.gloss(x0 + 30, y0 + 129, "only narrows it further", "dlg.g")
 
@@ -611,7 +611,7 @@ def scope_nest(f, x0, y0, x1, y1):
 # estimate, which overstates long phrases (+24 units on "Identity and access")
 # and slightly understates short capitalised words, evenly meant items came out
 # about three times further apart in one place than another.
-KEY_W = {"Enforced outside the agent's loop:": 194.81, "Identity and access": 110.31,
+KEY_W = {"Enforced outside the agent’s loop:": 194.34, "Identity and access": 110.31,
          "Supply chain": 75.2, "Sandbox": 50.2, "Network": 49.3}
 KEY_GAP = 14
 
@@ -630,7 +630,7 @@ def legend(f, x, y, width, marks=((1, "Identity and access"), (3, "Sandbox"), (4
         return KEY_W[s_]
 
     f.rule(y - 18, x, x + width)
-    head = "Enforced outside the agent's loop:"
+    head = "Enforced outside the agent’s loop:"
     f.text(x, y, head, GLOSS, C["ink"], tag="lg.h")
     bx, by = x + measured(head) + KEY_GAP, y
     need = sum(22 + KEY_W[s_] for _, s_ in marks) + KEY_GAP * (len(marks) - 1)
@@ -688,7 +688,7 @@ def figure2():
 # skeleton with one incident running through it, in the paper's own words
 # ("A factory in action").
 # ═════════════════════════════════════════════════════════════════════════════
-FIG6_AUTH = ("checks it against policy and the", "alert's authenticated source")
+FIG6_AUTH = ("checks it against policy and the", "alert’s authenticated source")
 
 
 def figure6():
@@ -706,7 +706,7 @@ def figure6():
     pxp = k.B[1] - 3
     ay = mid((k.AUTH[1], k.AUTH[3]))
     f.link([(pxp, k.ROW[0]), (pxp, ay), (k.AUTH[0], ay)], tag="propose")
-    for i, s in enumerate(("read the service's logs,", "last hour, one pull request")):
+    for i, s in enumerate(("read the service’s logs,", "last hour, one pull request")):
         f.gloss(pxp - 8 - f.width(s, "gloss"), ay + 20 + i * 14.5, s, f"propose.l{i}")
     x0, x1 = k.C
     y0, y1 = k.ROW
@@ -840,7 +840,7 @@ def narrow_level(n, title, desc):
     prev = y + 66
     y += 66 + 24
     fy0 = y
-    f.lab(N.GX + 14, fy0 + 22, "Developer's machine" if n == 1 else "The factory", "frame.l")
+    f.lab(N.GX + 14, fy0 + 22, "Developer’s machine" if n == 1 else "The factory", "frame.l")
     y += 40
     ix0, ix1 = N.IN
     if n == 2:
@@ -1072,7 +1072,7 @@ def figure6_narrow():
     y += 40
     ix0, ix1 = N.IN
     f.node(ix0, y, ix1 - ix0, 96, "Orchestrator agent",
-           ["proposes a task for an", "incident agent: the", "service's logs, last",
+           ["proposes a task for an", "incident agent: the", "service’s logs, last",
             "hour, one pull request"], kind="agent", tag="orch")
     f.link([(N.GX, prev), (N.GX, y)], tag="takes")
     oy = y

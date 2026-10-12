@@ -9,7 +9,7 @@
   <text x="20.7" y="13.9" font-family="'IBM Plex Mono',ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="12.25" fill="#FFFFFF" font-weight="600">1</text>
   <text x="34" y="31" font-family="Figtree,'Avenir Next','Helvetica Neue',sans-serif" font-size="12.5" fill="#1A1C1A" font-weight="600">Runtime authorization service</text>
   <text x="34" y="47.0" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.25" fill="#5A5E5A" font-weight="400">checks it against policy and the</text>
-  <text x="34" y="61.5" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.25" fill="#5A5E5A" font-weight="400">alert's authenticated source</text>
+  <text x="34" y="61.5" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.25" fill="#5A5E5A" font-weight="400">alert’s authenticated source</text>
   <rect x="24.5" y="98.5" width="189" height="65" rx="4" fill="none" stroke="#CBCDC8" stroke-width="1"/>
   <text x="34" y="119" font-family="Figtree,'Avenir Next','Helvetica Neue',sans-serif" font-size="12.5" fill="#1A1C1A" font-weight="600">Production alert</text>
   <text x="34" y="135.0" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.25" fill="#5A5E5A" font-weight="400">elevated errors in a</text>
@@ -19,7 +19,7 @@
   <text x="46" y="249" font-family="Figtree,'Avenir Next','Helvetica Neue',sans-serif" font-size="12.5" fill="#1A1C1A" font-weight="600">Orchestrator agent</text>
   <text x="46" y="265.0" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.25" fill="#5A5E5A" font-weight="400">proposes a task for an</text>
   <text x="46" y="279.5" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.25" fill="#5A5E5A" font-weight="400">incident agent: the</text>
-  <text x="46" y="294.0" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.25" fill="#5A5E5A" font-weight="400">service's logs, last</text>
+  <text x="46" y="294.0" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.25" fill="#5A5E5A" font-weight="400">service’s logs, last</text>
   <text x="46" y="308.5" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.25" fill="#5A5E5A" font-weight="400">hour, one pull request</text>
   <path d="M74 164 L74 228" fill="none" stroke="#797D79" stroke-width="1.1" marker-end="url(#sf6n-a)"/>
   <rect x="36.5" y="348.5" width="177" height="131" rx="4" fill="#F1F2EC" stroke="#5A7A00" stroke-width="1.25"/>

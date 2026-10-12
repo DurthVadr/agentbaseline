@@ -7,10 +7,10 @@
   <rect x="12.5" y="10.5" width="347" height="151" rx="4" fill="none" stroke="#CBCDC8" stroke-width="1"/>
   <text x="22" y="31" font-family="Figtree,'Avenir Next','Helvetica Neue',sans-serif" font-size="12.5" fill="#1A1C1A" font-weight="600">Profile</text>
   <text x="22" y="47" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.25" fill="#5A5E5A" font-weight="400">the most it can ever do</text>
-  <rect x="22.5" y="56.5" width="327" height="95" rx="4" fill="none" stroke="#CBCDC8" stroke-width="1"/>
+  <rect x="22.5" y="56.5" width="327" height="98" rx="4" fill="none" stroke="#CBCDC8" stroke-width="1"/>
   <text x="32" y="77" font-family="Figtree,'Avenir Next','Helvetica Neue',sans-serif" font-size="12.5" fill="#1A1C1A" font-weight="600">Task</text>
   <text x="32" y="93" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.25" fill="#5A5E5A" font-weight="400">narrows it to the work</text>
-  <rect x="32.5" y="102.5" width="307" height="39" rx="4" fill="none" stroke="#CBCDC8" stroke-width="1"/>
+  <rect x="32.5" y="102.5" width="307" height="45" rx="4" fill="none" stroke="#CBCDC8" stroke-width="1"/>
   <text x="42" y="123" font-family="Figtree,'Avenir Next','Helvetica Neue',sans-serif" font-size="12.5" fill="#1A1C1A" font-weight="600">Delegation</text>
   <text x="42" y="139" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.25" fill="#5A5E5A" font-weight="400">only narrows it further</text>
   <path d="M60 162 L60 192" fill="none" stroke="#797D79" stroke-width="1.1" marker-end="url(#sf2n-a)"/>
@@ -50,7 +50,7 @@
   <text x="22" y="503.0" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.25" fill="#5A5E5A" font-weight="400">only authorized operations reach it</text>
   <path d="M281 414 L281 466" fill="none" stroke="#797D79" stroke-width="1.1" marker-end="url(#sf2n-a)"/>
   <line x1="12" y1="530" x2="360" y2="530" stroke="url(#sf2n-fadeE4E5E112x360)" stroke-width="1"/>
-  <text x="12" y="548" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.25" fill="#1A1C1A" font-weight="400">Enforced outside the agent's loop:</text>
+  <text x="12" y="548" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.25" fill="#1A1C1A" font-weight="400">Enforced outside the agent’s loop:</text>
   <circle cx="20" cy="568" r="8" fill="#5A7A00"/>
   <text x="16.7" y="571.9" font-family="'IBM Plex Mono',ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="12.25" fill="#FFFFFF" font-weight="600">1</text>
   <text x="34" y="572" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.25" fill="#5A5E5A" font-weight="400">Identity and access</text>

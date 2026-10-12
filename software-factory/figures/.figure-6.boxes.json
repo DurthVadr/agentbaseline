@@ -29,7 +29,7 @@
   "y": 59.945,
   "w": 197.22499999999997,
   "h": 12.495000000000001,
-  "text": "alert's authenticated source"
+  "text": "alert\u2019s authenticated source"
  },
  {
   "tag": "grant.l",
@@ -149,7 +149,7 @@
   "y": 61.445,
   "w": 169.04999999999998,
   "h": 12.495000000000001,
-  "text": "read the service's logs,"
+  "text": "read the service\u2019s logs,"
  },
  {
   "tag": "propose.l1",
