@@ -67,17 +67,17 @@
   "tag": "wf.g0",
   "x": 54,
   "y": 249.25,
-  "w": 165.31249999999997,
+  "w": 150.93749999999997,
   "h": 12.75,
-  "text": "on CI/CD, a step runner"
+  "text": "on CI/CD or a durable"
  },
  {
   "tag": "wf.g1",
   "x": 54,
   "y": 263.75,
-  "w": 79.06249999999999,
+  "w": 114.99999999999999,
   "h": 12.75,
-  "text": "or Temporal"
+  "text": "execution engine"
  },
  {
   "tag": "#sbx",

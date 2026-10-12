@@ -107,25 +107,25 @@
   "tag": "sbx.g0",
   "x": 286,
   "y": 190.445,
-  "w": 98.61249999999998,
+  "w": 126.7875,
   "h": 12.495000000000001,
-  "text": "profile in its"
+  "text": "profile across its"
  },
  {
   "tag": "sbx.g1",
   "x": 286,
   "y": 204.945,
-  "w": 119.74374999999999,
+  "w": 140.875,
   "h": 12.495000000000001,
-  "text": "harness, workflow"
+  "text": "harness and sandbox,"
  },
  {
   "tag": "sbx.g2",
   "x": 286,
   "y": 219.445,
-  "w": 70.4375,
+  "w": 133.83124999999998,
   "h": 12.495000000000001,
-  "text": "in a skill"
+  "text": "workflow in a skill"
  },
  {
   "tag": "sbx.lp0",

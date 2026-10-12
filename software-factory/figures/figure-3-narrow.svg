@@ -1,7 +1,7 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 376 882" width="376" height="882" role="img" aria-labelledby="sf3n-t sf3n-d">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 376 897" width="376" height="897" role="img" aria-labelledby="sf3n-t sf3n-d">
   <title id="sf3n-t">Level 1, where a developer gives an agent room to work without giving it everything the developer can reach</title>
   <desc id="sf3n-d">A developer directs one coding agent in a sandbox on their machine or a remote environment, and every request it makes goes through a default-deny egress proxy that enforces the authorization service's decision. The agent can reach source control, the services its task needs, a model gateway and approved packages, and nothing else the developer can reach; its pull request goes back to the developer.</desc>
-  <rect width="376" height="882" fill="#FFFFFF"/>
+  <rect width="376" height="897" fill="#FFFFFF"/>
   <defs><marker id="sf3n-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#797D79"/></marker><marker id="sf3n-g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#5A7A00"/></marker><marker id="sf3n-s" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#5A5E5A"/></marker><linearGradient id="sf3n-fadeE4E5E124x360" gradientUnits="userSpaceOnUse" x1="24" y1="0" x2="360" y2="0"><stop offset="0" stop-color="#E4E5E1" stop-opacity="0"/><stop offset="0.06" stop-color="#E4E5E1" stop-opacity="1"/><stop offset="0.82" stop-color="#E4E5E1" stop-opacity="1"/><stop offset="1" stop-color="#E4E5E1" stop-opacity="0"/></linearGradient></defs>
   <g transform="translate(8 8)">
   <rect x="24.5" y="10.5" width="335" height="51" rx="4" fill="none" stroke="#5A7A00" stroke-width="1.25"/>
@@ -14,19 +14,20 @@
   <text x="34" y="121.0" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.5" fill="#5A5E5A" font-weight="400">directs the agent and</text>
   <text x="34" y="135.5" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.5" fill="#5A5E5A" font-weight="400">reviews its output</text>
   <text x="88" y="196" font-family="'Chakra Petch','Avenir Next',sans-serif" font-size="12.5" fill="#5A5E5A" font-weight="500" letter-spacing="0.04em">DEVELOPER’S MACHINE</text>
-  <rect x="36.5" y="214.5" width="177" height="131" rx="4" fill="#F1F2EC" stroke="#5A7A00" stroke-width="1.25"/>
+  <rect x="36.5" y="214.5" width="177" height="145.5" rx="4" fill="#F1F2EC" stroke="#5A7A00" stroke-width="1.25"/>
   <circle cx="36" cy="214" r="8" fill="#5A7A00"/>
   <text x="32.7" y="217.9" font-family="'IBM Plex Mono',ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="12.5" fill="#FFFFFF" font-weight="600">3</text>
   <text x="50" y="238" font-family="'Chakra Petch','Avenir Next',sans-serif" font-size="12.5" fill="#5A5E5A" font-weight="500" letter-spacing="0.04em">SANDBOX</text>
   <text x="50" y="264" font-family="Figtree,'Avenir Next','Helvetica Neue',sans-serif" font-size="12.5" fill="#1A1C1A" font-weight="600">Coding agent</text>
-  <text x="50" y="280.0" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.5" fill="#5A5E5A" font-weight="400">profile in its harness</text>
-  <text x="50" y="294.5" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.5" fill="#5A5E5A" font-weight="400">workflow in a skill</text>
-  <path d="M61.98 309.82 A6.5 6.5 0 1 1 54.78 307.89" fill="none" stroke="#797D79" stroke-width="1.2"/>
-  <path d="M58.16 306.66 L55.67 310.34 L53.89 305.45 z" fill="#797D79"/>
-  <text x="72" y="318" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.5" fill="#5A5E5A" font-weight="400">inner loop,</text>
-  <text x="72" y="332.5" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.5" fill="#5A5E5A" font-weight="400">until it passes</text>
+  <text x="50" y="280.0" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.5" fill="#5A5E5A" font-weight="400">profile across</text>
+  <text x="50" y="294.5" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.5" fill="#5A5E5A" font-weight="400">harness and sandbox,</text>
+  <text x="50" y="309.0" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.5" fill="#5A5E5A" font-weight="400">workflow in a skill</text>
+  <path d="M61.98 324.32 A6.5 6.5 0 1 1 54.78 322.39" fill="none" stroke="#797D79" stroke-width="1.2"/>
+  <path d="M58.16 321.16 L55.67 324.84 L53.89 319.95 z" fill="#797D79"/>
+  <text x="72" y="332.5" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.5" fill="#5A5E5A" font-weight="400">inner loop,</text>
+  <text x="72" y="347.0" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.5" fill="#5A5E5A" font-weight="400">until it passes</text>
   <path d="M74 150 L74 214" fill="none" stroke="#797D79" stroke-width="1.1" marker-end="url(#sf3n-a)"/>
-  <rect x="24.5" y="174.5" width="335" height="187" rx="4" fill="none" stroke="#797D79" stroke-width="1" stroke-dasharray="4 3"/>
+  <rect x="24.5" y="174.5" width="335" height="201.5" rx="4" fill="none" stroke="#797D79" stroke-width="1" stroke-dasharray="4 3"/>
   <rect x="232.5" y="234.5" width="103" height="83" rx="4" fill="none" stroke="#5A7A00" stroke-width="1.25"/>
   <circle cx="232" cy="234" r="8" fill="#5A7A00"/>
   <text x="228.7" y="237.9" font-family="'IBM Plex Mono',ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="12.5" fill="#FFFFFF" font-weight="600">4</text>
@@ -36,49 +37,49 @@
   <text x="242" y="300.0" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.5" fill="#5A5E5A" font-weight="400">credentials</text>
   <path d="M214 276 L232 276" fill="none" stroke="#797D79" stroke-width="1.1" marker-end="url(#sf3n-a)"/>
   <path d="M300 62 L300 234" fill="none" stroke="#5A7A00" stroke-width="1.25" stroke-dasharray="5 3" marker-end="url(#sf3n-g)"/>
-  <rect x="24.5" y="386.5" width="301" height="43" rx="4" fill="none" stroke="#5A7A00" stroke-width="1.25"/>
-  <text x="34" y="407" font-family="Figtree,'Avenir Next','Helvetica Neue',sans-serif" font-size="12.5" fill="#1A1C1A" font-weight="600">Model gateway</text>
-  <text x="34" y="423.0" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.5" fill="#5A5E5A" font-weight="400">approved models</text>
-  <rect x="24.5" y="442.5" width="301" height="43" rx="4" fill="none" stroke="#5A7A00" stroke-width="1.25"/>
-  <circle cx="24" cy="442" r="8" fill="#5A7A00"/>
-  <text x="20.7" y="445.9" font-family="'IBM Plex Mono',ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="12.5" fill="#FFFFFF" font-weight="600">2</text>
-  <text x="34" y="463" font-family="Figtree,'Avenir Next','Helvetica Neue',sans-serif" font-size="12.5" fill="#1A1C1A" font-weight="600">Admission point</text>
-  <text x="34" y="479.0" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.5" fill="#5A5E5A" font-weight="400">approved, scanned packages</text>
-  <rect x="24.5" y="498.5" width="301" height="43" rx="4" fill="none" stroke="#8F8A7C" stroke-width="1"/>
-  <text x="34" y="519" font-family="Figtree,'Avenir Next','Helvetica Neue',sans-serif" font-size="12.5" fill="#1A1C1A" font-weight="600">Services</text>
-  <text x="34" y="535.0" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.5" fill="#5A5E5A" font-weight="400">the task needs</text>
-  <rect x="24.5" y="554.5" width="301" height="43" rx="4" fill="none" stroke="#8F8A7C" stroke-width="1"/>
-  <text x="34" y="575" font-family="Figtree,'Avenir Next','Helvetica Neue',sans-serif" font-size="12.5" fill="#1A1C1A" font-weight="600">Source control</text>
-  <text x="34" y="591.0" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.5" fill="#5A5E5A" font-weight="400">the repository</text>
+  <rect x="24.5" y="401" width="301" height="43" rx="4" fill="none" stroke="#5A7A00" stroke-width="1.25"/>
+  <text x="34" y="421.5" font-family="Figtree,'Avenir Next','Helvetica Neue',sans-serif" font-size="12.5" fill="#1A1C1A" font-weight="600">Model gateway</text>
+  <text x="34" y="437.5" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.5" fill="#5A5E5A" font-weight="400">approved models</text>
+  <rect x="24.5" y="457" width="301" height="43" rx="4" fill="none" stroke="#5A7A00" stroke-width="1.25"/>
+  <circle cx="24" cy="456.5" r="8" fill="#5A7A00"/>
+  <text x="20.7" y="460.4" font-family="'IBM Plex Mono',ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="12.5" fill="#FFFFFF" font-weight="600">2</text>
+  <text x="34" y="477.5" font-family="Figtree,'Avenir Next','Helvetica Neue',sans-serif" font-size="12.5" fill="#1A1C1A" font-weight="600">Admission point</text>
+  <text x="34" y="493.5" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.5" fill="#5A5E5A" font-weight="400">approved, scanned packages</text>
+  <rect x="24.5" y="513" width="301" height="43" rx="4" fill="none" stroke="#8F8A7C" stroke-width="1"/>
+  <text x="34" y="533.5" font-family="Figtree,'Avenir Next','Helvetica Neue',sans-serif" font-size="12.5" fill="#1A1C1A" font-weight="600">Services</text>
+  <text x="34" y="549.5" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.5" fill="#5A5E5A" font-weight="400">the task needs</text>
+  <rect x="24.5" y="569" width="301" height="43" rx="4" fill="none" stroke="#8F8A7C" stroke-width="1"/>
+  <text x="34" y="589.5" font-family="Figtree,'Avenir Next','Helvetica Neue',sans-serif" font-size="12.5" fill="#1A1C1A" font-weight="600">Source control</text>
+  <text x="34" y="605.5" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.5" fill="#5A5E5A" font-weight="400">the repository</text>
   <path d="M336 276 L348 276" fill="none" stroke="#797D79" stroke-width="1.1"/>
-  <path d="M348 276 L348 576" fill="none" stroke="#797D79" stroke-width="1.1"/>
-  <path d="M348 408 L326 408" fill="none" stroke="#797D79" stroke-width="1.1" marker-end="url(#sf3n-a)"/>
-  <path d="M348 464 L326 464" fill="none" stroke="#797D79" stroke-width="1.1" marker-end="url(#sf3n-a)"/>
-  <path d="M348 520 L326 520" fill="none" stroke="#797D79" stroke-width="1.1" marker-end="url(#sf3n-a)"/>
-  <path d="M348 576 L326 576" fill="none" stroke="#797D79" stroke-width="1.1" marker-end="url(#sf3n-a)"/>
-  <path d="M74 598 L74 626" fill="none" stroke="#797D79" stroke-width="1.1" marker-end="url(#sf3n-a)"/>
-  <rect x="24.5" y="626.5" width="335" height="45" rx="4" fill="none" stroke="#8F8A7C" stroke-width="1"/>
-  <text x="34" y="647" font-family="Figtree,'Avenir Next','Helvetica Neue',sans-serif" font-size="12.5" fill="#1A1C1A" font-weight="600">Pull request</text>
-  <text x="34" y="663.0" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.5" fill="#5A5E5A" font-weight="400">the developer reviews it</text>
-  <path d="M74 672 L74 696 L4 696 L4 117 L24 117" fill="none" stroke="#5A5E5A" stroke-width="1.1" stroke-dasharray="4 3" marker-end="url(#sf3n-s)"/>
-  <text x="84" y="688" font-family="'Chakra Petch','Avenir Next',sans-serif" font-size="12.5" fill="#5A5E5A" font-weight="500" letter-spacing="0.04em">OUTER LOOP</text>
-  <text x="84" y="710" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.5" fill="#5A5E5A" font-weight="400">the developer drives the next run</text>
-  <rect x="24.5" y="728.5" width="335" height="45" rx="4" fill="none" stroke="#8F8A7C" stroke-width="1"/>
-  <text x="34" y="748" font-family="Figtree,'Avenir Next','Helvetica Neue',sans-serif" font-size="12.5" fill="#1A1C1A" font-weight="600">Observability</text>
-  <text x="34" y="764" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.5" fill="#5A5E5A" font-weight="400">harness logs, identity and proxy records</text>
-  <line x1="24" y1="788" x2="360" y2="788" stroke="url(#sf3n-fadeE4E5E124x360)" stroke-width="1"/>
-  <text x="24" y="810" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.5" fill="#1A1C1A" font-weight="400">Enforced outside the agent’s loop:</text>
-  <circle cx="32" cy="830" r="8" fill="#5A7A00"/>
-  <text x="28.7" y="833.9" font-family="'IBM Plex Mono',ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="12.5" fill="#FFFFFF" font-weight="600">1</text>
-  <text x="46" y="834" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.5" fill="#5A5E5A" font-weight="400">Identity and access</text>
-  <circle cx="180.5612244897959" cy="830" r="8" fill="#5A7A00"/>
-  <text x="177.2612244897959" y="833.9" font-family="'IBM Plex Mono',ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="12.5" fill="#FFFFFF" font-weight="600">2</text>
-  <text x="194.5612244897959" y="834" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.5" fill="#5A5E5A" font-weight="400">Supply chain</text>
-  <circle cx="32" cy="854" r="8" fill="#5A7A00"/>
-  <text x="28.7" y="857.9" font-family="'IBM Plex Mono',ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="12.5" fill="#FFFFFF" font-weight="600">3</text>
-  <text x="46" y="858" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.5" fill="#5A5E5A" font-weight="400">Sandbox</text>
-  <circle cx="180.5612244897959" cy="854" r="8" fill="#5A7A00"/>
-  <text x="177.2612244897959" y="857.9" font-family="'IBM Plex Mono',ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="12.5" fill="#FFFFFF" font-weight="600">4</text>
-  <text x="194.5612244897959" y="858" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.5" fill="#5A5E5A" font-weight="400">Network</text>
+  <path d="M348 276 L348 590.5" fill="none" stroke="#797D79" stroke-width="1.1"/>
+  <path d="M348 422.5 L326 422.5" fill="none" stroke="#797D79" stroke-width="1.1" marker-end="url(#sf3n-a)"/>
+  <path d="M348 478.5 L326 478.5" fill="none" stroke="#797D79" stroke-width="1.1" marker-end="url(#sf3n-a)"/>
+  <path d="M348 534.5 L326 534.5" fill="none" stroke="#797D79" stroke-width="1.1" marker-end="url(#sf3n-a)"/>
+  <path d="M348 590.5 L326 590.5" fill="none" stroke="#797D79" stroke-width="1.1" marker-end="url(#sf3n-a)"/>
+  <path d="M74 612.5 L74 640.5" fill="none" stroke="#797D79" stroke-width="1.1" marker-end="url(#sf3n-a)"/>
+  <rect x="24.5" y="641" width="335" height="45" rx="4" fill="none" stroke="#8F8A7C" stroke-width="1"/>
+  <text x="34" y="661.5" font-family="Figtree,'Avenir Next','Helvetica Neue',sans-serif" font-size="12.5" fill="#1A1C1A" font-weight="600">Pull request</text>
+  <text x="34" y="677.5" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.5" fill="#5A5E5A" font-weight="400">the developer reviews it</text>
+  <path d="M74 686.5 L74 710.5 L4 710.5 L4 117 L24 117" fill="none" stroke="#5A5E5A" stroke-width="1.1" stroke-dasharray="4 3" marker-end="url(#sf3n-s)"/>
+  <text x="84" y="702.5" font-family="'Chakra Petch','Avenir Next',sans-serif" font-size="12.5" fill="#5A5E5A" font-weight="500" letter-spacing="0.04em">OUTER LOOP</text>
+  <text x="84" y="724.5" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.5" fill="#5A5E5A" font-weight="400">the developer drives the next run</text>
+  <rect x="24.5" y="743" width="335" height="45" rx="4" fill="none" stroke="#8F8A7C" stroke-width="1"/>
+  <text x="34" y="762.5" font-family="Figtree,'Avenir Next','Helvetica Neue',sans-serif" font-size="12.5" fill="#1A1C1A" font-weight="600">Observability</text>
+  <text x="34" y="778.5" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.5" fill="#5A5E5A" font-weight="400">harness logs, identity and proxy records</text>
+  <line x1="24" y1="802.5" x2="360" y2="802.5" stroke="url(#sf3n-fadeE4E5E124x360)" stroke-width="1"/>
+  <text x="24" y="824.5" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.5" fill="#1A1C1A" font-weight="400">Enforced outside the agent’s loop:</text>
+  <circle cx="32" cy="844.5" r="8" fill="#5A7A00"/>
+  <text x="28.7" y="848.4" font-family="'IBM Plex Mono',ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="12.5" fill="#FFFFFF" font-weight="600">1</text>
+  <text x="46" y="848.5" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.5" fill="#5A5E5A" font-weight="400">Identity and access</text>
+  <circle cx="180.5612244897959" cy="844.5" r="8" fill="#5A7A00"/>
+  <text x="177.2612244897959" y="848.4" font-family="'IBM Plex Mono',ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="12.5" fill="#FFFFFF" font-weight="600">2</text>
+  <text x="194.5612244897959" y="848.5" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.5" fill="#5A5E5A" font-weight="400">Supply chain</text>
+  <circle cx="32" cy="868.5" r="8" fill="#5A7A00"/>
+  <text x="28.7" y="872.4" font-family="'IBM Plex Mono',ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="12.5" fill="#FFFFFF" font-weight="600">3</text>
+  <text x="46" y="872.5" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.5" fill="#5A5E5A" font-weight="400">Sandbox</text>
+  <circle cx="180.5612244897959" cy="868.5" r="8" fill="#5A7A00"/>
+  <text x="177.2612244897959" y="872.4" font-family="'IBM Plex Mono',ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="12.5" fill="#FFFFFF" font-weight="600">4</text>
+  <text x="194.5612244897959" y="872.5" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.5" fill="#5A5E5A" font-weight="400">Network</text>
   </g>
   </svg>

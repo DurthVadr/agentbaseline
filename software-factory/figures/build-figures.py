@@ -103,8 +103,8 @@ ALT = {
        "enforces the authorization service's decision. The agent can reach source control, the "
        "services its task needs, a model gateway and approved packages, and nothing else the "
        "developer can reach; its pull request goes back to the developer.",
-    4: "A request, event, schedule or ticket starts a workflow on CI/CD, a step runner or "
-       "Temporal, which runs a coding agent in a fresh sandbox, behind its own proxy, for each "
+    4: "A request, event, schedule or ticket starts a workflow on CI/CD or a durable "
+       "execution engine, which runs a coding agent in a fresh sandbox, behind its own proxy, for each "
        "run; the pull request goes through approval to merge, and review feedback starts the "
        "next run. The authorization service, proxy and destinations are the same as at "
        "Level 1.",
@@ -205,6 +205,9 @@ class SF(Fig):
     STYLE = {
         "card":    ('fill="none"', RULE, 1, ""),
         "guard":   ('fill="none"', GUARD, 1.25, ""),
+        # a guard drawn in front of its own stack: opaque, so the cards behind
+        # show only their right and bottom edges, as the sandbox stack does
+        "guardfill": (f'fill="{C["plate"]}"', GUARD, 1.25, ""),
         "sandbox": (f'fill="{WASH}"', GUARD, 1.25, ""),
         "agent":   (f'fill="{WASH}"', RULE, 1, ""),
         "ghost":   (f'fill="{C["plate"]}"', GUARD, 0.75, ""),
@@ -212,7 +215,7 @@ class SF(Fig):
         "blocked": ('fill="none"', RULE, 1, ' stroke-dasharray="3 3"'),
         "floor":   ('fill="none"', RULE, 1, ""),
     }
-    SOLID = {"card", "guard", "sandbox", "agent", "blocked", "floor"}
+    SOLID = {"card", "guard", "guardfill", "sandbox", "agent", "blocked", "floor"}
 
     def box(self, x, y, w, h, kind, tag):
         """Drawn half a unit inside its box, so a hairline on the canvas edge is
@@ -404,7 +407,8 @@ def skel_proxy(f, gloss=("default-deny;", "attaches", "credentials"), k=K, stack
     if stack:  # the others sit behind it, so the one drawn in front keeps its size
         for d in (6, 3):
             f.box(x0 + d, y0 + d, x1 - x0, y1 - y0, "ghost", f"pghost{d}")
-    f.node(x0, y0, x1 - x0, y1 - y0, "Egress proxy", gloss, kind="guard", num=4, tag="proxy")
+    f.node(x0, y0, x1 - x0, y1 - y0, "Egress proxy", gloss,
+           kind="guardfill" if stack else "guard", num=4, tag="proxy")
     return x1, y1
 
 
@@ -527,7 +531,7 @@ def level1(f):
     f.node(K.A[0], K.MID - 40, K.A[1] - K.A[0], 80, "Developer",
            ["directs the", "agent, reviews", "its output"], tag="dev")
     sx0, sy0, sx1, sy1 = sandbox_one(f, "Sandbox", "Coding agent",
-                                     ["profile in its", "harness, workflow", "in a skill"])
+                                     ["profile across its", "harness and sandbox,", "workflow in a skill"])
     f.link([(K.A[1], K.MID), (sx0, K.MID)], tag="directs")
     skel_proxy(f)
     f.link([(sx1, K.MID), (K.PROXY[0], K.MID)], tag="traffic")
@@ -548,7 +552,7 @@ def level2(f):
     f.node(K.A[0], K.MID - 48, K.A[1] - K.A[0], 96, "Request",
            ["or an event,", "a schedule", "or a ticket"], tag="req")
     f.node(K.B[0], K.MID - 48, K.B[1] - K.B[0], 96, "Workflow",
-           ["on CI/CD, a", "step runner", "or Temporal"], tag="wf")
+           ["on CI/CD or", "a durable", "execution", "engine"], tag="wf")
     f.link([(K.A[1], K.MID), (K.B[0], K.MID)], tag="starts")
     sx0, sy0, sx1, sy1 = sandbox_one(f, "Sandbox per run", "Coding agent",
                                      ["own identity,", "own profile"], stack=True)
@@ -899,7 +903,7 @@ def narrow_level(n, title, desc):
     y += 40
     ix0, ix1 = N.IN
     if n == 2:
-        f.node(ix0, y, ix1 - ix0, 66, "Workflow", ["on CI/CD, a step runner", "or Temporal"],
+        f.node(ix0, y, ix1 - ix0, 66, "Workflow", ["on CI/CD or a durable", "execution engine"],
                tag="wf")
         f.link([(N.GX, prev), (N.GX, y)], tag="starts")
         prev = y + 66
@@ -934,7 +938,10 @@ def narrow_level(n, title, desc):
         f.link([(N.GX + 60, y), (N.GX + 60, y - 16 - STACK)], tag="watch")
         y += 46 + 16
     else:
-        sh = 132
+        glosses = (["own identity", "and profile"] if n == 2 else
+                   ["profile across", "harness and sandbox,", "workflow in a skill"])
+        extra = (len(glosses) - 2) * 14.5  # a third gloss line pushes the loop down
+        sh = 132 + extra
         if n == 2:  # a fresh sandbox per run
             for d in (6, 3):
                 f.box(ix0 + d, y + d, ix1 - ix0 - 6, sh - 6, "ghost", f"ghost{d}")
@@ -943,12 +950,11 @@ def narrow_level(n, title, desc):
         f.badge(ix0, y, 3, "sbx")
         f.lab(ix0 + PAD + 4, y + 24, "Sandbox per run" if n == 2 else "Sandbox", "sbx.l")
         f.name(ix0 + PAD + 4, y + 50, "Coding agent", "sbx.n")
-        for i, g_ in enumerate(["own identity", "and profile"] if n == 2 else
-                               ["profile in its harness", "workflow in a skill"]):
+        for i, g_ in enumerate(glosses):
             f.gloss(ix0 + PAD + 4, y + 66 + i * 14.5, g_, f"sbx.g{i}")
-        f.loop_glyph(ix0 + PAD + 11, y + 100, "sbx.loop")
-        f.gloss(ix0 + PAD + 26, y + 104, "inner loop,", "sbx.lp0")
-        f.gloss(ix0 + PAD + 26, y + 118.5, "until it passes", "sbx.lp1")
+        f.loop_glyph(ix0 + PAD + 11, y + 100 + extra, "sbx.loop")
+        f.gloss(ix0 + PAD + 26, y + 104 + extra, "inner loop,", "sbx.lp0")
+        f.gloss(ix0 + PAD + 26, y + 118.5 + extra, "until it passes", "sbx.lp1")
         f.link([(N.GX, prev), (N.GX, y)], tag="into")
         sb_mid = y + 62
         y += sh + 16
@@ -961,7 +967,8 @@ def narrow_level(n, title, desc):
         for d in (6, 3):
             f.box(N.PROXY[0] + d, py0 + d, N.PROXY[1] - N.PROXY[0], 84, "ghost", f"pghost{d}")
     f.node(N.PROXY[0], py0, N.PROXY[1] - N.PROXY[0], 84, "Egress proxy",
-           ["default-deny;", "attaches", "credentials"], kind="guard", num=4, tag="proxy")
+           ["default-deny;", "attaches", "credentials"],
+           kind="guardfill" if n > 1 else "guard", num=4, tag="proxy")
     f.link([(ix1 - (6 if n == 2 else 0), sb_mid), (N.PROXY[0], sb_mid)], tag="traffic")
     gx = mid(N.PROXY) + 16
     f.link([(gx, N.AUTH[3]), (gx, py0)], "grant", tag="grant")

@@ -121,7 +121,7 @@
   },
   {
    "tag": "proxy",
-   "kind": "guard",
+   "kind": "guardfill",
    "x": 464,
    "y": 166,
    "w": 104,

@@ -18,13 +18,13 @@ The architecture builds on [Agent Baseline](https://agentbaseline.org/), and the
 
 # Introduction
 
-*Bolded terms are defined in the Definitions section of the appendix.*
-
 Software factories have existed for decades, but running them with agents is new, and the change has been fast. A year ago, Geoffrey Huntley's [Ralph loop](https://ghuntley.com/ralph/) stood out for showing that an agent could work unattended overnight. Today [Vercel's factory](https://vercel.com/blog/building-a-software-factory-for-ai-sdk) authors 25 to 35% of its AI SDK team's merged pull requests, [Uber reports](https://www.uber.com/us/en/blog/efficient-software-factory/) that more than 70% of its pull requests come from agents, and [Stripe's minions](https://stripe.dev/blog/minions-stripes-one-shot-end-to-end-coding-agents) go from a Slack message to a pull request that passes CI with no human interaction.
+
+*NOTE: Bolded terms are defined in the Definitions section of the appendix.*
 
 ## What a software factory is {#what-a-software-factory-is}
 
-A **software factory** is an agentic system that turns a prompt, a ticket, or a specification into tested code for an existing codebase, using one agent or several, and increasingly deploys and maintains what it builds. Scoping a factory to a specific codebase and use is part of its design, and the organization running it remains accountable for what it produces. It's assembled from agents and their harnesses, models, skills, tools and Model Context Protocol (MCP) servers, dependencies, and **blueprints**, and each agent works under a **profile** for the kind of job it does, such as incident response. Its skills and context capture the organization's policies, practices, and workflows, so what good looks like for each kind of work can be reused across developers, workflows, and models.
+A **software factory** is an agentic system that turns a prompt, a ticket, or a specification into tested code for an existing codebase, using one agent or several, and increasingly deploys and maintains what it builds. Scoping a factory to a specific codebase and use is part of its design, and the organization running it remains accountable for what it produces. It's assembled from agents and their harnesses, models, skills, tools and Model Context Protocol (MCP) servers, dependencies, and **blueprints**, and each agent works under a **profile** for the kind of job it does, such as incident response, which brings together the skills, tools, context, and sandbox configuration it works with. Its skills and context capture the organization's policies, practices, and workflows, so what good looks like for each kind of work can be reused across developers, workflows, and models.
 
 ![Work loops until it passes, and problems feed back to design](figures/figure-1.svg){alt="Work arrives as a prompt, a requirements document or a ticket, design sets its limits, and an inner loop assembles, builds in a sandbox and verifies the change until it passes. After review and a deploy under approval policy, an outer loop carries review, evals and production feedback back to design, and production signals start new work."}
 
@@ -77,7 +77,7 @@ Credentials stay at the egress proxy, so an agent never holds one. Scoped access
 
 ## Supply chain: which components and sources it can use
 
-Agents use only components and sources the organization has approved. A sandbox is built from verified components, such as its image, harness, skills, and tools, and packages and models that enter during a run come only through an admission point, such as a registry or a dedicated firewall, which hides unsafe versions so a goal-seeking agent doesn't go looking for them.
+Agents use only components and sources the organization has approved. A sandbox is built from verified components, such as its image, harness, skills, and tools, and packages and models that enter during a run come only through an admission point, such as a registry or a dedicated firewall, which hides unsafe versions so a goal-seeking agent doesn't go looking for them. The factory's own outputs carry provenance in turn, so downstream systems can verify where they came from.
 
 Nothing that enters the sandbox should carry credentials, so source code, task data, and responses are screened for embedded keys and tokens and stripped of them before they cross. Admission still can't catch everything, since provenance proves where a component came from, not that it's safe, and no check can prove natural-language input is safe. When a [Shai-Hulud-style](https://socket.dev/blog/tinycolor-supply-chain-attack-affects-40-packages) package gets through, it finds no credentials to steal, and the sandbox and network limit what it can do.
 
@@ -123,19 +123,19 @@ How much of the work a factory takes on by itself depends on its **orchestrator*
 
 | Level | Orchestrator | Execution layer | New architectural challenge |
 | :---- | :---- | :---- | :---- |
-| 1\. Human-Orchestrated | The developer | The developer, through the agent harness | Securing an agent under a developer's supervision |
-| 2\. Workflow-Orchestrated | A predefined workflow | A durable system, such as CI/CD or Temporal | Securing shared execution and delegated access |
-| 3\. Agent-Orchestrated | An orchestrator agent, or a workflow that uses one for judgment calls | The same durable system | Keeping an agent's plans from becoming its permissions |
+| Human-Orchestrated | The developer | The developer, through the agent harness | Securing an agent under a developer's supervision |
+| Workflow-Orchestrated | A predefined workflow | A durable system, such as CI/CD or a durable execution engine | Securing shared execution and delegated access |
+| Agent-Orchestrated | An orchestrator agent, or a workflow that uses one for judgment calls | The same durable system | Keeping an agent's plans from becoming its permissions |
 
 ## Level 1: Human-Orchestrated Factory
 
 ![Level 1, where a developer gives an agent room to work without giving it everything the developer can reach](figures/figure-3.svg){alt="A developer directs one coding agent in a sandbox on their machine or a remote environment, and every request it makes goes through a default-deny egress proxy that enforces the authorization service's decision. The agent can reach source control, the services its task needs, a model gateway and approved packages, and nothing else the developer can reach; its pull request goes back to the developer."}
 
-The developer directs a coding agent and reviews its output, but the agent still makes its own decisions inside the inner loop. Its sandbox can reach the working repository, approved package registries, and the specific development services the task needs, which gives it room to edit code, install dependencies, run tests, and open pull requests without inheriting everything the developer can access. That leaves the developer reviewing the result instead of approving each command. Its profile usually lives in the **agent harness** and its workflow in a **skill**, while the four boundaries enforce what it can reach and do.
+The developer directs a coding agent and reviews its output, but the agent still makes its own decisions inside the inner loop. Its sandbox can reach the working repository, approved package registries, and the specific development services the task needs, which gives it room to edit code, install dependencies, run tests, and open pull requests without inheriting everything the developer can access. That leaves the developer reviewing the result instead of approving each command. At this level the profile is usually spread across the **agent harness** configuration and the sandbox setup, with the workflow defined in a **skill**, while the four boundaries enforce what it can reach and do.
 
 ## Level 2: Workflow-Orchestrated Factory
 
-![Level 2, where a workflow orchestrates](figures/figure-4.svg){alt="A request, event, schedule or ticket starts a workflow on CI/CD, a step runner or Temporal, which runs a coding agent in a fresh sandbox, behind its own proxy, for each run; the pull request goes through approval to merge, and review feedback starts the next run. The authorization service, proxy and destinations are the same as at Level 1."}
+![Level 2, where a workflow orchestrates](figures/figure-4.svg){alt="A request, event, schedule or ticket starts a workflow on CI/CD or a durable execution engine, which runs a coding agent in a fresh sandbox, behind its own proxy, for each run; the pull request goes through approval to merge, and review feedback starts the next run. The authorization service, proxy and destinations are the same as at Level 1."}
 
 The factory becomes a shared service that starts work from requests, events, schedules, or tickets. It gets its own identity and acts for the requester when there is one; every run gets a fresh sandbox, and review feedback drives the next run until the pull request is ready. Evals and run metrics across many runs show where the factory needs to improve, and because it's shared, those improvements reach everyone using it, or as [Shopify](https://shopify.engineering/under-the-river) puts it, "one person's hard-won fix becomes the next person's starting point."
 
@@ -157,7 +157,7 @@ A production alert reports elevated errors in a payments service, and the orches
 
 Partway through, the agent decides it needs logs from an unrelated authentication service. Its reasoning may be sound, but the task doesn't cover that service, so the proxy blocks the call, and the agent keeps working within its scope unless it can justify a new authorization decision. The agent decided what it wanted, the authorization service decided what the task justified, and the proxy determined what happened. Repeated attempts outside its scope would be flagged by monitoring and could lead to its grants being revoked and the run stopped.
 
-The fix is tested in the sandbox, using a library admitted through the supply chain, and leaves as a pull request that approval policy routes to a person or approves automatically. The deploy reaches a small share of traffic first, and the error rate afterward confirms the fix or starts the next run.
+The fix is tested in the sandbox, using a library admitted through the supply chain, and leaves as a pull request with a provenance attestation that approval policy routes to a person or approves automatically. The deploy reaches a small share of traffic first, and the error rate afterward confirms the fix or starts the next run.
 
 # Conclusion
 
@@ -187,6 +187,7 @@ Security built into the factory, rather than added around it, is what makes that
 * Admit packages, dependencies, and models during a run only through an admission point, such as a registry, a proxy, or a supply chain firewall, that serves approved versions allowed by the agent's profile and hides unsafe ones, so a goal-seeking agent doesn't go looking for them.
 * Keep an approved set of sources the agent may reach, such as MCP servers, APIs, and registries, for the network boundary to enforce.
 * Block any component found to be compromised across the whole factory.
+* * Attach provenance to every artifact the factory produces, such as an SBOM and build attestations, recording which agent and profile produced it, which component versions it was built from, including those resolved at runtime, and which policy applied.
 * Keep credentials out of everything that enters the sandbox, screening source code, task data, and responses from downstream systems for embedded credentials and removing them before they cross.
 * Treat inputs separately from components. Validate the structure, provenance, and type of prompts, PRDs, tickets, and signals before the factory acts on them, and add heuristic injection detection where useful. An LLM acting as judge can add a layer, but the same injected text it screens can manipulate it, so don't rely on it alone.
 
@@ -245,9 +246,9 @@ Security built into the factory, rather than added around it, is what makes that
 
 ## Implementation reference
 
-### Profiles and authenticated configuration {#profiles-and-authenticated-configuration}
+### Profiles & Configuration {#profiles-configuration}
 
-A profile determines how an agent's sandbox is configured, including the image it starts from. From Level 2 onward, that runtime configuration must be authenticated and tamper-evident, so the runtime can verify it and refuse to start when it can't, or when required controls are missing. Packaging the profile as signed metadata in an OCI image is one way to do this, and binding a signed configuration to an approved image at launch is another. Signing shows the profile hasn't been tampered with, but only its enforced parts, the access, action, and network rules, act as boundaries, while its context, such as context files, hooks, and blueprints, guides the agent without constraining it.
+A profile defines everything an agent of a given kind works with, including its context, such as skills, context files, and blueprints, its tools, MCP servers, hooks, and approved packages, the sandbox it runs in, from its image and isolation level to its resource limits, and the access, action, and network rules that bound it. Agents of the same kind share a profile, and each one's sandbox is configured from it at launch. Because it's a single versioned artifact, a profile makes each kind of agent repeatable to set up and tear down, lets teams fork it for a new kind of job, and gives the outer loop one thing to improve, evaluate, and roll back. From Level 2 onward, the profile must be authenticated and tamper-evident, so the runtime can verify it and refuse to start when it can't, or when required controls are missing. Packaging the profile as signed metadata in an OCI image is one way to do this, and binding a signed configuration to an approved image at launch is another. Signing covers the whole profile, but only its enforced parts, the access, action, and network rules and the sandbox configuration, act as boundaries, while its context and hooks guide the agent without constraining it.
 
 ### Authorizing a task
 
@@ -265,9 +266,9 @@ At Level 1, the sandbox and egress proxy usually have to be added around a local
 | :---- | :---- | :---- | :---- |
 | Identity and access | The agent acts as the developer or as itself, within the developer's identity boundary. | The factory acts on behalf of the requester or as itself, and revoking the agent's grants and stopping its sandbox acts as a kill switch. | Each agent has its own identity and access, and acts for itself, for another agent, or for a person, with authority narrowing at each hop. |
 | Supply chain | Only approved registries and packages are reachable, through the egress proxy or another admission point, what's allowed is scanned, and new versions wait out a cooldown. | Sandboxes start from approved images with attested base layers and authenticated configuration. Every source an agent reaches, including skills, packages, models, MCP servers, and APIs, is checked against the approved set. | The signals that start work are checked too, and agent inputs and outputs, including tickets, context, and messages from other agents, are validated for structure and provenance, with heuristic screening for injection. |
-| Sandbox | A sandbox on the developer's machine or in a remote environment, with writes kept to the task workspace and no access to the host filesystem. | A fresh sandbox per task on shared infrastructure, configured from an authenticated profile and destroyed when the task ends. | Each agent in a run gets its own sandbox, configured from that agent's profile, and monitoring that watches from outside can tighten or stop it mid-run. |
+| Sandbox | A sandbox on the developer's machine or in a remote environment, with writes kept to the task workspace and no access to the host filesystem. | A fresh sandbox per task on shared infrastructure, configured from an authenticated profile and destroyed when the task ends. | Each agent in a run gets its own sandbox, configured from the profile for its kind of agent, and monitoring that watches from outside can tighten or stop it mid-run. |
 | Network | A default-deny egress proxy outside the sandbox that all traffic passes through. | An egress proxy per agent, with rules from its profile. The factory isn't reachable from outside. | Each agent in a run has its own egress rules and task scope, and traffic between agents passes through the same enforcement as any other traffic. |
-| Execution layer | The developer, working through the agent harness. | A durable system, such as a CI/CD pipeline, step runner, or Temporal, that starts runs, launches agents in sandboxes, and retries failures. | The same durable execution layer, starting each agent only with its authorized scope. |
+| Execution layer | The developer, working through the agent harness. | A durable system, such as a CI/CD pipeline, step runner, or durable execution engine, that starts runs, launches agents in sandboxes, and retries failures. | The same durable execution layer, starting each agent only with its authorized scope. |
 | Orchestrator | The developer, who kicks off each run and drives the outer loop. | A predefined workflow that turns requests and tickets into runs. | An orchestrator agent that takes work from requests and signals, runs preflight, and divides the work across agents. |
 | Observability | Harness logs plus identity and proxy records, reviewed by the developer. | Records from all four boundaries collected in one place and linked by run. Evals track output quality. | Telemetry and evals across runs, monitoring of running agents, and stopping agents that drift or become ineffective. |
 
@@ -322,7 +323,7 @@ Developers are accountable for the software they ship, whether they write it or 
 
 **Egress Proxy:** The enforcement point that a sandbox's network traffic passes through once the sandbox starts, in both directions. It blocks what the runtime authorization service hasn't authorized, attaches credentials so the agent never holds them, and may be one proxy or several protocol-aware gateways. It's part of the network boundary.
 
-**Execution Layer:** What everything in the factory runs on, which starts agents with their profiles, sequences work, retries failures, and stops runs. At Level 1 it's the developer working through the agent harness, and from Level 2 it's a durable system, such as a CI/CD pipeline, a step runner, or Temporal.
+**Execution Layer:** What everything in the factory runs on, which starts agents with their profiles, sequences work, retries failures, and stops runs. At Level 1 it's the developer working through the agent harness, and from Level 2 it's a durable system, such as a CI/CD pipeline, a step runner, or a durable execution engine.
 
 **Evals:** Tests that measure how well an agent or the factory performs over time, as part of observability.
 
@@ -338,7 +339,7 @@ Developers are accountable for the software they ship, whether they write it or 
 
 **Preflight:** The Level 3 orchestrator's planning step, in which it gathers context and proposes a profile, task scope, and resources for each piece of work.
 
-**Profile:** The capabilities, policy, and context given to an agent for a kind of job, such as incident response. It sets the upper bound on what the agent can do and determines how its sandbox is configured, as [Profiles and authenticated configuration](#profiles-and-authenticated-configuration) describes.
+**Profile:** Everything an agent of a given kind works with, such as an incident-response agent, including its context, tools, hooks, and packages, the sandbox it runs in, and the access, action, and network rules that bound it. Many agents can share a profile, each with its own identity and task. It sets the upper bound on what the agent can do, as [Profiles & Configuration](#profiles-configuration) describes.
 
 **Runtime Authorization Service:** The service that determines and authorizes the access an agent needs for its assigned task, within its profile, delegation, and organizational policy. Enforcement points check requests against the scope it authorizes, and it records every grant and can revoke access. It's part of the identity and access boundary.
 
