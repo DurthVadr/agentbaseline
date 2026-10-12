@@ -3,38 +3,38 @@
   <g transform="translate(8 8)">
   <rect x="40.5" y="10.5" width="319" height="45" rx="4" fill="none" stroke="var(--fig-rule,var(--baseline))" stroke-width="1"/>
   <text x="50" y="31" font-family="Figtree,'Avenir Next','Helvetica Neue',sans-serif" font-size="12.5" fill="var(--fig-ink,var(--ink))" font-weight="600">Inputs</text>
-  <text x="50" y="47.0" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.25" fill="var(--fig-soft,var(--soft))" font-weight="400">a prompt, a PRD or a ticket</text>
+  <text x="50" y="47.0" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.5" fill="var(--fig-soft,var(--soft))" font-weight="400">a prompt, a PRD or a ticket</text>
   <path d="M80 56 L80 78" fill="none" stroke="var(--fig-faint,var(--faint))" stroke-width="1.1" marker-end="url(#sf1n-a)"/>
   <rect x="40.5" y="78.5" width="319" height="45" rx="4" fill="none" stroke="var(--fig-rule,var(--baseline))" stroke-width="1"/>
   <text x="50" y="99" font-family="Figtree,'Avenir Next','Helvetica Neue',sans-serif" font-size="12.5" fill="var(--fig-ink,var(--ink))" font-weight="600">Design</text>
-  <text x="50" y="115.0" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.25" fill="var(--fig-soft,var(--soft))" font-weight="400">sets the limits, in advance</text>
+  <text x="50" y="115.0" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.5" fill="var(--fig-soft,var(--soft))" font-weight="400">sets the limits, in advance</text>
   <path d="M80 124 L80 146" fill="none" stroke="var(--fig-faint,var(--faint))" stroke-width="1.1" marker-end="url(#sf1n-a)"/>
-  <text x="52" y="168" font-family="'Chakra Petch','Avenir Next',sans-serif" font-size="12.25" fill="var(--fig-soft,var(--soft))" font-weight="500" letter-spacing="0.04em">INNER LOOP</text>
+  <text x="52" y="168" font-family="'Chakra Petch','Avenir Next',sans-serif" font-size="12.5" fill="var(--fig-soft,var(--soft))" font-weight="500" letter-spacing="0.04em">INNER LOOP</text>
   <rect x="52.5" y="182.5" width="273" height="45" rx="4" fill="none" stroke="var(--fig-rule,var(--baseline))" stroke-width="1"/>
   <text x="62" y="203" font-family="Figtree,'Avenir Next','Helvetica Neue',sans-serif" font-size="12.5" fill="var(--fig-ink,var(--ink))" font-weight="600">Assemble</text>
-  <text x="62" y="219.0" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.25" fill="var(--fig-soft,var(--soft))" font-weight="400">what the task needs</text>
+  <text x="62" y="219.0" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.5" fill="var(--fig-soft,var(--soft))" font-weight="400">what the task needs</text>
   <rect x="52.5" y="250.5" width="273" height="45" rx="4" fill="none" stroke="var(--fig-rule,var(--baseline))" stroke-width="1"/>
   <text x="62" y="271" font-family="Figtree,'Avenir Next','Helvetica Neue',sans-serif" font-size="12.5" fill="var(--fig-ink,var(--ink))" font-weight="600">Build</text>
-  <text x="62" y="287.0" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.25" fill="var(--fig-soft,var(--soft))" font-weight="400">the change, in a sandbox</text>
+  <text x="62" y="287.0" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.5" fill="var(--fig-soft,var(--soft))" font-weight="400">the change, in a sandbox</text>
   <path d="M92 228 L92 250" fill="none" stroke="var(--fig-faint,var(--faint))" stroke-width="1.1" marker-end="url(#sf1n-a)"/>
   <rect x="52.5" y="318.5" width="273" height="45" rx="4" fill="none" stroke="var(--fig-rule,var(--baseline))" stroke-width="1"/>
   <text x="62" y="339" font-family="Figtree,'Avenir Next','Helvetica Neue',sans-serif" font-size="12.5" fill="var(--fig-ink,var(--ink))" font-weight="600">Verify</text>
-  <text x="62" y="355.0" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.25" fill="var(--fig-soft,var(--soft))" font-weight="400">against the standards</text>
+  <text x="62" y="355.0" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.5" fill="var(--fig-soft,var(--soft))" font-weight="400">against the standards</text>
   <path d="M92 296 L92 318" fill="none" stroke="var(--fig-faint,var(--faint))" stroke-width="1.1" marker-end="url(#sf1n-a)"/>
   <path d="M326 341 L346 341 L346 205 L326 205" fill="none" stroke="var(--fig-faint,var(--faint))" stroke-width="1.1" marker-end="url(#sf1n-a)"/>
-  <text x="52" y="384" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.25" fill="var(--fig-soft,var(--soft))" font-weight="400">repeats until the work passes</text>
+  <text x="52" y="384" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.5" fill="var(--fig-soft,var(--soft))" font-weight="400">repeats until the work passes</text>
   <rect x="40.5" y="146.5" width="319" height="249" rx="4" fill="none" stroke="var(--fig-faint,var(--faint))" stroke-width="1" stroke-dasharray="4 3"/>
   <path d="M80 396 L80 418" fill="none" stroke="var(--fig-faint,var(--faint))" stroke-width="1.1" marker-end="url(#sf1n-a)"/>
   <rect x="40.5" y="418.5" width="319" height="45" rx="4" fill="none" stroke="var(--fig-rule,var(--baseline))" stroke-width="1"/>
   <text x="50" y="439" font-family="Figtree,'Avenir Next','Helvetica Neue',sans-serif" font-size="12.5" fill="var(--fig-ink,var(--ink))" font-weight="600">Review</text>
-  <text x="50" y="455.0" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.25" fill="var(--fig-soft,var(--soft))" font-weight="400">and evals</text>
+  <text x="50" y="455.0" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.5" fill="var(--fig-soft,var(--soft))" font-weight="400">and evals</text>
   <rect x="40.5" y="486.5" width="319" height="45" rx="4" fill="none" stroke="var(--fig-rule,var(--baseline))" stroke-width="1"/>
   <text x="50" y="507" font-family="Figtree,'Avenir Next','Helvetica Neue',sans-serif" font-size="12.5" fill="var(--fig-ink,var(--ink))" font-weight="600">Deploy</text>
-  <text x="50" y="523.0" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.25" fill="var(--fig-soft,var(--soft))" font-weight="400">under approval policy</text>
+  <text x="50" y="523.0" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.5" fill="var(--fig-soft,var(--soft))" font-weight="400">under approval policy</text>
   <path d="M80 464 L80 486" fill="none" stroke="var(--fig-faint,var(--faint))" stroke-width="1.1" marker-end="url(#sf1n-a)"/>
   <rect x="40.5" y="554.5" width="319" height="45" rx="4" fill="none" stroke="var(--fig-rule,var(--baseline))" stroke-width="1"/>
   <text x="50" y="575" font-family="Figtree,'Avenir Next','Helvetica Neue',sans-serif" font-size="12.5" fill="var(--fig-ink,var(--ink))" font-weight="600">Production</text>
-  <text x="50" y="591.0" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.25" fill="var(--fig-soft,var(--soft))" font-weight="400">sends back signals</text>
+  <text x="50" y="591.0" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.5" fill="var(--fig-soft,var(--soft))" font-weight="400">sends back signals</text>
   <path d="M80 532 L80 554" fill="none" stroke="var(--fig-faint,var(--faint))" stroke-width="1.1" marker-end="url(#sf1n-a)"/>
   <path d="M40 570 L22 570 L22 101 L40 101" fill="none" stroke="var(--fig-soft,var(--soft))" stroke-width="1.1" stroke-dasharray="4 3" marker-end="url(#sf1n-s)"/>
   <path d="M40 586 L6 586 L6 33 L40 33" fill="none" stroke="var(--fig-soft,var(--soft))" stroke-width="1.1" stroke-dasharray="4 3" marker-end="url(#sf1n-s)"/>

@@ -63,6 +63,10 @@ RULE = "#8F8A7C"
 W = 720
 MARGIN = 8
 NAME, GLOSS, LAB, NUM = 12.5, 12.25, 12.25, 12.25
+# Narrow (phone) compositions are shown as small as 304 px (a 320 px phone with
+# 8 px gutters), where 12.25 units would render at 9.9 px; their smallest run is
+# 12.5 units, 10.1 px there. bin/check-figure holds both.
+NARROW_TYPE = 12.5
 PAD = 10                              # card inset
 
 # ── what each figure says, in words ──────────────────────────────────────────
@@ -165,10 +169,24 @@ class SF(Fig):
     def name(self, x, y, s, tag, size=NAME):
         return self.text(x, y, s, size, C["ink"], "600", tag=tag, face="head")
 
-    def gloss(self, x, y, s, tag, size=GLOSS, fill=None):
-        return self.text(x, y, s, size, fill or C["soft"], tag=tag)
+    # sizes per figure: a narrow composition sets its small runs larger
+    @property
+    def gs(self):
+        return NARROW_TYPE if self.narrow else GLOSS
 
-    def lab(self, x, y, s, tag, fill=None, size=LAB):
+    @property
+    def ls(self):
+        return NARROW_TYPE if self.narrow else LAB
+
+    @property
+    def ns(self):
+        return NARROW_TYPE if self.narrow else NUM
+
+    def gloss(self, x, y, s, tag, size=None, fill=None):
+        return self.text(x, y, s, size or self.gs, fill or C["soft"], tag=tag)
+
+    def lab(self, x, y, s, tag, fill=None, size=None):
+        size = size or self.ls
         return self.text(x, y, s.upper(), size, fill or C["soft"], "500", False, LS,
                          tag=tag, face="label")
 
@@ -176,8 +194,8 @@ class SF(Fig):
         if kind == "name":
             return len(s) * self._adv(NAME, False, "600", "head")
         if kind == "label":
-            return len(s) * (self._adv(LAB, False, "500", "label") + LS * LAB)
-        return len(s) * self._adv(GLOSS, False)
+            return len(s) * (self._adv(self.ls, False, "500", "label") + LS * self.ls)
+        return len(s) * self._adv(self.gs, False)
 
     # ── shapes ──
     STYLE = {
@@ -207,7 +225,7 @@ class SF(Fig):
         sits on the corner of the part that enforces the boundary, so it reads
         as a mark on that part rather than as a word in its name."""
         self.parts.append(f'<circle cx="{cx}" cy="{cy}" r="8" fill="{GUARD}"/>')
-        self.text(cx - 3.3, cy + 3.9, str(n), NUM, C["plate"], "600", True, tag=f"#{tag}")
+        self.text(cx - 3.3, cy + 3.9, str(n), self.ns, C["plate"], "600", True, tag=f"#{tag}")
         self.shapes.append({"tag": f"badge{tag}", "kind": "badge", "x": cx - 8, "y": cy - 8,
                             "w": 16, "h": 16, "solid": True})
 
@@ -632,14 +650,15 @@ def legend(f, x, y, width, marks=((1, "Identity and access"), (3, "Sandbox"), (4
     def measured(s_):
         if s_ not in KEY_W:
             raise SystemExit(f"legend: measure {s_!r} (KEY_W) before keying it")
-        f.boxes[-1]["w"] = KEY_W[s_] + 1        # the run as drawn, plus a unit
-        return KEY_W[s_]
+        w = KEY_W[s_] * f.gs / GLOSS             # measured at GLOSS; scales with size
+        f.boxes[-1]["w"] = w + 1                 # the run as drawn, plus a unit
+        return w
 
     f.rule(y - 18, x, x + width)
     head = "Enforced outside the agent’s loop:"
-    f.text(x, y, head, GLOSS, C["ink"], tag="lg.h")
+    f.text(x, y, head, f.gs, C["ink"], tag="lg.h")
     bx, by = x + measured(head) + KEY_GAP, y
-    need = sum(22 + KEY_W[s_] for _, s_ in marks) + KEY_GAP * (len(marks) - 1)
+    need = sum(22 + KEY_W[s_] * f.gs / GLOSS for _, s_ in marks) + KEY_GAP * (len(marks) - 1)
     if bx + need > x + width:
         bx, by = x, y + 24
     for n, s_ in marks:
@@ -895,7 +914,7 @@ def narrow_level(n, title, desc):
         f.lab(ix0 + PAD + 4, y + 24, "Sandbox per run" if n == 2 else "Sandbox", "sbx.l")
         f.name(ix0 + PAD + 4, y + 50, "Coding agent", "sbx.n")
         for i, g_ in enumerate(["own identity", "and profile"] if n == 2 else
-                               ["profile in its harness,", "workflow in a skill"]):
+                               ["profile in its harness", "workflow in a skill"]):
             f.gloss(ix0 + PAD + 4, y + 66 + i * 14.5, g_, f"sbx.g{i}")
         f.loop_glyph(ix0 + PAD + 11, y + 100, "sbx.loop")
         f.gloss(ix0 + PAD + 26, y + 104, "inner loop,", "sbx.lp0")
@@ -1142,8 +1161,9 @@ def figure6_narrow():
     f.link([(N.GX, y), (N.GX, ly), (N.RAIL, ly), (N.RAIL, a_mid), (N.A[0], a_mid)], "loop",
            tag="outer")
     f.lab(N.GX + 10, ly - 8, "outer loop", "outer.l")
-    f.gloss(N.GX + 10, ly + 14, "confirms the fix or starts the next run", "outer.g")
-    f.set_height(ly + 20)
+    f.gloss(N.GX + 10, ly + 14, "confirms the fix or", "outer.g0")
+    f.gloss(N.GX + 10, ly + 28.5, "starts the next run", "outer.g1")
+    f.set_height(ly + 34)
     f.write("figure-6-narrow")
 
 

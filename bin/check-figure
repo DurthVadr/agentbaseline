@@ -58,11 +58,14 @@ GEOM = SVG.parent / f".{NAME}.geom.json"
 # earlier version of this rule assumed a 6.5 in (468 pt) column and so passed
 # text that prints at 6.5 pt.
 PRINT_WIDTH_PT, MIN_PT = 425.2, 7.0
-# Screen: a 375 px phone less 16 px gutters each side is 343 px, the width every
-# narrow variant (and any wide figure without one) is shown at. A wide figure
-# with a narrow variant is shown only from 800 px up (reference-architecture's
-# `.sff` rules), where its slot is 800 − 2 × 32 = 736 px at its narrowest.
-PHONE_PX, WIDE_MIN_PX, MIN_PX = 343, 736, 10.0
+# Screen: the page's narrowest figure slot, measured. Below 480 px a figure
+# spans calc(100vw - 16px) (reference-architecture's `.sff` rules), so on a
+# 320 px phone, the narrowest the page supports, a narrow variant (or a wide
+# figure without one) is 304 px wide. An earlier version of this rule assumed a
+# 343 px column the page never uses; the final verification measured 8.6 px
+# text at 320 px. A wide figure with a narrow variant is shown only from 800 px
+# up, where its slot is 800 − 2 × 32 = 736 px at its narrowest.
+PHONE_PX, WIDE_MIN_PX, MIN_PX = 304, 736, 10.0
 
 if not BOXES.exists():
     sys.exit("no box manifest — run whitepaper/figures/build-figure-1.py first")
