@@ -1,0 +1,285 @@
+{
+ "W": 376,
+ "H": 711,
+ "shapes": [
+  {
+   "tag": "prof",
+   "kind": "card",
+   "x": 20,
+   "y": 18,
+   "w": 348,
+   "h": 152,
+   "solid": true
+  },
+  {
+   "tag": "task",
+   "kind": "card",
+   "x": 30,
+   "y": 64,
+   "w": 328,
+   "h": 96,
+   "solid": true
+  },
+  {
+   "tag": "dlg",
+   "kind": "card",
+   "x": 40,
+   "y": 110,
+   "w": 308,
+   "h": 40,
+   "solid": true
+  },
+  {
+   "tag": "auth",
+   "kind": "guard",
+   "x": 20,
+   "y": 200,
+   "w": 348,
+   "h": 70,
+   "solid": true
+  },
+  {
+   "tag": "badgeauth",
+   "kind": "badge",
+   "x": 12,
+   "y": 192,
+   "w": 16,
+   "h": 16,
+   "solid": true
+  },
+  {
+   "tag": "sbx",
+   "kind": "sandbox",
+   "x": 20,
+   "y": 314,
+   "w": 198,
+   "h": 118,
+   "solid": true
+  },
+  {
+   "tag": "badgesbx",
+   "kind": "badge",
+   "x": 12,
+   "y": 306,
+   "w": 16,
+   "h": 16,
+   "solid": true
+  },
+  {
+   "tag": "sbx.loop",
+   "kind": "glyph",
+   "x": 31.5,
+   "y": 392.5,
+   "w": 19.0,
+   "h": 19.0,
+   "solid": false
+  },
+  {
+   "tag": "proxy",
+   "kind": "guard",
+   "x": 240,
+   "y": 331,
+   "w": 98,
+   "h": 84,
+   "solid": true
+  },
+  {
+   "tag": "badgeproxy",
+   "kind": "badge",
+   "x": 232,
+   "y": 323,
+   "w": 16,
+   "h": 16,
+   "solid": true
+  },
+  {
+   "tag": "down",
+   "kind": "card",
+   "x": 20,
+   "y": 460,
+   "w": 348,
+   "h": 44,
+   "solid": true
+  },
+  {
+   "tag": "lg.guard",
+   "kind": "guard",
+   "x": 20,
+   "y": 539,
+   "w": 28,
+   "h": 16,
+   "solid": true
+  },
+  {
+   "tag": "badgelg1",
+   "kind": "badge",
+   "x": 60,
+   "y": 579,
+   "w": 16,
+   "h": 16,
+   "solid": true
+  },
+  {
+   "tag": "badgelg2",
+   "kind": "badge",
+   "x": 224.90625,
+   "y": 579,
+   "w": 16,
+   "h": 16,
+   "solid": true
+  },
+  {
+   "tag": "badgelg3",
+   "kind": "badge",
+   "x": 60,
+   "y": 603,
+   "w": 16,
+   "h": 16,
+   "solid": true
+  },
+  {
+   "tag": "badgelg4",
+   "kind": "badge",
+   "x": 147.28125,
+   "y": 603,
+   "w": 16,
+   "h": 16,
+   "solid": true
+  },
+  {
+   "tag": "lg.wash",
+   "kind": "agent",
+   "x": 20,
+   "y": 636,
+   "w": 28,
+   "h": 16,
+   "solid": true
+  }
+ ],
+ "links": [
+  {
+   "tag": "bound",
+   "kind": "flow",
+   "pts": [
+    [
+     68,
+     170
+    ],
+    [
+     68,
+     200
+    ]
+   ],
+   "head": true,
+   "group": null,
+   "free": false
+  },
+  {
+   "tag": "propose",
+   "kind": "flow",
+   "pts": [
+    [
+     158,
+     314
+    ],
+    [
+     158,
+     270
+    ]
+   ],
+   "head": true,
+   "group": null,
+   "free": false
+  },
+  {
+   "tag": "grant",
+   "kind": "grant",
+   "pts": [
+    [
+     289.0,
+     270
+    ],
+    [
+     289.0,
+     331
+    ]
+   ],
+   "head": true,
+   "group": null,
+   "free": false
+  },
+  {
+   "tag": "request",
+   "kind": "flow",
+   "pts": [
+    [
+     218,
+     373
+    ],
+    [
+     240,
+     373
+    ]
+   ],
+   "head": true,
+   "group": null,
+   "free": false
+  },
+  {
+   "tag": "out",
+   "kind": "flow",
+   "pts": [
+    [
+     289.0,
+     415
+    ],
+    [
+     289.0,
+     460
+    ]
+   ],
+   "head": true,
+   "group": null,
+   "free": false
+  },
+  {
+   "tag": "lg.flow",
+   "kind": "flow",
+   "pts": [
+    [
+     20,
+     669
+    ],
+    [
+     48,
+     669
+    ]
+   ],
+   "head": true,
+   "group": null,
+   "free": true
+  },
+  {
+   "tag": "lg.grant",
+   "kind": "grant",
+   "pts": [
+    [
+     20,
+     693
+    ],
+    [
+     48,
+     693
+    ]
+   ],
+   "head": true,
+   "group": null,
+   "free": true
+  }
+ ],
+ "margin": 8,
+ "phone": {
+  "display_px": 343,
+  "min_px": 10
+ }
+}

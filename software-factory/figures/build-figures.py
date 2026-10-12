@@ -58,6 +58,55 @@ MARGIN = 8
 PRINT_IN, MIN_PT = 6.5, 7.0          # checked by bin/check-figure
 NAME, GLOSS, LAB, NUM = 12.5, 11.25, 11.25, 11.25
 PAD = 10                              # card inset
+
+# ── what each figure says, in words ──────────────────────────────────────────
+# CAPTION is the paper's, verbatim; it is each drawing's <title>. ALT is the
+# alt text: what the drawing shows and the point it makes, in one or two plain
+# sentences. It is each drawing's <desc>, wide and narrow alike, and the text
+# the paper source carries for the figure, so the page, the PDF and a screen
+# reader say the same thing.
+CAPTION = {
+    1: "Work loops until it passes, and problems feed back to design",
+    2: "The agent proposes, policy authorizes, and infrastructure enforces",
+    3: "Level 1, where a developer gives an agent room to work without giving it everything "
+       "the developer can reach",
+    4: "Level 2, where a workflow orchestrates",
+    5: "Level 3, where an agent orchestrates but can't grant itself access",
+    6: "Only a new authorization decision can widen a task",
+}
+ALT = {
+    1: "Work arrives as a prompt, a requirements document or a ticket, design sets its "
+       "limits, and an inner loop "
+       "assembles, builds in a sandbox and verifies the change until it passes. After review "
+       "and a deploy under approval policy, an outer loop carries review, evals and "
+       "production feedback back to design, and production signals start new work.",
+    2: "An agent in a sandbox, holding no credentials, proposes the scope it needs; the "
+       "runtime authorization service decides within the bounds of the agent's profile, its "
+       "task and any delegation. The egress proxy enforces that decision and attaches the "
+       "credentials, so only authorized operations reach anything downstream.",
+    3: "A developer directs one coding agent in a sandbox on their machine or a remote "
+       "environment, and every request it makes goes through a default-deny egress proxy that "
+       "enforces the authorization service's decision. The agent can reach source control, the "
+       "services its task needs, a model gateway and approved packages, and nothing else the "
+       "developer can reach; its pull request goes back to the developer.",
+    4: "A request, event, schedule or ticket starts a workflow on CI/CD, a step runner or "
+       "Temporal, which runs a coding agent in a fresh sandbox, behind its own proxy, for each "
+       "run; the pull request goes through approval to merge, and review feedback starts the "
+       "next run. The authorization service, proxy and destinations are the same as at "
+       "Level 1.",
+    5: "An orchestrator agent turns signals and requests into tasks and proposes each one's "
+       "profile and scope to the authorization service, which alone grants access; the "
+       "execution layer starts each agent in its own sandbox, and a monitoring agent watches "
+       "from outside and flags new work. Changes go through approval and deploy to "
+       "production, whose signals start the next work, inside the same boundaries as Levels 1 "
+       "and 2.",
+    6: "A production alert leads the orchestrator to propose a task for an incident agent, one "
+       "service's logs for the last hour and one pull request, which the authorization service "
+       "checks against policy and the alert's source. When the agent reaches for another "
+       "service's logs, the proxy blocks the call, because only a new authorization decision "
+       "could widen the task; the fix ships through approval and a small first deploy, and the "
+       "error rate afterward confirms it or starts the next run.",
+}
 LS = 0.06                             # label tracking (em)
 
 
@@ -532,13 +581,6 @@ def build_level(n, fn, title, desc):
 # The skeleton with the authorization model in the place where, from Figure 3
 # on, the work starts; and the legend, introduced once.
 # ═════════════════════════════════════════════════════════════════════════════
-FIG2_DESC = ("The profile sets the most an agent can ever do, the task narrows it to the work "
-             "at hand, and delegation can only narrow it further; together they bound the "
-             "runtime authorization service's decision. The agent, free to reason and try "
-             "things inside its sandbox, proposes the scope it needs. The authorization service "
-             "decides, and passes the authorized scope to the egress proxy, which enforces it "
-             "and attaches credentials, so the agent holds none and only authorized operations "
-             "reach downstream systems.")
 
 
 def scope_nest(f, x0, y0, x1, y1):
@@ -590,8 +632,7 @@ def legend(f, x, y, width):
 
 def figure2():
     k = K.shifted(10)
-    f = SF("sf2", W, 440, "The agent proposes, policy authorizes, and infrastructure enforces",
-           FIG2_DESC)
+    f = SF("sf2", W, 440, CAPTION[2], ALT[2])
     skel_auth(f, k, ("decides what access each task gets,", "routes high-impact actions to approval"),
               grant_label=False)
     px = mid((k.PROXY[0], k.PROXY[2]))
@@ -633,23 +674,12 @@ def figure2():
 # skeleton with one incident running through it, in the paper's own words
 # ("A factory in action").
 # ═════════════════════════════════════════════════════════════════════════════
-FIG6_DESC = ("A production alert reports elevated errors in a payments service. The "
-             "orchestrator agent proposes a task for an incident agent: read the service's logs "
-             "for the last hour and open one pull request. The runtime authorization service "
-             "checks it against policy and the alert's authenticated source, and the egress "
-             "proxy attaches credentials only to the requests it grants. When the agent reaches "
-             "for an unrelated authentication service's logs, the task doesn't cover them and "
-             "the proxy blocks the call; only a new authorization decision could widen the task. "
-             "The fix uses a library admitted through the supply chain and leaves as a pull "
-             "request that approval policy routes to a person or approves automatically. The "
-             "deploy reaches a small share of traffic first, and the error rate afterward "
-             "confirms the fix or starts the next run.")
 FIG6_AUTH = ("checks it against policy and the", "alert's authenticated source")
 
 
 def figure6():
     k = K.shifted(10)
-    f = SF("sf6", W, k.H, "Only a new authorization decision can widen a task", FIG6_DESC)
+    f = SF("sf6", W, k.H, CAPTION[6], ALT[6])
     skel_auth(f, k, FIG6_AUTH)
     skel_frame(f, "The factory", k=k)
     f.node(k.A[0], k.MID - 48, k.A[1] - k.A[0], 96, ["Production", "alert"],
@@ -703,17 +733,10 @@ def figure6():
 # ═════════════════════════════════════════════════════════════════════════════
 # Figure 1 — work loops until it passes, and problems feed back to design
 # ═════════════════════════════════════════════════════════════════════════════
-FIG1_DESC = ("Work arrives as a prompt, a PRD or a ticket, and design sets its limits. The "
-             "inner loop assembles what the task needs, builds the change in a sandbox and "
-             "verifies it against the organization's standards, repeating until the work passes. "
-             "Review, and deployment under approval policy, follow. The outer loop feeds review, "
-             "evals and production feedback back into design, and production sends back signals "
-             "that start new work.")
 
 
 def figure1():
-    f = SF("sf1", W, 340, "Work loops until it passes, and problems feed back to design",
-           FIG1_DESC)
+    f = SF("sf1", W, 340, CAPTION[1], ALT[1])
     y0, h = 40, 64
     ym = y0 + h / 2
     f.node(28, y0, 96, h, "Inputs", ["a prompt, PRD", "or ticket"], tag="in")
@@ -922,11 +945,7 @@ def narrow_level(n, title, desc):
 
 
 def figure1_narrow():
-    f = SF("sf1n", NW, 1000, "Work loops until it passes, and problems feed back to design",
-           "Inputs, then design, then the inner loop of assemble, build and verify, repeated "
-           "until the work passes; then review, deploy under approval policy, and production. "
-           "The outer loop feeds review, evals and production feedback back into design, and "
-           "production's signals start new work.", narrow=True)
+    f = SF("sf1n", NW, 1000, CAPTION[1], ALT[1], narrow=True)
     x0, x1 = 40, NW
     ax = x0 + 40
     y = 10
@@ -974,31 +993,148 @@ def figure1_narrow():
     f.write("figure-1-narrow")
 
 
+def figure2_narrow():
+    """Figure 2 for phones: the bound above the decision, the decision above
+    the agent and the proxy, the legend wrapped underneath."""
+    f = SF("sf2n", NW, 1000, CAPTION[2], ALT[2], narrow=True)
+    X = 12      # the boundary marks sit on the cards' corners; keep them off the edge
+    y = 10
+    scope_nest(f, X, y, NW, y + 152)
+    ay0 = y + 152 + 30
+    f.link([(60, y + 152), (60, ay0)], tag="bound")
+    f.gloss(70, y + 152 + 19, "bound the decision", "bound.l")
+    f.node(X, ay0, NW - X, 70, "Runtime authorization service",
+           ["decides what access each task gets,", "routes high-impact actions to approval"],
+           kind="guard", num=1, tag="auth")
+    sy0 = ay0 + 70 + 44
+    sx0, sx1 = X, 210
+    f.box(sx0, sy0, sx1 - sx0, 118, "sandbox", "sbx")
+    f.badge(sx0, sy0, 3, "sbx")
+    f.lab(sx0 + PAD + 4, sy0 + 24, "Sandbox", "sbx.l")
+    f.name(sx0 + PAD + 4, sy0 + 50, "Agent", "sbx.n")
+    f.gloss(sx0 + PAD + 4, sy0 + 66, "holds no credentials", "sbx.g")
+    f.loop_glyph(sx0 + PAD + 11, sy0 + 88, "sbx.loop")
+    f.gloss(sx0 + PAD + 26, sy0 + 92, "free to reason", "sbx.lp0")
+    f.gloss(sx0 + PAD + 26, sy0 + 106.5, "and try things", "sbx.lp1")
+    ux = 150
+    f.link([(ux, sy0), (ux, ay0 + 70)], tag="propose")
+    f.gloss(ux - 8 - f.width("proposes scope", "gloss"), ay0 + 70 + 26, "proposes scope",
+            "propose.l")
+    px0, px1 = 232, 330
+    py0 = sy0 + 17
+    f.node(px0, py0, px1 - px0, 84, "Egress proxy", ["enforces it,", "attaches", "credentials"],
+           kind="guard", num=4, tag="proxy")
+    gx = mid((px0, px1))
+    f.link([(gx, ay0 + 70), (gx, py0)], "grant", tag="grant")
+    f.gloss(gx - 8 - f.width("authorized", "gloss"), ay0 + 70 + 20, "authorized", "grant.l0")
+    f.gloss(gx - 8 - f.width("scope", "gloss"), ay0 + 70 + 34.5, "scope", "grant.l1")
+    f.link([(sx1, py0 + 42), (px0, py0 + 42)], tag="request")
+    dy0 = sy0 + 118 + 28
+    f.node(X, dy0, NW - X, 44, "Downstream", ["only authorized operations reach it"],
+           tag="down")
+    f.link([(gx, py0 + 84), (gx, dy0)], tag="out")
+    end = legend(f, X, dy0 + 44 + 46, NW - X)
+    f.set_height(end)
+    f.write("figure-2-narrow")
+
+
+def figure6_narrow():
+    """Figure 6 for phones, on the narrow levels' skeleton: the request for a
+    wider task climbs the corridor beside the column to the authorization
+    service; the decision comes down the right edge to the proxy."""
+    f = SF("sf6n", NW, 1400, CAPTION[6], ALT[6], narrow=True)
+    x0, y0, x1, y1 = N.AUTH[0], N.AUTH[1], N.AUTH[2], N.AUTH[3] + 14
+    f.node(x0, y0, x1 - x0, y1 - y0, "Runtime authorization service", list(FIG6_AUTH),
+           kind="guard", num=1, tag="auth")
+    y = y1 + 22
+    f.node(N.A[0], y, N.A[1] - N.A[0], 66, "Production alert",
+           ["elevated errors in a", "payments service"], tag="start")
+    a_mid = y + 33
+    prev = y + 66
+    y += 66 + 24
+    fy0 = y
+    f.lab(N.GX + 14, fy0 + 22, "The factory", "frame.l")
+    y += 40
+    ix0, ix1 = N.IN
+    f.node(ix0, y, ix1 - ix0, 96, "Orchestrator agent",
+           ["proposes a task for an", "incident agent: the", "service's logs, last",
+            "hour, one pull request"], kind="agent", tag="orch")
+    f.link([(N.GX, prev), (N.GX, y)], tag="takes")
+    oy = y
+    y += 96 + 24
+    sy0 = y
+    sh = 132
+    f.box(ix0, sy0, ix1 - ix0, sh, "sandbox", "sbx")
+    f.badge(ix0, sy0, 3, "sbx")
+    f.lab(ix0 + PAD + 4, sy0 + 24, "Sandbox", "sbx.l")
+    f.name(ix0 + PAD + 4, sy0 + 50, "Incident agent", "sbx.n")
+    f.gloss(ix0 + PAD + 4, sy0 + 66, "configured from", "sbx.g0")
+    f.gloss(ix0 + PAD + 4, sy0 + 80.5, "its profile", "sbx.g1")
+    f.loop_glyph(ix0 + PAD + 11, sy0 + 102, "sbx.loop")
+    f.gloss(ix0 + PAD + 26, sy0 + 106, "inner loop,", "sbx.lp0")
+    f.gloss(ix0 + PAD + 26, sy0 + 120.5, "until tests pass", "sbx.lp1")
+    # asking for more: up the corridor to the authorization service
+    cx = ix1 + 12
+    f.link([(ix1, sy0 + 24), (cx, sy0 + 24), (cx, y1)], tag="wider")
+    f.gloss(cx + 8, oy + 20, "asks for", "wider.l0")
+    f.gloss(cx + 8, oy + 34.5, "a new", "wider.l1")
+    f.gloss(cx + 8, oy + 49, "decision", "wider.l2")
+    y = sy0 + sh + 24
+    # the proxy under the sandbox; the decision comes down the right edge to it
+    px0, px1 = ix0, 352
+    py0 = y
+    f.node(px0, py0, px1 - px0, 60, "Egress proxy", ["enforces it, attaches credentials"],
+           kind="guard", num=4, tag="proxy")
+    f.link([(N.GX, sy0 + sh), (N.GX, py0)], tag="traffic")
+    gx = 340
+    f.link([(gx, y1), (gx, py0)], "grant", tag="grant")
+    y = py0 + 60 + 16
+    fy1 = y
+    f.box(N.X0, fy0, N.X1 - N.X0, fy1 - fy0, "zone", "frame")
+    # what the proxy lets through, and what it doesn't
+    bus = 342
+    y = fy1 + 24
+    ys = []
+    dests = [(["Payments service logs"], ["last hour only"], "card", None),
+             (["Authentication service logs"], ["blocked: outside the task"], "blocked", None),
+             (["Admission point"], ["serves the approved library"], "guard", 2)]
+    dx0, dx1 = N.X0, 322
+    for i, (nm, g, kind, num) in enumerate(dests):
+        f.node(dx0, y, dx1 - dx0, 44, nm, g, kind=kind, num=num, tag=f"dest{i}")
+        ys.append((y + 22, kind))
+        y += 44 + 8
+    pry = y + 16
+    f.node(dx0, pry, dx1 - dx0, 46, "Pull request", ["one, as granted"], tag="out0")
+    f.link([(bus, py0 + 60), (bus, pry + 23)], head=False, tag="bus", group="bus")
+    for i, (yy, kind) in enumerate(ys):
+        f.link([(bus, yy), (dx1, yy)], tag=f"bus.{i}", group="bus", bar=(kind == "blocked"))
+    f.link([(bus, pry + 23), (dx1, pry + 23)], tag="bus.pr", group="bus")
+    y = pry + 46
+    for i, (nm, g) in enumerate([("Approval", "a person or automatic"),
+                                 ("Deploy", "small share of traffic first"),
+                                 ("Production", "error rate afterward")], 1):
+        f.link([(N.GX, y), (N.GX, y + 22)], tag=f"o{i}")
+        y += 22
+        f.node(N.X0, y, N.X1 - N.X0, 46, nm, [g], tag=f"out{i}")
+        y += 46
+    ly = y + 24
+    f.link([(N.GX, y), (N.GX, ly), (N.RAIL, ly), (N.RAIL, a_mid), (N.A[0], a_mid)], "loop",
+           tag="outer")
+    f.lab(N.GX + 10, ly - 8, "outer loop", "outer.l")
+    f.gloss(N.GX + 10, ly + 14, "confirms the fix or starts the next run", "outer.g")
+    f.set_height(ly + 20)
+    f.write("figure-6-narrow")
+
+
 if __name__ == "__main__":
     figure1()
     figure1_narrow()
     figure2()
-    build_level(3, level1, "Level 1: a developer gives an agent room to work",
-                "The developer directs one coding agent, which runs in a sandbox on the "
-                "developer's machine or a remote environment and loops until its work passes. "
-                "All of its traffic leaves through a default-deny egress proxy that enforces "
-                "the runtime authorization service's decision and attaches credentials, so it "
-                "reaches source control, the services the task needs, a model gateway and an "
-                "admission point for packages, and nothing else. Its pull request goes back to "
-                "the developer for review.")
-    build_level(4, level2, "Level 2: a workflow orchestrates",
-                "A request, event, schedule or ticket starts a predefined workflow on a durable "
-                "execution layer, which launches a coding agent in a fresh sandbox for each run. "
-                "The boundaries are the same as at Level 1. The pull request goes through "
-                "approval policy and merges; review feedback drives the next run.")
-    build_level(5, level3, "Level 3: an agent orchestrates but can't grant itself access",
-                "Signals and requests reach an orchestrator agent, which proposes a profile and "
-                "task scope for each piece of work to the runtime authorization service. The "
-                "execution layer starts each agent in its own sandbox, with its own profile, "
-                "and only with the access the service granted. A monitoring agent watches from "
-                "outside the sandboxes. The boundaries are the same as at Levels 1 and 2. "
-                "Approval is by a person or automatic; deploys reach production, which sends "
-                "back signals.")
-    for n, t in ((1, "Level 1"), (2, "Level 2"), (3, "Level 3")):
-        narrow_level(n, t, f"{t}, as a single column for narrow screens.")
+    build_level(3, level1, CAPTION[3], ALT[3])
+    build_level(4, level2, CAPTION[4], ALT[4])
+    build_level(5, level3, CAPTION[5], ALT[5])
+    for n in (1, 2, 3):
+        narrow_level(n, CAPTION[n + 2], ALT[n + 2])
     figure6()
+    figure2_narrow()
+    figure6_narrow()

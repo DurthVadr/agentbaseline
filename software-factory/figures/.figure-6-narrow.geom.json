@@ -1,0 +1,412 @@
+{
+ "W": 376,
+ "H": 1086,
+ "shapes": [
+  {
+   "tag": "auth",
+   "kind": "guard",
+   "x": 32,
+   "y": 18,
+   "w": 336,
+   "h": 66,
+   "solid": true
+  },
+  {
+   "tag": "badgeauth",
+   "kind": "badge",
+   "x": 24,
+   "y": 10,
+   "w": 16,
+   "h": 16,
+   "solid": true
+  },
+  {
+   "tag": "start",
+   "kind": "card",
+   "x": 32,
+   "y": 106,
+   "w": 190,
+   "h": 66,
+   "solid": true
+  },
+  {
+   "tag": "orch",
+   "kind": "agent",
+   "x": 44,
+   "y": 236,
+   "w": 178,
+   "h": 96,
+   "solid": true
+  },
+  {
+   "tag": "sbx",
+   "kind": "sandbox",
+   "x": 44,
+   "y": 356,
+   "w": 178,
+   "h": 132,
+   "solid": true
+  },
+  {
+   "tag": "badgesbx",
+   "kind": "badge",
+   "x": 36,
+   "y": 348,
+   "w": 16,
+   "h": 16,
+   "solid": true
+  },
+  {
+   "tag": "sbx.loop",
+   "kind": "glyph",
+   "x": 55.5,
+   "y": 448.5,
+   "w": 19.0,
+   "h": 19.0,
+   "solid": false
+  },
+  {
+   "tag": "proxy",
+   "kind": "guard",
+   "x": 44,
+   "y": 512,
+   "w": 316,
+   "h": 60,
+   "solid": true
+  },
+  {
+   "tag": "badgeproxy",
+   "kind": "badge",
+   "x": 36,
+   "y": 504,
+   "w": 16,
+   "h": 16,
+   "solid": true
+  },
+  {
+   "tag": "frame",
+   "kind": "zone",
+   "x": 32,
+   "y": 196,
+   "w": 336,
+   "h": 392,
+   "solid": false
+  },
+  {
+   "tag": "dest0",
+   "kind": "card",
+   "x": 32,
+   "y": 612,
+   "w": 298,
+   "h": 44,
+   "solid": true
+  },
+  {
+   "tag": "dest1",
+   "kind": "blocked",
+   "x": 32,
+   "y": 664,
+   "w": 298,
+   "h": 44,
+   "solid": true
+  },
+  {
+   "tag": "dest2",
+   "kind": "guard",
+   "x": 32,
+   "y": 716,
+   "w": 298,
+   "h": 44,
+   "solid": true
+  },
+  {
+   "tag": "badgedest2",
+   "kind": "badge",
+   "x": 24,
+   "y": 708,
+   "w": 16,
+   "h": 16,
+   "solid": true
+  },
+  {
+   "tag": "out0",
+   "kind": "card",
+   "x": 32,
+   "y": 784,
+   "w": 298,
+   "h": 46,
+   "solid": true
+  },
+  {
+   "tag": "out1",
+   "kind": "card",
+   "x": 32,
+   "y": 852,
+   "w": 336,
+   "h": 46,
+   "solid": true
+  },
+  {
+   "tag": "out2",
+   "kind": "card",
+   "x": 32,
+   "y": 920,
+   "w": 336,
+   "h": 46,
+   "solid": true
+  },
+  {
+   "tag": "out3",
+   "kind": "card",
+   "x": 32,
+   "y": 988,
+   "w": 336,
+   "h": 46,
+   "solid": true
+  }
+ ],
+ "links": [
+  {
+   "tag": "takes",
+   "kind": "flow",
+   "pts": [
+    [
+     82,
+     172
+    ],
+    [
+     82,
+     236
+    ]
+   ],
+   "head": true,
+   "group": null,
+   "free": false
+  },
+  {
+   "tag": "wider",
+   "kind": "flow",
+   "pts": [
+    [
+     222,
+     380
+    ],
+    [
+     234,
+     380
+    ],
+    [
+     234,
+     84
+    ]
+   ],
+   "head": true,
+   "group": null,
+   "free": false
+  },
+  {
+   "tag": "traffic",
+   "kind": "flow",
+   "pts": [
+    [
+     82,
+     488
+    ],
+    [
+     82,
+     512
+    ]
+   ],
+   "head": true,
+   "group": null,
+   "free": false
+  },
+  {
+   "tag": "grant",
+   "kind": "grant",
+   "pts": [
+    [
+     348,
+     84
+    ],
+    [
+     348,
+     512
+    ]
+   ],
+   "head": true,
+   "group": null,
+   "free": false
+  },
+  {
+   "tag": "bus",
+   "kind": "flow",
+   "pts": [
+    [
+     350,
+     572
+    ],
+    [
+     350,
+     807
+    ]
+   ],
+   "head": false,
+   "group": "bus",
+   "free": false
+  },
+  {
+   "tag": "bus.0",
+   "kind": "flow",
+   "pts": [
+    [
+     350,
+     634
+    ],
+    [
+     330,
+     634
+    ]
+   ],
+   "head": true,
+   "group": "bus",
+   "free": false
+  },
+  {
+   "tag": "bus.1",
+   "kind": "flow",
+   "pts": [
+    [
+     350,
+     686
+    ],
+    [
+     330,
+     686
+    ]
+   ],
+   "head": false,
+   "group": "bus",
+   "free": false
+  },
+  {
+   "tag": "bus.2",
+   "kind": "flow",
+   "pts": [
+    [
+     350,
+     738
+    ],
+    [
+     330,
+     738
+    ]
+   ],
+   "head": true,
+   "group": "bus",
+   "free": false
+  },
+  {
+   "tag": "bus.pr",
+   "kind": "flow",
+   "pts": [
+    [
+     350,
+     807
+    ],
+    [
+     330,
+     807
+    ]
+   ],
+   "head": true,
+   "group": "bus",
+   "free": false
+  },
+  {
+   "tag": "o1",
+   "kind": "flow",
+   "pts": [
+    [
+     82,
+     830
+    ],
+    [
+     82,
+     852
+    ]
+   ],
+   "head": true,
+   "group": null,
+   "free": false
+  },
+  {
+   "tag": "o2",
+   "kind": "flow",
+   "pts": [
+    [
+     82,
+     898
+    ],
+    [
+     82,
+     920
+    ]
+   ],
+   "head": true,
+   "group": null,
+   "free": false
+  },
+  {
+   "tag": "o3",
+   "kind": "flow",
+   "pts": [
+    [
+     82,
+     966
+    ],
+    [
+     82,
+     988
+    ]
+   ],
+   "head": true,
+   "group": null,
+   "free": false
+  },
+  {
+   "tag": "outer",
+   "kind": "loop",
+   "pts": [
+    [
+     82,
+     1034
+    ],
+    [
+     82,
+     1058
+    ],
+    [
+     12,
+     1058
+    ],
+    [
+     12,
+     139
+    ],
+    [
+     32,
+     139
+    ]
+   ],
+   "head": true,
+   "group": null,
+   "free": false
+  }
+ ],
+ "margin": 8,
+ "phone": {
+  "display_px": 343,
+  "min_px": 10
+ }
+}

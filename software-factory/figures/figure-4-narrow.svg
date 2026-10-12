@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 376 996" width="376" height="996" role="img" aria-labelledby="sf4n-t sf4n-d">
-  <title id="sf4n-t">Level 2</title>
-  <desc id="sf4n-d">Level 2, as a single column for narrow screens.</desc>
+  <title id="sf4n-t">Level 2, where a workflow orchestrates</title>
+  <desc id="sf4n-d">A request, event, schedule or ticket starts a workflow on CI/CD, a step runner or Temporal, which runs a coding agent in a fresh sandbox, behind its own proxy, for each run; the pull request goes through approval to merge, and review feedback starts the next run. The authorization service, proxy and destinations are the same as at Level 1.</desc>
   <rect width="376" height="996" fill="#FFFFFF"/>
   <defs><marker id="sf4n-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#797D79"/></marker><marker id="sf4n-g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#5A7A00"/></marker><marker id="sf4n-s" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#5A5E5A"/></marker></defs>
   <g transform="translate(8 8)">

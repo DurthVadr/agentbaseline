@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 376 1232" role="img" aria-labelledby="sf5n-t sf5n-d">
-  <title id="sf5n-t">Level 3</title>
-  <desc id="sf5n-d">Level 3, as a single column for narrow screens.</desc>
+  <title id="sf5n-t">Level 3, where an agent orchestrates but can't grant itself access</title>
+  <desc id="sf5n-d">An orchestrator agent turns signals and requests into tasks and proposes each one's profile and scope to the authorization service, which alone grants access; the execution layer starts each agent in its own sandbox, and a monitoring agent watches from outside and flags new work. Changes go through approval and deploy to production, whose signals start the next work, inside the same boundaries as Levels 1 and 2.</desc>
   <defs><marker id="sf5n-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="var(--fig-faint,var(--faint))"/></marker><marker id="sf5n-g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="var(--fig-accent,var(--accent))"/></marker><marker id="sf5n-s" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="var(--fig-soft,var(--soft))"/></marker></defs>
   <g transform="translate(8 8)">
   <rect x="24.5" y="10.5" width="335" height="51" rx="4" fill="none" stroke="var(--fig-accent,var(--accent))" stroke-width="1.25"/>

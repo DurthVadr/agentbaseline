@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 376 620" width="376" height="620" role="img" aria-labelledby="sf1n-t sf1n-d">
   <title id="sf1n-t">Work loops until it passes, and problems feed back to design</title>
-  <desc id="sf1n-d">Inputs, then design, then the inner loop of assemble, build and verify, repeated until the work passes; then review, deploy under approval policy, and production. The outer loop feeds review, evals and production feedback back into design, and production's signals start new work.</desc>
+  <desc id="sf1n-d">Work arrives as a prompt, a requirements document or a ticket, design sets its limits, and an inner loop assembles, builds in a sandbox and verifies the change until it passes. After review and a deploy under approval policy, an outer loop carries review, evals and production feedback back to design, and production signals start new work.</desc>
   <rect width="376" height="620" fill="#FFFFFF"/>
   <defs><marker id="sf1n-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#797D79"/></marker><marker id="sf1n-g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#5A7A00"/></marker><marker id="sf1n-s" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#5A5E5A"/></marker></defs>
   <g transform="translate(8 8)">
