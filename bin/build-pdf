@@ -568,6 +568,21 @@ td { text-wrap:balance; }
    is the first child of its wrapper, so this reaches exactly those. */
 .pagedjs_page_content > div > :first-child { margin-top:0; }
 
+/* Chapters run on. The white paper opens every chapter on a new page; this
+   paper's chapters are a third of a page to a page and a half, so that rule
+   left a page in three mostly white (Network alone on a page, the Conclusion
+   on a third of one). The executive summary keeps its page, as an abstract
+   does, and the appendix opens a page of its own. The head keeps its rule
+   and takes a band of space above it, so a chapter still reads as one. */
+h1:not(.covertitle) { break-before:auto; margin-top:12mm; }
+h1#executive-summary, h1#introduction, h1#appendix { break-before:page; }
+/* A chapter head with three lines under it at the foot of a page reads as
+   stranded. It takes four with it, or moves to the next page. */
+h1 + p { orphans:4; }
+/* A list item is one requirement. Split across a page, its last line sat
+   alone at the head of the next page with no bullet to say what it was. */
+li { break-inside:avoid; }
+
 /* ── reference architecture: tables ───────────────────────────────────── */
 /* pandoc's equal column widths are dropped and each table gets its own: a
    one-word column does not need a quarter of the measure. Rows never split. */
