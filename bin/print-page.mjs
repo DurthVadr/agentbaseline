@@ -301,6 +301,12 @@ const chrome = spawn(CHROME, [
   // A profile this new otherwise sends Chrome through its first-run work,
   // which is time spent not listening on the debug port.
   "--no-first-run", "--no-default-browser-check",
+  // Without these, Chrome on macOS asks the login keychain for its storage key
+  // at launch, and that is a permission prompt: an unattended build waits on a
+  // dialog nobody is there to answer. A mock keychain and the basic password
+  // store keep it off the keychain. Neither touches layout or the PDF; the
+  // white paper prints the same bytes with them.
+  "--use-mock-keychain", "--password-store=basic",
   // Port 0 asks the OS for a free one. The port used to be derived from this
   // process's pid, which collides between runs: a browser left behind by an
   // earlier failure could still hold it, and this script would then drive
