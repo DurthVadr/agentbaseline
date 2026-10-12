@@ -29,6 +29,14 @@ ROOT = pathlib.Path(__file__).resolve().parents[1]
 # wrote social-card-34.png while the og:image pointed at social-card-35.png.
 N_CONTROLS = controls_source.catalogue_size()
 
+# `--paper software-factory` writes the second paper's card instead. Same sheet,
+# same faces, same marks; the paper's name, its title block and its four
+# boundaries in place of the wordmark and the tenets, with Agent Baseline named
+# first as what it applies. Nothing about the baseline's card changes.
+PAPER_ARG = sys.argv[sys.argv.index("--paper") + 1] if "--paper" in sys.argv else None
+if PAPER_ARG not in (None, "software-factory"):
+    sys.exit(f"unknown paper {PAPER_ARG!r}: expected software-factory")
+
 def face(family, style, weight, fname):
     data = base64.b64encode((ROOT / "static" / "fonts" / fname).read_bytes()).decode()
     return (f"@font-face{{font-family:'{family}';font-style:{style};"
@@ -81,6 +89,49 @@ card = f'''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width=
     fill="{FAINT}">agentbaseline.org &#183; v1.0-draft</text>
 </svg>'''
 
+if PAPER_ARG == "software-factory":
+    import re
+    src = (ROOT / "software-factory" / "software-factory.md").read_text(encoding="utf-8")
+    m = re.search(r"^Version (\S+), ([A-Z][a-z]+) (\d{1,2}), (\d{4})$", src, re.M)
+    if not m:
+        sys.exit("software-factory.md: no \"Version N, Month D, YYYY\" line to put on the card")
+    SF_VERSION, SF_DATE = m.group(1), f"{m.group(3)} {m.group(2)} {m.group(4)}"
+    LABEL = "'Chakra Petch','Avenir Next',sans-serif"
+    def cell(x, label, value, w):
+        return (f'<text x="{x}" y="456" font-family="{LABEL}" font-size="13" font-weight="500" '
+                f'letter-spacing="1.6" fill="{FAINT}">{label}</text>'
+                f'<text x="{x}" y="486" font-family="{MONO}" font-size="19" fill="{INK}">{value}</text>')
+    marks = ""
+    for i, (n, name) in enumerate([("1", "Identity and access"), ("2", "Supply chain"),
+                                   ("3", "Sandbox"), ("4", "Network")]):
+        x = 80 + i * 262
+        marks += (f'<circle cx="{x + 11}" cy="555" r="11" fill="{ACCENT}"/>'
+                  f'<text x="{x + 11}" y="560" text-anchor="middle" font-family="{MONO}" '
+                  f'font-size="13" font-weight="600" fill="{PAPER}">{n}</text>'
+                  f'<text x="{x + 30}" y="561" font-family="{HEAD}" font-size="19" '
+                  f'font-weight="600" fill="{INK}">{name}</text>')
+    card = f'''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <style>{fonts}</style>
+  <rect width="1200" height="630" fill="{PAPER}"/>
+  <g fill="none" stroke="{BASE}" stroke-width="1">
+    <path d="M40 74 v-34 h34 M1126 40 h34 v34 M40 556 v34 h34 M1126 590 h34 v-34"/>
+  </g>
+  <text x="80" y="128" font-family="{LABEL}" font-size="17" font-weight="500"
+    letter-spacing="2.4" fill="{SOFT}"><tspan fill="{ACCENT}">AGENT BASELINE</tspan>, APPLIED TO THE SOFTWARE FACTORY</text>
+  <text x="80" y="244" font-family="{HEAD}" font-size="72" font-weight="600"
+    letter-spacing="-1.4" fill="{INK}">The Secure Software Factory</text>
+  <text x="80" y="326" font-family="{HEAD}" font-size="72" font-weight="600"
+    letter-spacing="-1.4" fill="{SOFT}">A Reference Architecture</text>
+  <line x1="80" y1="420" x2="1120" y2="420" stroke="{BASE}" stroke-width="1"/>
+  {cell(80, "BUILDS ON", "Agent Baseline", 0)}
+  <line x1="390" y1="420" x2="390" y2="506" stroke="{BASE}" stroke-width="1"/>
+  {cell(412, "VERSION", SF_VERSION, 0)}
+  <line x1="560" y1="420" x2="560" y2="506" stroke="{BASE}" stroke-width="1"/>
+  {cell(582, "PUBLISHED", SF_DATE, 0)}
+  <line x1="80" y1="506" x2="1120" y2="506" stroke="{BASE}" stroke-width="1"/>
+  {marks}
+</svg>'''
+
 tmp = ROOT / "whitepaper" / "figures" / ".social.svg"
 tmp.write_text(card, encoding="utf-8")
 
@@ -90,7 +141,8 @@ chrome = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
 # caches — correcting the bytes in place would leave the old number in every
 # preview already fetched. The plain name stays because previews posted before
 # this resolve it, and a correct card at the old URL beats a 404.
-out = ROOT / "static" / "social-card.png"
+out = ROOT / "static" / ("social-card.png" if PAPER_ARG is None
+                         else f"social-card-software-factory-v{SF_VERSION}.png")
 out.parent.mkdir(exist_ok=True)
 if not pathlib.Path(chrome).exists():
     tmp.unlink(missing_ok=True)
@@ -103,6 +155,11 @@ r = subprocess.run([chrome, "--headless", "--disable-gpu", "--hide-scrollbars",
 if r.returncode != 0:
     sys.exit(f"chrome failed ({r.returncode}): {r.stderr.decode()[:400]}")
 tmp.unlink(missing_ok=True)
+if PAPER_ARG is not None:
+    # Versioned by the paper's version, so a new version is a new URL and the
+    # platforms' og:image caches can't keep showing the old one.
+    print(f"wrote {out.name}  ({out.stat().st_size:,} bytes)" if out.exists() else "social card FAILED")
+    sys.exit(0)
 versioned = ROOT / "static" / f"social-card-{N_CONTROLS}.png"
 versioned.write_bytes(out.read_bytes())
 print(f"wrote social-card.png + {versioned.name}  ({out.stat().st_size:,} bytes)"

@@ -5,8 +5,9 @@
      — previewed as nothing at all. Same failure as the event strip: markup in one
      layout, silently absent from the other.
 
-     Called with a dict so each page supplies its own title and description:
-       {{ partial "social-meta.html" (dict "ctx" . "title" "…" "desc" "…") }} */}}
+     Called with a dict so each page supplies its own title and description,
+     and optionally its own card:
+       {{ partial "social-meta.html" (dict "ctx" . "title" "…" "desc" "…" "image" "…") }} */}}
 {{- $t := .title | default "Agent Baseline" -}}
 {{- $d := .desc -}}
 {{- $u := .ctx.Permalink | default .ctx.Site.BaseURL -}}
@@ -31,6 +32,16 @@
 {{- if not (fileExists (printf "static/%s" $file)) -}}
   {{- warnf "social-card-%d.png is missing — og:image falls back to social-card.png, which may show a stale count. Run bin/build-social." $n -}}
   {{- $file = "social-card.png" -}}
+{{- end -}}
+{{- /* A page with a card of its own passes "image" (a file in static/), e.g.
+       the second paper's page, whose share should name that paper. Missing,
+       it falls back to the baseline's card rather than an og:image that 404s. */ -}}
+{{- with .image -}}
+  {{- if fileExists (printf "static/%s" .) -}}
+    {{- $file = . -}}
+  {{- else -}}
+    {{- warnf "%s is missing — og:image falls back to %s. Run bin/build-social --paper." . $file -}}
+  {{- end -}}
 {{- end -}}
 {{- $card := printf "%s%s" .ctx.Site.BaseURL $file -}}
 <meta property="og:type" content="article">
