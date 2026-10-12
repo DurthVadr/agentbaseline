@@ -167,14 +167,14 @@ class SF(Fig):
         mk = f' marker-end="url(#{self.key}-{m})"' if head and not bar else ""
         self.parts.append(f'<path d="{d}" fill="none" stroke="{col}" stroke-width="{sw}"'
                           f'{dash}{mk}/>')
-        if bar:
+        if bar:  # the stop is the proxy enforcing, so it takes the accent
             (x1, y1), (x2, y2) = pts[-2], pts[-1]
             if y1 == y2:
-                self.parts.append(f'<path d="M{x2:g} {y2-6:g} L{x2:g} {y2+6:g}" stroke="{col}" '
-                                  f'stroke-width="1.6"/>')
+                self.parts.append(f'<path d="M{x2 - 1.5:g} {y2-7:g} L{x2 - 1.5:g} {y2+7:g}" '
+                                  f'stroke="{GUARD}" stroke-width="2"/>')
             else:
-                self.parts.append(f'<path d="M{x2-6:g} {y2:g} L{x2+6:g} {y2:g}" stroke="{col}" '
-                                  f'stroke-width="1.6"/>')
+                self.parts.append(f'<path d="M{x2-7:g} {y2 - 1.5:g} L{x2+7:g} {y2 - 1.5:g}" '
+                                  f'stroke="{GUARD}" stroke-width="2"/>')
         self.links.append({"tag": tag, "kind": kind, "pts": pts, "head": head and not bar,
                            "group": group, "free": free})
 
@@ -329,8 +329,12 @@ DEST = [  # (name, gloss lines, kind, boundary)
 ]
 
 
-def card_h(gloss):
-    return 44 if len(gloss) <= 1 else 58
+def card_h(gloss, name=""):
+    """A destination card's height: one name line and one gloss line is 44;
+    each further line adds its leading."""
+    names = len(name) if isinstance(name, (list, tuple)) else 1
+    # even heights, so every fan branch lands on a whole unit
+    return 44 + 16 * (names - 1) + 14 * max(len(gloss) - 1, 0)
 
 
 def skel_dest(f, dest=DEST, blocked_note=True, k=K, px1=None):
@@ -338,7 +342,7 @@ def skel_dest(f, dest=DEST, blocked_note=True, k=K, px1=None):
     ys = []
     y = k.ROW[0]
     for i, (n, g, kind, num) in enumerate(dest):
-        h = card_h(g)
+        h = card_h(g, n)
         f.node(k.E[0], y, k.E[1] - k.E[0], h, n, g, kind=kind, num=num, tag=f"dest{i}")
         ys.append((y + h / 2, kind))
         y += h + 8
@@ -528,103 +532,138 @@ def build_level(n, fn, title, desc):
 # The skeleton with the authorization model in the place where, from Figure 3
 # on, the work starts; and the legend, introduced once.
 # ═════════════════════════════════════════════════════════════════════════════
-def figure2():
-    k = K.shifted(8)
-    f = SF("sf2", W, 420, "The agent proposes, policy authorizes, and infrastructure enforces",
-           "The profile sets the most an agent can ever do, the task narrows it to the work "
-           "at hand, and delegation can only narrow it further; together they bound the "
-           "runtime authorization service's decision. The agent, inside its sandbox, proposes "
-           "the scope it needs. The authorization service decides, and passes the authorized "
-           "scope to the egress proxy, which enforces it and attaches credentials, so the "
-           "agent holds none and only authorized operations reach downstream systems.")
-    skel_auth(f, k, ("decides what access each task gets,", "routes high-impact actions to approval"),
-              grant_label=False)
-    px = mid((k.PROXY[0], k.PROXY[2]))
-    f.gloss(px + 8, k.AUTH[3] + 26, "authorized scope", "grant.l")
-    # profile ⊃ task ⊃ delegation
-    x0, x1 = 0, K.B[1]
-    y0, y1 = k.ROW
+FIG2_DESC = ("The profile sets the most an agent can ever do, the task narrows it to the work "
+             "at hand, and delegation can only narrow it further; together they bound the "
+             "runtime authorization service's decision. The agent, free to reason and try "
+             "things inside its sandbox, proposes the scope it needs. The authorization service "
+             "decides, and passes the authorized scope to the egress proxy, which enforces it "
+             "and attaches credentials, so the agent holds none and only authorized operations "
+             "reach downstream systems.")
+
+
+def scope_nest(f, x0, y0, x1, y1):
+    """Profile ⊃ task ⊃ delegation: each a hairline card inside the last."""
     f.box(x0, y0, x1 - x0, y1 - y0, "card", "prof")
     f.name(x0 + PAD, y0 + 21, "Profile", "prof.n")
     f.gloss(x0 + PAD, y0 + 37, "the most it can ever do", "prof.g")
-    f.box(x0 + 10, y0 + 46, x1 - x0 - 20, y1 - y0 - 46 - 10, "card", "task")
+    f.box(x0 + 10, y0 + 46, x1 - x0 - 20, y1 - y0 - 56, "card", "task")
     f.name(x0 + 20, y0 + 67, "Task", "task.n")
     f.gloss(x0 + 20, y0 + 83, "narrows it to the work", "task.g")
-    f.box(x0 + 20, y0 + 92, x1 - x0 - 40, y1 - y0 - 92 - 20, "card", "dlg")
+    f.box(x0 + 20, y0 + 92, x1 - x0 - 40, y1 - y0 - 112, "card", "dlg")
     f.name(x0 + 30, y0 + 113, "Delegation", "dlg.n")
     f.gloss(x0 + 30, y0 + 129, "only narrows it further", "dlg.g")
+
+
+def legend(f, x, y, width):
+    """The legend, once: what the colour, the fill, the numbers and the two
+    kinds of line mean. Wraps to the width it is given."""
+    f.rule(y - 18, x, x + width)
+    f.box(x, y - 11, 28, 16, "guard", "lg.guard")
+    lines = (["Enforced outside the agent's loop, numbered by the boundary it holds"]
+             if width > 600 else ["Enforced outside the agent's loop,", "numbered by the boundary"])
+    for i, s in enumerate(lines):
+        f.text(x + 40, y + 1 + i * 15, s, GLOSS, C["ink"], tag=f"lg.g{i}")
+    y += (len(lines) - 1) * 15 + 26
+    bx, by = x + 40, y
+    for n, s in ((1, "Identity and access"), (2, "Supply chain"), (3, "Sandbox"), (4, "Network")):
+        w = 22 + f.width(s, "gloss")
+        if bx + w > x + width:
+            bx, by = x + 40, by + 24
+        f.badge(bx + 8, by - 4, n, f"lg{n}")
+        f.gloss(bx + 22, by, s, f"lg{n}.t")
+        bx += w + 20
+    y = by + 32
+    f.box(x, y - 11, 28, 16, "agent", "lg.wash")
+    f.text(x + 40, y + 1, "Untrusted agent execution", GLOSS, C["ink"], tag="lg.wash.t")
+    if width > 600:
+        sx = [x + 246, x + 452]
+        ys = [y, y]
+    else:
+        sx = [x, x]
+        ys = [y + 26, y + 50]
+    f.link([(sx[0], ys[0] - 4), (sx[0] + 28, ys[0] - 4)], tag="lg.flow", free=True)
+    f.text(sx[0] + 40, ys[0] + 1, "Request or traffic", GLOSS, C["ink"], tag="lg.flow.t")
+    f.link([(sx[1], ys[1] - 4), (sx[1] + 28, ys[1] - 4)], "grant", tag="lg.grant", free=True)
+    f.text(sx[1] + 40, ys[1] + 1, "Authorization decision", GLOSS, C["ink"], tag="lg.grant.t")
+    return ys[1] + 6
+
+
+def figure2():
+    k = K.shifted(10)
+    f = SF("sf2", W, 440, "The agent proposes, policy authorizes, and infrastructure enforces",
+           FIG2_DESC)
+    skel_auth(f, k, ("decides what access each task gets,", "routes high-impact actions to approval"),
+              grant_label=False)
+    px = mid((k.PROXY[0], k.PROXY[2]))
+    f.gloss(px + 8, mid((k.AUTH[3], k.PROXY[1])) + 4, "authorized scope", "grant.l")
+    # profile ⊃ task ⊃ delegation bound the decision
+    y0, y1 = k.ROW
+    scope_nest(f, 0, y0, K.B[1], y1)
     ay = mid((k.AUTH[1], k.AUTH[3]))
-    bxv = x1 - 30
-    f.link([(bxv, y0), (bxv, ay), (k.AUTH[0], ay)], tag="bound")
-    f.gloss(bxv - 8 - f.width("bound the decision", "gloss"), ay + 4, "bound the decision",
-            "bound.l")
-    # the agent, in its sandbox
+    bx = mid((0, K.B[1]))
+    f.link([(bx, y0), (bx, ay), (k.AUTH[0], ay)], tag="bound")
+    f.gloss(bx + 12, ay - 8, "bound the decision", "bound.l")
+    # the agent, free inside its sandbox, proposes what it needs
     sx0, sx1 = k.C
     f.box(sx0, y0, sx1 - sx0, y1 - y0, "sandbox", "sbx")
     f.badge(sx0, y0, 3, "sbx")
     f.lab(sx0 + PAD + 4, y0 + 24, "Sandbox", "sbx.l")
     f.name(sx0 + PAD + 4, y0 + 52, "Agent", "sbx.n")
     f.gloss(sx0 + PAD + 4, y0 + 68, "holds no credentials", "sbx.g")
+    gy = y1 - 30
+    f.loop_glyph(sx0 + PAD + 11, gy - 4, "sbx.loop")
+    f.gloss(sx0 + PAD + 26, gy, "free to reason", "sbx.lp0")
+    f.gloss(sx0 + PAD + 26, gy + 14.5, "and try things", "sbx.lp1")
     ux = sx1 - 40
     f.link([(ux, y0), (ux, k.AUTH[3])], tag="propose")
-    f.gloss(ux - 8 - f.width("proposes scope", "gloss"), k.AUTH[3] + 26, "proposes scope",
-            "propose.l")
+    f.gloss(ux - 8 - f.width("proposes scope", "gloss"), mid((k.AUTH[3], y0)) + 4,
+            "proposes scope", "propose.l")
     skel_proxy(f, ("enforces it,", "attaches", "credentials"), k=k)
     f.link([(sx1, k.MID), (k.PROXY[0], k.MID)], tag="request")
     f.node(K.E[0], k.PROXY[1], K.E[1] - K.E[0], k.PROXY[3] - k.PROXY[1], "Downstream",
            ["only authorized", "operations", "reach it"], tag="down")
     f.link([(k.PROXY[2], k.MID), (K.E[0], k.MID)], tag="out")
-    # the legend: introduced here, kept by every figure after it
-    ly = y1 + 40
-    f.rule(ly - 18, 0, W)
-    f.box(0, ly - 11, 28, 16, "guard", "lg.guard")
-    f.text(40, ly + 1, "Enforced outside the agent's loop, numbered by the boundary it holds",
-           GLOSS, C["ink"], tag="lg.g1")
-    bx = 40
-    for n, s in ((1, "Identity and access"), (2, "Supply chain"), (3, "Sandbox"), (4, "Network")):
-        f.badge(bx + 8, ly + 23, n, f"lg{n}")
-        f.gloss(bx + 22, ly + 27, s, f"lg{n}.t")
-        bx += 22 + f.width(s, "gloss") + 20
-    ly2 = ly + 58
-    f.box(0, ly2 - 11, 28, 16, "agent", "lg.wash")
-    f.text(40, ly2 + 1, "Untrusted agent execution", GLOSS, C["ink"], tag="lg.wash.t")
-    f.link([(246, ly2 - 3), (282, ly2 - 3)], tag="lg.flow", free=True)
-    f.text(292, ly2 + 1, "Request or traffic", GLOSS, C["ink"], tag="lg.flow.t")
-    f.link([(452, ly2 - 3), (488, ly2 - 3)], "grant", tag="lg.grant", free=True)
-    f.text(498, ly2 + 1, "Authorization decision", GLOSS, C["ink"], tag="lg.grant.t")
-    f.set_height(ly2 + 10)
+    end = legend(f, 0, y1 + 44, W)
+    f.set_height(end)
     f.write("figure-2")
 
 
 # ═════════════════════════════════════════════════════════════════════════════
 # Figure 6 — only a new authorization decision can widen a task. Level 3's
-# skeleton, with one incident running through it.
+# skeleton with one incident running through it, in the paper's own words
+# ("A factory in action").
 # ═════════════════════════════════════════════════════════════════════════════
+FIG6_DESC = ("A production alert reports elevated errors in a payments service. The "
+             "orchestrator agent proposes a task for an incident agent: read the service's logs "
+             "for the last hour and open one pull request. The runtime authorization service "
+             "checks it against policy and the alert's authenticated source, and the egress "
+             "proxy attaches credentials only to the requests it grants. When the agent reaches "
+             "for an unrelated authentication service's logs, the task doesn't cover them and "
+             "the proxy blocks the call; only a new authorization decision could widen the task. "
+             "The fix uses a library admitted through the supply chain and leaves as a pull "
+             "request that approval policy routes to a person or approves automatically. The "
+             "deploy reaches a small share of traffic first, and the error rate afterward "
+             "confirms the fix or starts the next run.")
+FIG6_AUTH = ("checks it against policy and the", "alert's authenticated source")
+
+
 def figure6():
-    k = K.shifted(16)
-    f = SF("sf6", W, k.H, "Only a new authorization decision can widen a task",
-           "A production alert reports elevated errors in the payments service. The "
-           "orchestrator agent proposes a task and an incident profile; the runtime "
-           "authorization service grants the task the payments service's logs for the last "
-           "hour and one pull request, and the egress proxy enforces that grant. When the "
-           "incident agent reaches for the authentication service's logs, the proxy blocks "
-           "the call; only a new authorization decision could widen the task. The fix uses a "
-           "library admitted through the supply chain and leaves as a pull request that "
-           "approval policy routes; the deploy reaches a small share of traffic first, and the "
-           "error rate afterwards confirms the fix or starts the next run.")
-    skel_auth(f, k, ("profile: read logs, open pull requests",
-                     "task: payments logs, last hour; one PR"))
+    k = K.shifted(10)
+    f = SF("sf6", W, k.H, "Only a new authorization decision can widen a task", FIG6_DESC)
+    skel_auth(f, k, FIG6_AUTH)
     skel_frame(f, "The factory", k=k)
-    f.node(k.A[0], k.ROW[0], k.A[1] - k.A[0], 92, "Alert",
-           ["elevated errors", "in the payments", "service"], tag="sig")
+    f.node(k.A[0], k.MID - 48, k.A[1] - k.A[0], 96, ["Production", "alert"],
+           ["elevated errors", "in a payments", "service"], tag="sig")
     ob = (k.B[0], k.ROW[0], k.B[1] - k.B[0], 110)
-    f.node(*ob, ["Orchestrator", "agent"], ["proposes a", "task and an", "incident", "profile"],
+    f.node(*ob, ["Orchestrator", "agent"], ["proposes a", "task for an", "incident", "agent"],
            kind="agent", tag="orch")
     f.link([(k.A[1], k.ROW[0] + 46), (k.B[0], k.ROW[0] + 46)], tag="takes")
+    # what the task asks for rides on the proposal, into the authorization service
     pxp = k.B[1] - 8
     ay = mid((k.AUTH[1], k.AUTH[3]))
     f.link([(pxp, k.ROW[0]), (pxp, ay), (k.AUTH[0], ay)], tag="propose")
-    f.gloss(pxp - 8 - f.width("proposes", "gloss"), ay - 6, "proposes", "propose.l")
+    for i, s in enumerate(("read the service's logs,", "last hour, one pull request")):
+        f.gloss(pxp - 8 - f.width(s, "gloss"), ay + 20 + i * 14.5, s, f"propose.l{i}")
     x0, x1 = k.C
     y0, y1 = k.ROW
     f.box(x0, y0, x1 - x0, y1 - y0, "sandbox", "sbx")
@@ -637,15 +676,16 @@ def figure6():
     f.loop_glyph(x0 + PAD + 11, gy - 4, "sbx.loop")
     f.gloss(x0 + PAD + 26, gy, "inner loop,", "sbx.lp0")
     f.gloss(x0 + PAD + 26, gy + 14.5, "until tests pass", "sbx.lp1")
-    # asking for more is a request for a new decision, never a grant
+    # wanting more is a request for a new decision, never a grant
     ux = x1 - 40
     f.link([(ux, y0), (ux, k.AUTH[3])], tag="wider")
-    f.gloss(ux - 8 - f.width("requests wider scope", "gloss"), k.GRANT_Y,
-            "requests wider scope", "wider.l")
+    f.gloss(ux - 8 - f.width("asks for a new decision", "gloss"), k.GRANT_Y,
+            "asks for a new decision", "wider.l")
     skel_proxy(f, ("enforces it,", "attaches", "credentials"), k=k)
     f.link([(x1, k.MID), (k.PROXY[0], k.MID)], tag="traffic")
-    skel_dest(f, [("Payments logs", ["last hour,", "allowed"], "card", None),
-                  ("Auth service", ["logs: blocked,", "outside the task"], "blocked", None),
+    skel_dest(f, [(["Payments", "service logs"], ["last hour only"], "card", None),
+                  (["Authentication", "service logs"], ["blocked: outside", "the task"],
+                   "blocked", None),
                   ("Admission point", ["serves the", "approved library"], "guard", 2)],
               blocked_note=False, k=k)
     skel_pr_exit(f, k=k)
@@ -653,15 +693,9 @@ def figure6():
     out_card(f, slots[0], "Pull request", ["one, as", "granted"], "pr", k=k)
     out_card(f, slots[1], "Approval", ["a person or", "automatic"], "appr", k=k)
     out_card(f, slots[2], "Deploy", ["small share of", "traffic first"], "deploy", k=k)
-    out_card(f, slots[3], "Production", ["error rate", "after deploy"], "prod", k=k)
+    out_card(f, slots[3], "Production", ["error rate", "afterward"], "prod", k=k)
     out_chain(f, slots, k=k)
-    px = mid(slots[3])
-    ax = mid(k.A)
-    f.link([(px, k.OUT[1]), (px, k.LOOPY), (ax, k.LOOPY), (ax, k.ROW[0] + 92)], "loop",
-           tag="outer")
-    f.lab(ax + 10, k.LOOPY - 6, "outer loop", "outer.l")
-    f.gloss(ax + 10 + f.width("outer loop", "label") + 8, k.LOOPY - 6,
-            "the error rate confirms the fix or starts the next run", "outer.g")
+    outer_loop(f, mid(slots[3]), k.MID + 48, "confirms the fix or starts the next run", k=k)
     f.set_height(k.LOOPY + 8)
     f.write("figure-6")
 
@@ -669,18 +703,23 @@ def figure6():
 # ═════════════════════════════════════════════════════════════════════════════
 # Figure 1 — work loops until it passes, and problems feed back to design
 # ═════════════════════════════════════════════════════════════════════════════
+FIG1_DESC = ("Work arrives as a prompt, a PRD or a ticket, and design sets its limits. The "
+             "inner loop assembles what the task needs, builds the change in a sandbox and "
+             "verifies it against the organization's standards, repeating until the work passes. "
+             "Review, and deployment under approval policy, follow. The outer loop feeds review, "
+             "evals and production feedback back into design, and production sends back signals "
+             "that start new work.")
+
+
 def figure1():
     f = SF("sf1", W, 340, "Work loops until it passes, and problems feed back to design",
-           "Work arrives as a prompt, a PRD or a ticket, and design sets its limits. The inner "
-           "loop assembles what the task needs, builds the change in a sandbox and verifies it, "
-           "repeating until the work passes. Review and approval policy decide what deploys. "
-           "The outer loop feeds review, evals and production feedback back into design, and "
-           "production sends back signals that start new work.")
+           FIG1_DESC)
     y0, h = 40, 64
-    f.node(0, y0, 104, h, "Inputs", ["a prompt, PRD", "or ticket"], tag="in")
-    f.node(128, y0, 122, h, "Design", ["sets the limits", "in advance"], tag="design")
-    f.link([(104, y0 + h / 2), (128, y0 + h / 2)], tag="a1")
-    gx0, gx1 = 276, W
+    ym = y0 + h / 2
+    f.node(28, y0, 96, h, "Inputs", ["a prompt, PRD", "or ticket"], tag="in")
+    f.node(148, y0, 114, h, "Design", ["sets the limits", "in advance"], tag="design")
+    f.link([(124, ym), (148, ym)], tag="a1")
+    gx0, gx1 = 288, W
     f.box(gx0, 10, gx1 - gx0, 152, "zone", "inner")
     f.lab(gx0 + 12, 28, "Inner loop", "inner.l")
     f.gloss(gx0 + 12 + f.width("Inner loop", "label") + 8, 28, "repeats until the work passes",
@@ -692,37 +731,40 @@ def figure1():
                               ("Build", ["the change, in", "a sandbox"]),
                               ("Verify", ["against the", "standards"])]):
         f.node(x, y0, cw, h, n, g, tag=n.lower())
-    f.link([(250, y0 + h / 2), (xs[0], y0 + h / 2)], tag="a2")
+    f.link([(262, ym), (xs[0], ym)], tag="a2")
     for a, b in zip(xs, xs[1:]):
-        f.link([(a + cw, y0 + h / 2), (b, y0 + h / 2)], tag=f"s{int(a)}")
+        f.link([(a + cw, ym), (b, ym)], tag=f"s{int(a)}")
     ly = y0 + h + 24
     f.link([(mid((xs[2], xs[2] + cw)), y0 + h), (mid((xs[2], xs[2] + cw)), ly),
             (mid((xs[0], xs[0] + cw)), ly), (mid((xs[0], xs[0] + cw)), y0 + h)], tag="again")
     f.gloss(xs[1] + 6, ly + 18, "until it passes", "again.l")
-    f.gloss(gx0 + 12, 186, "Assembled from agents and harnesses, models, skills,", "blocks1")
-    f.gloss(gx0 + 12, 200.5, "tools and MCP servers, dependencies and blueprints", "blocks2")
+    f.gloss(xs[0], 186, "Assembled from agents and harnesses, models, skills,", "blocks1")
+    f.gloss(xs[0], 200.5, "tools and MCP servers, dependencies and blueprints", "blocks2")
     # out of the loop, right to left: review → deploy → production
-    b0 = 240
-    rw = 140
-    rx = [W - rw, W - 2 * rw - 28, W - 3 * rw - 56]
-    f.node(rx[0], b0, rw, h, "Review", ["and evals"], tag="review")
+    b0, rw, bg = 256, 140, 36
+    rx = [W - rw, W - 2 * rw - bg, W - 3 * rw - 2 * bg]
+    bm = b0 + h / 2
+    f.node(rx[0], b0, rw, h, "Review", ["of the change"], tag="review")
     f.node(rx[1], b0, rw, h, "Deploy", ["under approval", "policy"], tag="deploy")
-    f.node(rx[2], b0, rw, h, "Production", ["sends back", "signals"], tag="prod")
-    vx = mid((rx[0], rx[0] + rw))
+    f.node(rx[2], b0, rw, h, "Production", ["sends back signals,", "such as incidents"],
+           tag="prod")
+    vx = mid((rx[0], rx[0] + rw)) + 20
     f.link([(vx, 162), (vx, b0)], tag="passes")
-    f.gloss(vx + 8, 226, "passes", "passes.l")
-    f.link([(rx[0], b0 + h / 2), (rx[1] + rw, b0 + h / 2)], tag="b1")
-    f.link([(rx[1], b0 + h / 2), (rx[2] + rw, b0 + h / 2)], tag="b2")
-    # the outer loop: what review and production learn goes back to design;
-    # production's signals start new work
-    dx = mid((128, 250))
-    f.link([(rx[2], b0 + 20), (dx, b0 + 20), (dx, y0 + h)], "loop", tag="outer")
-    f.lab(dx - 8 - f.width("outer loop", "label"), 150, "outer loop", "outer.l")
-    f.gloss(dx - 8 - f.width("feedback goes", "gloss"), 166, "feedback goes", "outer.g1")
-    f.gloss(dx - 8 - f.width("back to design", "gloss"), 180.5, "back to design", "outer.g2")
-    sx = 40
-    f.link([(rx[2], b0 + h - 16), (sx, b0 + h - 16), (sx, y0 + h)], "loop", tag="signals")
-    f.gloss(sx + 8, b0 + h - 22, "signals start new work", "signals.l")
+    f.gloss(vx + 8, 214, "passes", "passes.l")
+    f.link([(rx[0], bm), (rx[1] + rw, bm)], tag="b1")
+    f.link([(rx[1], bm), (rx[2] + rw, bm)], tag="b2")
+    # the outer loop collects what review and production learn and carries it
+    # back to design; production's signals go round the left to start new work
+    cy = 232
+    dx = mid((148, 262))
+    rvx = rx[0] + 24
+    f.link([(rvx, b0), (rvx, cy), (dx, cy), (dx, y0 + h)], "loop", tag="outer", group="outer")
+    f.link([(rx[2] + 50, b0), (rx[2] + 50, cy)], "loop", head=False, tag="outer.p",
+           group="outer")
+    w = f.lab(dx + 12, cy - 8, "outer loop", "outer.l")
+    f.gloss(dx + 12 + w + 8, cy - 8, "review, evals and production feedback", "outer.g")
+    f.link([(rx[2], bm + 12), (8, bm + 12), (8, ym), (28, ym)], "loop", tag="signals")
+    f.gloss(20, bm + 6, "signals start new work", "signals.l")
     f.set_height(b0 + h + 4)
     f.write("figure-1")
 
