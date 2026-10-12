@@ -13,7 +13,9 @@
      block (the pill, a.closes), and two tinted blocks in the same viewport fight.
      Here the accent is spent on the registration mark and the link only; the
      strip itself is the page's wash with a hairline under it — the same
-     treatment the questions band and the figure plate use. */}}
+     treatment the questions band and the figure plate use. The label's text is
+     the darker link token, as the pill's is: the accent itself is under AA at
+     this size on the wash. */}}
 {{- $e := .Site.Params.event -}}
 {{- if $e -}}
 {{- $live := true -}}
@@ -40,12 +42,15 @@
   .eventbar .mark { width:7px; height:7px; flex:none; background:var(--accent);
     /* the corner fiducial, shrunk — a filled square reads as "now" where the
        sheet's open squares read as registration */ }
-  .eventbar .tag { color:var(--accent); font-weight:600; letter-spacing:.1em;
+  /* Text in --link-hover, not --accent, as the pill does: 11px accent on the
+     wash was 4.4:1 in light mode, under AA; this is 7.5:1. The square beside
+     it keeps the accent. */
+  .eventbar .tag { color:var(--link-hover); font-weight:600; letter-spacing:.1em;
     text-transform:uppercase; font-size:11px; white-space:nowrap; }
   .eventbar .say { color:var(--soft); min-width:0; }
   .eventbar .go { color:var(--ink); font-weight:600; text-decoration:none;
     white-space:nowrap; border-bottom:1px solid var(--faint); }
-  .eventbar .go:hover { color:var(--accent); border-bottom-color:var(--accent); }
+  .eventbar .go:hover { color:var(--link-hover); border-bottom-color:var(--accent); }
   /* 24px minimum target — the icon stays 14px, the hit area grows. */
   .eventbar .x { margin-left:auto; flex:none; background:none; border:0;
     color:var(--faint); cursor:pointer; padding:5px; line-height:0;
