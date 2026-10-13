@@ -151,6 +151,12 @@ for i, (n1, s1) in enumerate(allsent):
         # that is one fact shown twice, not prose written twice
         if {n1, n2} == {"public/index.html", "public/controls/index.html"}:
             continue
+        # likewise the reference architecture's byline, which its page and the
+        # homepage's "Who wrote it" print from one contributors.yaml: exempt
+        # only that pair of sentences, so the two pages' prose is still held
+        if ({n1, n2} == {"public/index.html", "public/reference-architecture/index.html"}
+                and "drafted by" in s1.lower() and "drafted by" in s2.lower()):
+            continue
         r = difflib.SequenceMatcher(None, s1.lower(), s2.lower()).ratio()
         if r > 0.72:
             findings.append(("near", f"{r:.0%} alike — {n1}: “{s1[:58]}…” / "
