@@ -1,51 +1,63 @@
 {
  "W": 736,
- "H": 656,
+ "H": 602,
  "shapes": [
   {
    "tag": "frame",
    "kind": "zone",
-   "x": 130,
-   "y": 84,
-   "w": 450,
-   "h": 280,
+   "x": 122,
+   "y": 148,
+   "w": 432,
+   "h": 316,
    "solid": false,
    "sw": 1
   },
   {
-   "tag": "sc",
-   "kind": "guard",
-   "x": 244,
-   "y": 14,
-   "w": 324,
+   "tag": "req",
+   "kind": "card",
+   "x": 8,
+   "y": 12,
+   "w": 120,
    "h": 44,
    "solid": true,
-   "sw": 1.25
+   "sw": 1
   },
   {
-   "tag": "badgesc",
-   "kind": "badge",
-   "x": 236,
-   "y": 6,
-   "w": 16,
-   "h": 16,
-   "solid": true
+   "tag": "orch",
+   "kind": "agent",
+   "x": 168,
+   "y": 8,
+   "w": 280,
+   "h": 52,
+   "solid": true,
+   "sw": 1.75
   },
   {
-   "tag": "sc.launch.dot",
-   "kind": "glyph",
-   "x": 251.4,
-   "y": 151.4,
-   "w": 5.2,
-   "h": 5.2,
-   "solid": false
+   "tag": "ctx",
+   "kind": "card",
+   "x": 598,
+   "y": 8,
+   "w": 130,
+   "h": 60,
+   "solid": true,
+   "sw": 1.75
+  },
+  {
+   "tag": "exec",
+   "kind": "card",
+   "x": 198,
+   "y": 88,
+   "w": 220,
+   "h": 44,
+   "solid": true,
+   "sw": 1
   },
   {
    "tag": "auth",
    "kind": "guard",
-   "x": 64,
-   "y": 406,
-   "w": 454,
+   "x": 468,
+   "y": 88,
+   "w": 260,
    "h": 44,
    "solid": true,
    "sw": 1.25
@@ -53,95 +65,36 @@
   {
    "tag": "badgeauth",
    "kind": "badge",
-   "x": 56,
-   "y": 398,
+   "x": 460,
+   "y": 80,
    "w": 16,
    "h": 16,
    "solid": true
   },
   {
-   "tag": "sig",
-   "kind": "card",
-   "x": 8,
-   "y": 194,
-   "w": 112,
-   "h": 104,
-   "solid": true,
-   "sw": 1.75
-  },
-  {
-   "tag": "exec",
-   "kind": "card",
-   "x": 142,
-   "y": 134,
-   "w": 100,
-   "h": 144,
-   "solid": true,
-   "sw": 1
-  },
-  {
-   "tag": "orch",
-   "kind": "agent",
-   "x": 142,
-   "y": 296,
-   "w": 100,
-   "h": 60,
-   "solid": true,
-   "sw": 1.75
+   "tag": "split.dot",
+   "kind": "glyph",
+   "x": 305.4,
+   "y": 173.4,
+   "w": 5.2,
+   "h": 5.2,
+   "solid": false
   },
   {
    "tag": "sbx0",
    "kind": "sandbox",
-   "x": 272,
-   "y": 134.0,
-   "w": 172,
-   "h": 40.0,
+   "x": 134,
+   "y": 222,
+   "w": 117,
+   "h": 96,
    "solid": true,
-   "sw": 2.0
+   "sw": 1.25
   },
   {
    "tag": "badgesbx0",
    "kind": "badge",
-   "x": 264,
-   "y": 126.0,
-   "w": 16,
-   "h": 16,
-   "solid": true
-  },
-  {
-   "tag": "sbx1",
-   "kind": "sandbox",
-   "x": 272,
-   "y": 186.0,
-   "w": 172,
-   "h": 40.0,
-   "solid": true,
-   "sw": 2.0
-  },
-  {
-   "tag": "badgesbx1",
-   "kind": "badge",
-   "x": 264,
-   "y": 178.0,
-   "w": 16,
-   "h": 16,
-   "solid": true
-  },
-  {
-   "tag": "sbx2",
-   "kind": "sandbox",
-   "x": 272,
-   "y": 238.0,
-   "w": 172,
-   "h": 40.0,
-   "solid": true,
-   "sw": 2.0
-  },
-  {
-   "tag": "badgesbx2",
-   "kind": "badge",
-   "x": 264,
-   "y": 230.0,
+   "x": 126,
+   "y": 214,
    "w": 16,
    "h": 16,
    "solid": true
@@ -149,143 +102,171 @@
   {
    "tag": "sbx0.loop",
    "kind": "glyph",
-   "x": 418.5,
-   "y": 137.5,
+   "x": 145.5,
+   "y": 296.5,
    "w": 19.0,
    "h": 19.0,
    "solid": false
+  },
+  {
+   "tag": "sbx1",
+   "kind": "sandbox",
+   "x": 347,
+   "y": 222,
+   "w": 117,
+   "h": 96,
+   "solid": true,
+   "sw": 1.25
+  },
+  {
+   "tag": "badgesbx1",
+   "kind": "badge",
+   "x": 339,
+   "y": 214,
+   "w": 16,
+   "h": 16,
+   "solid": true
   },
   {
    "tag": "sbx1.loop",
    "kind": "glyph",
-   "x": 418.5,
-   "y": 189.5,
+   "x": 358.5,
+   "y": 296.5,
    "w": 19.0,
    "h": 19.0,
    "solid": false
   },
   {
-   "tag": "sbx2.loop",
-   "kind": "glyph",
-   "x": 418.5,
-   "y": 241.5,
-   "w": 19.0,
-   "h": 19.0,
-   "solid": false
+   "tag": "proxy0",
+   "kind": "guard",
+   "x": 269,
+   "y": 246,
+   "w": 62,
+   "h": 52,
+   "solid": true,
+   "sw": 1.25
   },
   {
-   "tag": "exec.bus.dot",
-   "kind": "glyph",
-   "x": 251.4,
-   "y": 203.4,
-   "w": 5.2,
-   "h": 5.2,
-   "solid": false
+   "tag": "badgeproxy0",
+   "kind": "badge",
+   "x": 261,
+   "y": 238,
+   "w": 16,
+   "h": 16,
+   "solid": true
   },
   {
-   "tag": "mon",
+   "tag": "badgeproxy0",
+   "kind": "badge",
+   "x": 309,
+   "y": 238,
+   "w": 16,
+   "h": 16,
+   "solid": true
+  },
+  {
+   "tag": "proxy1",
+   "kind": "guard",
+   "x": 482,
+   "y": 246,
+   "w": 62,
+   "h": 52,
+   "solid": true,
+   "sw": 1.25
+  },
+  {
+   "tag": "badgeproxy1",
+   "kind": "badge",
+   "x": 474,
+   "y": 238,
+   "w": 16,
+   "h": 16,
+   "solid": true
+  },
+  {
+   "tag": "badgeproxy1",
+   "kind": "badge",
+   "x": 522,
+   "y": 238,
+   "w": 16,
+   "h": 16,
+   "solid": true
+  },
+  {
+   "tag": "mon0",
    "kind": "agent",
-   "x": 272,
-   "y": 296,
-   "w": 172,
-   "h": 60,
+   "x": 134,
+   "y": 338,
+   "w": 140,
+   "h": 44,
    "solid": true,
    "sw": 1.75
   },
   {
-   "tag": "pghost6",
-   "kind": "ghost",
-   "x": 470,
-   "y": 182,
-   "w": 104,
-   "h": 60,
-   "solid": false,
-   "sw": 0.75
+   "tag": "mon1",
+   "kind": "agent",
+   "x": 347,
+   "y": 338,
+   "w": 140,
+   "h": 44,
+   "solid": true,
+   "sw": 1.75
   },
   {
-   "tag": "pghost3",
-   "kind": "ghost",
-   "x": 467,
-   "y": 179,
-   "w": 104,
-   "h": 60,
-   "solid": false,
-   "sw": 0.75
-  },
-  {
-   "tag": "proxy",
-   "kind": "guardfill",
-   "x": 464,
-   "y": 176,
-   "w": 104,
-   "h": 60,
+   "tag": "obs",
+   "kind": "record",
+   "x": 134,
+   "y": 408,
+   "w": 410,
+   "h": 44,
    "solid": true,
    "sw": 1.25
   },
   {
-   "tag": "badgeproxy",
-   "kind": "badge",
-   "x": 456,
-   "y": 168,
-   "w": 16,
-   "h": 16,
-   "solid": true
-  },
-  {
-   "tag": "badgeproxy",
-   "kind": "badge",
-   "x": 498,
-   "y": 228,
-   "w": 16,
-   "h": 16,
-   "solid": true
-  },
-  {
-   "tag": "dest0",
-   "kind": "card",
-   "x": 608,
-   "y": 134,
-   "w": 120,
-   "h": 44,
-   "solid": true,
-   "sw": 1
-  },
-  {
-   "tag": "dest1",
-   "kind": "card",
-   "x": 608,
-   "y": 190,
-   "w": 120,
-   "h": 44,
-   "solid": true,
-   "sw": 1
-  },
-  {
-   "tag": "dest2",
+   "tag": "sc",
    "kind": "guard",
-   "x": 608,
-   "y": 246,
-   "w": 120,
+   "x": 582,
+   "y": 148,
+   "w": 146,
+   "h": 60,
+   "solid": true,
+   "sw": 1.25
+  },
+  {
+   "tag": "badgesc",
+   "kind": "badge",
+   "x": 574,
+   "y": 140,
+   "w": 16,
+   "h": 16,
+   "solid": true
+  },
+  {
+   "tag": "mg",
+   "kind": "guard",
+   "x": 582,
+   "y": 220,
+   "w": 146,
    "h": 44,
    "solid": true,
    "sw": 1.25
   },
   {
-   "tag": "dest3",
+   "tag": "down",
    "kind": "card",
-   "x": 608,
-   "y": 302,
-   "w": 120,
-   "h": 44,
+   "x": 582,
+   "y": 276,
+   "w": 146,
+   "h": 60,
    "solid": true,
    "sw": 1
   },
   {
    "tag": "pr",
    "kind": "card",
-   "x": 142,
-   "y": 484,
-   "w": 104,
+   "x": 476,
+   "y": 488,
+   "w": 108,
    "h": 60,
    "solid": true,
    "sw": 1
@@ -293,9 +274,9 @@
   {
    "tag": "appr",
    "kind": "card",
-   "x": 266,
-   "y": 484,
-   "w": 174,
+   "x": 288,
+   "y": 488,
+   "w": 168,
    "h": 60,
    "solid": true,
    "sw": 1
@@ -303,9 +284,9 @@
   {
    "tag": "deploy",
    "kind": "card",
-   "x": 460,
-   "y": 484,
-   "w": 96,
+   "x": 170,
+   "y": 488,
+   "w": 98,
    "h": 60,
    "solid": true,
    "sw": 1.75
@@ -313,28 +294,64 @@
   {
    "tag": "prod",
    "kind": "card",
-   "x": 576,
-   "y": 484,
-   "w": 132,
+   "x": 24,
+   "y": 488,
+   "w": 126,
    "h": 60,
    "solid": true,
    "sw": 1.75
   },
   {
-   "tag": "obs",
-   "kind": "record",
+   "tag": "sig",
+   "kind": "card",
    "x": 8,
-   "y": 600,
-   "w": 720,
-   "h": 46,
+   "y": 308,
+   "w": 100,
+   "h": 156,
    "solid": true,
-   "sw": 1.25
+   "sw": 1.75
+  },
+  {
+   "tag": "badgelg1",
+   "kind": "badge",
+   "x": 216.34,
+   "y": 574,
+   "w": 16,
+   "h": 16,
+   "solid": true
+  },
+  {
+   "tag": "badgelg2",
+   "kind": "badge",
+   "x": 302.54,
+   "y": 574,
+   "w": 16,
+   "h": 16,
+   "solid": true
+  },
+  {
+   "tag": "badgelg3",
+   "kind": "badge",
+   "x": 387.84000000000003,
+   "y": 574,
+   "w": 16,
+   "h": 16,
+   "solid": true
+  },
+  {
+   "tag": "badgelg4",
+   "kind": "badge",
+   "x": 499.04,
+   "y": 574,
+   "w": 16,
+   "h": 16,
+   "solid": true
   },
   {
    "tag": "dk0",
    "kind": "card",
-   "x": 608,
-   "y": 18,
+   "x": 598,
+   "y": 364,
    "w": 18,
    "h": 12,
    "solid": true,
@@ -343,8 +360,8 @@
   {
    "tag": "dk1",
    "kind": "card",
-   "x": 608,
-   "y": 37,
+   "x": 598,
+   "y": 383,
    "w": 18,
    "h": 12,
    "solid": true,
@@ -353,33 +370,16 @@
  ],
  "links": [
   {
-   "tag": "sc.launch",
+   "tag": "req.in",
    "kind": "flow",
    "pts": [
     [
-     254,
-     58
+     128,
+     34.0
     ],
     [
-     254,
-     154.0
-    ]
-   ],
-   "head": false,
-   "group": null,
-   "free": false
-  },
-  {
-   "tag": "sc.pkg",
-   "kind": "flow",
-   "pts": [
-    [
-     538,
-     58
-    ],
-    [
-     538,
-     176
+     168,
+     34.0
     ]
    ],
    "head": true,
@@ -387,16 +387,16 @@
    "free": false
   },
   {
-   "tag": "grant",
-   "kind": "grant",
+   "tag": "ctx.in",
+   "kind": "flow",
    "pts": [
     [
-     492,
-     406
+     598,
+     28
     ],
     [
-     492,
-     242
+     448,
+     28
     ]
    ],
    "head": true,
@@ -404,20 +404,16 @@
    "free": false
   },
   {
-   "tag": "takes",
+   "tag": "divide",
    "kind": "flow",
    "pts": [
     [
-     64,
-     298
+     308.0,
+     60
     ],
     [
-     64,
-     326.0
-    ],
-    [
-     142,
-     326.0
+     308.0,
+     88
     ]
    ],
    "head": true,
@@ -429,12 +425,16 @@
    "kind": "flow",
    "pts": [
     [
-     192.0,
-     356
+     448,
+     48
     ],
     [
-     192.0,
-     406
+     504,
+     48
+    ],
+    [
+     504,
+     88
     ]
    ],
    "head": true,
@@ -442,122 +442,75 @@
    "free": false
   },
   {
-   "tag": "exec.bus",
+   "tag": "split",
    "kind": "flow",
    "pts": [
     [
-     242,
-     206.0
+     308.0,
+     132
     ],
     [
-     254,
-     206.0
+     308.0,
+     176
     ]
    ],
    "head": false,
-   "group": "xb",
+   "group": "split",
    "free": false
   },
   {
-   "tag": "xbus",
+   "tag": "split0",
    "kind": "flow",
    "pts": [
     [
-     254,
-     154.0
+     308.0,
+     176
     ],
     [
-     254,
-     258.0
-    ]
-   ],
-   "head": false,
-   "group": "xb",
-   "free": false
-  },
-  {
-   "tag": "xb0",
-   "kind": "flow",
-   "pts": [
-    [
-     254,
-     154.0
+     208,
+     176
     ],
     [
-     272,
-     154.0
+     208,
+     222
     ]
    ],
    "head": true,
-   "group": "xb",
+   "group": "split",
    "free": false
   },
   {
-   "tag": "xb1",
+   "tag": "split1",
    "kind": "flow",
    "pts": [
     [
-     254,
-     206.0
+     308.0,
+     176
     ],
     [
-     272,
-     206.0
+     421,
+     176
+    ],
+    [
+     421,
+     222
     ]
    ],
    "head": true,
-   "group": "xb",
+   "group": "split",
    "free": false
   },
   {
-   "tag": "xb2",
+   "tag": "traffic0",
    "kind": "flow",
    "pts": [
     [
-     254,
-     258.0
+     251,
+     272.0
     ],
     [
-     272,
-     258.0
-    ]
-   ],
-   "head": true,
-   "group": "xb",
-   "free": false
-  },
-  {
-   "tag": "watch",
-   "kind": "flow",
-   "pts": [
-    [
-     358.0,
-     296
-    ],
-    [
-     358.0,
-     278
-    ]
-   ],
-   "head": false,
-   "group": null,
-   "free": false
-  },
-  {
-   "tag": "flags",
-   "kind": "flow",
-   "pts": [
-    [
-     292,
-     296
-    ],
-    [
-     292,
-     287
-    ],
-    [
-     120,
-     287
+     269,
+     272.0
     ]
    ],
    "head": true,
@@ -565,16 +518,16 @@
    "free": false
   },
   {
-   "tag": "traffic",
+   "tag": "traffic1",
    "kind": "flow",
    "pts": [
-    [
-     444,
-     206
-    ],
     [
      464,
-     206
+     272.0
+    ],
+    [
+     482,
+     272.0
     ]
    ],
    "head": true,
@@ -582,16 +535,88 @@
    "free": false
   },
   {
-   "tag": "bus.in",
+   "tag": "grant",
+   "kind": "grant",
+   "pts": [
+    [
+     508,
+     132
+    ],
+    [
+     508,
+     246
+    ]
+   ],
+   "head": true,
+   "group": null,
+   "free": false
+  },
+  {
+   "tag": "watch0",
    "kind": "flow",
    "pts": [
     [
-     568,
-     206
+     192.5,
+     338
     ],
     [
-     590,
-     206
+     192.5,
+     318
+    ]
+   ],
+   "head": false,
+   "group": null,
+   "free": false
+  },
+  {
+   "tag": "watch1",
+   "kind": "flow",
+   "pts": [
+    [
+     405.5,
+     338
+    ],
+    [
+     405.5,
+     318
+    ]
+   ],
+   "head": false,
+   "group": null,
+   "free": false
+  },
+  {
+   "tag": "bus.in1",
+   "kind": "flow",
+   "pts": [
+    [
+     544,
+     272.0
+    ],
+    [
+     564,
+     272.0
+    ]
+   ],
+   "head": false,
+   "group": "bus",
+   "free": false
+  },
+  {
+   "tag": "bus.in0",
+   "kind": "flow",
+   "pts": [
+    [
+     283,
+     298
+    ],
+    [
+     283,
+     396
+    ],
+    [
+     564,
+     396
     ]
    ],
    "head": false,
@@ -603,15 +628,15 @@
    "kind": "flow",
    "pts": [
     [
-     590,
-     156.0
+     564,
+     178.0
     ],
     [
-     590,
-     324.0
+     564,
+     488
     ]
    ],
-   "head": false,
+   "head": true,
    "group": "bus",
    "free": false
   },
@@ -620,12 +645,12 @@
    "kind": "flow",
    "pts": [
     [
-     590,
-     156.0
+     564,
+     178.0
     ],
     [
-     608,
-     156.0
+     582,
+     178.0
     ]
    ],
    "head": true,
@@ -637,12 +662,12 @@
    "kind": "flow",
    "pts": [
     [
-     590,
-     212.0
+     564,
+     242.0
     ],
     [
-     608,
-     212.0
+     582,
+     242.0
     ]
    ],
    "head": true,
@@ -654,12 +679,12 @@
    "kind": "flow",
    "pts": [
     [
-     590,
-     268.0
+     564,
+     306.0
     ],
     [
-     608,
-     268.0
+     582,
+     306.0
     ]
    ],
    "head": true,
@@ -667,41 +692,16 @@
    "free": false
   },
   {
-   "tag": "bus.3",
+   "tag": "out.pr",
    "kind": "flow",
    "pts": [
     [
-     590,
-     324.0
+     476,
+     518.0
     ],
     [
-     608,
-     324.0
-    ]
-   ],
-   "head": true,
-   "group": "bus",
-   "free": false
-  },
-  {
-   "tag": "pr.exit",
-   "kind": "flow",
-   "pts": [
-    [
-     544,
-     236
-    ],
-    [
-     544,
-     466
-    ],
-    [
-     194.0,
-     466
-    ],
-    [
-     194.0,
-     484
+     456,
+     518.0
     ]
    ],
    "head": true,
@@ -709,16 +709,16 @@
    "free": false
   },
   {
-   "tag": "out134",
+   "tag": "out.appr",
    "kind": "flow",
    "pts": [
     [
-     246,
-     514.0
+     288,
+     518.0
     ],
     [
-     266,
-     514.0
+     268,
+     518.0
     ]
    ],
    "head": true,
@@ -726,16 +726,16 @@
    "free": false
   },
   {
-   "tag": "out258",
+   "tag": "out.deploy",
    "kind": "flow",
    "pts": [
     [
-     440,
-     514.0
+     170,
+     518.0
     ],
     [
-     460,
-     514.0
+     150,
+     518.0
     ]
    ],
    "head": true,
@@ -743,16 +743,33 @@
    "free": false
   },
   {
-   "tag": "out452",
-   "kind": "flow",
+   "tag": "incidents",
+   "kind": "loop",
    "pts": [
     [
-     556,
-     514.0
+     96,
+     488
     ],
     [
-     576,
-     514.0
+     96,
+     464
+    ]
+   ],
+   "head": true,
+   "group": null,
+   "free": false
+  },
+  {
+   "tag": "evals",
+   "kind": "loop",
+   "pts": [
+    [
+     134,
+     430.0
+    ],
+    [
+     108,
+     430.0
     ]
    ],
    "head": true,
@@ -764,20 +781,24 @@
    "kind": "loop",
    "pts": [
     [
-     642.0,
-     544
+     16,
+     308
     ],
     [
-     642.0,
-     584
+     16,
+     74
     ],
     [
-     44,
-     584
+     148,
+     74
     ],
     [
-     44,
-     298
+     148,
+     52
+    ],
+    [
+     168,
+     52
     ]
    ],
    "head": true,

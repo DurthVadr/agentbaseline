@@ -15,7 +15,7 @@
   <rect x="96.5" y="94.5" width="255" height="59" rx="4" fill="none" stroke="#5A7A00" stroke-width="1.25"/>
   <circle cx="96" cy="94" r="8" fill="#5A7A00"/>
   <text x="92.7" y="97.9" font-family="'IBM Plex Mono',ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="12.5" fill="#FFFFFF" font-weight="600">3</text>
-  <text x="106" y="115" font-family="Figtree,'Avenir Next','Helvetica Neue',sans-serif" font-size="12.5" fill="#1A1C1A" font-weight="600">Supply chain scanning</text>
+  <text x="106" y="115" font-family="Figtree,'Avenir Next','Helvetica Neue',sans-serif" font-size="12.5" fill="#1A1C1A" font-weight="600">Supply chain firewall</text>
   <text x="106" y="131.0" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.5" fill="#5A5E5A" font-weight="400">approved versions</text>
   <text x="106" y="145.5" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.5" fill="#5A5E5A" font-weight="400">the profile allows</text>
   <text x="131.8125" y="172" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.5" fill="#5A5E5A" font-weight="400">checks components</text>

@@ -7,7 +7,7 @@
   <rect x="60.5" y="96.5" width="291" height="43" rx="4" fill="none" stroke="var(--fig-accent,var(--accent))" stroke-width="1.25"/>
   <circle cx="60" cy="96" r="8" fill="var(--fig-accent,var(--accent))"/>
   <text x="56.7" y="99.9" font-family="'IBM Plex Mono',ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="12.5" fill="var(--fig-plate,var(--paper))" font-weight="600">3</text>
-  <text x="70" y="117" font-family="Figtree,'Avenir Next','Helvetica Neue',sans-serif" font-size="12.5" fill="var(--fig-ink,var(--ink))" font-weight="600">Supply chain scanning</text>
+  <text x="70" y="117" font-family="Figtree,'Avenir Next','Helvetica Neue',sans-serif" font-size="12.5" fill="var(--fig-ink,var(--ink))" font-weight="600">Supply chain firewall</text>
   <text x="70" y="133.0" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.5" fill="var(--fig-soft,var(--soft))" font-weight="400">approved versions the profile allows</text>
   <path d="M200 54 L200 96" fill="none" stroke="var(--fig-faint,var(--faint))" stroke-width="1.1" marker-end="url(#sf2n-a)"/>
   <text x="208" y="78" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.5" fill="var(--fig-soft,var(--soft))" font-weight="400">configures at launch</text>
