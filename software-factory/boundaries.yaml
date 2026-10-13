@@ -12,7 +12,14 @@ boundaries:
   - name: Network
     covers: which systems and operations it can reach
 
-# The paper's drawing of the boundaries at work, shown under the list.
+# The paper's figure of the boundaries at work. The page draws its own under
+# the list (partial sf-architecture.html) and points to this figure in the
+# PDF; bin/check-copy holds this number and caption to the paper's.
 figure:
   n: 2
   caption: The agent proposes, policy authorizes, and infrastructure enforces
+
+# The caption of the page's own drawing: the talk deck's line for it, never
+# "Figure N", since the drawing is not the paper's figure.
+drawing:
+  caption: Every boundary holds outside the agent’s loop.

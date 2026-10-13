@@ -1,0 +1,31 @@
+{{- /* The four boundaries at work, in one drawing: the page's own, not one of
+       the paper's figures. It is the talk deck's one-row architecture (the
+       profile, the agent in its sandbox, the egress proxy and what lies
+       behind it, with the runtime authorization service beneath and the
+       tamper-evident record under everything), redrawn for the page by
+       bin/build-architecture-drawing.mjs: partials/sf-architecture.svg (wide)
+       and sf-architecture-narrow.svg (a different composition for phones,
+       not a scaled copy). The agent proposes, the service decides, and the
+       proxy enforces: the service is drawn as a decision, not a container.
+       Trusted context and the profile's bounds flow into it, with the
+       agent's proposal for each task and each delegation, which it doesn't
+       take at face value; this task's scope (to the proxy), approval the
+       agent can't give, and the record flow out. Task and delegation are
+       what it weighs, never boxes inside it. Its numbers are the page's
+       list's. Because it is not the paper's drawing it carries no figure
+       number; the caption is the deck's line for it, and a quiet link
+       points to the paper's own drawing in the PDF. The id keeps #figure-2
+       links from before landing here.
+
+       Context: dict "caption" (the deck's line), "n" (the paper's figure
+       number for the pointer) and "pdf" (the PDF's path, or empty when the
+       checkout has none, which drops the pointer). Styles: .sfa in the
+       page's sheet; static/js/draw.js draws the outlines in, once. */ -}}
+<figure class="sff sfa" id="figure-{{ .n }}" data-draw>
+  <div class="sfa-v">
+    <div class="sfa-w">{{ partial "sf-architecture.svg" . }}</div>
+    <div class="sfa-n">{{ partial "sf-architecture-narrow.svg" . }}</div>
+  </div>
+  <figcaption>{{ .caption }}{{ with .pdf }} <a class="sfa-ref" href="/{{ . }}#nameddest=identity-and-access-who-the-agent-acts-for-and-what-it-may-do">The paper’s own drawing: Figure {{ $.n }} (PDF)</a>{{ end }}</figcaption>
+</figure>
+<script src="/js/draw.js" defer></script>

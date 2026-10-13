@@ -3,10 +3,12 @@
        numbered figures, plain lists. The paper applies Agent Baseline to the
        software factory; the page teaches what the paper teaches, in plain
        sentences, then sends the reader to the paper. Sections: the four
-       boundaries (with the paper's Figure 2), the three levels of autonomy
-       (one level at a time, each with the paper's own figure), the paper's
-       downloads, and who wrote it. The figures are the paper's, inlined from
-       the same source as the PDF (partial sf-figure.html). Same chrome as the
+       boundaries (with the page's own drawing of them, from the talk deck,
+       partial sf-architecture.html, made by bin/build-architecture-drawing.mjs),
+       the three levels of autonomy (one level
+       at a time, each with the paper's own figure), the paper's downloads,
+       and who wrote it. The levels' figures are the paper's, inlined from the
+       same source as the PDF (partial sf-figure.html). Same chrome as the
        other pages (this site duplicates its chrome rather than sharing it;
        see 404.html). */ -}}
 <!doctype html>
@@ -355,6 +357,85 @@
   figure.sff > figcaption .fn { font-family:var(--labelfont); font-weight:500;
     font-size:11.5px; letter-spacing:.1em; text-transform:uppercase;
     color:var(--ink); margin-right:8px; }
+
+  /* The four boundaries in one drawing (partial sf-architecture.html): the
+     talk deck's, set in the page's tokens. Paper and ink; the accent marks
+     the four boundaries, enforced outside the agent's loop; the wash marks
+     where untrusted agent code runs, and what the authorization decision
+     reads (the profile, trusted context); the record is ink, heavier than any
+     card, since every boundary keeps one and it is not a fifth. Same slot
+     and the same switch to the narrow composition as the paper's figures
+     (.sff), and its text is never smaller than theirs at any width: the wide
+     drawing's smallest is 14.75 of 880 units (theirs 14.65), 10.8px in the
+     644px slot a 700px screen gives it; below that the narrow one, capped
+     at 440px, is 304px wide at 320 and its smallest text 10.3px (theirs
+     10.1px). */
+  .sfa-v svg { display:block; width:100%; height:auto; }
+  .sfa-n { display:none; }
+  @media (max-width:699px) {
+    .sfa-w { display:none; }
+    .sfa-n { display:block; max-width:440px; margin:0 auto; }
+  }
+  .sfa text { font-family:var(--serif); }
+  .sfa .sfa-t { font-family:var(--head); font-weight:600; fill:var(--fig-ink); }
+  .sfa .sfa-g { fill:var(--fig-soft); }
+  .sfa .sfa-l { font-style:italic; fill:var(--fig-soft); }
+  .sfa .sfa-cap { font-family:var(--labelfont); font-weight:500; letter-spacing:.08em;
+    fill:var(--fig-soft); }
+  .sfa .sfa-box { fill:var(--paper); stroke:var(--fig-rule); stroke-width:1.25; }
+  .sfa .sfa-plate { fill:var(--paper); }
+  /* what the decision reads, the same material as the profile that bounds it */
+  .sfa .sfa-ctx { fill:var(--wash); }
+  .sfa .sfa-deny, .sfa .sfa-dash { stroke-dasharray:5 4; }
+  .sfa .sfa-zone { fill:var(--wash); stroke:var(--fig-rule); stroke-width:1.25; }
+  .sfa .sfa-doc { fill:var(--wash); stroke:var(--fig-rule); stroke-width:1.25; }
+  .sfa .sfa-ear { fill:var(--fig-hair); stroke:var(--fig-rule); stroke-width:1.25;
+    stroke-linejoin:round; }
+  .sfa .sfa-wire { fill:none; stroke:var(--fig-faint); stroke-width:1.35; }
+  .sfa .sfa-stop { stroke-width:2.5; }
+  .sfa .sfa-mk { fill:var(--fig-faint); }
+  /* the core path, heavier than the rest: the agent's requests to the proxy, its
+     proposal, trusted context into the decision, and this task's scope */
+  .sfa .sfa-main { stroke:var(--fig-soft); stroke-width:1.9; }
+  .sfa .sfa-mk-main { fill:var(--fig-soft); }
+  .sfa .sfa-dot { fill:var(--fig-soft); }
+  .sfa .sfa-ico { fill:var(--fig-soft); }
+  /* over time: task after task, delegation after delegation, each proposed and
+     checked; a loop on the proposal wire, which runs through it */
+  .sfa .sfa-disc { fill:var(--paper); }
+  .sfa .sfa-cyc { fill:none; stroke:var(--fig-soft); stroke-width:1.35; }
+  .sfa .sfa-cyc-h { fill:var(--fig-soft); }
+  /* what is enforced outside the agent's loop */
+  .sfa .sfa-b { stroke:var(--fig-accent); stroke-width:1.5; }
+  .sfa .sfa-badge circle { fill:var(--fig-accent); }
+  .sfa .sfa-badge text { font-family:var(--mono); font-weight:600; fill:var(--paper); }
+  /* the record reads as significant: a heavier rule in ink, its seal (kept
+     under the boundaries' weight plus a little, so in dark it doesn't
+     outweigh the decision) */
+  .sfa .sfa-rec { fill:var(--wash); stroke:var(--fig-ink); stroke-width:1.6; }
+  .sfa .sfa-ico-rec { fill:var(--fig-ink); }
+  /* the pointer to the paper's own figure, on a line of its own, in the
+     label voice the page's other ways out use */
+  figure.sfa > figcaption .sfa-ref { display:table; margin-top:4px;
+    font-family:var(--labelfont); font-size:13.5px; letter-spacing:.03em; }
+  /* The boundaries' outlines draw in once as the drawing comes into view,
+     then turn the accent, as they do in the talk (static/js/draw.js sets
+     .is-armed, then .is-drawn). Screens only and only with motion allowed;
+     everywhere else, and without the script, the drawing is simply there,
+     finished. The words never wait for the lines. */
+  @media screen and (prefers-reduced-motion:no-preference) {
+    .sfa.is-armed .sfa-b { stroke-dasharray:1; stroke-dashoffset:1; stroke:var(--fig-rule); }
+    .sfa.is-drawn .sfa-b { animation:sfa-draw .9s ease-out both; }
+    .sfa.is-drawn .sfa-b[data-k="3"] { animation-delay:.15s; }
+    .sfa.is-drawn .sfa-b[data-k="1"] { animation-delay:.3s; }
+    .sfa.is-drawn .sfa-b[data-k="4"] { animation-delay:.45s; }
+    .sfa.is-drawn .sfa-b[data-k="2"] { animation-delay:.6s; }
+    @keyframes sfa-draw {
+      0% { stroke-dasharray:1; stroke-dashoffset:1; stroke:var(--fig-rule); }
+      70% { stroke-dasharray:1; stroke-dashoffset:0; stroke:var(--fig-rule); }
+      100% { stroke-dasharray:1; stroke-dashoffset:0; stroke:var(--fig-accent); }
+    }
+  }
 </style>
 </head>
 <body>
@@ -443,7 +524,11 @@
   </div>
   {{ partial "software-factory-boundaries.html" $bd.boundaries }}
   {{- if not (and $bd.figure $bd.figure.n $bd.figure.caption) }}{{ errorf "software-factory/boundaries.yaml: `figure` needs n and caption" }}{{ end }}
-  {{ partial "sf-figure.html" (dict "n" $bd.figure.n "caption" $bd.figure.caption) }}
+  {{- /* The page's own drawing of the four boundaries (the talk deck's), not
+         the paper's Figure 2: captioned with the deck's line for it, and
+         pointing to the paper's figure in the PDF. */}}
+  {{- if not (and $bd.drawing $bd.drawing.caption) }}{{ errorf "software-factory/boundaries.yaml: `drawing` needs a caption" }}{{ end }}
+  {{ partial "sf-architecture.html" (dict "n" $bd.figure.n "caption" $bd.drawing.caption "pdf" (cond (fileExists (printf "static/%s" $sf.pdf)) $sf.pdf "")) }}
   <div class="prose after-fig">
     {{/* The paper's "A factory in action", cut to the moment that shows the
          separation, then the line that keeps tested code and the boundaries
