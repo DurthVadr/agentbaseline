@@ -36,9 +36,12 @@
   .mx-step + .mx-step { border-left:1px solid var(--faint); }
   .mx-step .n { font-family:var(--mono); font-size:12px; line-height:1.4;
     letter-spacing:.02em; }
+  /* A name fits its step at every width (see the phone rules below). Only a
+     reader's own wider letter and word spacing (WCAG 1.4.12) can make one
+     outgrow it, and then it wraps inside its step, not under the next. */
   .mx-step .nm { font-family:var(--labelfont); font-weight:500; font-size:12.5px;
     line-height:1.35; letter-spacing:.07em; text-transform:uppercase;
-    color:var(--ink); }
+    color:var(--ink); overflow-wrap:anywhere; }
   .mx-step:hover { background:color-mix(in srgb, var(--accent) 12%, var(--wash));
     border-top-color:var(--accent); }
   .mx-step[aria-selected="true"] { background:var(--accent); border-top-color:var(--accent);
