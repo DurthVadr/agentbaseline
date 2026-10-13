@@ -58,7 +58,8 @@ where an accidental noindex on / or /controls is caught.
 vercel.json, for each text version: a single temporary redirect from its page's
 path, conditioned on Accept: text/markdown, to the text version, and Vary:
 Accept on the page — the third place, after hugo.toml and the headers, where a
-page and its text version must agree.
+page and its text version must agree. And every YAML file the site serves (the
+catalogue, at /controls.yaml) is sent as text/yaml with its charset.
 
 Links in a text version or llms.txt — inline, reference-style or raw src/href —
 are absolute; links into the repository's main branch name files this checkout
@@ -69,7 +70,9 @@ robots.txt: names the sitemap, at its absolute URL.
 llms.txt: exists and parses as llmstxt.org describes it — the first line is the
 H1 — and every link in it to this site resolves to a built file. Links
 elsewhere (the repository) are counted and not fetched: this runs offline.
-llms-full.txt exists and opens with an H1.
+llms-full.txt exists, opens with an H1 and holds every text version, each under
+the version and date its own header gives — the header the paper facts rule
+holds to the paper.
 
 Findings are printed, then a count; any finding exits non-zero. Warnings print
 but do not fail.
@@ -277,6 +280,12 @@ def confirmed_names(path):
     return names
 
 
+def header(path):
+    """The quoted fields of a text version's YAML header, as a dict."""
+    m = re.match(r"---\n(.*?)\n---\n", path.read_text(encoding="utf-8"), re.S)
+    return dict(re.findall(r'^(\w+):\s*"([^"]*)"\s*$', m.group(1), re.M)) if m else {}
+
+
 def check_article(where, i, node):
     """A TechArticle states its own paper's version, date and authors."""
     mds = [e.get("contentUrl", "") for e in node.get("encoding", []) if isinstance(e, dict)
@@ -286,10 +295,7 @@ def check_article(where, i, node):
         find(where, f"JSON-LD block {i} (TechArticle) has no text/markdown encoding that is a "
                     f"built file, so its paper cannot be found to hold it to")
         return
-    text = f.read_text(encoding="utf-8")
-    hdr = re.match(r"---\n(.*?)\n---\n", text, re.S)
-    hdr = hdr.group(1) if hdr else ""
-    field = lambda k: (re.search(rf'^{k}:\s*"([^"]*)"\s*$', hdr, re.M) or [None, None])[1]
+    field = header(f).get
     src = field("source") or ""
     m = REPO and re.match(re.escape(REPO) + r"/blob/main/([^#?]+)$", src)
     paper = ROOT / m.group(1) if m else None
@@ -355,6 +361,7 @@ def text_links(where, path):
 # ── every page ───────────────────────────────────────────────────────────────
 pages = [p for p in sorted(PUBLIC.rglob("*.html")) if p.name != "404.html"]
 texts = articles = 0
+text_files = set()
 for p in pages:
     where = p.relative_to(PUBLIC).as_posix()
     h = parse(p)
@@ -440,6 +447,7 @@ for p in pages:
             find(where, f"text version {href or '(no href)'} is not a built file on {ORIGIN}")
             continue
         texts += 1
+        text_files.add(f)
         tw = f.relative_to(PUBLIC).as_posix()
         if f.stat().st_size == 0:
             find(tw, "empty")
@@ -515,9 +523,41 @@ else:
 for name in ("llms.txt", "llms-full.txt"):
     if not re.fullmatch(r"text/plain;\s*charset=utf-8", served_headers(f"/{name}").get("content-type", ""), re.I):
         find("vercel.json", f"/{name} is not served as `text/plain; charset=utf-8`")
+# The catalogue is a file of its own, linked from llms.txt and the JSON-LD.
+# text/yaml is what makes a browser show it rather than save it, and the
+# charset keeps its dashes readable.
+for y in sorted([*PUBLIC.rglob("*.yaml"), *PUBLIC.rglob("*.yml")]):
+    path = "/" + y.relative_to(PUBLIC).as_posix()
+    if not re.fullmatch(r"text/yaml;\s*charset=utf-8", served_headers(path).get("content-type", ""), re.I):
+        find("vercel.json", f"{path} is not served as `text/yaml; charset=utf-8`")
 full = PUBLIC / "llms-full.txt"
 if not full.is_file() or not re.match(r"# \S", full.read_text(encoding="utf-8")):
     find("llms-full.txt", "missing, or does not open with an H1")
+else:
+    # Each document opens on a short list of its text version's header fields.
+    # The version and date there are a third statement of them, after the
+    # header and the JSON-LD, and one left with the baseline's after a paper
+    # got its own would still read as fact.
+    held = set()
+    for m in re.finditer(r"^\* \* \*\n\n- Source: (\S+)\n((?:- [^\n]*\n)*)",
+                         full.read_text(encoding="utf-8"), re.M):
+        f = built(m.group(1))
+        if not f:
+            find("llms-full.txt", f"Source {m.group(1)} resolves to no built file")
+            continue
+        held.add(f)
+        facts = dict(re.findall(r"^- ([^:\n]+): (.*)$", m.group(2), re.M))
+        hdr = header(f)
+        if not facts.get("Version") or facts["Version"] != hdr.get("version"):
+            find("llms-full.txt", f"{f.name} is given as Version {facts.get('Version')!r}; "
+                                  f"its header says {hdr.get('version')!r}")
+        d = re.fullmatch(r"(\d{1,2}) ([A-Z][a-z]+) (\d{4})", facts.get("Published", ""))
+        iso = d and d.group(2) in MONTHS and f"{d.group(3)}-{MONTHS[d.group(2)]:02d}-{int(d.group(1)):02d}"
+        if not iso or iso != hdr.get("published"):
+            find("llms-full.txt", f"{f.name} is given as Published {facts.get('Published')!r}; "
+                                  f"its header says {hdr.get('published')!r}")
+    for f in sorted(text_files - held):
+        find("llms-full.txt", f"holds no `- Source:` entry for {f.relative_to(PUBLIC).as_posix()}")
 
 for where, msg in findings:
     print(f"  FAIL  {where}: {msg}")
