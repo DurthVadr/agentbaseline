@@ -1,0 +1,29 @@
+{{- /* The four boundaries at work, in one drawing: the page's own, not one of
+       the paper's figures. It is the talk deck's one-row architecture (the
+       profile, the agent in its sandbox, the egress proxy and what lies
+       behind it, between the supply chain firewall above and the runtime
+       authorization service beneath, with the tamper-evident record under
+       everything), redrawn for the page by bin/build-architecture-drawing.mjs:
+       partials/sf-architecture.svg (wide) and sf-architecture-narrow.svg (a
+       different composition for phones, not a scaled copy), drawn as the
+       paper's figures are. The agent proposes, the service decides, and the
+       proxy enforces: the service is drawn as a decision, not a container.
+       Trusted context and the profile's bounds flow into it with the agent's
+       proposal; the authorized scope (to the proxy) and approval the agent
+       can't give flow out. The profile configures the sandbox at launch
+       through the supply chain firewall, and the proxy checks packages with it.
+       Its numbers are the paper's, as the page's list's are. Because it is not the
+       paper's drawing it carries no figure number and no caption: the list
+       above it says what it shows. The id keeps #figure-2 links from before
+       landing here.
+
+       Context: dict "n" (the paper's figure number, for the id). Styles: .sfa
+       in the page's sheet, and the paper's figures' wide/narrow switch
+       (.sff-d); static/js/draw.js draws the outlines in, once. */ -}}
+<figure class="sff sfa" id="figure-{{ .n }}" data-draw>
+  <div class="sff-d has-n">
+    <div class="sff-w">{{ partial "sf-architecture.svg" . }}</div>
+    <div class="sff-n">{{ partial "sf-architecture-narrow.svg" . }}</div>
+  </div>
+</figure>
+<script src="/js/draw.js" defer></script>

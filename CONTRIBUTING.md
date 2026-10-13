@@ -1,7 +1,7 @@
 # Contributing
 
-This is a draft for public comment. **Disagreement is the point.** What follows is how to
-file it so that it lands somewhere useful.
+This is a working draft for community review. **Disagreement is the point.** What follows is
+how to file it so that it lands somewhere useful.
 
 ## Read this first
 
@@ -14,6 +14,14 @@ file it so that it lands somewhere useful.
 **Comment** — open an issue against a specific control identifier (`DIS-01`, `AUT-03`). Say
 what's wrong and, where you can, what would make it right. "This is not implementable in a
 regulated environment" is a good issue. So is "this reads like a vendor datasheet."
+
+**Comment on The Secure Software Factory** — open an issue through
+[the reference architecture form](https://github.com/agentbaseline/agentbaseline/issues/new?template=software-factory.yml),
+which labels it, and name the part you are disputing: one of the four boundaries (identity and
+access, supply chain, sandbox, network), execution and observability, or a level of autonomy.
+The paper has no identifiers of its own; where its appendix maps to a baseline control, cite
+that identifier. Its source is `software-factory/software-factory.md`, but the text changes
+only when the working group changes the paper, so comment by issue, not pull request.
 
 **File a crosswalk** — map these controls to a framework you already run: NIST AI RMF, ISO
 42001, OWASP, CIS, SOC 2. One pull request per framework, into `crosswalks/`. This is the

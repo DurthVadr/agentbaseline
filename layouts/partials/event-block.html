@@ -37,10 +37,12 @@
   /* The label layer, matching the section marks: Chakra Petch, tracked, upper.
      The filled square is the same "now" fiducial the strip uses — the one mark
      the two share, which is what makes them read as one announcement in two
-     places instead of two announcements. */
+     places instead of two announcements. The text is --link-hover, the strip's
+     label colour: 11px accent on the wash was 4.4:1 in light mode, under AA.
+     The square keeps the accent. */
   .meetup .lbl { display:flex; align-items:center; gap:9px; margin:0 0 16px;
     font-family:var(--labelfont); font-weight:600; font-size:11px;
-    letter-spacing:.12em; text-transform:uppercase; color:var(--accent); }
+    letter-spacing:.12em; text-transform:uppercase; color:var(--link-hover); }
   .meetup .lbl::before { content:""; width:7px; height:7px; flex:none;
     background:var(--accent); }
 
@@ -70,11 +72,13 @@
   }
 
   /* The same chip the outcome links wear under each question, so the one thing
-     to click here looks like the things to click there. */
+     to click here looks like the things to click there. Its text is
+     --link-hover, as theirs is: accent on its own 10% wash was 3.9:1 in
+     light mode, under AA. The wash stays the accent's. */
   .meetup .go { margin:24px 0 0; }
   .meetup .go a { display:inline-block; font-family:var(--labelfont);
     font-weight:500; font-size:11.5px; letter-spacing:.08em;
-    text-transform:uppercase; color:var(--accent); text-decoration:none;
+    text-transform:uppercase; color:var(--link-hover); text-decoration:none;
     border-radius:3px; padding:7px 14px;
     background:color-mix(in srgb, var(--accent) 10%, transparent); }
   .meetup .go a:hover {

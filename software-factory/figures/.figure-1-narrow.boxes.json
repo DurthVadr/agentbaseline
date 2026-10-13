@@ -1,0 +1,146 @@
+[
+ {
+  "tag": "in.n0",
+  "x": 58,
+  "y": 29.25,
+  "w": 43.875,
+  "h": 12.75,
+  "text": "Inputs"
+ },
+ {
+  "tag": "in.g0",
+  "x": 58,
+  "y": 45.25,
+  "w": 194.06249999999997,
+  "h": 12.75,
+  "text": "a prompt, a PRD or a ticket"
+ },
+ {
+  "tag": "design.n0",
+  "x": 58,
+  "y": 97.25,
+  "w": 43.875,
+  "h": 12.75,
+  "text": "Design"
+ },
+ {
+  "tag": "design.g0",
+  "x": 58,
+  "y": 113.25,
+  "w": 194.06249999999997,
+  "h": 12.75,
+  "text": "sets the limits, in advance"
+ },
+ {
+  "tag": "inner.l",
+  "x": 60,
+  "y": 166.25,
+  "w": 87.5,
+  "h": 12.75,
+  "text": "INNER LOOP"
+ },
+ {
+  "tag": "assemble.n0",
+  "x": 70,
+  "y": 201.25,
+  "w": 58.5,
+  "h": 12.75,
+  "text": "Assemble"
+ },
+ {
+  "tag": "assemble.g0",
+  "x": 70,
+  "y": 217.25,
+  "w": 136.56249999999997,
+  "h": 12.75,
+  "text": "what the task needs"
+ },
+ {
+  "tag": "build.n0",
+  "x": 70,
+  "y": 269.25,
+  "w": 36.5625,
+  "h": 12.75,
+  "text": "Build"
+ },
+ {
+  "tag": "build.g0",
+  "x": 70,
+  "y": 285.25,
+  "w": 172.49999999999997,
+  "h": 12.75,
+  "text": "the change, in a sandbox"
+ },
+ {
+  "tag": "verify.n0",
+  "x": 70,
+  "y": 337.25,
+  "w": 43.875,
+  "h": 12.75,
+  "text": "Verify"
+ },
+ {
+  "tag": "verify.g0",
+  "x": 70,
+  "y": 353.25,
+  "w": 150.93749999999997,
+  "h": 12.75,
+  "text": "against the standards"
+ },
+ {
+  "tag": "inner.g",
+  "x": 60,
+  "y": 382.25,
+  "w": 208.43749999999997,
+  "h": 12.75,
+  "text": "repeats until the work passes"
+ },
+ {
+  "tag": "review.n0",
+  "x": 58,
+  "y": 437.25,
+  "w": 43.875,
+  "h": 12.75,
+  "text": "Review"
+ },
+ {
+  "tag": "review.g0",
+  "x": 58,
+  "y": 453.25,
+  "w": 64.68749999999999,
+  "h": 12.75,
+  "text": "and evals"
+ },
+ {
+  "tag": "deploy.n0",
+  "x": 58,
+  "y": 505.25,
+  "w": 43.875,
+  "h": 12.75,
+  "text": "Deploy"
+ },
+ {
+  "tag": "deploy.g0",
+  "x": 58,
+  "y": 521.25,
+  "w": 150.93749999999997,
+  "h": 12.75,
+  "text": "under approval policy"
+ },
+ {
+  "tag": "production.n0",
+  "x": 58,
+  "y": 573.25,
+  "w": 73.125,
+  "h": 12.75,
+  "text": "Production"
+ },
+ {
+  "tag": "production.g0",
+  "x": 58,
+  "y": 589.25,
+  "w": 129.37499999999997,
+  "h": 12.75,
+  "text": "sends back signals"
+ }
+]

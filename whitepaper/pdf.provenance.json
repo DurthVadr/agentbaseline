@@ -6,12 +6,14 @@
   "source_date_epoch": "1785412800",
   "built_by": {
     "producer": "Skia/PDF m150",
-    "creator": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/150.0.0.0 Safari/537.36"
+    "creator": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/150.0.0.0 Safari/537.36",
+    "pandoc": "pandoc 3.10.1"
   },
   "inputs": {
-    "bin/build-pdf": "9780cdc7b6d8bb04cf5ea76f6e4135d565bc4f0ccda065f5b30b2fbac4227f1f",
+    "bin/build-pdf": "ee69520654e93b95d66a02a56bd6e662c9f00a5b40e8c78912e5339e35ab885c",
     "bin/controls_source.py": "ade276753e0ac230bfde2e0836c4abe74cab4b9c2e5accd586c3cd8a2f156b9d",
-    "bin/print-page.mjs": "4daa5557a3c36ff1d6f7275d438429ea99c980091bbfb3152892190e0801c48c",
+    "bin/papers.py": "ac0594f45c4810fabe6d7b840ce8b5916a88d4da68e8e609f0d444bd9404ed1c",
+    "bin/print-page.mjs": "119d3f84951a91d113b1b9bc1d22114ab339dbcee5c1f3a025e2c2d51babd47d",
     "bin/vendor/paged.polyfill.js": "f59f361802416c770d549a647958649af2cf6601999924bc00e4f507dad5269f",
     "static/fonts/chakra-petch-normal-500-latin.woff2": "adf007cd277ef6dac0c8cecacfb60cc5e24e7c8bcce4db98aa233bd3a88ef5a3",
     "static/fonts/chakra-petch-normal-600-latin.woff2": "4d6d5f0b31b3a471a843779c4ecada040e5bc291f96bca9805a94293fe8003fa",

@@ -9,6 +9,15 @@ never reused.
 ## [Unreleased]
 
 ### Added
+- *The Secure Software Factory: A Reference Architecture*, version 1 (13 October 2026), a
+  second paper that applies the baseline to AI agents that write and ship code. Its source is
+  `software-factory/software-factory.md`; its PDF is `/software-factory.pdf`, listed under
+  Artifacts after the baseline's. Its page, `/reference-architecture`, shows the paper's four
+  security boundaries in a drawing of its own, its three levels of autonomy with the paper's
+  Figures 3 to 5, and its eight authors. Every page's utility bar links it, marked New until
+  27 October; the homepage names it under the tenets and again in a section after the white
+  paper. Comments go through an issue form that applies the
+  `software-factory` label; CONTRIBUTING says how. *(2026-10-13, Matthew Creager, Keycard)*
 - The community Slack is linked from the utility bar on every page and, on the homepage,
   from the review section, with the invite address in one place in `hugo.toml`.
   CONTRIBUTING and GOVERNANCE say what belongs in Slack and what belongs in an issue, and
@@ -22,6 +31,9 @@ never reused.
   Figtree face to render. *(2026-09-18)*
 
 ### Changed
+- Comment on v1.0-draft closed on 30 September 2026, so the bar no longer shows a deadline,
+  the pages' descriptions no longer ask for comment, and the homepage's review section says
+  where the comments went: the issues. *(2026-10-13, Matthew Creager, Keycard)*
 - The catalogue is rebuilt from Appendix A of the paper as it landed in this repository —
   the appendix declares itself the canonical naming and requirement set, and the body prose
   now agrees with it. 35 controls across the six outcomes: `CON` narrows to 4 controls,

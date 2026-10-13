@@ -77,7 +77,11 @@
       top:calc(anchor(bottom) + 10px); bottom:12px;
       height:max-content; max-height:-webkit-fill-available; max-height:stretch;
       right:calc(anchor(right) - 8px); left:auto;
-      position-try-fallbacks:flip-inline; }
+      position-try-fallbacks:flip-inline, --dd-vp; }
+    /* Where the panel fits on neither side of its label (the label mid-row,
+       as on /reference-architecture from 320 to 420px, where it ran 104px off
+       the left edge), pin it 12px from the viewport's left instead. */
+    @position-try --dd-vp { left:12px; right:auto; }
     details.menu ul.dd.left { left:calc(anchor(left) - 8px); right:auto; }
   }
   /* nowrap, because the rows are filenames: min-width sets the floor and the

@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
-"""Render static/whitepaper.pdf from whitepaper.md and controls.yaml.
+"""Render a paper's PDF: static/whitepaper.pdf by default, or the reference architecture.
+
+    python3 bin/build-pdf                              # the white paper
+    python3 bin/build-pdf --paper software-factory     # the reference architecture
 
 Markdown -> HTML via pandoc, paginated by Paged.js, printed by Chrome.
 Deliberately not LaTeX: the PDF embeds the site's own woff2 files, so the page,
@@ -38,17 +41,55 @@ Two properties this script owes its callers, both learned the hard way:
     the one this source makes?" on any machine, with no browser and no pandoc,
     which is what lets the question be asked in CI on every pull request rather
     than remembered by whoever last touched the paper.
+
+The second paper
+────────────────
+`--paper software-factory` renders software-factory/software-factory.md to
+static/software-factory.pdf, through the same pandoc, the same fonts, the same
+Paged.js and the same print script, so the two PDFs are siblings rather than two
+documents that resemble each other. What differs is only what the second paper
+is: a reference architecture that applies Agent Baseline. Its cover is set like
+a drawing's title block (what it builds on, its subject, its version and date,
+all from its own front matter), its running head names Agent Baseline first, the
+way the site's crumb does, and its figure captions are ruled datum rows. It
+appends no catalogue: it maps to the controls in prose and tables.
+
+The white paper's output must not move when this script changes for the second
+paper. Everything the second paper adds is reached only through its own builder
+and its own stylesheet; the white paper's document is assembled from the same
+strings as before. Prove it after any change here: build the white paper with
+`--out` before and after, on the browser its manifest records, and compare the
+two files byte for byte — and the two .build/paper.html documents, which must
+match too.
+
+Four things the second paper needed that the first did not, each because the
+obvious rendering was wrong:
+
+  * Its widest table, how the factory deepens across levels, is four columns of
+    long prose. Set as a table it is the Appendix A failure again: three
+    paragraphs squeezed to a few words a line beside a one-word column, and a row
+    that breaks across a page loses the component it describes. It is set as one
+    block per row — the component, then the three levels beneath it, each with
+    its level in the margin — and a block never splits.
+  * Its definitions are `**Term:** text` paragraphs. Printed as paragraphs, the
+    terms disappear into the measure; they are set as a glossary with the term in
+    the margin, and each bolded term in the body links to its entry, because the
+    paper tells the reader that bolded terms are defined there.
+  * Its figures are drawn separately and land late. A figure that does not exist
+    prints as a broken-image glyph and nothing fails, so the build fails instead;
+    alt text that still says TODO fails it too, unless `--draft`, which stamps
+    every page and cannot write the tracked artifact.
+  * Its date is written "Version 1, October 13, 2026", not in the white paper's
+    shape. It is read from that line and nowhere else, and a missing or
+    unparseable line stops the build, for the reason front_matter_dates() gives.
 """
 import argparse, pathlib, subprocess, sys, shutil, re, base64, hashlib, html, json, os, calendar, datetime, urllib.request
 
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
 import controls_source
+from papers import PAPERS, DEFAULT
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
-SRC = ROOT / "whitepaper" / "whitepaper.md"
-OUT = ROOT / "static" / "whitepaper.pdf"
-PROVENANCE = ROOT / "whitepaper" / "pdf.provenance.json"
-WORK = ROOT / "whitepaper" / ".build"
 PAGED = ROOT / "bin" / "vendor" / "paged.polyfill.js"
 
 # ── what this build read ─────────────────────────────────────────────────────
@@ -75,11 +116,12 @@ def record(path):
     INPUTS[rel(p)] = hashlib.sha256(p.read_bytes()).hexdigest()
     return p
 
-for tool in ("pandoc",):
-    if not shutil.which(tool):
-        sys.exit(f"{tool} is not installed")
-if not PAGED.exists():
-    sys.exit(f"missing {PAGED.relative_to(ROOT)} — see bin/vendor/README.md")
+def preflight():
+    for tool in ("pandoc",):
+        if not shutil.which(tool):
+            sys.exit(f"{tool} is not installed")
+    if not PAGED.exists():
+        sys.exit(f"missing {PAGED.relative_to(ROOT)} — see bin/vendor/README.md")
 
 # ── the catalogue ────────────────────────────────────────────────────────────
 # A tolerant reader rather than a schema-shaped regex. The previous attempt at
@@ -105,10 +147,6 @@ def load_controls():
     controls_source.control_ids()
     return outcomes, controls
 
-OUTCOMES, CONTROLS = load_controls()
-
-# ── the paper ────────────────────────────────────────────────────────────────
-md = record(SRC).read_text(encoding="utf-8")
 
 def cut_section(text, heading_re):
     """Remove one `# Heading` block, up to the next level-1 heading."""
@@ -119,70 +157,81 @@ def cut_section(text, heading_re):
     end = m.end() + (nxt.start() if nxt else len(text) - m.end())
     return text[:m.start()] + text[end:], text[m.start():end]
 
-# The paper's hand-written contents is a flat list of links. It is useful on
-# GitHub and useless in print, where a link with no page number cannot be
-# followed. Dropped here and rebuilt below with real page references.
-md, _ = cut_section(md, r"^# Contents\b.*$")
-# Appendix A is regenerated from controls.yaml.
-md, _ = cut_section(md, r"^# Appendix A\b.*$")
 
-WORK.mkdir(exist_ok=True)
-(WORK / "paper.md").write_text(md, encoding="utf-8")
-body = subprocess.run(
-    ["pandoc", str(WORK / "paper.md"), "-t", "html5", "--no-highlight"],
-    capture_output=True, text=True, check=True).stdout
+PANDOC_VERSION = []
 
-# The paper opens with a title, a subtitle and two published lines. All four
-# are the cover's job. Left in the flow they do not simply repeat the cover —
-# they land orphaned at the foot of the contents page, under the leaders.
-body = re.sub(r"^\s*<h1[^>]*>.*?</h1>", "", body, count=1, flags=re.S)
-for _ in range(2):
-    body = re.sub(r"^\s*<p>(?:(?!</p>).)*?(?:Identify the agent|Published as).*?</p>",
-                  "", body, count=1, flags=re.S)
 
-# Images are written relative to the markdown; the build directory is one level
-# down, so every one of them resolved to nothing and printed as a broken-image
-# glyph. Absolute file URLs, resolved against the paper's own directory.
-body = re.sub(r'(<img[^>]+src=")([^":]+)(")',
-              lambda m: m.group(1) + (SRC.parent / m.group(2)).resolve().as_uri() + m.group(3),
-              body)
+def pandoc(md, work):
+    """The paper as HTML. pandoc's version is kept for the manifest: the paper-2
+    rewrites below depend on the shape of its HTML (<colgroup>, <thead>, alt=),
+    and a different pandoc is a different build even with every input unchanged."""
+    if not PANDOC_VERSION:
+        v = subprocess.run(["pandoc", "--version"], capture_output=True, text=True, check=True)
+        PANDOC_VERSION.append(v.stdout.splitlines()[0].strip())
+    work.mkdir(exist_ok=True)
+    (work / "paper.md").write_text(md, encoding="utf-8")
+    return subprocess.run(
+        ["pandoc", str(work / "paper.md"), "-t", "html5", "--no-highlight"],
+        capture_output=True, text=True, check=True).stdout
 
-# ── contents, with page numbers resolved by Paged.js ─────────────────────────
-toc = []
-for m in re.finditer(r'<h([12])\s+id="([^"]+)"[^>]*>(.*?)</h\1>', body, re.S):
-    lvl, anchor, label = m.group(1), m.group(2), re.sub(r"<[^>]+>", "", m.group(3))
-    label = html.unescape(label).strip()
-    if label:
-        toc.append((lvl, anchor, label))
-toc.append(("1", "appendix-a", "Appendix A. Canonical capability map"))
-toc_html = "\n".join(
-    f'<li class="l{lvl}"><a href="#{a}"><span class="t">{html.escape(l)}</span></a></li>'
-    for lvl, a, l in toc)
 
-# ── the appendix, as blocks rather than a table ──────────────────────────────
-by_outcome = {}
-for c in CONTROLS:
-    by_outcome.setdefault(c["outcome"], []).append(c)
-app = []
-for o in OUTCOMES:
-    rows = by_outcome.get(o["prefix"], [])
-    if not rows:
-        continue
-    ids = f'{rows[0]["id"]}–{rows[-1]["id"]}'
-    app.append(f'<section class="fam">'
-               f'<h2 id="app-{o["prefix"].lower()}">{html.escape(o["name"])}'
-               f'<span class="span">{ids}</span></h2>'
-               f'<p class="famreq">{html.escape(o["requirement"] or "")}</p>')
-    for c in rows:
-        app.append(
-            f'<div class="ctl" id="{c["id"]}">'
-            f'<div class="cid">{c["id"]}</div>'
-            f'<div class="cbody"><div class="chead">'
-            f'<span class="ctitle">{html.escape(c["title"] or "")}</span>'
-            f'<span class="ctype">{html.escape(c["type"] or "")}</span></div>'
-            f'<p class="creq">{html.escape(c["requirement"] or "")}</p></div></div>')
-    app.append("</section>")
-appendix_html = "\n".join(app)
+def figures(body, src, draft):
+    """Refuse a missing figure or unwritten alt text, then make every image absolute.
+
+    A figure path that resolves to nothing prints as a broken-image glyph, and
+    nothing in the print path notices: the page count is the same, the build is
+    green, and the PDF ships with a hole in it. The second paper's figures are
+    drawn separately and arrive late, so that is not hypothetical. Missing is
+    always fatal — there is no draft of a figure that is not there. Alt text that
+    is empty or still says TODO is fatal unless the build is a draft, which can
+    never be written to the tracked artifact (see main).
+
+    Images are written relative to the markdown; the build directory is one level
+    down, so every one of them resolved to nothing and printed as a broken-image
+    glyph. Absolute file URLs, resolved against the paper's own directory.
+    """
+    missing, unwritten, found = [], [], []
+    for tag in re.findall(r"<img\b[^>]*>", body):
+        s = re.search(r'\bsrc="([^"]*)"', tag)
+        a = re.search(r'\balt="([^"]*)"', tag)
+        target = s.group(1) if s else ""
+        alt = html.unescape(a.group(1)) if a else ""
+        found.append(target)
+        if not target or (":" not in target and not (src.parent / target).is_file()):
+            missing.append(target or "(no src)")
+        if not alt.strip() or re.search(r"\bTODO\b", alt, re.I):
+            unwritten.append(f"{target}: {alt!r}")
+    if missing:
+        sys.exit(f"{rel(src)} references {len(missing)} figure(s) that do not exist:\n" +
+                 "".join(f"    {m}\n" for m in missing) +
+                 "A missing figure prints as a broken-image glyph and nothing else fails, "
+                 "so this build does instead.")
+    if unwritten and not draft:
+        sys.exit(f"{rel(src)} has {len(unwritten)} figure(s) whose alt text is empty or "
+                 f"still a TODO:\n" + "".join(f"    {u}\n" for u in unwritten) +
+                 "Write the alt text in the paper, or pass --draft for a stamped draft "
+                 "build (which cannot be written to the tracked PDF).")
+    body = re.sub(r'(<img[^>]+src=")([^":]+)(")',
+                  lambda m: m.group(1) + (src.parent / m.group(2)).resolve().as_uri() + m.group(3),
+                  body)
+    return body, found
+
+
+def contents(body):
+    """Contents entries from the level-1 and level-2 headings, in order."""
+    toc = []
+    for m in re.finditer(r'<h([12])\s+id="([^"]+)"[^>]*>(.*?)</h\1>', body, re.S):
+        lvl, anchor, label = m.group(1), m.group(2), re.sub(r"<[^>]+>", "", m.group(3))
+        label = html.unescape(label).strip()
+        if label:
+            toc.append((lvl, anchor, label))
+    return toc
+
+
+def contents_html(toc):
+    return "\n".join(
+        f'<li class="l{lvl}"><a href="#{a}"><span class="t">{html.escape(l)}</span></a></li>'
+        for lvl, a, l in toc)
 
 # ── fonts, embedded so the print engine cannot fall back silently ────────────
 FACES = [
@@ -199,22 +248,31 @@ FACES = [
     ("IBM Plex Mono",  400, "normal", "ibm-plex-mono-normal-400-latin.woff2"),
     ("IBM Plex Mono",  600, "normal", "ibm-plex-mono-normal-600-latin.woff2"),
 ]
-faces = []
-for fam, wt, style, fn in FACES:
-    f = ROOT / "static" / "fonts" / fn
-    if not f.exists():
-        sys.exit(f"missing font {fn} — the PDF must not fall back to a system face")
-    b64 = base64.b64encode(record(f).read_bytes()).decode()
-    faces.append(f'@font-face{{font-family:"{fam}";font-weight:{wt};'
-                 f'font-style:{style};font-display:block;'
-                 f'src:url(data:font/woff2;base64,{b64}) format("woff2")}}')
-FONTS = "\n".join(faces)
+
+def fonts():
+    faces = []
+    for fam, wt, style, fn in FACES:
+        f = ROOT / "static" / "fonts" / fn
+        if not f.exists():
+            sys.exit(f"missing font {fn} — the PDF must not fall back to a system face")
+        b64 = base64.b64encode(record(f).read_bytes()).decode()
+        faces.append(f'@font-face{{font-family:"{fam}";font-weight:{wt};'
+                     f'font-style:{style};font-display:block;'
+                     f'src:url(data:font/woff2;base64,{b64}) format("woff2")}}')
+    return "\n".join(faces)
 
 # figtree-normal-400-latin.woff2 is a variable font (fvar/gvar, wght 300-900),
 # so every weight below is a real instance cut from the one file rather than a
 # synthesised bold. The filename says 400 and means "the 400 named instance is
 # the default" — it is not the only weight in there.
-CSS = """
+#
+# The white paper's stylesheet is PAGE_CSS + SHARED_CSS, byte for byte the
+# string it always was. The reference architecture swaps the page furniture
+# (SF_PAGE_CSS for PAGE_CSS) and appends SF_CSS after the shared rules, so its
+# overrides win on source order and nothing it adds can reach the white paper.
+# Edit SHARED_CSS and both papers move — which is a rebuild of both, not a
+# change to one.
+PAGE_CSS = """
 @page {
   size: A4; margin: 22mm 30mm 20mm;
   @bottom-left  { content: "Agent Baseline"; font-family:"IBM Plex Mono",monospace;
@@ -232,7 +290,8 @@ CSS = """
   @bottom-left{content:none} @bottom-center{content:none}
   @bottom-right{content:none} @top-right{content:none} }
 .cover { page:cover; }
-
+"""
+SHARED_CSS = """
 :root { --ink:#221F18; --soft:#5C5850; --faint:#8C8878; --line:#E6E2D7;
         --rule:#CFCBBE; --accent:#4F6B00; --wash:#F7F5EE; }
 
@@ -409,13 +468,244 @@ th { font-family:"Chakra Petch",sans-serif; font-size:7pt; font-weight:600;
   text-transform:uppercase; color:var(--faint); white-space:nowrap; }
 .ctl .creq { margin:0; font-size:9pt; line-height:1.55; color:var(--soft); }
 """
+CSS = PAGE_CSS + SHARED_CSS
+
+# ── the reference architecture's page furniture ─────────────────────────────
+# The head names this document, opposite the section the page is in, in the
+# label voice: where a drawing carries its title. It used to read as the site's
+# crumb, "Agent Baseline / Reference architecture", which a reader, or a
+# summarizer, can take as "Agent Baseline's reference architecture", and the
+# baseline is not one. The relation is stated instead, in the foot, where the
+# white paper's foot names Agent Baseline: "Builds on Agent Baseline", the
+# words of the cover's title block. The version and date sit at the centre of
+# the foot, where the white paper keeps its version, and the folio at right.
+#
+# The section is the one in force at the top of the page (string(…, start)).
+# Chapters run on, so a page often opens in one and starts another; the head
+# names where the reader is on arriving, not what begins near the foot.
+SF_PAGE_CSS = """
+@page {
+  size: A4; margin: 22mm 30mm 20mm;
+  @top-left     { content: "@TITLE@";
+                  font-family:"Chakra Petch",sans-serif; font-weight:500;
+                  font-size:7pt; letter-spacing:.13em; text-transform:uppercase;
+                  color:#8C8878; white-space:nowrap; }
+  @top-right    { content: string(section, start); font-family:"Chakra Petch",sans-serif;
+                  font-size:7.5pt; letter-spacing:.13em; text-transform:uppercase;
+                  color:#B0AB99; white-space:nowrap; }
+  @bottom-left  { content: "Builds on Agent Baseline";
+                  font-family:"IBM Plex Mono",monospace; font-size:7.5pt;
+                  letter-spacing:.06em; color:#8C8878; white-space:nowrap; }
+  @bottom-center{ content: "Version @VERSION@ · @DATE@";
+                  font-family:"IBM Plex Mono",monospace; font-size:7.5pt;
+                  letter-spacing:.06em; color:#B0AB99; white-space:nowrap; }
+  @bottom-right { content: counter(page); font-family:"IBM Plex Mono",monospace;
+                  font-size:8pt; font-weight:600; color:#5C5850; }
+}
+@page cover { margin:0;
+  @top-left{content:none} @top-right{content:none}
+  @bottom-left{content:none} @bottom-center{content:none}
+  @bottom-right{content:none} }
+.cover { page:cover; }
+"""
+
+SF_CSS = """
+/* ── reference architecture: cover ─────────────────────────────────────── */
+/* The white paper's cover, with its tenets row replaced by the document's
+   title block: the same ruled strip, the same slot, but label-and-value cells
+   as on the reference-architecture page rather than four statements. The
+   kicker names Agent Baseline first and in the accent, the rest in the soft
+   voice, so the parent is the thing the eye lands on. */
+/* The cover is a drawing sheet: the kicker and title at the head, the title
+   block at the foot, above the sheet's lower rule, where a drawing keeps it.
+   Set under the title, as the white paper's tenets are, it left the lower half
+   of the sheet empty; anchored to the foot, the white between title and block
+   is the sheet's, not a gap. */
+.cover { display:flex; flex-direction:column; }
+.cover .meta { margin:0; }
+.cover .mark { color:var(--soft); }
+.cover .mark .parent { color:var(--accent); }
+.covertitle .sub { color:var(--soft); }
+.cover .tb { display:grid; grid-template-columns:repeat(4,auto) 1fr; margin:auto 0 8mm;
+  border-top:.4pt solid var(--rule); border-bottom:.4pt solid var(--rule); }
+.cover .tb .cell { padding:3.2mm 6mm 3.4mm 0; margin:0; }
+/* Every cell after the first takes a rule and a gutter. A class, not `.cell + .cell`:
+   Paged.js drops sibling-combinator rules when it paginates, which left the text
+   against the rule in every cell after the first. */
+.cover .tb .cell.sep { border-left:.4pt solid var(--line); padding-left:4mm; }
+.cover .tb dt { font-family:"Chakra Petch",sans-serif; font-weight:500; font-size:6.8pt;
+  letter-spacing:.13em; text-transform:uppercase; color:var(--faint); margin:0 0 1.2mm; }
+.cover .tb dd { margin:0; font-family:"IBM Plex Mono",monospace; font-size:8.5pt;
+  color:var(--ink); white-space:nowrap; font-variant-numeric:tabular-nums lining-nums; }
+
+/* The byline wraps between people, not inside a name ("William / Manning"). */
+.cover .by .nb { white-space:nowrap; }
+
+/* ── reference architecture: figures ───────────────────────────────────── */
+/* Captions as a datum row under the drawing: a rule, the figure's number in
+   the label voice in its own cell, the caption beside it. The white paper's
+   centred caption under a mono number stays the white paper's. The drawing
+   is set inline (sf_inline_figures) and fills the measure. */
+figure { margin:6mm 0 7mm; }
+figure svg { display:block; width:100%; height:auto; }
+figcaption { display:grid; grid-template-columns:20mm 1fr; gap:0 3mm;
+  max-width:none; margin:3mm 0 0; padding-top:2mm; border-top:.4pt solid var(--rule);
+  font-size:8.5pt; line-height:1.45; }
+figcaption::before { content:"Figure " counter(fig); font-family:"Chakra Petch",sans-serif;
+  font-weight:600; font-size:6.8pt; letter-spacing:.13em; text-transform:uppercase;
+  color:var(--accent); padding:.6mm 0 0; border-right:.4pt solid var(--line); }
+
+/* ── reference architecture: running text ─────────────────────────────── */
+/* The recent incidents carry their source as a link on the heading; in a
+   heading the link is the heading, so it takes the heading's colour. */
+h3 a { color:inherit; border-bottom:none; }
+/* The incidents are a run of short entries, each a head and a paragraph or
+   two, so their heads sit a little closer than a section's label heads. At the
+   shared 6mm the last incident ("Let's land #118") ran onto a page of its own,
+   three lines on a white sheet as the paper's last page. sf_incidents gives
+   every head in the section the class, dated or not, so the spacing is even. */
+h3.incident { margin-top:4.5mm; }
+/* An incident's date after its name, as a datum. */
+h3.incident .when { font-family:"IBM Plex Mono",monospace; font-weight:400; font-size:7.5pt;
+  letter-spacing:.02em; text-transform:none; color:var(--faint); margin-left:.6mm; }
+/* A bolded term links to its definition. The bold already marks it, and an
+   underline under two dozen terms would read as two dozen citations. */
+a.term { border-bottom:none; }
+/* The invariants close each boundary: the one sentence a team can test. A
+   ruled row with the label run in, rather than a bold word in a paragraph. */
+p.invariant { margin:4mm 0 5mm; padding:2.2mm 0 2.4mm; text-align:left;
+  border-top:.5pt solid var(--rule); border-bottom:.4pt solid var(--line);
+  break-inside:avoid; }
+p.invariant strong { font-family:"Chakra Petch",sans-serif; font-weight:600;
+  font-size:7.5pt; letter-spacing:.13em; text-transform:uppercase;
+  color:var(--accent); margin-right:1.5mm; }
+
+/* Paged.js marks a container it splits across pages with
+   data-align-last-split-element=justify, and text-align-last inherits — so
+   every short line inside a split glossary or levels block was justified
+   edge to edge ("Agent ........ Baseline"). The shared stylesheet settles it
+   for p, li and dd; these are the other leaves this paper puts inside a
+   container long enough to split. */
+dt, th, td, figcaption, h1, h2, h3, h4 { text-align-last:left; }
+/* A paragraph whose last line is one word ("…doesn't rely on / it.") reads as
+   a mistake at this measure. Chrome's pretty wrapping rebalances the last few
+   lines of a paragraph to avoid it; it changes where lines fall, never what
+   they say, and the off-sheet guard in print-page.mjs still checks the result.
+   Table cells are two or three lines in a narrow column, where pretty does not
+   reach ("…can itself be / compromised"); balanced lines suit them, and Chrome
+   leaves a cell longer than six lines to ordinary wrapping. */
+p, li, dd { text-wrap:pretty; }
+td { text-wrap:balance; }
+
+/* A margin that meets an unforced page break is truncated in CSS
+   fragmentation, so a heading carried to the top of a page lines up with the
+   text block. Paged.js keeps it, which set every such h2 9mm low and cost a
+   page at the end of the appendix. The first element in a page's content box
+   is the first child of its wrapper, so this reaches exactly those, and the
+   first child of a keep group (sf_keep_lists) that opens a page: a head set in
+   one was the exception, "Implementation reference" 9mm low on its page. */
+.pagedjs_page_content > div > :first-child,
+.pagedjs_page_content > div > .keep:first-child > :first-child { margin-top:0; }
+
+/* Chapters run on. The white paper opens every chapter on a new page; this
+   paper's chapters are a third of a page to a page and a half, so that rule
+   left a page in three mostly white (Network alone on a page, the Conclusion
+   on a third of one). The executive summary keeps its page, as an abstract
+   does, and the appendix opens a page of its own. The head keeps its rule
+   and takes a band of space above it, so a chapter still reads as one. */
+h1:not(.covertitle) { break-before:auto; margin-top:12mm; }
+h1#executive-summary, h1#introduction, h1#appendix { break-before:page; }
+/* A chapter head with three lines under it at the foot of a page reads as
+   stranded. It takes four with it, or moves to the next page. */
+h1 + p { orphans:4; }
+/* A list item is one requirement. Split across a page, its last line sat
+   alone at the head of the next page with no bullet to say what it was. */
+li { break-inside:avoid; }
+/* sf_keep_lists(): a label head and its first two items, then the rest. */
+.keep { break-inside:avoid; }
+.keep > ul.lead { margin-bottom:0; }
+ul.cont { margin-top:0; }
+
+/* ── reference architecture: tables ───────────────────────────────────── */
+/* pandoc's equal column widths are dropped and each table gets its own: a
+   one-word column does not need a quarter of the measure. Rows never split. */
+tr { break-inside:avoid; }
+td { line-height:1.5; }
+table.t-threat th:nth-child(1) { width:44%; }
+table.t-threat th:nth-child(2) { width:15%; }
+table.t-threat .trust { font-family:"Chakra Petch",sans-serif; font-weight:600;
+  font-size:7pt; letter-spacing:.11em; text-transform:uppercase; color:var(--ink); }
+table.t-threat .trust.trusted { color:var(--accent); }
+table.t-levels th:nth-child(1) { width:21%; }
+table.t-levels th:nth-child(2) { width:25%; }
+table.t-levels th:nth-child(3) { width:25%; }
+table.t-levels td:first-child, table.t-outcomes td:first-child,
+table.t-controls td:first-child { font-family:"Figtree",sans-serif; font-weight:500;
+  font-size:9pt; color:var(--ink); }
+table.t-outcomes th:nth-child(1) { width:20%; }
+/* Balanced lines suit a narrow cell; in these wide ones they stopped every
+   line well short of the column, so it read as narrower than it is. */
+table.t-outcomes td + td, table.t-controls td + td { text-wrap:pretty; }
+table.t-outcomes a.oc { color:inherit; }
+table.t-controls th:nth-child(1) { width:27%; }
+
+/* How the factory deepens across levels: one block per row, the component as
+   its head and each level beneath with its name in the margin. Set as the
+   four-column table it is in the source, three paragraphs were squeezed to a
+   few words a line, and a row that broke across a page left a level's text
+   with no component above it — the Appendix A failure. A block never splits. */
+.deepen { margin:4mm 0 2mm; }
+/* The key: the table's own head, once. Label voice like a th, then each
+   level's name beside its number, in the grid the entries use. */
+.deepen .key { margin:0 0 3mm; }
+.deepen .key .k0 { text-align-last:left;
+  font-family:"Chakra Petch",sans-serif; font-size:7pt; font-weight:600;
+  letter-spacing:.1em; text-transform:uppercase; color:var(--faint); text-align:left;
+  padding:0 0 1.6mm; margin:0 0 1.2mm; border-bottom:.5pt solid var(--rule); }
+.deepen .key .lv { border-top:none; padding:.2mm 0; }
+.deepen .key dd { font-family:"Figtree",sans-serif; font-size:8.5pt; color:var(--soft);
+  line-height:1.4; text-wrap:wrap; }
+.deepen .row { break-inside:avoid; margin:0 0 3mm; border-top:.5pt solid var(--rule); }
+.deepen .comp { font-family:"Figtree",sans-serif; font-weight:600; font-size:10pt;
+  line-height:1.3; margin:0; padding:1.8mm 0 1.2mm; text-align:left; }
+.deepen dl { margin:0; }
+.deepen .lv { display:grid; grid-template-columns:19mm 1fr; gap:0 4mm;
+  padding:1.6mm 0 1.8mm; border-top:.4pt solid var(--line); }
+.deepen dt { font-family:"IBM Plex Mono",monospace; font-weight:600; font-size:8pt;
+  color:var(--accent); letter-spacing:.01em; padding-top:.3mm; }
+.deepen dd { margin:0; font-size:9pt; line-height:1.55; text-align:left;
+  text-wrap:balance; }
+
+/* ── reference architecture: definitions ──────────────────────────────── */
+/* A glossary, not a run of bold-led paragraphs: the term in the margin, so
+   the eye can run down the terms, and an entry never splits from its term. */
+dl.glossary { margin:3mm 0 0; }
+dl.glossary .entry { display:grid; grid-template-columns:32mm 1fr; gap:0 4mm;
+  padding:1.5mm 0 1.6mm; border-top:.4pt solid var(--line); break-inside:avoid; }
+dl.glossary dt { font-family:"Figtree",sans-serif; font-weight:500; font-size:9.5pt;
+  line-height:1.35; color:var(--ink); text-align:left; hyphens:none; padding-top:.2mm; }
+dl.glossary dd { margin:0; font-size:9pt; line-height:1.5; color:var(--soft);
+  text-align:left; }
+"""
+
+# A draft says so on every page, in the centre of the foot, which neither
+# paper uses, and on its cover. Appended only for --draft, so a publishable
+# build's stylesheet does not contain it at all.
+DRAFT_CSS = """
+@page { @bottom-center { content: "Draft · not for publication"; font-family:"IBM Plex Mono",monospace;
+  font-size:7.5pt; font-weight:600; letter-spacing:.06em; color:#B3541E; } }
+@page cover { @bottom-center { content:none } }
+.cover .draft { position:absolute; top:22mm; right:30mm; margin:0;
+  font-family:"IBM Plex Mono",monospace; font-size:8pt; font-weight:600;
+  letter-spacing:.06em; color:#B3541E; }
+"""
 
 
 PUBLISHED_RE = r"Published as\b[^\n]*?·\s*(\d{1,2}\s+[A-Za-z]+\s+\d{4})"
 COMMENTS_RE = r"Draft for public comment until\s+(\d{1,2}\s+[A-Za-z]+\s+\d{4})"
 
 
-def front_matter_dates():
+def front_matter_dates(src):
     """The paper's published date and comment deadline, from its own front matter.
 
     One reading, used for both the cover and the PDF's timestamps. The cover used
@@ -442,7 +732,7 @@ def front_matter_dates():
     1 January 2026" is worse than a build that stops and says which line it could
     not read. Abbreviating the month is enough to land here.
     """
-    text = SRC.read_text(encoding="utf-8")
+    text = src.read_text(encoding="utf-8")
     found = {}
     for key, pattern, shape in (
         ("published", PUBLISHED_RE, "Published as **Agent Baseline** · v… · 30 July 2026 · …"),
@@ -464,9 +754,9 @@ def front_matter_dates():
     return found
 
 
-def published_epoch(published):
+def published_epoch(published, fmt="%d %B %Y"):
     """The published date as a UTC epoch, for /CreationDate and /ModDate."""
-    d = datetime.datetime.strptime(published, "%d %B %Y")
+    d = datetime.datetime.strptime(published, fmt)
     # Midday rather than midnight: the stored value is UTC but readers see it in
     # local time, and a midnight stamp displays as the previous day anywhere west
     # of Greenwich — a PDF of the 30th reporting the 29th looks like a bug in the
@@ -474,8 +764,66 @@ def published_epoch(published):
     return calendar.timegm(d.timetuple()) + 12 * 3600
 
 
-def render(out, provenance):
-    dates = front_matter_dates()
+# ── the white paper ──────────────────────────────────────────────────────────
+def build_whitepaper(paper, draft):
+    """The white paper's document, exactly as this script has always assembled it."""
+    src = paper["src"]
+    OUTCOMES, CONTROLS = load_controls()
+
+    md = record(src).read_text(encoding="utf-8")
+
+    # The paper's hand-written contents is a flat list of links. It is useful on
+    # GitHub and useless in print, where a link with no page number cannot be
+    # followed. Dropped here and rebuilt below with real page references.
+    md, _ = cut_section(md, r"^# Contents\b.*$")
+    # Appendix A is regenerated from controls.yaml.
+    md, _ = cut_section(md, r"^# Appendix A\b.*$")
+
+    body = pandoc(md, paper["work"])
+
+    # The paper opens with a title, a subtitle and two published lines. All four
+    # are the cover's job. Left in the flow they do not simply repeat the cover —
+    # they land orphaned at the foot of the contents page, under the leaders.
+    body = re.sub(r"^\s*<h1[^>]*>.*?</h1>", "", body, count=1, flags=re.S)
+    for _ in range(2):
+        body = re.sub(r"^\s*<p>(?:(?!</p>).)*?(?:Identify the agent|Published as).*?</p>",
+                      "", body, count=1, flags=re.S)
+
+    body, _ = figures(body, src, draft)
+
+    # ── contents, with page numbers resolved by Paged.js ─────────────────────
+    toc = contents(body)
+    toc.append(("1", "appendix-a", "Appendix A. Canonical capability map"))
+    toc_html = contents_html(toc)
+
+    # ── the appendix, as blocks rather than a table ──────────────────────────
+    by_outcome = {}
+    for c in CONTROLS:
+        by_outcome.setdefault(c["outcome"], []).append(c)
+    app = []
+    for o in OUTCOMES:
+        rows = by_outcome.get(o["prefix"], [])
+        if not rows:
+            continue
+        ids = f'{rows[0]["id"]}–{rows[-1]["id"]}'
+        app.append(f'<section class="fam">'
+                   f'<h2 id="app-{o["prefix"].lower()}">{html.escape(o["name"])}'
+                   f'<span class="span">{ids}</span></h2>'
+                   f'<p class="famreq">{html.escape(o["requirement"] or "")}</p>')
+        for c in rows:
+            app.append(
+                f'<div class="ctl" id="{c["id"]}">'
+                f'<div class="cid">{c["id"]}</div>'
+                f'<div class="cbody"><div class="chead">'
+                f'<span class="ctitle">{html.escape(c["title"] or "")}</span>'
+                f'<span class="ctype">{html.escape(c["type"] or "")}</span></div>'
+                f'<p class="creq">{html.escape(c["requirement"] or "")}</p></div></div>')
+        app.append("</section>")
+    appendix_html = "\n".join(app)
+
+    FONTS = fonts()
+
+    dates = front_matter_dates(src)
     version = "1.0-draft"
     m = re.search(r'^version:\s*"([^"]+)"',
                   (ROOT / "whitepaper" / "controls.yaml").read_text(encoding="utf-8"), re.M)
@@ -484,6 +832,8 @@ def render(out, provenance):
     # str.replace, not %-formatting: the stylesheet is full of
     # percentages and every one of them is a format specifier.
     css = CSS.replace("@VERSION@", version)
+    if draft:
+        css += DRAFT_CSS
 
     authors = ""
     cpath = ROOT / "whitepaper" / "contributors.yaml"
@@ -515,7 +865,8 @@ def render(out, provenance):
 </head><body>
 
 <section class="cover">
-  <p class="mark">Agent Baseline · agentbaseline.org</p>
+  <p class="mark">Agent Baseline · agentbaseline.org</p>{'''
+  <p class="draft">Draft · not for publication</p>''' if draft else ''}
   <h1 class="covertitle">Six security outcomes for safely building, deploying and operating AI agents</h1>
   <ul class="tenets">
     <li>Identify the agent.</li><li>Bound its authority.</li>
@@ -546,7 +897,463 @@ def render(out, provenance):
 <script src="{PAGED.as_uri()}"></script>
 </body></html>"""
 
-    page = WORK / "paper.html"
+    # The scripts are inputs too: the stylesheet and the cover live in this file,
+    # the normalisation lives in print-page.mjs, and the catalogue reader in
+    # controls_source.py decides what the appendix says. A change to any of them
+    # changes the artifact, so a manifest that omitted them would call a stale PDF
+    # current.
+    record(ROOT / "bin" / "controls_source.py")
+    return {
+        "doc": doc,
+        "epoch": published_epoch(dates["published"]),
+        "print_args": [],
+        "summary": f"{len(CONTROLS)} controls · {len(toc)} contents entries",
+    }
+
+
+# ── the reference architecture ───────────────────────────────────────────────
+# "Version 1, October 13, 2026": the version, then the date with the month in
+# full. The white paper writes its date the other way round, in a different
+# sentence, so each paper is read in its own shape rather than one regex being
+# loosened until it accepts both.
+SF_VERSION_RE = r"^Version\s+(\S+?),\s+([A-Za-z]+\s+\d{1,2},\s+\d{4})\s*$"
+SF_BYLINE_RE = r"^Drafted by\s+(.+?)\.?\s*$"
+
+
+def sf_front_matter(md, src):
+    """Title, version, date and byline, from the paper's own first lines.
+
+    Fails rather than guessing, for the reason front_matter_dates() gives: the
+    cover, the running foot and the PDF's timestamps are all printed from these,
+    and a cover with an invented date is worse than a build that stops.
+    """
+    name = rel(src)
+    t = re.match(r"\s*#\s+(.+?)\s*\n", md)
+    if not t:
+        sys.exit(f"{name} does not open with a `# Title` line; the cover is printed from it.")
+    v = re.search(SF_VERSION_RE, md, re.M)
+    if not v:
+        sys.exit(f"cannot read the version and date from {name}'s front matter.\n"
+                 f"  expected a line shaped like: Version 1, October 13, 2026\n"
+                 f"The cover, the running foot and the PDF's timestamps are all printed "
+                 f"from that line, so there is nothing sensible to fall back to. Fix the "
+                 f"front matter, or update {pathlib.Path(__file__).name} if the wording "
+                 f"moved on purpose.")
+    try:
+        when = datetime.datetime.strptime(" ".join(v.group(2).split()), "%B %d, %Y")
+    except ValueError:
+        sys.exit(f"{name}'s date is not a date this can parse: {v.group(2)!r} — write it "
+                 f"as 'October 13, 2026', month unabbreviated.")
+    b = re.search(SF_BYLINE_RE, md, re.M)
+    if not b:
+        sys.exit(f"cannot read the byline from {name}'s front matter.\n"
+                 f"  expected a line shaped like: Drafted by A Person (Org), … and B Person (Org).\n"
+                 f"The cover credits the authors from that line and the PDF's Author "
+                 f"field lists them; neither should be left blank by accident.")
+    people = []
+    # Commas and "and" inside an affiliation's parentheses are not separators.
+    for seg in re.split(r",\s+(?:and\s+)?(?![^()]*\))|\s+and\s+(?![^()]*\))", b.group(1)):
+        seg = seg.strip()
+        if not seg:
+            continue
+        m = re.fullmatch(r"(.+?)\s*\(([^()]+)\)", seg)
+        people.append((m.group(1), m.group(2)) if m else (seg, ""))
+    if not people:
+        sys.exit(f"{name}'s byline names nobody: {b.group(0)!r}")
+    return {"title": t.group(1), "version": v.group(1), "date": when,
+            "date_line": v.group(0).strip(), "byline": b.group(0).strip(),
+            "people": people}
+
+
+def sf_contributors(people):
+    """Refuse a byline that names anyone contributors.yaml has not confirmed.
+
+    The byline is printed from the paper's own first lines, on the cover and in
+    /Author. contributors.yaml is where a person's consent to be listed, and
+    their affiliation, is recorded: the site's page prints only `confirmed: true`
+    entries, and the white paper's cover does the same. Read from the paper
+    alone, a withdrawn name stayed on the PDF's cover after it had left the site,
+    and the PDF was not even stale, because the yaml was not an input. It is
+    recorded now, and every byline name must be in it, confirmed, with the same
+    affiliation, or the build stops and says who.
+
+    The file holds one entry per line, `- { name: …, affiliation: …, … }`, or the
+    white paper's block form; both are read.
+    """
+    path = ROOT / "software-factory" / "contributors.yaml"
+    if not path.exists():
+        sys.exit(f"{rel(path)} is missing; the byline cannot be checked against it.")
+    text = record(path).read_text(encoding="utf-8")
+    body = text.split("contributors:", 1)[1] if "contributors:" in text else ""
+    entries = []
+    for blk in re.split(r"\n(?=\s*- )", body):
+        blk = blk.strip()
+        if not blk.startswith("-"):
+            continue
+        flow = re.fullmatch(r"-\s*\{(.*)\}\s*(?:#.*)?", blk, re.S)
+        pairs = (re.findall(r"(\w+)\s*:\s*([^,]+?)\s*(?:,|$)", flow.group(1)) if flow else
+                 re.findall(r"^[ \t-]*(\w+):[ \t]*(.+?)[ \t]*$", blk, re.M))
+        entries.append({k: v.strip().strip('"\'') for k, v in pairs})
+    known = {e.get("name"): e for e in entries if e.get("name")}
+    wrong = []
+    for name, aff in people:
+        e = known.get(name)
+        if e is None:
+            wrong.append(f"{name}: not in {rel(path)}")
+        elif e.get("confirmed", "").lower() != "true":
+            wrong.append(f"{name}: confirmed is {e.get('confirmed') or 'missing'}, not true")
+        elif e.get("affiliation", "") != aff:
+            wrong.append(f"{name}: the byline says {aff!r}, {rel(path)} says {e.get('affiliation')!r}")
+    if wrong:
+        sys.exit("the byline names people contributors.yaml does not confirm as printed:\n" +
+                 "".join(f"    {w}\n" for w in wrong) +
+                 "The cover and /Author print the byline, and nothing is published unconfirmed. "
+                 "Fix the paper's byline or the yaml, whichever is wrong.")
+
+
+def slug(text):
+    return re.sub(r"[^a-z0-9]+", "-", text.lower()).strip("-")
+
+
+def cells(row, tag):
+    return [c.strip() for c in re.findall(rf"<{tag}\b[^>]*>(.*?)</{tag}>", row, re.S)]
+
+
+def sf_tables(body):
+    """Give each table its own treatment, keyed on its first column's heading.
+
+    Keyed on the heading rather than on position, so a table added above another
+    does not inherit its neighbour's layout. pandoc's colgroup gives every column
+    an equal share, which no table here wants; it goes, and the widths are set by
+    class in SF_CSS.
+    """
+    kinds = {"What": "t-threat", "Level": "t-levels", "Outcome": "t-outcomes",
+             "Autonomy level": "t-controls", "Boundary or component": "deepen"}
+    seen = []
+
+    def one(m):
+        t = re.sub(r"<colgroup>.*?</colgroup>\s*", "", m.group(0), flags=re.S)
+        head = cells(re.search(r"<thead>(.*?)</thead>", t, re.S).group(1), "th")
+        kind = kinds.get(re.sub(r"<[^>]+>", "", head[0]).strip())
+        seen.append(kind)
+        if kind == "deepen":
+            return deepen(t, head)
+        if kind == "t-outcomes":
+            # Each outcome names the section of the controls page that defines it,
+            # anchored there by its name in lower case, as on the site's own pages.
+            # Only in the PDF: the paper's source and the site page are untouched.
+            t = re.sub(r"(<tr\b[^>]*>\s*<td\b[^>]*>)\s*(Discover|Constrain|Authorize|Observe|Validate|Respond)\s*(</td>)",
+                       lambda c: f'{c.group(1)}<a class="oc" href="https://agentbaseline.org/controls#'
+                                 f'{c.group(2).lower()}">{c.group(2)}</a>{c.group(3)}', t)
+        if kind == "t-threat":
+            t = re.sub(r"(<td\b[^>]*>)\s*(Untrusted|Trusted)\s*(</td>)",
+                       lambda c: f'{c.group(1)}<span class="trust {c.group(2).lower()}">'
+                                 f'{c.group(2)}</span>{c.group(3)}', t)
+        return t.replace("<table>", f'<table class="{kind}">', 1) if kind else t
+
+    body = re.sub(r"<table>.*?</table>", one, body, flags=re.S)
+    if "deepen" not in seen and 'id="how-the-factory-deepens-across-levels"' in body:
+        sys.exit("found the heading 'How the factory deepens across levels' but not its "
+                 "table (first column 'Boundary or component'). Set as a plain table it "
+                 "squeezes three paragraphs into quarter-width columns and splits rows "
+                 "across pages; fix the table, or update sf_tables().")
+    return body
+
+
+def deepen(table, head):
+    """The four-column levels table as one unsplittable block per row.
+
+    The table's head is set once, as a key above the blocks: what the first
+    column holds and each level's full name. Repeated in every block, the
+    names took three lines of the margin beside a one-line description, so the
+    level, not what it said, set the height of nearly every entry; and the
+    first column's heading was not printed at all."""
+    if len(head) != 4:
+        sys.exit(f"'How the factory deepens across levels' has {len(head)} columns, not 4 "
+                 f"(a component and three levels); update deepen() to match.")
+    levels = []
+    for h in head[1:]:
+        text = html.unescape(re.sub(r"<[^>]+>", "", h)).strip()
+        lead, _, rest = text.partition(":")
+        levels.append((html.escape(lead.strip()), html.escape(" ".join(rest.split()))))
+    rows = re.findall(r"<tr\b[^>]*>(.*?)</tr>", re.search(r"<tbody>(.*?)</tbody>", table, re.S).group(1), re.S)
+    first = html.escape(html.unescape(re.sub(r"<[^>]+>", "", head[0])).strip())
+    out = ['<div class="deepen">', f'<dl class="key"><div class="k0">{first}</div>']
+    out += [f'<div class="lv"><dt>{lead}</dt><dd>{rest}</dd></div>' for lead, rest in levels]
+    out.append("</dl>")
+    # The key is a table head: it never ends a page without the first entry.
+    out.insert(1, '<div class="keep">')
+    for n, r in enumerate(rows):
+        c = cells(r, "td")
+        if len(c) != 4:
+            sys.exit(f"a row of 'How the factory deepens across levels' has {len(c)} cells: {c[:1]}")
+        out.append(f'<div class="row"><p class="comp">{c[0]}</p><dl>')
+        for (lead, rest), text in zip(levels, c[1:]):
+            out.append(f'<div class="lv"><dt>{lead}</dt><dd>{text}</dd></div>')
+        out.append("</dl></div>" + ("</div>" if n == 0 else ""))
+    out.append("</div>")
+    return "\n".join(out)
+
+
+def sf_inline_figures(body):
+    """Set each SVG figure into the page itself rather than behind an <img>.
+
+    An SVG loaded as an image is a document of its own and cannot see the page's
+    @font-face rules, so the figures' Figtree, Plex and Chakra Petch fell back to
+    whatever the building machine had: pdffonts listed Avenir Next, Charter and
+    Menlo, the figures printed in faces the site does not use, and they printed
+    in different ones on a different machine. Set inline, a figure takes the
+    embedded faces like the text around it and shares their subsets. The site
+    inlines the same files (bin/sync-figure-partial), and every id in them is
+    already prefixed per figure (sf3-a), so two figures cannot collide.
+
+    The paper's alt text, which figures() has already refused if it is missing
+    or a TODO, becomes the drawing's accessible name. The files are recorded
+    here because the file:// sweep in render() no longer sees them.
+    """
+    def one(m):
+        tag = m.group(0)
+        url = re.search(r'\bsrc="(file://[^"]*)"', tag).group(1)
+        alt = re.search(r'\balt="([^"]*)"', tag)
+        svg = record(pathlib.Path(urllib.request.url2pathname(url[len("file://"):]))) \
+            .read_text(encoding="utf-8")
+        svg = re.sub(r"^\s*<\?xml[^>]*\?>\s*", "", svg)
+
+        def root(r):
+            attrs = re.sub(r'\s(?:width|height|role|aria-labelledby|aria-label)="[^"]*"', "", r.group(1))
+            return f'<svg{attrs} role="img" aria-label="{alt.group(1) if alt else ""}">'
+        return re.sub(r"<svg\b([^>]*)>", root, svg, count=1)
+    return re.sub(r'<img\b[^>]*\bsrc="file://[^"]*\.svg"[^>]*>', one, body)
+
+
+def sf_incidents(body):
+    """Each recent incident's date in its own voice, after its name.
+
+    The heads read "PocketOS, April 2026", all in the label voice, so a name and
+    a date ran together in one string of capitals. The text is unchanged; what
+    follows the first comma that leads to a year is set as a datum, as dates
+    are on the cover and in the foot. A head without a date is left whole.
+    """
+    m = re.search(r'<h2 id="recent-incidents"[^>]*>.*?</h2>(.*?)(?=<h[12][\s>]|\Z)', body, re.S)
+    if not m:
+        return body
+
+    def dated(x):
+        opening = x.group(1).replace("<h3", '<h3 class="incident"', 1)
+        return (f'{opening}{x.group(2)}, <span class="when">{x.group(3)}</span>'
+                f'{x.group(4) or ""}{x.group(5)}')
+
+    def head(h):
+        return re.sub(r"(<h3\b[^>]*>(?:<a\b[^>]*>)?)([^<]*?),\s+([^<,]*\d{4}[^<]*)(</a>)?(</h3>)",
+                      dated, h.group(0))
+    section = re.sub(r"<h3\b.*?</h3>", head, m.group(1), flags=re.S)
+    # A head without a date is still an incident, and takes the incidents'
+    # spacing; left out, it sat further below its paragraph than the others.
+    section = re.sub(r"<h3(?![^>]*\bclass=)", '<h3 class="incident"', section)
+    return body[:m.start(1)] + section + body[m.end(1):]
+
+
+def sf_keep_lists(body):
+    """A label head over a list keeps its first two items with it.
+
+    break-after:avoid on the head binds it to the list's first item only, so a
+    head could close a page with one requirement under it and the rest overleaf.
+    A keep rule on the items themselves is what CSS offers, and Paged.js does not
+    honour it: on the appendix lists it pushed whole sections to the next page
+    and left a head at a foot with nothing under it. So the head and the first
+    two items are set as one unbreakable group, and the list continues in a
+    second <ul> with no space between, which reads as the same list.
+    """
+    def one(m):
+        items = re.findall(r"<li>.*?</li>", m.group(2), re.S)
+        if len(items) < 3 or any("<ul" in i or "<ol" in i for i in items):
+            return m.group(0)
+        return (f'<div class="keep">{m.group(1)}<ul class="lead">{"".join(items[:2])}</ul></div>'
+                f'<ul class="cont">{"".join(items[2:])}</ul>')
+    body = re.sub(r"(<h3\b[^>]*>(?:(?!</h3>).)*</h3>)\s*<ul>\s*((?:(?!</ul>).)*?)\s*</ul>",
+                  one, body, flags=re.S)
+    # A section head directly over a label head is one unit too. Paged.js keeps
+    # a head with the block after it, but not a chain of two: "Implementation
+    # reference" was left alone at the foot of a page with its first label head
+    # and paragraph overleaf.
+    return re.sub(r"(<h2\b[^>]*>(?:(?!</h2>).)*</h2>)\s*(<h3\b[^>]*>(?:(?!</h3>).)*</h3>)",
+                  r'<div class="keep">\1\2</div>', body, flags=re.S)
+
+
+def sf_glossary(body):
+    """The Definitions section as a glossary, and every bolded term linked to it.
+
+    Every paragraph in the section must be a `**Term:** text` definition. A
+    paragraph of another shape would otherwise be dropped from a list it does not
+    belong in, or silently left as the one plain paragraph among the entries.
+    """
+    # The section runs to the next h1 or h2, or to the end of the document: as
+    # the last section it used to match nothing, and the glossary, its links and
+    # the refusal below were all skipped without a word.
+    m = re.search(r'(<h2 id="definitions"[^>]*>.*?</h2>)(.*?)(?=<h[12][\s>]|\Z)', body, re.S)
+    if not m:
+        if 'id="definitions"' in body:
+            sys.exit("found the Definitions heading but could not read its section; "
+                     "update sf_glossary() rather than print it as plain paragraphs.")
+        return body, {}
+    entries, terms = [], {}
+    rest = m.group(2)
+    for p in re.finditer(r"<p><strong>(.+?):</strong>\s*(.*?)</p>", rest, re.S):
+        term = " ".join(p.group(1).split())
+        anchor = "def-" + slug(html.unescape(term))
+        terms[html.unescape(term).lower()] = anchor
+        entries.append(f'<div class="entry" id="{anchor}"><dt>{term}</dt>'
+                       f'<dd>{p.group(2).strip()}</dd></div>')
+    leftover = re.sub(r"<p><strong>.+?:</strong>.*?</p>", "", rest, flags=re.S).strip()
+    if leftover or not entries:
+        sys.exit("the Definitions section holds something other than `**Term:** text` "
+                 f"paragraphs:\n    {leftover[:160]!r}\nSet it by hand or update sf_glossary().")
+    gloss = '<dl class="glossary">\n' + "\n".join(entries) + "\n</dl>\n"
+    body = body[:m.start(2)] + "\n" + gloss + body[m.end(2):]
+
+    # The paper says bolded terms are defined in the appendix; in a PDF that is
+    # a promise a link can keep. Matched case-insensitively and allowing a plural
+    # ("blueprints" for Blueprint). The glossary itself is not touched — a term
+    # does not link to itself.
+    g0 = body.index('<dl class="glossary">')
+    g1 = body.index("</dl>", g0)
+    unmatched = []
+
+    def link(s):
+        # Normalised as the glossary keys are: pandoc wraps a long line inside
+        # a bolded term ("agent\nharness"), which matched nothing.
+        word = " ".join(html.unescape(re.sub(r"<[^>]+>", "", s.group(1))).split()).lower()
+        for k in (word, word[:-1] if word.endswith("s") else None):
+            if k and k in terms:
+                return f'<a class="term" href="#{terms[k]}">{s.group(0)}</a>'
+        if not re.match(r"invariants?:?$", word):
+            unmatched.append(word)
+        return s.group(0)
+
+    head = re.sub(r"<strong>(.*?)</strong>", link, body[:g0], flags=re.S)
+    body = head + body[g0:g1] + body[g1:]
+    if unmatched:
+        print(f"  note: bolded but not defined: {', '.join(sorted(set(unmatched)))}")
+    return body, terms
+
+
+def build_software_factory(paper, draft):
+    src = paper["src"]
+    md = record(src).read_text(encoding="utf-8")
+    fm = sf_front_matter(md, src)
+    sf_contributors(fm["people"])
+    body = pandoc(md, paper["work"])
+
+    # The title, the version line and the byline are the cover's. Each must be
+    # found and removed exactly once, or the contents page opens with an orphaned
+    # copy of the cover, which is what the white paper's version of this did.
+    for what, pat in (("title", r"^\s*<h1[^>]*>.*?</h1>"),
+                      ("version line", r"^\s*<p>Version\s.*?</p>"),
+                      ("byline", r"^\s*<p>Drafted by\s.*?</p>")):
+        body, n = re.subn(pat, "", body, count=1, flags=re.S)
+        if n != 1:
+            sys.exit(f"could not lift the {what} out of the body; the cover would repeat "
+                     f"it in the flow. Check the front matter of {rel(src)}.")
+
+    body, figs = figures(body, src, draft)
+    body = sf_inline_figures(body)
+    body = sf_tables(body)
+    body, _ = sf_glossary(body)
+    body = sf_keep_lists(body)
+    body = sf_incidents(body)
+    body = re.sub(r"<p><strong>(Invariants?):</strong>",
+                  r'<p class="invariant"><strong>\1:</strong>', body)
+
+    toc = contents(body)
+    toc_html = contents_html(toc)
+    FONTS = fonts()
+
+    date = f"{fm['date'].day} {fm['date']:%B %Y}"
+    running = fm["title"].partition(": ")[0].replace("\\", "\\\\").replace('"', '\\"')
+    css = (SF_PAGE_CSS + SHARED_CSS + SF_CSS).replace("@VERSION@", fm["version"]) \
+                                             .replace("@DATE@", date) \
+                                             .replace("@TITLE@", running)
+    if draft:
+        css += DRAFT_CSS
+
+    title = fm["title"]
+    lead, colon, sub = title.partition(": ")
+    # Chrome names the first bookmark from the laid-out text, where an ordinary
+    # space before the break collapses and the title came out as
+    # "Factory:A Reference Architecture". A no-break space survives layout and
+    # is invisible at the end of the line.
+    title_html = (f'{html.escape(lead)}:&nbsp;<br><span class="sub">{html.escape(sub)}</span>'
+                  if colon else html.escape(title))
+    # Each name with its affiliation is one unbreakable run: the byline wraps
+    # between people, never between a given name and a family name.
+    names = [f'<span class="nb">{html.escape(n)}<sup>{html.escape(a)}</sup></span>' if a
+             else f'<span class="nb">{html.escape(n)}</span>'
+             for n, a in fm["people"]]
+    # The last name is joined as the paper joins it. Its byline has a serial
+    # comma ("…Nassri (Socket), and Aaron Stanley…"); the cover used
+    # the white paper's plain " and " and dropped it, so the cover did not
+    # print what the paper says.
+    serial = re.search(r",\s+and\s+[^,]+$", fm["byline"]) is not None
+    last = (", and " if serial and len(names) > 2 else " and ")
+    byline = ("Drafted by " + (", ".join(names[:-1]) + last + names[-1]
+                               if len(names) > 1 else names[0]) + ".")
+
+    doc = f"""<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<title>{html.escape(title)}</title>
+<style>{FONTS}</style>
+<style>{css}</style>
+</head><body>
+
+<section class="cover">
+  <p class="mark"><span class="parent">Agent Baseline</span>, applied to the software factory</p>{'''
+  <p class="draft">Draft · not for publication</p>''' if draft else ''}
+  <h1 class="covertitle">{title_html}</h1>
+  <dl class="tb">
+    <div class="cell"><dt>Builds on</dt><dd>Agent Baseline</dd></div>
+    <div class="cell sep"><dt>Subject</dt><dd>The software factory</dd></div>
+    <div class="cell sep"><dt>Version</dt><dd>{html.escape(fm["version"])}</dd></div>
+    <div class="cell sep"><dt>Published</dt><dd>{date}</dd></div>
+  </dl>
+  <p class="by">{byline}</p>
+  <p class="meta">
+    Open for comment at agentbaseline.org<br>
+    Prose and figures CC BY 4.0
+  </p>
+</section>
+
+<nav class="toc"><h2>Contents</h2><ol>{toc_html}</ol></nav>
+
+{body}
+
+<script>window.PagedConfig = {{ auto: false }};</script>
+<script src="{PAGED.as_uri()}"></script>
+</body></html>"""
+
+    return {
+        "doc": doc,
+        "epoch": calendar.timegm(fm["date"].timetuple()) + 12 * 3600,
+        # The white paper prints with neither, and must keep printing the same
+        # bytes, so these are asked for here rather than made the default.
+        "print_args": ["--outline",
+                       "--meta", f"Author={', '.join(n for n, _ in fm['people'])}",
+                       "--meta", "Subject=Agent Baseline, applied to the software factory",
+                       "--meta", "Keywords=Agent Baseline; software factory; reference architecture; "
+                                 "AI agents; agent security"],
+        "summary": f"{len(figs)} figures · {len(toc)} contents entries"
+                   + (" · DRAFT" if draft else ""),
+    }
+
+
+BUILDERS = {"whitepaper": build_whitepaper, "software-factory": build_software_factory}
+
+
+def render(name, out, provenance, draft=False):
+    paper = PAPERS[name]
+    built = BUILDERS[name](paper, draft)
+    doc = built["doc"]
+
+    page = paper["work"] / "paper.html"
     page.write_text(doc, encoding="utf-8")
 
     # Everything the document pulls in from disk at print time. The figures are
@@ -559,12 +1366,11 @@ def render(out, provenance):
         if p.exists() and ROOT in p.resolve().parents:
             record(p)
     # The scripts are inputs too: the stylesheet and the cover live in this file,
-    # the normalisation lives in print-page.mjs, and the catalogue reader in
-    # controls_source.py decides what the appendix says. A change to any of them
-    # changes the artifact, so a manifest that omitted them would call a stale PDF
-    # current.
+    # the normalisation lives in print-page.mjs, and papers.py says which source
+    # makes which artifact. A change to any of them changes the artifact, so a
+    # manifest that omitted them would call a stale PDF current.
     for script in (pathlib.Path(__file__), ROOT / "bin" / "print-page.mjs",
-                   ROOT / "bin" / "controls_source.py"):
+                   ROOT / "bin" / "papers.py"):
         record(script)
 
     out.parent.mkdir(parents=True, exist_ok=True)
@@ -601,25 +1407,52 @@ def render(out, provenance):
     # it only moves when the paper does. An epoch already in the environment wins,
     # so a release process can pin it.
     env = dict(os.environ)
-    env.setdefault("SOURCE_DATE_EPOCH", str(published_epoch(dates["published"])))
+    env.setdefault("SOURCE_DATE_EPOCH", str(built["epoch"]))
     try:
         r = subprocess.run(["node", str(ROOT / "bin" / "print-page.mjs"),
-                            str(page), str(tmp)], capture_output=True, text=True, env=env)
+                            str(page), str(tmp), *built["print_args"]],
+                           capture_output=True, text=True, env=env)
         if r.returncode or not tmp.exists():
             sys.exit(f"PDF FAILED\n{r.stdout}\n{r.stderr}")
         print(f"  {r.stdout.strip()}")
         blob = tmp.read_bytes()
+        # The rule fonts() enforces for the text, held for the whole file: every
+        # face the PDF embeds is one of FACES. A figure loaded as an image once
+        # printed in Avenir Next, Charter and Menlo with nothing to say so. Checked
+        # before the move, so a refused render never replaces the tracked file.
+        embedded = set(re.findall(rb"/(?:BaseFont|FontName)\s*/(?:[A-Z]{6}\+)?([A-Za-z0-9]+)", blob))
+        allowed = {fam.replace(" ", "").encode() for fam, *_ in FACES}
+        if not embedded or embedded - allowed:
+            sys.exit(f"the render embeds " +
+                     (", ".join(sorted(f.decode() for f in embedded - allowed))
+                      if embedded else "no font this can read") +
+                     f", outside the site's faces ({', '.join(sorted(a.decode() for a in allowed))}). "
+                     f"Something is drawing text in a system font; {rel(out)} was not written.")
         os.replace(tmp, out)
     finally:
         tmp.unlink(missing_ok=True)
 
     pages = len(re.findall(rb"/Type\s*/Page[^s]", blob))
-    print(f"wrote {rel(out)}  {len(blob):,} bytes · {pages} pages "
-          f"· {len(CONTROLS)} controls · {len(toc)} contents entries")
+    print(f"wrote {rel(out)}  {len(blob):,} bytes · {pages} pages · {built['summary']}")
 
     if provenance:
-        write_provenance(provenance, out, blob, pages, env["SOURCE_DATE_EPOCH"])
+        write_provenance(provenance, out, blob, pages, env["SOURCE_DATE_EPOCH"], draft)
         print(f"wrote {rel(provenance)}  {len(INPUTS)} recorded input(s)")
+
+
+def same_path(a, b):
+    """Whether two paths name one file, as the filesystem resolves them.
+
+    samefile when both exist. Otherwise the resolved paths compared without case,
+    which on a case-sensitive volume refuses a little more than it must, and
+    never less: a guard that errs here errs towards refusing."""
+    a, b = pathlib.Path(a), pathlib.Path(b)
+    try:
+        if a.exists() and b.exists():
+            return os.path.samefile(a, b)
+    except OSError:
+        pass
+    return str(a.resolve()).casefold() == str(b.resolve()).casefold()
 
 
 def pdf_string(blob, key):
@@ -628,7 +1461,7 @@ def pdf_string(blob, key):
     return re.sub(r"\\([()\\])", r"\1", m.group(1).decode("latin1")) if m else ""
 
 
-def write_provenance(path, out, blob, pages, epoch):
+def write_provenance(path, out, blob, pages, epoch, draft=False):
     """Record what was built, from what, by what.
 
     The toolchain fields are read back out of the PDF rather than asked of the
@@ -639,6 +1472,9 @@ def write_provenance(path, out, blob, pages, epoch):
     not going to come out byte-identical under a different browser or a different
     kernel, and a check that knows both strings can say so instead of blaming the
     paper.
+
+    A draft says so here as well as on its pages, so check-pdf-current can refuse
+    a draft that reached the tracked path by a copy rather than by this script.
     """
     path.parent.mkdir(parents=True, exist_ok=True)
     doc = {
@@ -648,27 +1484,57 @@ def write_provenance(path, out, blob, pages, epoch):
         "sha256": hashlib.sha256(blob).hexdigest(),
         "source_date_epoch": epoch,
         "built_by": {"producer": pdf_string(blob, "Producer"),
-                     "creator": pdf_string(blob, "Creator")},
+                     "creator": pdf_string(blob, "Creator"),
+                     "pandoc": PANDOC_VERSION[0] if PANDOC_VERSION else ""},
         "inputs": dict(sorted(INPUTS.items())),
     }
+    if draft:
+        doc["draft"] = True
     path.write_text(json.dumps(doc, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
 
 
 if __name__ == "__main__":
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
+    ap.add_argument("--paper", choices=sorted(PAPERS), default=DEFAULT,
+                    help=f"which paper to render (default: {DEFAULT})")
     # --out exists so that a caller wanting to inspect a build never has to point
     # the renderer at the tracked file. check-pdf-reproducible used to rebuild over
     # static/whitepaper.pdf and copy the committed bytes back afterwards, which
     # made merely running the check a way to lose the deliverable. It now builds
     # somewhere else entirely, so there is no window to lose it in.
-    ap.add_argument("--out", type=pathlib.Path, default=OUT,
-                    help="where to write the PDF (default: static/whitepaper.pdf)")
+    ap.add_argument("--out", type=pathlib.Path, default=None,
+                    help="where to write the PDF (default: the paper's tracked artifact, "
+                         "static/whitepaper.pdf or static/software-factory.pdf)")
     ap.add_argument("--provenance", type=pathlib.Path, default=None,
                     help="where to write the build manifest "
-                         "(default: whitepaper/pdf.provenance.json, and only when "
+                         "(default: the paper's pdf.provenance.json, and only when "
                          "--out is the tracked artifact)")
+    ap.add_argument("--draft", action="store_true",
+                    help="accept figures whose alt text is still a TODO, and stamp every "
+                         "page as a draft; refused for the tracked artifact")
     args = ap.parse_args()
+    paper = PAPERS[args.paper]
+    out = args.out if args.out is not None else paper["out"]
     prov = args.provenance
-    if prov is None and args.out.resolve() == OUT.resolve():
-        prov = PROVENANCE
-    render(args.out, prov)
+    if prov is None and same_path(out, paper["out"]):
+        prov = paper["provenance"]
+    # Two ways to put the wrong file at a tracked path, both refused here rather
+    # than caught later. A draft is for looking at: written to any paper's
+    # tracked path it would be one `git add` from publishing a stamped, unfinished
+    # paper. And one paper's render written over the other's artifact or manifest
+    # is a self-consistent pair that describes the wrong document. The paths are
+    # compared as the filesystem sees them, not as strings: on a case-insensitive
+    # volume static/WHITEPAPER.pdf is static/whitepaper.pdf, and the string
+    # comparison this replaced let a draft through by that route.
+    for other, p in PAPERS.items():
+        for kind, tracked, given in (("PDF", p["out"], out), ("manifest", p["provenance"], prov)):
+            if given is None or not same_path(given, tracked):
+                continue
+            if args.draft:
+                sys.exit(f"--draft cannot write {rel(tracked)}, a tracked {kind}. Pass --out "
+                         f"(and --provenance, if you want one) somewhere else.")
+            if other != args.paper:
+                sys.exit(f"--paper {args.paper} cannot write {rel(tracked)}: that is the tracked "
+                         f"{kind} of {other}.")
+    preflight()
+    render(args.paper, out, prov, args.draft)

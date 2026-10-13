@@ -18,7 +18,15 @@
  * Ctrl-C — has to end with that browser dead. The guards below are for the
  * ways out that are not the happy one.
  *
- *   node bin/print-page.mjs <input.html> <output.pdf>
+ *   node bin/print-page.mjs <input.html> <output.pdf> [--outline] [--meta Key=Value]…
+ *
+ * With only the two paths this prints exactly what it always has; the white
+ * paper's committed bytes depend on that. The flags are for the reference
+ * architecture, and each one is asked for rather than made a default:
+ *
+ *   --outline          Chrome's bookmarks, built from the document's headings.
+ *   --meta Key=Value   a document-information field Chrome does not write —
+ *                      Author, Subject or Keywords. Repeatable. See withInfo().
  */
 import { spawn } from "node:child_process";
 import { once } from "node:events";
@@ -27,10 +35,23 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { pathToFileURL } from "node:url";
 
-const [input, output] = process.argv.slice(2);
+const USAGE = "usage: print-page.mjs <input.html> <output.pdf> [--outline] [--meta Key=Value]…";
+const [input, output, ...flags] = process.argv.slice(2);
 if (!input || !output) {
-  console.error("usage: print-page.mjs <input.html> <output.pdf>");
+  console.error(USAGE);
   process.exit(2);
+}
+let OUTLINE = false;
+const META = [];
+for (let i = 0; i < flags.length; i++) {
+  if (flags[i] === "--outline") { OUTLINE = true; continue; }
+  const kv = flags[i] === "--meta" ? flags[++i] : undefined;
+  const m = /^(Author|Subject|Keywords)=(.+)$/s.exec(kv ?? "");
+  if (!m) {
+    console.error(`print-page: cannot use ${JSON.stringify(flags[i] ?? flags[i - 1])}\n${USAGE}`);
+    process.exit(2);
+  }
+  META.push([m[1], m[2]]);
 }
 
 // Overridable so the failure paths below can be exercised against a stub
@@ -151,6 +172,74 @@ function normalise(buf) {
   return outBuf;
 }
 
+/* The document-information fields Chrome leaves out, added as an incremental
+   update rather than by editing the dictionary Chrome wrote.
+
+   Chrome writes /Title (from <title>), /Creator, /Producer and the two dates,
+   and nothing else — there is no <meta> it reads for an author. The Info
+   dictionary is object 1, at the very top of the file, so lengthening it in
+   place would move every object after it and invalidate the whole xref table.
+   An incremental update is the mechanism PDF has for exactly this: the new
+   Info object, a one-entry xref section for it, and a trailer whose /Prev
+   points at the original table, all appended after %%EOF. Nothing Chrome wrote
+   moves by a byte, every reader resolves /Info to the new object, and the
+   original — which normalise() has already stamped — is left where it was.
+
+   The new dictionary is the old one with the fields added, so the dates and
+   the toolchain strings it carries are the ones normalise() produced. It is
+   deterministic for the same reason: it is built only from the file and the
+   arguments. */
+function pdfText(value) {
+  // A literal string when the text is printable ASCII, escaped; otherwise
+  // UTF-16BE with a byte-order mark, as hex, which is what PDF text strings are.
+  if (/^[\x20-\x7e]*$/.test(value)) return `(${value.replace(/[\\()]/g, "\\$&")})`;
+  let hex = "FEFF";
+  for (const ch of value) {
+    const cp = ch.codePointAt(0);
+    const units = cp > 0xffff
+      ? [0xd800 + ((cp - 0x10000) >> 10), 0xdc00 + ((cp - 0x10000) & 0x3ff)] : [cp];
+    for (const u of units) hex += u.toString(16).toUpperCase().padStart(4, "0");
+  }
+  return `<${hex}>`;
+}
+
+function withInfo(buf, fields) {
+  const s = buf.toString("latin1");
+  const sx = s.lastIndexOf("startxref");
+  const tr = s.lastIndexOf("trailer", sx);
+  if (sx < 0 || tr < 0) throw new Error("no trailer — cannot add document information");
+  const trailer = s.slice(tr, sx);
+  const size = /\/Size\s+(\d+)/.exec(trailer);
+  const root = /\/Root\s+(\d+\s+\d+\s+R)/.exec(trailer);
+  const info = /\/Info\s+(\d+)\s+(\d+)\s+R/.exec(trailer);
+  if (!size || !root || !info) throw new Error("trailer lacks /Size, /Root or /Info");
+  const prev = parseInt(s.slice(sx + 9).trim(), 10);
+  const head = new RegExp(`(^|[\\r\\n])${info[1]} ${info[2]} obj\\s*`).exec(s);
+  if (!head) throw new Error(`Info object ${info[1]} not found`);
+  const open = head.index + head[0].length;
+  const end = s.indexOf("endobj", open);
+  const dict = s.slice(open, end).trimEnd();
+  if (!dict.startsWith("<<") || !dict.endsWith(">>")) {
+    throw new Error("the Info object is not a plain dictionary — cannot extend it");
+  }
+  for (const [key] of fields) {
+    if (new RegExp(`/${key}[\\s(<]`).test(dict)) throw new Error(`/${key} is already set`);
+  }
+  const added = fields.map(([k, v]) => `/${k} ${pdfText(v)}`).join("\n");
+  const obj = `${info[1]} ${info[2]} obj\n${dict.slice(0, -2)}\n${added}>>\nendobj\n`;
+  const lead = s.endsWith("\n") ? "" : "\n";
+  const objAt = buf.length + lead.length;
+  const xrefAt = objAt + obj.length;
+  const off = (n) => String(n).padStart(10, "0");
+  const tail = lead + obj +
+    `xref\n0 1\n0000000000 65535 f \n${info[1]} 1\n${off(objAt)} ${info[2].padStart(5, "0")} n \n` +
+    `trailer\n<</Size ${size[1]}\n/Root ${root[1]}\n/Info ${info[1]} ${info[2]} R\n/Prev ${prev}>>\n` +
+    `startxref\n${xrefAt}\n%%EOF\n`;
+  const out = Buffer.concat([buf, Buffer.from(tail, "latin1")]);
+  assertXrefIntact(out);
+  return out;
+}
+
 /* Check the file still parses, rather than trying to enumerate what must not be
    touched.
  
@@ -163,25 +252,38 @@ function normalise(buf) {
  
    The xref table stores an absolute byte offset for every object, so if any
    substitution moved anything, an entry stops pointing at `N 0 obj` and this
-   throws. Costs about a second on a 1MB file. */
+   throws. Costs about a second on a 1MB file.
+
+   A file with an incremental update (see withInfo) has more than one table,
+   chained by /Prev; every one of them is followed and checked, so the update
+   cannot hide a broken original behind a one-entry table that happens to be
+   fine. A file without one — Chrome's own output — has one table and is read
+   exactly as before. */
 function assertXrefIntact(buf) {
   const s = buf.toString("latin1");
   const start = s.lastIndexOf("startxref");
   if (start < 0) throw new Error("no startxref — the PDF is not readable after normalisation");
-  const at = parseInt(s.slice(start + 9).trim(), 10);
-  const table = s.slice(at);
-  if (!table.startsWith("xref")) {
-    // A cross-reference stream rather than a classic table. Skia does not emit
-    // these today; if it starts to, the scan below cannot see the objects and
-    // silence would be the wrong answer.
-    throw new Error("xref is not a classic table — normalisation cannot verify this file");
-  }
+  let at = parseInt(s.slice(start + 9).trim(), 10);
   let checked = 0, bad = 0;
-  for (const m of table.matchAll(/^(\d{10}) (\d{5}) n\s*$/gm)) {
-    const off = parseInt(m[1], 10);
-    if (off === 0) continue;
-    checked++;
-    if (!/^\d+\s+\d+\s+obj/.test(s.slice(off, off + 24))) bad++;
+  const visited = new Set();
+  while (Number.isFinite(at) && !visited.has(at)) {
+    visited.add(at);
+    const tr = s.indexOf("trailer", at);
+    const table = s.slice(at, tr < 0 ? undefined : tr);
+    if (!table.startsWith("xref")) {
+      // A cross-reference stream rather than a classic table. Skia does not emit
+      // these today; if it starts to, the scan below cannot see the objects and
+      // silence would be the wrong answer.
+      throw new Error("xref is not a classic table — normalisation cannot verify this file");
+    }
+    for (const m of table.matchAll(/^(\d{10}) (\d{5}) n\s*$/gm)) {
+      const off = parseInt(m[1], 10);
+      if (off === 0) continue;
+      checked++;
+      if (!/^\d+\s+\d+\s+obj/.test(s.slice(off, off + 24))) bad++;
+    }
+    const prev = tr < 0 ? null : /\/Prev\s+(\d+)/.exec(s.slice(tr, s.indexOf("startxref", tr)));
+    at = prev ? parseInt(prev[1], 10) : NaN;
   }
   if (!checked) throw new Error("xref table lists no objects — refusing to trust this file");
   if (bad) {
@@ -199,6 +301,12 @@ const chrome = spawn(CHROME, [
   // A profile this new otherwise sends Chrome through its first-run work,
   // which is time spent not listening on the debug port.
   "--no-first-run", "--no-default-browser-check",
+  // Without these, Chrome on macOS asks the login keychain for its storage key
+  // at launch, and that is a permission prompt: an unattended build waits on a
+  // dialog nobody is there to answer. A mock keychain and the basic password
+  // store keep it off the keychain. Neither touches layout or the PDF; the
+  // white paper prints the same bytes with them.
+  "--use-mock-keychain", "--password-store=basic",
   // Port 0 asks the OS for a free one. The port used to be derived from this
   // process's pid, which collides between runs: a browser left behind by an
   // earlier failure could still hold it, and this script would then drive
@@ -420,8 +528,11 @@ try {
     preferCSSPageSize: true,
     marginTop: 0, marginBottom: 0, marginLeft: 0, marginRight: 0,
     displayHeaderFooter: false,
+    ...(OUTLINE ? { generateDocumentOutline: true } : {}),
   }, PRINT_MS);
-  writeFileSync(output, normalise(Buffer.from(data, "base64")));
+  let pdf = normalise(Buffer.from(data, "base64"));
+  if (META.length) pdf = withInfo(pdf, META);
+  writeFileSync(output, pdf);
   console.log(`paginated ${out.pages} page(s)`);
 } catch (err) {
   // Caught rather than left to propagate: an uncaught rejection out of a

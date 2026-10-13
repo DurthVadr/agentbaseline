@@ -19,6 +19,30 @@ jobs:
         run: |
           (cd whitepaper/figures && python3 build-figure-1.py)
           python3 bin/check-figure
+      # The reference architecture's figures are generated too: the committed
+      # SVGs and the page's inlined partials must be what the generator makes,
+      # and every figure must pass the same geometry check. The page's own
+      # drawing of the four boundaries is generated as well, and held to the
+      # same drift check. `git diff` sees only tracked files, so a figure or
+      # partial the generator writes that nobody committed passed it; anything
+      # untracked in either folder fails as well.
+      - name: Reference architecture figures — current, and geometry
+        run: |
+          # From nothing: a committed figure the generator no longer makes
+          # then shows as a deletion instead of surviving on disk.
+          rm -f software-factory/figures/figure-*.svg software-factory/figures/.figure-*.json \
+            layouts/partials/sf-figure-*.svg layouts/partials/sf-architecture*.svg
+          python3 software-factory/figures/build-figures.py
+          python3 bin/sync-figure-partial
+          node bin/build-architecture-drawing.mjs
+          git diff --exit-code -- software-factory/figures layouts/partials
+          untracked=$(git status --porcelain --untracked-files=all -- software-factory/figures layouts/partials)
+          if [ -n "$untracked" ]; then
+            echo "::error::the figure generator wrote files that are not committed — commit them or stop generating them"
+            echo "$untracked"
+            exit 1
+          fi
+          for f in software-factory/figures/figure-*.svg; do python3 bin/check-figure "$f"; done
       - name: Copy — repeated phrasing, dead titles, contradictions
         run: |
           hugo --gc --minify
@@ -56,7 +80,12 @@ jobs:
       # the manifest bin/build-pdf writes instead — digests of every file the render
       # read, and of the PDF it produced. No browser, no pandoc, under a second.
       - name: The committed PDF is the one this source builds
-        run: python3 bin/check-pdf-current
+        run: python3 bin/check-pdf-current --paper whitepaper
+      # The reference architecture's PDF, held to its own manifest the same way.
+      # It is published, so it is required: absent fails, and present must be the
+      # non-draft build of the source in the tree.
+      - name: The reference architecture's PDF is the one its source builds
+        run: python3 bin/check-sf-pdf
 
   # Determinism is the other half of the question and it needs the browser, so it
   # gets its own job with a pinned one. It does not compare against the committed
@@ -114,3 +143,16 @@ jobs:
             exit 1
           }
           echo "deterministic: $(stat -c%s /tmp/a.pdf) bytes, twice"
+      # The reference architecture, the same way: the non-draft build that made
+      # its committed PDF is the one held deterministic. Its PDF is required
+      # (check-sf-pdf above fails without it), so there is no draft fallback.
+      - name: Two builds of the reference architecture produce one file
+        run: |
+          python3 bin/build-pdf --paper software-factory --out /tmp/sf-a.pdf --provenance /tmp/sf-a.json
+          python3 bin/build-pdf --paper software-factory --out /tmp/sf-b.pdf --provenance /tmp/sf-b.json
+          cmp /tmp/sf-a.pdf /tmp/sf-b.pdf || {
+            echo "::error::the reference architecture's build is not deterministic — two builds of identical source differ"
+            cmp -l /tmp/sf-a.pdf /tmp/sf-b.pdf | head -40
+            exit 1
+          }
+          echo "deterministic: $(stat -c%s /tmp/sf-a.pdf) bytes, twice"

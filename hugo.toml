@@ -28,6 +28,15 @@ disableKinds = ["taxonomy", "term", "RSS", "section"]
   source = "whitepaper/contributors.yaml"
   target = "data/contributors.yaml"
 [[module.mounts]]
+  source = "software-factory/boundaries.yaml"
+  target = "data/sfboundaries.yaml"
+[[module.mounts]]
+  source = "software-factory/levels.yaml"
+  target = "data/sflevels.yaml"
+[[module.mounts]]
+  source = "software-factory/contributors.yaml"
+  target = "data/sfcontributors.yaml"
+[[module.mounts]]
   source = "layouts"
   target = "layouts"
 [[module.mounts]]
@@ -101,19 +110,82 @@ disableKinds = ["taxonomy", "term", "RSS", "section"]
   path = "agent-baseline-wordmark-animated-on-dark.mov"
   icon = "file-video"
 
-# The event strip renders only while `until` is in the future, so it removes
-# itself the day after rather than relying on anyone noticing.
+# The reference architecture: the second paper, built on the baseline, with
+# the software factory as its subject. The homepage section, its own page, the
+# Artifacts rows, the bar's link and the controls page all read this table.
+# `pdf` and `paper` are checked with fileExists, so a checkout without the
+# file gets no dead link; `source` is the repo subfolder; `template` is the
+# issue form that applies the `software-factory` label, which an outside
+# commenter cannot set from a URL. `commentsUntil` is empty until the working
+# group names a date — the copy then says "open for comment" and no more.
+# The PDF is published and required (bin/papers.py): a missing PDF or manifest
+# fails bin/check-sf-pdf, and so does one that isn't the build of this source.
+[params.softwareFactory]
+  # The homepage's one line about the second paper, in its section after the
+  # baseline's own paper. The paper's page writes its own opening. Keep it
+  # shorter than the white paper's line above it (19 words) and on one line
+  # at the 680px measure, so the section stays smaller than the baseline's.
+  summary       = "The Secure Software Factory applies Agent Baseline to agents that ship code."
+  # The paper's own front matter (software-factory.md, line 3: "Version 1,
+  # October 13, 2026"). The page's title block states them; check-copy holds
+  # them to the paper.
+  version       = "1"
+  published     = "13 October 2026"
+  pdf           = "software-factory.pdf"
+  source        = "software-factory"
+  # The paper's markdown inside `source`; checked with fileExists like `pdf`.
+  paper         = "software-factory.md"
+  template      = "software-factory.yml"
+  commentsUntil = ""
+  # The bar button's launch plate (accent-filled, marked New), and the New on
+  # the homepage's launch line, render only before this moment, two weeks
+  # after the 13 October launch; the button, outlined, and the line stay
+  # (layouts/partials/sf-new.html). Compared at build time, like
+  # [params.event].until, and with the New York offset for the same reason (a
+  # bare date is midnight UTC, 8 pm the evening before in New York). The site
+  # does not rebuild on its own: redeploy on or after 27 October or the plate
+  # stays up.
+  launchUntil   = "2026-10-27T00:00:00-04:00"
+  # The levels band: the paper's level names, figures and captions, with one
+  # sentence per level written for the page (software-factory/levels.yaml).
+  # Set false and the band leaves in one line.
+  showLevels    = true
+
+# Thanked on the homepage under the bylines, sorted by name there. Each mark is
+# the organization's published one (its press kit, or a logo library built from
+# media kits), recoloured to currentColor, never redrawn; `name` is what a
+# screen reader hears, and `height` (px) is set by eye so none outweighs the rest.
+[params.thanks]
+  orgs = [
+    { name = "Browserbase", logo = "browserbase", height = 19 },
+    { name = "Docker",      logo = "docker",      height = 17 },
+    { name = "Keycard",     logo = "keycard",     height = 17.5 },
+    { name = "Snyk",        logo = "snyk",        height = 24 },
+    { name = "Socket",      logo = "socket",      height = 19 },
+    { name = "Tessl",       logo = "tessl",       height = 22 },
+  ]
+
+# The event strip and the closing block render only while `until` is in the
+# future AT BUILD TIME. The site is static, so after `until` passes they stay
+# up until the next production deploy. On 14 October 2026: push anything, or
+# redeploy from the Vercel dashboard, and they are gone.
 [params.event]
-  id    = "blackhat-2026"
-  label = "Live · Black Hat"
-  say   = "Docker, Keycard and Snyk are there 3–7 August. Bring the baseline a hard question."
+  id    = "sf-show-and-tell-2026"
+  label = "Live · New York"
+  say   = "Secure Software Factory Show and Tell, 13 October at Elsie Rooftop. Bring the factory a hard question."
   cta   = "RSVP"
-  url   = "https://luma.com/insecure-wbn3"
-  until = "2026-08-08"
+  url   = "https://luma.com/keycard-rg1c"
+  # RFC 3339 with the New York offset. A bare date is parsed as midnight UTC,
+  # which is 8pm on launch night in New York: a deploy that evening would have
+  # pulled the strip and the closing block while the room was still full. The
+  # site sets no timeZone (a root key, and it would change how every date on
+  # the site is read), so the offset lives on the value. Still EDT on
+  # 14 October; US clocks change on 1 November.
+  until = "2026-10-14T06:00:00-04:00"
   # The closing block renders from the same table, so the strip and the block
   # expire together and can never disagree about the event.
-  pull  = "Filing an issue is the durable way to disagree with this. Being in the room is the faster one."
-  when  = "Black Hat week · 3–7 August 2026"
-  where = "Marquee, Las Vegas"
-  what  = "Securing Your Coding Agent: The Road to the Software Factory"
-  who   = "A panel with Docker, Keycard and Snyk"
+  pull  = "Filing an issue is the durable way to disagree with a paper. Being in the room is the faster one."
+  when  = "Tuesday 13 October 2026 · from 5:30 pm · launch night"
+  where = "Elsie Rooftop, 1412 Broadway, New York"
+  what  = "Secure Software Factory Show and Tell"
+  who   = "A panel moderated by Allie Howe, with Dick Hardt, co-author of OAuth 2.0, and speakers from Keycard, Socket, Docker and Braintrust, then live demos"

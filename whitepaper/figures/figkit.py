@@ -157,12 +157,16 @@ class Fig:
                           f'stroke="{C["faint"]}" stroke-width="1.1" '
                           f'marker-end="url(#ar)"/>')
 
-    def write(self, name):
+    def write(self, name, out_dir=None):
+        """Write NAME.svg and its box manifest. `out_dir` lets the second
+        paper's figures (software-factory/figures) share this kit; the default
+        is this folder, so the first paper's figures are written as before."""
+        here = pathlib.Path(out_dir) if out_dir else pathlib.Path(__file__).parent
         if self._defs:
             self.parts.insert(4, "<defs>" + "".join(self._defs.values()) + "</defs>")
         self.parts.append("</svg>")
-        out = pathlib.Path(__file__).parent / f"{name}.svg"
+        out = here / f"{name}.svg"
         out.write_text("\n  ".join(self.parts) + "\n", encoding="utf-8")
-        (pathlib.Path(__file__).parent / f".{name}.boxes.json").write_text(
+        (here / f".{name}.boxes.json").write_text(
             json.dumps(self.boxes, indent=1), encoding="utf-8")
         print(f"wrote {name}.svg  {self.W}×{self.H}  ({len(self.boxes)} text runs)")

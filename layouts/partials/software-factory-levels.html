@@ -1,0 +1,118 @@
+{{/* The three levels of autonomy, one at a time. The paper's point is that
+     the four boundaries stay the same at every level and what changes is who
+     decides the next step, so each level is the paper's own drawing of the
+     factory at that level, under one sentence saying who decides what
+     happens next.
+
+     Above the levels, three steps that climb from left to right, one per
+     level, lowest first. With static/js/tabs.js they are the level tabs and
+     one level shows at a time. Without the script (and in print) the steps
+     stay hidden and the three levels show stacked, each under its own
+     heading.
+
+     Data: software-factory/levels.yaml, passed in as the context. The
+     drawings are the paper's figures (partial sf-figure.html). All of this
+     section's CSS is in the <style> below, scoped to .mx. */}}
+{{- $levels := . }}
+<style>
+  /* Three levels of autonomy. Scoped to .mx. */
+  .mx { margin-top:10px; }
+  /* The steps: three blocks on one baseline, each 24px higher than the one
+     before, so the row climbs to the right. The selected step is filled
+     with the accent and its words take the paper colour. */
+  .mx-steps { display:grid; grid-template-columns:repeat(3,minmax(0,1fr));
+    border-bottom:1px solid var(--faint); margin-bottom:26px; }
+  .mx-steps[hidden] { display:none; }
+  .mx .mx-hint { display:none; margin:0 0 10px; font-family:var(--head);
+    font-size:13px; line-height:1.5; color:var(--soft); }
+  .mx.is-tabbed .mx-hint { display:block; }
+  .mx-step { appearance:none; -webkit-appearance:none; margin:0; font:inherit;
+    text-align:left; cursor:pointer; min-width:0; position:relative;
+    display:flex; flex-direction:column; gap:3px;
+    padding:10px 12px 16px; background:var(--wash); color:var(--soft);
+    border:0; border-top:2px solid var(--faint); border-radius:0; }
+  .mx-step:nth-child(1) { margin-top:48px; }
+  .mx-step:nth-child(2) { margin-top:24px; }
+  .mx-step + .mx-step { border-left:1px solid var(--faint); }
+  .mx-step .n { font-family:var(--mono); font-size:12px; line-height:1.4;
+    letter-spacing:.02em; }
+  /* A name fits its step at every width (see the phone rules below). Only a
+     reader's own wider letter and word spacing (WCAG 1.4.12) can make one
+     outgrow it, and then it wraps inside its step, not under the next. */
+  .mx-step .nm { font-family:var(--labelfont); font-weight:500; font-size:12.5px;
+    line-height:1.35; letter-spacing:.07em; text-transform:uppercase;
+    color:var(--ink); overflow-wrap:anywhere; }
+  .mx-step:hover { background:color-mix(in srgb, var(--accent) 12%, var(--wash));
+    border-top-color:var(--accent); }
+  .mx-step[aria-selected="true"] { background:var(--accent); border-top-color:var(--accent);
+    color:var(--paper); cursor:default; }
+  .mx-step[aria-selected="true"] .nm { color:var(--paper); }
+  .mx-step:focus-visible { outline:2px solid var(--link); outline-offset:2px; z-index:1; }
+  /* Forced colours replace the fill that marks the selected step, so mark it
+     with the system's own selection colours there. */
+  @media (forced-colors: active) {
+    .mx-step[aria-selected="true"] { forced-color-adjust:none; background:Highlight;
+      color:HighlightText; border-top-color:Highlight; }
+    .mx-step[aria-selected="true"] .nm { color:HighlightText; }
+  }
+  .mx-step[aria-selected="true"]:focus-visible { outline-color:var(--ink); }
+  /* Phones: the steps keep climbing; the names drop the caps so the longest
+     word fits a third of a 320px screen. */
+  @media (max-width:479px) {
+    .mx-step { padding:8px 8px 12px; }
+    .mx-step:nth-child(1) { margin-top:36px; }
+    .mx-step:nth-child(2) { margin-top:18px; }
+    .mx-step .nm { font-family:var(--head); font-size:12.5px; letter-spacing:0;
+      text-transform:none; hyphens:auto; }
+  }
+
+  /* Under 360px a third of the row is under 90px, and "Orchestrated" is
+     76px: trim the padding and the size rather than break the word. */
+  @media (max-width:359px) {
+    .mx-step { padding-inline:5px; }
+    .mx-step .nm { font-size:12px; }
+  }
+  /* A level: its heading (hidden while tabbed: the step names it), its
+     one-line lead, then its drawing. */
+  .mx .lvp + .lvp { margin-top:52px; }
+  .mx.is-tabbed .lvp + .lvp { margin-top:0; }
+  /* The panel is focusable (the tabs pattern), but its box is the 680px
+     column while the drawing inside is 880px, so a ring on the panel cut
+     through the figure. Ring the lead and the drawing instead. */
+  .mx .lvp:focus-visible { outline:none; }
+  .mx .lvp:focus-visible > .lead, .mx .lvp:focus-visible > figure.sff {
+    outline:2px solid var(--link); outline-offset:6px; }
+  .mx .lvp h3 { margin:0 0 6px; font-family:var(--labelfont); font-weight:500;
+    font-size:13.5px; line-height:1.4; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--ink); display:flex; align-items:baseline; gap:10px; }
+  .mx .lvp h3 .n { font-family:var(--mono); font-size:12px; letter-spacing:.02em;
+    color:var(--accent); text-transform:none; }
+  .mx.is-tabbed .lvp h3 { position:absolute; width:1px; height:1px; padding:0;
+    margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0; }
+  .mx .lead { font-size:19px; line-height:1.5; color:var(--ink); margin:0 0 18px; }
+  /* Print shows every level, as without the script. */
+  @media print {
+    .mx-steps, .mx.is-tabbed .mx-hint { display:none; }
+    .mx .lvp[hidden] { display:block; }
+    .mx .lvp + .lvp, .mx.is-tabbed .lvp + .lvp { margin-top:40px; }
+    .mx.is-tabbed .lvp h3 { position:static; width:auto; height:auto; margin:0 0 6px;
+      overflow:visible; clip:auto; white-space:normal; }
+  }
+</style>
+<div class="mx" data-tabs>
+  <p class="mx-hint" id="levels-hint">Select a level.</p>
+  <div class="mx-steps" data-tablist aria-label="Levels of autonomy" aria-describedby="levels-hint" hidden>
+  {{- range $i, $l := $levels }}{{ $n := add $i 1 }}
+    <button type="button" class="mx-step" id="lv-tab-{{ $n }}" data-tab aria-controls="level-{{ $n }}"><span class="n">Level {{ $n }}</span><span class="nm">{{ $l.name }}</span></button>
+  {{- end }}
+  </div>
+  {{- range $i, $l := $levels }}{{ $n := add $i 1 }}
+  {{- if not (and $l.name $l.lead $l.figure $l.caption) }}{{ errorf "software-factory/levels.yaml: level %d needs name, lead, figure and caption" $n }}{{ end }}
+  <section class="lvp" id="level-{{ $n }}" aria-labelledby="level-{{ $n }}-h">
+    <h3 id="level-{{ $n }}-h"><span class="n">Level {{ $n }}</span> {{ $l.name }}</h3>
+    <p class="lead">{{ $l.lead }}</p>
+    {{ partial "sf-figure.html" (dict "n" $l.figure "caption" $l.caption) }}
+  </section>
+  {{- end }}
+</div>
+<script src="/js/tabs.js" defer></script>

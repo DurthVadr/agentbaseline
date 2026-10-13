@@ -1,0 +1,6 @@
+{{- /* True until params.softwareFactory.launchUntil, compared at build time
+     like the event strip. The bar button's plate and the homepage's launch
+     line both ask here, so they cannot disagree about when the launch ends. */ -}}
+{{- $new := false -}}
+{{- with site.Params.softwareFactory }}{{ with .launchUntil }}{{ $new = lt now.Unix (time .).Unix }}{{ end }}{{ end -}}
+{{- return $new -}}

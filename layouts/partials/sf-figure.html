@@ -1,0 +1,26 @@
+{{- /* One of the paper's figures, inlined, with the paper's number and
+       caption. Context: dict "n" (the paper's figure number) and "caption"
+       (its caption, verbatim). The drawings are generated from
+       software-factory/figures/ by bin/sync-figure-partial into
+       partials/sf-figure-N.svg (wide) and, where the figure has one,
+       partials/sf-figure-N-narrow.svg (a different composition for phones,
+       not a scaled copy). Same drawing, number and caption as the PDF.
+
+       A missing drawing fails the build. Styles: .sff in the page's
+       sheet. */ -}}
+{{- $wide := printf "sf-figure-%d.svg" .n }}
+{{- $narrow := printf "sf-figure-%d-narrow.svg" .n }}
+{{- $hasN := templates.Exists (printf "partials/%s" $narrow) }}
+<figure class="sff" id="figure-{{ .n }}">
+  {{- if templates.Exists (printf "partials/%s" $wide) }}
+  <div class="sff-d{{ if $hasN }} has-n{{ end }}">
+    <div class="sff-w">{{ partial $wide . }}</div>
+    {{- if $hasN }}
+    <div class="sff-n">{{ partial $narrow . }}</div>
+    {{- end }}
+  </div>
+  {{- else }}
+  {{- errorf "layouts/partials/%s is missing: the paper's Figure %d has not been drawn (run bin/sync-figure-partial)" $wide .n }}
+  {{- end }}
+  <figcaption><span class="fn">Figure {{ .n }}</span> {{ .caption }}</figcaption>
+</figure>

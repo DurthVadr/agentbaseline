@@ -105,16 +105,6 @@
   .utility .pub { font-family:var(--labelfont); font-size:11.5px;
     letter-spacing:.07em; text-transform:uppercase; color:var(--soft); }
   .utility .pub .k { color:var(--faint); margin-right:2px; }
-  /* The one tinted block in the chrome: the deadline is the site's ask.
-     Soft treatment — accent text on a translucent wash of itself. */
-  .utility a.closes, .utility a.closes:visited {
-    background:color-mix(in srgb, var(--accent) 12%, transparent);
-    color:var(--accent); font-family:var(--labelfont); font-weight:500;
-    font-size:11px; letter-spacing:.06em; padding:3px 8px;
-    border-radius:3px; }
-  .utility a.closes:hover {
-    background:color-mix(in srgb, var(--accent) 22%, transparent);
-    color:var(--accent); }
   .utility .ver { color:var(--faint); }
   @media (max-width:760px) { .utility .pub { display:none; } }
   .themebtn { background:none; border:0; padding:2px; margin:0; cursor:pointer;
@@ -190,7 +180,7 @@
   /* The ways out of the page, on one line, in the label voice. */
   .prose p.ctas { font-family:var(--labelfont); font-size:13.5px;
     letter-spacing:.03em; color:var(--faint); margin-top:22px; }
-  .prose p.ctas a { color:var(--link); }
+  .prose p.ctas a { color:var(--link); white-space:nowrap; }
 
   /* The footer mirrors the title block — a document closes the way it opens.
      It is a sibling of <main>, not a child of it: contentinfo is a landmark of
@@ -199,6 +189,8 @@
     border-top:1px solid var(--line); padding-top:16px;
     font-family:var(--mono); font-size:11.5px; color:var(--faint); line-height:1.9;
     display:flex; gap:12px 32px; flex-wrap:wrap; justify-content:space-between; }
+  /* Underlined: in the footer's faint text, colour alone was 1.02:1. */
+  footer a { text-decoration:underline; text-underline-offset:2px; }
   footer .sig { font-family:var(--labelfont); letter-spacing:.12em;
     text-transform:uppercase; }
 </style>
@@ -224,8 +216,8 @@
     </details>
     <span class="crumb"><a class="mast" href="/">Agent Baseline</a>
       <span class="sep">/</span> <span class="here">Not found</span></span>
+    {{ partial "ra-link.html" . }}
     <span class="right pub"><span class="k">Published</span> {{ .Site.Params.published }}</span>
-    <a class="closes" href="{{ .Site.Params.repo }}/issues">Comment closes {{ .Site.Params.commentsUntil }}</a>
     {{ partial "artifacts-menu.html" . }}
     <span class="ver">v{{ .Site.Params.version }}</span>
     {{/* aria-pressed is corrected by theme.js as soon as the body parses — the
@@ -254,12 +246,17 @@
     published.</p>
     {{/* The count is read from the catalogue, like every other number on the
          site, so it cannot drift from controls.yaml. */}}
-    <p class="note">Everything here is two pages: the overview, and the
-    {{ len $cat.controls }} controls behind the six outcomes.</p>
+    <p class="note">Everything here is three pages: the overview, the
+    {{ len $cat.controls }} controls behind the six outcomes, and the software factory
+    reference architecture.</p>
+    {{/* The site serves two papers, so the PDF link says whose it is, and sits
+         with the baseline's links, ahead of the second paper's. After "Read the
+         reference architecture" a bare "Download the PDF" read as that paper's. */}}
     <p class="ctas">
-      <a href="/">Go to the overview</a> ·
-      <a href="/controls">Browse the controls</a>
-      {{ if fileExists "static/whitepaper.pdf" }}· <a href="/whitepaper.pdf">Download the PDF</a>{{ end }}
+      <a href="/">Go to the overview</a>&nbsp;·
+      <a href="/controls">Browse the controls</a>&nbsp;·
+      {{ if fileExists "static/whitepaper.pdf" }}<a href="/whitepaper.pdf">Download the white paper (PDF)</a>&nbsp;· {{ end }}
+      <a href="/reference-architecture">Read the reference architecture</a>
     </p>
   </div>
 

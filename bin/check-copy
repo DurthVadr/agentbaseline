@@ -19,15 +19,36 @@ import re, sys, pathlib, collections, difflib, html
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 STRICT = "--strict" in sys.argv
 
+# The reference architecture's page, and its paper (None in a checkout without it).
+RA_PAGE = ROOT / "public" / "reference-architecture" / "index.html"
+SF_MD = ROOT / "software-factory" / "software-factory.md"
+SF_SRC = SF_MD.read_text(encoding="utf-8") if SF_MD.exists() else None
+
 SOURCES = [
     ROOT / "public" / "index.html",
     ROOT / "public" / "controls" / "index.html",
+    RA_PAGE,
     ROOT / "README.md", ROOT / "VERSIONING.md", ROOT / "GOVERNANCE.md",
     ROOT / "PROVENANCE.md", ROOT / "CONTRIBUTING.md",
 ]
 
+# Pages checked for their own prose only: the text inside <main>. The two
+# original pages are read whole, as they always were, with the narrow chrome
+# exemption below. A page added later shares their masthead, event strip and
+# footer, so read whole it would repeat that chrome by construction, and the
+# only ways to quiet that are to widen the exemption (which also stops the
+# near-duplicate check comparing sentences within a page) or to drop the page.
+# Reading only its <main> checks everything written for it, against both
+# original pages in full, and leaves every rule for those pages unchanged.
+MAIN_ONLY = {RA_PAGE}
+
 def prose(path):
     t = path.read_text(encoding="utf-8")
+    if path in MAIN_ONLY:
+        m = re.search(r"<main\b.*?</main>", t, re.S)
+        if not m:
+            sys.exit(f"{path.relative_to(ROOT)}: no <main> — refusing to check an empty page")
+        t = m.group(0)
     if path.suffix == ".html":
         t = re.sub(r"<(script|style|svg)[^>]*>.*?</\1>", " ", t, flags=re.S)
         t = re.sub(r"<[^>]+>", " ", t)
@@ -59,6 +80,15 @@ corpus = {}
 for p in SOURCES:
     if p.exists():
         corpus[p.relative_to(ROOT).as_posix()] = prose(p)
+
+# The built pages are required. Each has a layout, so after a build each must be
+# in public/; one that is not has not been checked, and skipping it used to look
+# exactly like passing it. A `draft: true` on /reference-architecture took its
+# prose and its row counts out of the check and --strict still exited 0, on 7
+# sources instead of 8. Collected here and enforced at the end, after the other
+# checks have run, so the report still says everything else it found.
+UNBUILT = [p.relative_to(ROOT).as_posix() for p in SOURCES
+           if ROOT / "public" in p.parents and not p.exists()]
 
 # ── 0 · the built output must come from this configuration ───────────────────
 # Every check below that reads public/ is only as good as the build that made
@@ -218,6 +248,185 @@ if _wp.exists() and _cfg.exists():
                                        f"site — whitepaper.md says “{_pm.group(1)}”, "
                                        f"hugo.toml says “{_cm.group(1)}”"))
 
+# ── 3c-ter · the reference architecture must render its data rows ──────────
+# Locate sections by their stable IDs so heading edits cannot bypass this check.
+if not RA_PAGE.exists():
+    findings.append(("count", "/reference-architecture was not built "
+                              "(public/reference-architecture/index.html is missing), so its "
+                              "boundary and level rows were not counted"))
+else:
+    _h = RA_PAGE.read_text(encoding="utf-8")
+    for _id, _row, _want in (
+        ("boundaries", r'<li class="?bd-i\b', 4),
+        ("levels", r'<section class="?lvp\b', 3),
+    ):
+        _m = re.search(r'<h2\b[^>]*\bid=["\']?' + re.escape(_id)
+                       + r'(?:["\']|(?=[\s>]))[^>]*>(.*?)(?=<h2\b|</main>)', _h, re.S)
+        if not _m:
+            findings.append(("count", f"/reference-architecture is missing section {_id}"))
+            continue
+        _n = len(re.findall(_row, _m.group(1)))
+        if _n != _want:
+            findings.append(("count", f"section {_id} has {_n} row(s) on /reference-architecture; expected {_want}"))
+
+# ── 3c-quater · the reference architecture's version and date are the paper's ─
+# The page's title block states them from hugo.toml; the paper states them on
+# its third line ("Version 1, October 13, 2026"). Two copies of one fact.
+if SF_SRC is not None and _cfg.exists():
+    _sm = re.search(r"^Version (\S+), ([A-Z][a-z]+) (\d{1,2}), (\d{4})$", SF_SRC, re.M)
+    _c = _cfg.read_text(encoding="utf-8")
+    _blk = re.search(r"^\[params\.softwareFactory\]\n(.*?)(?=^\[)", _c, re.M | re.S)
+    _blk = _blk.group(1) if _blk else ""
+    _cv = re.search(r'^\s*version\s*=\s*"([^"]+)"', _blk, re.M)
+    _cp = re.search(r'^\s*published\s*=\s*"([^"]+)"', _blk, re.M)
+    if not _sm:
+        findings.append(("contra", "software-factory.md: no \"Version N, Month D, YYYY\" line, "
+                                   "so the page's version and date have nothing to agree with"))
+    elif not (_cv and _cp):
+        findings.append(("contra", "hugo.toml: [params.softwareFactory] needs `version` and "
+                                   "`published`, which the page's title block states"))
+    else:
+        _want_v, _want_p = _sm.group(1), f"{_sm.group(3)} {_sm.group(2)} {_sm.group(4)}"
+        if _cv.group(1) != _want_v:
+            findings.append(("contra", f"the reference architecture's version disagrees — the paper "
+                                       f"says “{_want_v}”, hugo.toml says “{_cv.group(1)}”"))
+        if _cp.group(1) != _want_p:
+            findings.append(("contra", f"the reference architecture's date disagrees — the paper "
+                                       f"says “{_want_p}”, hugo.toml says “{_cp.group(1)}”"))
+
+# ── 3c-quinquies · each figure says what the paper says it says ─────────────
+# The paper's source gives every figure a caption and alt text; the generated
+# SVG carries the same two as its <title> and <desc>, which the page inlines.
+# Two copies of each, so they are held together here: the PDF and the page
+# must not describe one drawing two ways.
+def _norm(x):
+    return " ".join(html.unescape(x).split())
+
+if SF_SRC is not None:
+    _figs = re.findall(r'^!\[([^\]]+)\]\((figures/[^)]+\.svg)\)\{alt="([^"]*)"\}', SF_SRC, re.M)
+    if not _figs:
+        findings.append(("contra", "software-factory.md: no figures with alt text found — "
+                                   "the figure syntax changed, so this check reads nothing"))
+    # A figure written any other way (another attribute beside alt, say) would
+    # drop out of the comparison silently, so every figure must be one it read.
+    _read = {_rel for _, _rel, _ in _figs}
+    for _rel in dict.fromkeys(re.findall(r'!\[[^\]]*\]\((figures/[^)]+\.svg)\)', SF_SRC)):
+        if _rel not in _read:
+            findings.append(("contra", f"software-factory.md: {_rel} is not written as "
+                                       f"![caption]({_rel}){{alt=\"…\"}}, so this check cannot "
+                                       f"read it and its <title> and <desc> are not compared"))
+    for _cap, _rel, _alt in _figs:
+        _svg = SF_MD.parent / _rel
+        if not _svg.exists():
+            findings.append(("contra", f"software-factory.md cites {_rel}, which does not exist"))
+            continue
+        _t = _svg.read_text(encoding="utf-8")
+        _st = re.search(r"<title[^>]*>(.*?)</title>", _t, re.S)
+        _sd = re.search(r"<desc[^>]*>(.*?)</desc>", _t, re.S)
+        if not _st or _norm(_st.group(1)) != _norm(_cap):
+            findings.append(("contra", f"{_rel}: its <title> is not the paper's caption “{_cap[:60]}…”"))
+        if not _sd or _norm(_sd.group(1)) != _norm(_alt):
+            findings.append(("contra", f"{_rel}: its <desc> is not the paper's alt text"))
+
+# ── 3c-sexies · the page's copies of the paper's words are the paper's ──────
+# The page lists the four boundaries, captions its figures and names the levels
+# from software-factory/boundaries.yaml and levels.yaml. Those are copies of
+# the paper's headings and captions; edit one and the page and the PDF say two
+# things. Quotes are compared normalised (the page sets ’, the source ').
+def _q(x):
+    return " ".join(x.replace("’", "'").replace("‘", "'")
+                     .replace("“", '"').replace("”", '"').split())
+_bd = ROOT / "software-factory" / "boundaries.yaml"
+_lv = ROOT / "software-factory" / "levels.yaml"
+if SF_SRC is not None:
+    _caps = {int(n): c for c, n in re.findall(
+        r'^!\[([^\]]+)\]\(figures/figure-(\d+)\.svg\)', SF_SRC, re.M)}
+    _h2 = {_q(h) for h in re.findall(r"^## (.+?)(?:\s*\{#[^}]*\})?$", SF_SRC, re.M)}
+    for _f, _need in ((_bd, "boundaries"), (_lv, "levels")):
+        if not _f.exists():
+            findings.append(("contra", f"software-factory/{_f.name} is missing — the page "
+                                       f"renders its {_need} from it"))
+    if _bd.exists():
+        _y = _bd.read_text(encoding="utf-8")
+        _pairs = re.findall(r"^  - name: (.+)\n    covers: (.+)$", _y, re.M)
+        if len(_pairs) != 4:
+            findings.append(("contra", f"boundaries.yaml: {len(_pairs)} name/covers pairs "
+                                       f"read, the paper has four boundaries"))
+        for _n, _c in _pairs:
+            if _q(f"{_n}: {_c}") not in _h2:
+                findings.append(("contra", f"boundaries.yaml: “{_n}: {_c}” is not a heading "
+                                           f"of software-factory.md"))
+        _fm = re.search(r"^figure:\n  n: (\d+)\n  caption: (.+)$", _y, re.M)
+        if not _fm:
+            findings.append(("contra", "boundaries.yaml: no figure n/caption read"))
+        elif _q(_fm.group(2)) != _q(_caps.get(int(_fm.group(1)), "")):
+            findings.append(("contra", f"boundaries.yaml: Figure {_fm.group(1)}'s caption is "
+                                       f"not the paper's"))
+    if _lv.exists():
+        _y = _lv.read_text(encoding="utf-8")
+        _lvls = re.findall(r"^  - name: (.+)\n    lead: .+\n    figure: (\d+)\n    caption: (.+)$",
+                           _y, re.M)
+        if len(_lvls) != 3:
+            findings.append(("contra", f"levels.yaml: {len(_lvls)} levels read, the paper has three"))
+        for _i, (_n, _fn, _c) in enumerate(_lvls, 1):
+            if _q(f"Level {_i}: {_n} Factory") not in _h2:
+                findings.append(("contra", f"levels.yaml: level {_i} “{_n}” is not the paper's "
+                                           f"“Level {_i}: … Factory” heading"))
+            if _q(_c) != _q(_caps.get(int(_fn), "")):
+                findings.append(("contra", f"levels.yaml: Figure {_fn}'s caption is not the paper's"))
+
+# The YAML checks above read the source with line regexes, so a value folded
+# onto a continuation line could slip past them. The rendered page is what a
+# reader sees, and Hugo has already parsed the YAML into it: hold that too, in
+# order and one for one, against the paper.
+def _txt(x):
+    return _q(html.unescape(re.sub(r"<[^>]+>", " ", x)))
+
+if SF_SRC is not None and RA_PAGE.exists():
+    _pg = RA_PAGE.read_text(encoding="utf-8")
+    _sec = re.search(r"^# The four security boundaries\n(.*?)(?=^# )", SF_SRC, re.M | re.S)
+    _want_bd = [_q(h) for h in re.findall(r"^## (.+?)(?:\s*\{#[^}]*\})?$", _sec.group(1), re.M)] if _sec else []
+    _got_bd = [_txt(f"{a}: {b}") for a, b in re.findall(
+        r'class="?bd-nm"?>(.*?)</span>\s*<span class="?bd-c"?>(.*?)</span>', _pg, re.S)]
+    if not _want_bd or _got_bd != _want_bd:
+        findings.append(("contra", f"/reference-architecture lists the boundaries as {_got_bd}, "
+                                   f"the paper's headings are {_want_bd}"))
+    _want_lv = [_q(n) for n in re.findall(r"^## Level \d: (.+?) Factory$", SF_SRC, re.M)]
+    _got_lv = [_txt(n) for n in re.findall(r'class="?nm"?>(.*?)</span>', _pg, re.S)]
+    if not _want_lv or _got_lv != _want_lv:
+        findings.append(("contra", f"/reference-architecture names the levels {_got_lv}, "
+                                   f"the paper names them {_want_lv}"))
+    for _n, _c in re.findall(r'<figcaption><span class="?fn"?>Figure (\d+)</span>(.*?)</figcaption>', _pg, re.S):
+        _want = _caps.get(int(_n))
+        if _want is None or _txt(_c) != _q(_want):
+            findings.append(("contra", f"/reference-architecture captions Figure {_n} "
+                                       f"“{_txt(_c)}”, not the paper's caption"))
+
+# ── 3c-septies · the reference architecture is no longer than the homepage ──
+# The second paper's page sends readers to the paper; it doesn't read it to
+# them. Words in <main>, without inline SVG, scripts, styles and templates, and
+# without the homepage's event block, which expires: the page must not outgrow
+# the homepage it sits under once the launch is over.
+def _main_words(path, drop_event=False):
+    t = path.read_text(encoding="utf-8")
+    m = re.search(r"<main\b.*?</main>", t, re.S)
+    if not m:
+        return None
+    t = m.group(0)
+    if drop_event:
+        t = re.sub(r'<aside[^>]*class="?meetup\b.*?</aside>', " ", t, flags=re.S)
+    t = re.sub(r"<(svg|script|style|template)\b[^>]*>.*?</\1>", " ", t, flags=re.S)
+    return len(html.unescape(re.sub(r"<[^>]+>", " ", t)).split())
+_ix_p = ROOT / "public" / "index.html"
+if _ix_p.exists() and RA_PAGE.exists():
+    _wh, _wr = _main_words(_ix_p, drop_event=True), _main_words(RA_PAGE)
+    if _wh is None or _wr is None:
+        findings.append(("contra", "a page has no <main>, so its length cannot be compared"))
+    elif _wr > _wh:
+        findings.append(("contra", f"/reference-architecture is {_wr} words, longer than the "
+                                   f"homepage's {_wh} (event block excluded) — read the paper, "
+                                   f"don't read it to them"))
+
 # ── 3d · no two consecutive authors from the same organization ────────────────
 # A jointly published document is read for whose document it really is, and the
 # author order is the first evidence. Surname order interleaves the current six
@@ -246,11 +455,17 @@ for name, text in corpus.items():
         if tic in low:
             findings.append(("tic", f"{name}: “{tic}”"))
 
-order = {"contra": 0, "order": 1, "repeat": 2, "near": 3, "title": 4,
-         "dash": 5, "tic": 6}
+order = {"contra": 0, "count": 1, "order": 2, "repeat": 3, "near": 4,
+         "title": 5, "dash": 6, "tic": 7}
 findings.sort(key=lambda f: order[f[0]])
 print(f"copy: {len(corpus)} sources · {len(allsent)} sentences")
 for kind, msg in findings:
     print(f"  {kind.upper():<7}{msg}")
 print(f"\n{len(findings)} finding(s)")
-sys.exit(1 if findings and STRICT else 0)
+if UNBUILT:
+    sys.stdout.flush()
+    print(f"\nNOT BUILT: {', '.join(UNBUILT)}\n"
+          f"  These pages have layouts and must be in the build; a page that is not "
+          f"built is not checked, which is not a pass. Run `hugo --gc --minify`, and check "
+          f"the page's front matter for `draft: true` or a changed route.", file=sys.stderr)
+sys.exit(1 if UNBUILT or (findings and STRICT) else 0)
