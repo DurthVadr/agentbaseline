@@ -12,7 +12,7 @@ Most security models still assume a person makes each decision, and agents now c
 
 A secure software factory can't depend on agents enforcing their own limits. Agents need the freedom to reason and try things to be useful. A secure factory gives them that freedom by enforcing what they can actually do outside their decision loop, separating an agent's planning from the authorization and enforcement of its actions.
 
-This architecture defines four boundaries, covering identity and access, the supply chain, the sandbox, and the network. They hold across three levels of autonomy, from a factory a developer steers, to one a durable workflow runs as a shared service, to one in which agents find their own work and deploy it, and what changes between levels is how much work the factory takes on and how much the boundaries have to do.
+This architecture defines four boundaries, covering the sandbox, the network, the supply chain, and identity and access. They hold across three levels of autonomy, from a factory a developer steers, to one a durable workflow runs as a shared service, to one in which agents find their own work and deploy it, and what changes between levels is how much work the factory takes on and how much the boundaries have to do.
 
 The architecture builds on [Agent Baseline](https://agentbaseline.org/), and the appendix maps it to Agent Baseline's outcomes and controls. This is version 1, and it's open for comments at [agentbaseline.org](https://agentbaseline.org/).
 
@@ -63,26 +63,6 @@ An agent that plans work for other agents reads the same untrusted inputs, so it
 
 A software factory has all three parts of Simon Willison's [lethal trifecta](https://simonwillison.net/2025/Jun/16/the-lethal-trifecta/) by design, since it reads tickets that outsiders can influence, holds source code and credentials, and can open pull requests and reach untrusted networks. The four boundaries limit what an untrusted agent can do with that, whether it cooperates or not, which lets the factory keep the access that makes it useful. They're security responsibilities, not separate pieces of infrastructure, and what matters is that each holds independently of the agent, as a property a team can test in the deployed factory.
 
-## Identity and access: who the agent acts for and what it may do
-
-This boundary acts twice in every run, first checking that whoever is asking may use the factory, then deciding what each agent can act on. Every agent has its own identity, and each action is attributed to both the agent and whoever it acts for. The profile sets the most an agent can ever do, a **task** narrows that to the work at hand, and **delegation** to another agent can only narrow it further.
-
-The **runtime authorization service**, never the agent, decides what access each task gets, using trusted context, the profile, delegation, and policy. A conventional authorization system decides whether an incident agent may read production logs at all, while the authorization service decides that, for this incident, it may read one service's logs for one hour, and requires approval or denies the request when the task doesn't justify it.
-
-![The agent proposes, policy authorizes, and infrastructure enforces](figures/figure-2.svg){alt="An agent in a sandbox, holding no credentials, proposes the scope it needs; the runtime authorization service decides within the bounds of the agent's profile, using trusted context: the agent and whoever it acts for, its task, any delegation and policy. The egress proxy enforces that decision and attaches the credentials, so only authorized operations reach anything downstream and packages come only through an admission point. High-impact actions go to an approval the agent can't give, anything outside policy is denied or sent to a person, and every grant is recorded. The profile also configures the sandbox at launch, and each boundary keeps a tamper-evident record."}
-
-Credentials stay at the egress proxy, so an agent never holds one, which makes the proxy an authorization enforcement point as well as a network one. Many services only offer coarse-grained keys or scopes and can't tell which task a request belongs to, but the proxy knows the task and can allow only the repositories, operations, and resources it covers, the gap the PocketOS token fell through. Scoped access still doesn't make every authorized action harmless, so high-impact actions need approval, every grant is recorded with who authorized it, and grants can be revoked at any time. These were the controls missing in [PocketOS](https://x.com/lifeofjer/status/2048103471019434248) and ["Let's land #118"](https://www.thatsjet.com/blog/insecure-defaults-excessive-agency/).
-
-**Invariants:** An agent can use only the access granted for its task, never holds credentials, and can't grant itself more, whatever its inputs say. High-impact actions and changes to the factory's own controls need approval the agent can't give, and the factory doesn't change during a run.
-
-## Supply chain: which components and sources it can use
-
-Agents use only components and sources the organization has approved. A sandbox is built from verified components, such as its image, harness, skills, and tools, and packages and models that enter during a run come only through an admission point, such as a registry or a dedicated firewall, which hides unsafe versions so a goal-seeking agent doesn't go looking for them. The factory's own outputs carry provenance in turn, so downstream systems can verify where they came from.
-
-Nothing that enters the sandbox should carry credentials, so source code, task data, and responses are screened for embedded keys and tokens and stripped of them before they cross. Admission still can't catch everything, since provenance proves where a component came from, not that it's safe, and no check can prove natural-language input is safe. When a [Shai-Hulud-style](https://socket.dev/blog/tinycolor-supply-chain-attack-affects-40-packages) package gets through, it finds no credentials to steal, and the sandbox and network limit what it can do.
-
-**Invariant:** Everything the factory is built from, takes in, or reaches comes from approved sources the agent didn't choose, and nothing entering the sandbox carries credentials.
-
 ## Sandbox: where its code runs
 
 Agents execute code, and some of it will be wrong or hostile, so the place it runs has to contain the damage. The rest of the architecture depends on that isolation, since credentials stay out of reach and the proxy stays the only way out only as long as the agent can't escape.
@@ -98,6 +78,26 @@ Network access is where an agent's decisions turn into actions on other systems,
 The egress proxy starts from default-deny, allows only approved destinations, and enforces each authorization decision down to the operation and resource where the protocol allows it. Destinations should be as narrow as the task permits, which was the control missing in the [Anthropic](https://www.anthropic.com/news/investigating-incidents-cybersecurity-evals) and [Hugging Face](https://huggingface.co/blog/agent-intrusion-technical-timeline) incidents, and inference goes through the same enforcement, via a model gateway that applies model limits and budgets.
 
 **Invariant:** Once the sandbox starts, nothing gets in or out except through paths the agent can't reconfigure or bypass.
+
+## Supply chain: which components and sources it can use
+
+Agents use only components and sources the organization has approved. A sandbox is built from verified components, such as its image, harness, skills, and tools, and packages and models that enter during a run come only through an admission point, such as a registry or a dedicated firewall, which hides unsafe versions so a goal-seeking agent doesn't go looking for them. The factory's own outputs carry provenance in turn, so downstream systems can verify where they came from.
+
+Nothing that enters the sandbox should carry credentials, so source code, task data, and responses are screened for embedded keys and tokens and stripped of them before they cross. Admission still can't catch everything, since provenance proves where a component came from, not that it's safe, and no check can prove natural-language input is safe. When a [Shai-Hulud-style](https://socket.dev/blog/tinycolor-supply-chain-attack-affects-40-packages) package gets through, it finds no credentials to steal, and the sandbox and network limit what it can do.
+
+**Invariant:** Everything the factory is built from, takes in, or reaches comes from approved sources the agent didn't choose, and nothing entering the sandbox carries credentials.
+
+## Identity and access: who the agent acts for and what it may do
+
+This boundary acts twice in every run, first checking that whoever is asking may use the factory, then deciding what each agent can act on. Every agent has its own identity, and each action is attributed to both the agent and whoever it acts for. The profile sets the most an agent can ever do, a **task** narrows that to the work at hand, and **delegation** to another agent can only narrow it further.
+
+The **runtime authorization service**, never the agent, decides what access each task gets, using trusted context, the profile, delegation, and policy. A conventional authorization system decides whether an incident agent may read production logs at all, while the authorization service decides that, for this incident, it may read one service's logs for one hour, and requires approval or denies the request when the task doesn't justify it.
+
+![The agent proposes, policy authorizes, and infrastructure enforces](figures/figure-2.svg){alt="An agent in a sandbox, holding no credentials, proposes the scope it needs; the runtime authorization service decides within the bounds of the agent's profile, using trusted context: the agent and whoever it acts for, its task, any delegation and policy. The egress proxy enforces that decision and attaches the credentials, so only authorized operations reach anything downstream and packages come only through an admission point. High-impact actions go to an approval the agent can't give, anything outside policy is denied or sent to a person, and every grant is recorded. The profile also configures the sandbox at launch, and each boundary keeps a tamper-evident record."}
+
+Credentials stay at the egress proxy, so an agent never holds one, which makes the proxy an authorization enforcement point as well as a network one. Many services only offer coarse-grained keys or scopes and can't tell which task a request belongs to, but the proxy knows the task and can allow only the repositories, operations, and resources it covers, the gap the PocketOS token fell through. Scoped access still doesn't make every authorized action harmless, so high-impact actions need approval, every grant is recorded with who authorized it, and grants can be revoked at any time. These were the controls missing in [PocketOS](https://x.com/lifeofjer/status/2048103471019434248) and ["Let's land #118"](https://www.thatsjet.com/blog/insecure-defaults-excessive-agency/).
+
+**Invariants:** An agent can use only the access granted for its task, never holds credentials, and can't grant itself more, whatever its inputs say. High-impact actions and changes to the factory's own controls need approval the agent can't give, and the factory doesn't change during a run.
 
 # Execution and observability
 
@@ -171,26 +171,6 @@ Security built into the factory, rather than added around it, is what makes that
 
 ## Security controls by boundary
 
-### Identity and access
-
-* Before a run starts, check that the person or system asking may use the factory.
-* Give every agent its own identity, and record it alongside the identity of any person, agent, ticket, or signal it acts for.
-* Issue short-lived, task-scoped credentials only after authorization, and keep them at the proxy, outside the sandbox and the agent's context. For services that only accept static API keys or coarse OAuth scopes, holding the credential at the proxy still lets the authorization service make finer-grained decisions, as long as the enforcement point understands the operation.
-* Have the runtime authorization service authorize a bounded scope for each task, weighing the task, the agent's profile, any delegation, the permissions of whoever started the run, and organizational policy, with enforcement points checking requests against it locally or through the service. Fitting within the profile is necessary but not sufficient.
-* Route high-impact actions, such as a deploy or a push to a protected branch, to independent approval or step-up verification, with approval policy deciding which changes count as high impact.
-* Offer the ability to revoke any agent's grants at any time through the runtime authorization service. Revoking blocks new actions but doesn't stop work already running or undo what's done, so pair it with stopping the agent through the execution layer and rolling back what it changed.
-* Keep a tamper-evident audit log of every grant and action, outside the agent's reach.
-
-### Supply chain
-
-* Build each sandbox only from approved, verified components, including its image, its harness, and the skills, tools, and configuration in its profile, with skills pinned to approved, scanned versions.
-* Admit packages, dependencies, and models during a run only through an admission point, such as a registry, a proxy, or a supply chain firewall, that serves approved versions allowed by the agent's profile and hides unsafe ones, so a goal-seeking agent doesn't go looking for them.
-* Keep an approved set of sources the agent may reach, such as MCP servers, APIs, and registries, for the network boundary to enforce.
-* Block any component found to be compromised across the whole factory.
-* Attach provenance to every artifact the factory produces, such as an SBOM and build attestations, recording which agent and profile produced it, which component versions it was built from, including those resolved at runtime, and which policy applied.
-* Keep credentials out of everything that enters the sandbox, screening source code, task data, and responses from downstream systems for embedded credentials and removing them before they cross.
-* Treat inputs separately from components. Validate the structure, provenance, and type of prompts, PRDs, tickets, and signals before the factory acts on them, and add heuristic injection detection where useful. An LLM acting as judge can add a layer, but the same injected text it screens can manipulate it, so don't rely on it alone.
-
 ### Sandbox
 
 * Configure each sandbox from the agent's profile, which sets its image, isolation level, action policy, and resource limits.
@@ -217,6 +197,26 @@ Security built into the factory, rather than added around it, is what makes that
 * Deny inbound traffic by default, and host the factory where it isn't reachable from outside.
 * Block channels agents could use to communicate with each other outside sanctioned paths.
 * Log and monitor traffic, since thrash and drift often show up here first.
+
+### Supply chain
+
+* Build each sandbox only from approved, verified components, including its image, its harness, and the skills, tools, and configuration in its profile, with skills pinned to approved, scanned versions.
+* Admit packages, dependencies, and models during a run only through an admission point, such as a registry, a proxy, or a supply chain firewall, that serves approved versions allowed by the agent's profile and hides unsafe ones, so a goal-seeking agent doesn't go looking for them.
+* Keep an approved set of sources the agent may reach, such as MCP servers, APIs, and registries, for the network boundary to enforce.
+* Block any component found to be compromised across the whole factory.
+* Attach provenance to every artifact the factory produces, such as an SBOM and build attestations, recording which agent and profile produced it, which component versions it was built from, including those resolved at runtime, and which policy applied.
+* Keep credentials out of everything that enters the sandbox, screening source code, task data, and responses from downstream systems for embedded credentials and removing them before they cross.
+* Treat inputs separately from components. Validate the structure, provenance, and type of prompts, PRDs, tickets, and signals before the factory acts on them, and add heuristic injection detection where useful. An LLM acting as judge can add a layer, but the same injected text it screens can manipulate it, so don't rely on it alone.
+
+### Identity and access
+
+* Before a run starts, check that the person or system asking may use the factory.
+* Give every agent its own identity, and record it alongside the identity of any person, agent, ticket, or signal it acts for.
+* Issue short-lived, task-scoped credentials only after authorization, and keep them at the proxy, outside the sandbox and the agent's context. For services that only accept static API keys or coarse OAuth scopes, holding the credential at the proxy still lets the authorization service make finer-grained decisions, as long as the enforcement point understands the operation.
+* Have the runtime authorization service authorize a bounded scope for each task, weighing the task, the agent's profile, any delegation, the permissions of whoever started the run, and organizational policy, with enforcement points checking requests against it locally or through the service. Fitting within the profile is necessary but not sufficient.
+* Route high-impact actions, such as a deploy or a push to a protected branch, to independent approval or step-up verification, with approval policy deciding which changes count as high impact.
+* Offer the ability to revoke any agent's grants at any time through the runtime authorization service. Revoking blocks new actions but doesn't stop work already running or undo what's done, so pair it with stopping the agent through the execution layer and rolling back what it changed.
+* Keep a tamper-evident audit log of every grant and action, outside the agent's reach.
 
 ### Inference
 
@@ -264,10 +264,10 @@ At Level 1, the sandbox and egress proxy usually have to be added around a local
 
 | Boundary or component | Level 1: Human-Orchestrated Factory | Level 2: Workflow-Orchestrated Factory | Level 3: Agent-Orchestrated Factory |
 | :---- | :---- | :---- | :---- |
-| Identity and access | The agent acts as the developer or as itself, within the developer's identity boundary. | The factory acts on behalf of the requester or as itself, and revoking the agent's grants and stopping its sandbox acts as a kill switch. | Each agent has its own identity and access, and acts for itself, for another agent, or for a person, with authority narrowing at each hop. |
-| Supply chain | Only approved registries and packages are reachable, through the egress proxy or another admission point, what's allowed is scanned, and new versions wait out a cooldown. | Sandboxes start from approved images with attested base layers and authenticated configuration. Every source an agent reaches, including skills, packages, models, MCP servers, and APIs, is checked against the approved set. | The signals that start work are checked too, and agent inputs and outputs, including tickets, context, and messages from other agents, are validated for structure and provenance, with heuristic screening for injection. |
 | Sandbox | A sandbox on the developer's machine or in a remote environment, with writes kept to the task workspace and no access to the host filesystem. | A fresh sandbox per task on shared infrastructure, configured from an authenticated profile and destroyed when the task ends. | Each agent in a run gets its own sandbox, configured from the profile for its kind of agent, and monitoring that watches from outside can tighten or stop it mid-run. |
 | Network | A default-deny egress proxy outside the sandbox that all traffic passes through. | An egress proxy per agent, with rules from its profile. The factory isn't reachable from outside. | Each agent in a run has its own egress rules and task scope, and traffic between agents passes through the same enforcement as any other traffic. |
+| Supply chain | Only approved registries and packages are reachable, through the egress proxy or another admission point, what's allowed is scanned, and new versions wait out a cooldown. | Sandboxes start from approved images with attested base layers and authenticated configuration. Every source an agent reaches, including skills, packages, models, MCP servers, and APIs, is checked against the approved set. | The signals that start work are checked too, and agent inputs and outputs, including tickets, context, and messages from other agents, are validated for structure and provenance, with heuristic screening for injection. |
+| Identity and access | The agent acts as the developer or as itself, within the developer's identity boundary. | The factory acts on behalf of the requester or as itself, and revoking the agent's grants and stopping its sandbox acts as a kill switch. | Each agent has its own identity and access, and acts for itself, for another agent, or for a person, with authority narrowing at each hop. |
 | Execution layer | The developer, working through the agent harness. | A durable system, such as a CI/CD pipeline, step runner, or durable execution engine, that starts runs, launches agents in sandboxes, and retries failures. | The same durable execution layer, starting each agent only with its authorized scope. |
 | Orchestrator | The developer, who kicks off each run and drives the outer loop. | A predefined workflow that turns requests and tickets into runs. | An orchestrator agent that takes work from requests and signals, runs preflight, and divides the work across agents. |
 | Observability | Harness logs plus identity and proxy records, reviewed by the developer. | Records from all four boundaries collected in one place and linked by run. Evals track output quality. | Telemetry and evals across runs, monitoring of running agents, and stopping agents that drift or become ineffective. |
