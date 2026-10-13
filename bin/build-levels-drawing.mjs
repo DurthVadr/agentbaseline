@@ -235,9 +235,10 @@ function kit(id, T) {
   let n = 0;
   // a part the reader can ask about: its name is its accessible name, its description its
   // tooltip; focusable, so a keyboard reaches every part
-  const node = (key, [name, desc], body, cls = '') => {
+  // o.b names the boundary a card enforces, for a sheet that colours boundaries apart
+  const node = (key, [name, desc], body, cls = '', b = '') => {
     const d = `${id}-${key}-${++n}`;
-    return `<g class="sfl-node${cls ? ' ' + cls : ''}" tabindex="0" role="img" aria-label="${esc(name)}" aria-describedby="${d}">`
+    return `<g class="sfl-node${cls ? ' ' + cls : ''}"${b ? ` data-b="${b}"` : ''} data-part="${key}" tabindex="0" role="img" aria-label="${esc(name)}" aria-describedby="${d}">`
       + `<desc id="${d}">${esc(desc)}</desc>${body}</g>`;
   };
   const rect = (b, cls, rx = 6) => `<rect class="${cls}" x="${b.x + .5}" y="${b.y + .5}" width="${b.w - 1}" height="${b.h - 1}" rx="${rx}"/>`;
@@ -250,27 +251,27 @@ function kit(id, T) {
   const PH = T.pill + 8;
   const pill = (x, y, k) => {
     const t = `${N[k]} ${BOUNDARIES[k].toUpperCase()}`, w = width(t, 'pill') + 16, cy_ = y - 2;
-    return `<g class="sfl-pill" aria-hidden="true"><rect x="${f1(x)}" y="${f1(cy_ - PH / 2)}" width="${f1(w)}" height="${PH}" rx="${PH / 2}"/>`
+    return `<g class="sfl-pill" data-b="${k}" aria-hidden="true"><rect x="${f1(x)}" y="${f1(cy_ - PH / 2)}" width="${f1(w)}" height="${PH}" rx="${PH / 2}"/>`
       + `<text x="${f1(x + 8)}" y="${f1(cy_ + T.pill * 0.36)}" font-size="${T.pill}">${esc(t)}</text></g>`;
   };
   // a card: its name, and the pill of the boundary it enforces (o.k) on its top edge
   const card = (key, say, b, o = {}) => node(key, say,
     (o.ghosts ? ghosts(b, o.cls || 'sfl-box') : '') + rect(b, o.cls || 'sfl-box') + title(b, say[0])
-    + (o.k ? pill(b.x + 10, b.y, o.k) : ''));
+    + (o.k ? pill(b.x + 10, b.y, o.k) : ''), '', o.k || '');
   // one of many: two outlines behind a card, offset down and right
   const ghosts = (b, cls) => [12, 6].map(d =>
     `<rect class="${cls} sfl-ghost" x="${b.x + d + .5}" y="${b.y + d + .5}" width="${b.w - 1}" height="${b.h - 1}" rx="6"/>`).join('');
   const capt = (x, y, t) => `<text class="sfl-cap" x="${f1(x)}" y="${f1(y)}" font-size="${T.cap}">${esc(t)}</text>`;
   // a frame: a hairline, and its caption inside the top left, which is what the reader
   // hovers (the frame's whole area would steal every hover inside it)
-  const zone = (key, say, b) => `<g data-zone="${esc(say[0])}">${rect(b, 'sfl-zone', 8)}</g>`
+  const zone = (key, say, b) => `<g data-frame="${key}" data-zone="${esc(say[0])}">${rect(b, 'sfl-zone', 8)}`
     + node(key, say, `<rect class="sfl-hit" x="${b.x + 4}" y="${b.y + 4}" width="${f1(width(say[0], 'cap') + T.pad + 8)}" height="${T.cap + 14}"/>`
-      + capt(b.x + T.pad, b.y + T.cap * 0.72 + 10, say[0].toUpperCase()));
+      + capt(b.x + T.pad, b.y + T.cap * 0.72 + 10, say[0].toUpperCase())) + '</g>';
   // the sandbox: the frame where untrusted agent code runs, washed, wearing the sandbox
   // boundary's pill, which is the hover target; o.right sets the pill on the right corner,
   // where a wire lands on the left one
-  const sandbox = (key, say, b, o = {}) => (o.ghosts ? ghosts(b, 'sfl-sb') : '') + rect(b, 'sfl-sb', 8)
-    + node(key, say, pill(o.right ? r(b) - 10 - width(`${N.sandbox} ${BOUNDARIES.sandbox.toUpperCase()}`, 'pill') - 16 : b.x + 10, b.y, 'sandbox'));
+  const sandbox = (key, say, b, o = {}) => `<g data-frame="${key}">` + (o.ghosts ? ghosts(b, 'sfl-sb') : '') + rect(b, 'sfl-sb', 8)
+    + node(key, say, pill(o.right ? r(b) - 10 - width(`${N.sandbox} ${BOUNDARIES.sandbox.toUpperCase()}`, 'pill') - 16 : b.x + 10, b.y, 'sandbox')) + '</g>';
   const d = pts => `M${pts.map(p => p.map(f1).join(' ')).join(' L')}`;
   // a wire. kind: flow (ink), main (the agent's requests, heavier), grant (the decision,
   // accent, dashed), loop (the outer loop, the mark, dashed). o.head false: no arrowhead.
