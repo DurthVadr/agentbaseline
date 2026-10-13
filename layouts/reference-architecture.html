@@ -37,6 +37,7 @@
 {{/* External and synchronous: the deployment CSP allows script-src 'self'
      only, and the stored theme must apply before first paint. */}}
 <script src="/js/theme.js"></script>
+<script src="/js/dl-dock.js" defer></script>
 {{ partial "analytics.html" . }}
 <style>
   /* Same sheet language as the front page: title block, hairline frame,
@@ -207,6 +208,34 @@
   .subtitle { font-family:var(--head); font-weight:500;
     font-size:clamp(20px,2.6vw,25px); line-height:1.25; letter-spacing:-0.01em;
     color:var(--soft); margin:12px 0 0; text-wrap:balance; }
+
+  /* The paper's download, top right of the title block, on the kicker's row.
+     The shape of the bar's reference architecture button (ra-link.html), in
+     the link green rather than ink: it is the page's one action. --link on
+     the paper is 4.7:1 in light mode, the lime 13.8:1 in dark, and the paper
+     knocked out of the filled hover keeps the same ratios. On phones the row
+     wraps and it drops under the kicker. */
+  .tb-top { display:flex; flex-wrap:wrap; align-items:center;
+    justify-content:space-between; gap:10px 24px; margin:0 0 14px; }
+  .tb-top .status { margin:0; }
+  a.dl-btn, a.dl-btn:visited { display:inline-flex; align-items:center; gap:7px;
+    padding:6px 12px 6px 10px; border:1px solid var(--link); border-radius:3px;
+    font-family:var(--labelfont); font-weight:600; font-size:12px;
+    letter-spacing:.07em; text-transform:uppercase; white-space:nowrap;
+    color:var(--link); }
+  a.dl-btn:hover { background:var(--link); border-color:var(--link); color:var(--paper); }
+  a.dl-btn:focus-visible { outline:2px solid var(--accent); outline-offset:2px; }
+  a.dl-btn svg.ph { width:15px; height:15px; }
+  /* The same button docked in the bar once the title block's has scrolled
+     away (dl-dock.js). Negative margins equal to its padding and border, as
+     the bar's other button does, so the bar keeps its height. Hidden until
+     then, and with no script it stays hidden: the title block's copy and the
+     "Read the paper" section are always there. */
+  .utility a.dl-btn.dock { padding:4px 10px 4px 9px; margin-block:-5px;
+    align-self:center; animation:dl-in .18s ease-out; }
+  .utility a.dl-btn.dock[hidden] { display:none; }
+  @keyframes dl-in { from { opacity:0; transform:translateY(-3px); } }
+  @media (prefers-reduced-motion:reduce) { .utility a.dl-btn.dock { animation:none; } }
 
   .prose p { margin:0 0 18px; }
   /* The footer mirrors the title block — a document closes the way it opens.
@@ -442,6 +471,9 @@
     {{/* The bar's link to this page ends the crumb, as the current page;
          the Artifacts menu takes the bar's right-hand anchor. */}}
     <span class="right"></span>
+    {{- with .Site.Params.softwareFactory }}{{ if fileExists (printf "static/%s" .pdf) }}
+    <a class="dl-btn dock" href="/{{ .pdf }}" download hidden>{{ partial "icons/file-pdf.svg" $ }}Whitepaper PDF</a>
+    {{- end }}{{ end }}
     {{ partial "artifacts-menu.html" . }}
     {{/* No version chip either. The other pages' chip is the baseline's
          version, and here, above the paper's own version, it read as the
@@ -472,7 +504,12 @@
          it, not as two brands. Under the title, the document's title block:
          what it builds on, its subject, what the factory it describes
          produces, and where the paper stands. */}}
-    <p class="status">Agent Baseline, applied to the software factory</p>
+    <div class="tb-top">
+      <p class="status">Agent Baseline, applied to the software factory</p>
+      {{- if fileExists (printf "static/%s" $sf.pdf) }}
+      <a class="dl-btn" id="dl-paper" href="/{{ $sf.pdf }}" download>{{ partial "icons/file-pdf.svg" . }}Whitepaper PDF</a>
+      {{- end }}
+    </div>
     <h1>Reference architecture</h1>
     {{/* The paper's own title, under the page's short name: searches and AI
          answers find "Secure Software Factory" here, not only the 2022 CNCF
