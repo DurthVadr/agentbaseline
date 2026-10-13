@@ -535,6 +535,9 @@ SF_CSS = """
 .cover .tb dd { margin:0; font-family:"IBM Plex Mono",monospace; font-size:8.5pt;
   color:var(--ink); white-space:nowrap; font-variant-numeric:tabular-nums lining-nums; }
 
+/* The byline wraps between people, not inside a name ("William / Manning"). */
+.cover .by .nb { white-space:nowrap; }
+
 /* ── reference architecture: figures ───────────────────────────────────── */
 /* Captions as a datum row under the drawing: a rule, the figure's number in
    the label voice in its own cell, the caption beside it. The white paper's
@@ -553,6 +556,12 @@ figcaption::before { content:"Figure " counter(fig); font-family:"Chakra Petch",
 /* The recent incidents carry their source as a link on the heading; in a
    heading the link is the heading, so it takes the heading's colour. */
 h3 a { color:inherit; border-bottom:none; }
+/* The incidents are a run of short entries, each a head and a paragraph or
+   two, so their heads sit a little closer than a section's label heads. At the
+   shared 6mm the last incident ("Let's land #118") ran onto a page of its own,
+   three lines on a white sheet as the paper's last page. sf_incidents gives
+   every head in the section the class, dated or not, so the spacing is even. */
+h3.incident { margin-top:4.5mm; }
 /* An incident's date after its name, as a datum. */
 h3.incident .when { font-family:"IBM Plex Mono",monospace; font-weight:400; font-size:7.5pt;
   letter-spacing:.02em; text-transform:none; color:var(--faint); margin-left:.6mm; }
@@ -1135,6 +1144,9 @@ def sf_incidents(body):
         return re.sub(r"(<h3\b[^>]*>(?:<a\b[^>]*>)?)([^<]*?),\s+([^<,]*\d{4}[^<]*)(</a>)?(</h3>)",
                       dated, h.group(0))
     section = re.sub(r"<h3\b.*?</h3>", head, m.group(1), flags=re.S)
+    # A head without a date is still an incident, and takes the incidents'
+    # spacing; left out, it sat further below its paragraph than the others.
+    section = re.sub(r"<h3(?![^>]*\bclass=)", '<h3 class="incident"', section)
     return body[:m.start(1)] + section + body[m.end(1):]
 
 
@@ -1205,7 +1217,9 @@ def sf_glossary(body):
     unmatched = []
 
     def link(s):
-        word = html.unescape(re.sub(r"<[^>]+>", "", s.group(1))).strip().lower()
+        # Normalised as the glossary keys are: pandoc wraps a long line inside
+        # a bolded term ("agent\nharness"), which matched nothing.
+        word = " ".join(html.unescape(re.sub(r"<[^>]+>", "", s.group(1))).split()).lower()
         for k in (word, word[:-1] if word.endswith("s") else None):
             if k and k in terms:
                 return f'<a class="term" href="#{terms[k]}">{s.group(0)}</a>'
@@ -1267,7 +1281,10 @@ def build_software_factory(paper, draft):
     # is invisible at the end of the line.
     title_html = (f'{html.escape(lead)}:&nbsp;<br><span class="sub">{html.escape(sub)}</span>'
                   if colon else html.escape(title))
-    names = [f"{html.escape(n)}<sup>{html.escape(a)}</sup>" if a else html.escape(n)
+    # Each name with its affiliation is one unbreakable run: the byline wraps
+    # between people, never between a given name and a family name.
+    names = [f'<span class="nb">{html.escape(n)}<sup>{html.escape(a)}</sup></span>' if a
+             else f'<span class="nb">{html.escape(n)}</span>'
              for n, a in fm["people"]]
     # The last name is joined as the paper joins it. Its byline has a serial
     # comma ("…Ramakrishnan (Mastercard), and Aaron Stanley…"); the cover used

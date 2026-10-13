@@ -10,7 +10,7 @@
     "pandoc": "pandoc 3.10.1"
   },
   "inputs": {
-    "bin/build-pdf": "77a8a13bf9b1776c819d20d3c13c84d0ca66b0a45819f6e42681ccb538a951eb",
+    "bin/build-pdf": "f90c876b25d5b374efcc5f404a1ee8423d44d45986534a72ae69f692d5d9d95a",
     "bin/controls_source.py": "ade276753e0ac230bfde2e0836c4abe74cab4b9c2e5accd586c3cd8a2f156b9d",
     "bin/papers.py": "ac0594f45c4810fabe6d7b840ce8b5916a88d4da68e8e609f0d444bd9404ed1c",
     "bin/print-page.mjs": "119d3f84951a91d113b1b9bc1d22114ab339dbcee5c1f3a025e2c2d51babd47d",
