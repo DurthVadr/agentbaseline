@@ -13,9 +13,9 @@ never reused.
   second paper that applies the baseline to AI agents that write and ship code. Its source is
   `software-factory/software-factory.md`; its PDF is `/software-factory.pdf`, listed under
   Artifacts after the baseline's. Its page, `/reference-architecture`, shows the paper's four
-  security boundaries and three levels of autonomy with the paper's figures, and its eleven
-  authors. The homepage links it in a section after the white paper, and the bar's pill points
-  at it until 27 October. Comments go through an issue form that applies the
+  security boundaries in a drawing of its own, its three levels of autonomy with the paper's
+  Figures 3 to 5, and its nine authors. The homepage links it in a section after the white
+  paper, and the bar's pill points at it until 27 October. Comments go through an issue form that applies the
   `software-factory` label; CONTRIBUTING says how. *(2026-10-13, Matthew Creager, Keycard)*
 - The community Slack is linked from the utility bar on every page and, on the homepage,
   from the review section, with the invite address in one place in `hugo.toml`.
