@@ -1,70 +1,23 @@
 {
  "W": 736,
- "H": 656,
+ "H": 658,
  "shapes": [
   {
    "tag": "frame",
    "kind": "zone",
-   "x": 130,
-   "y": 84,
-   "w": 450,
-   "h": 210,
+   "x": 112,
+   "y": 172,
+   "w": 442,
+   "h": 338,
    "solid": false,
    "sw": 1
-  },
-  {
-   "tag": "sc",
-   "kind": "guard",
-   "x": 244,
-   "y": 14,
-   "w": 324,
-   "h": 44,
-   "solid": true,
-   "sw": 1.25
-  },
-  {
-   "tag": "badgesc",
-   "kind": "badge",
-   "x": 236,
-   "y": 6,
-   "w": 16,
-   "h": 16,
-   "solid": true
-  },
-  {
-   "tag": "sc.launch.dot",
-   "kind": "glyph",
-   "x": 251.4,
-   "y": 203.4,
-   "w": 5.2,
-   "h": 5.2,
-   "solid": false
-  },
-  {
-   "tag": "auth",
-   "kind": "guard",
-   "x": 64,
-   "y": 406,
-   "w": 454,
-   "h": 44,
-   "solid": true,
-   "sw": 1.25
-  },
-  {
-   "tag": "badgeauth",
-   "kind": "badge",
-   "x": 56,
-   "y": 398,
-   "w": 16,
-   "h": 16,
-   "solid": true
   },
   {
    "tag": "req",
    "kind": "card",
    "x": 8,
-   "y": 168,
-   "w": 112,
+   "y": 8,
+   "w": 120,
    "h": 76,
    "solid": true,
    "sw": 1.75
@@ -72,57 +25,136 @@
   {
    "tag": "wf",
    "kind": "card",
-   "x": 142,
-   "y": 168,
-   "w": 100,
-   "h": 76,
+   "x": 158,
+   "y": 8,
+   "w": 302,
+   "h": 52,
    "solid": true,
    "sw": 1.75
   },
   {
-   "tag": "ghost8",
+   "tag": "exec",
+   "kind": "card",
+   "x": 199,
+   "y": 96,
+   "w": 220,
+   "h": 60,
+   "solid": true,
+   "sw": 1.75
+  },
+  {
+   "tag": "auth",
+   "kind": "guard",
+   "x": 468,
+   "y": 96,
+   "w": 260,
+   "h": 44,
+   "solid": true,
+   "sw": 1.25
+  },
+  {
+   "tag": "badgeauth",
+   "kind": "badge",
+   "x": 460,
+   "y": 88,
+   "w": 16,
+   "h": 16,
+   "solid": true
+  },
+  {
+   "tag": "ghost6",
    "kind": "ghost",
-   "x": 280,
-   "y": 142,
-   "w": 164,
-   "h": 136,
+   "x": 130,
+   "y": 252,
+   "w": 326,
+   "h": 186,
    "solid": false,
    "sw": 1.25
   },
   {
-   "tag": "ghost4",
+   "tag": "ghost3",
    "kind": "ghost",
-   "x": 276,
-   "y": 138,
-   "w": 164,
-   "h": 136,
+   "x": 127,
+   "y": 249,
+   "w": 326,
+   "h": 186,
    "solid": false,
    "sw": 1.25
   },
   {
    "tag": "sbx",
    "kind": "sandbox",
-   "x": 272,
-   "y": 134,
-   "w": 164,
-   "h": 136,
+   "x": 124,
+   "y": 246,
+   "w": 326,
+   "h": 186,
    "solid": true,
    "sw": 2.0
   },
   {
    "tag": "badgesbx",
    "kind": "badge",
-   "x": 264,
-   "y": 126,
+   "x": 116,
+   "y": 238,
    "w": 16,
    "h": 16,
    "solid": true
   },
   {
+   "tag": "harness",
+   "kind": "agent",
+   "x": 129,
+   "y": 276,
+   "w": 316,
+   "h": 104,
+   "solid": true,
+   "sw": 1
+  },
+  {
+   "tag": "part0",
+   "kind": "card",
+   "x": 139.0,
+   "y": 322,
+   "w": 143.0,
+   "h": 22,
+   "solid": true,
+   "sw": 1
+  },
+  {
+   "tag": "part1",
+   "kind": "card",
+   "x": 292.0,
+   "y": 322,
+   "w": 143.0,
+   "h": 22,
+   "solid": true,
+   "sw": 1
+  },
+  {
+   "tag": "part2",
+   "kind": "card",
+   "x": 139.0,
+   "y": 350,
+   "w": 143.0,
+   "h": 22,
+   "solid": true,
+   "sw": 1
+  },
+  {
+   "tag": "part3",
+   "kind": "card",
+   "x": 292.0,
+   "y": 350,
+   "w": 143.0,
+   "h": 22,
+   "solid": true,
+   "sw": 1
+  },
+  {
    "tag": "sbx.loop",
    "kind": "glyph",
-   "x": 283.5,
-   "y": 228.5,
+   "x": 135.5,
+   "y": 390.5,
    "w": 19.0,
    "h": 19.0,
    "solid": false
@@ -130,97 +162,96 @@
   {
    "tag": "pghost6",
    "kind": "ghost",
-   "x": 470,
-   "y": 182,
-   "w": 104,
-   "h": 60,
+   "x": 480,
+   "y": 264,
+   "w": 68,
+   "h": 76,
    "solid": false,
    "sw": 1.25
   },
   {
    "tag": "pghost3",
    "kind": "ghost",
-   "x": 467,
-   "y": 179,
-   "w": 104,
-   "h": 60,
+   "x": 477,
+   "y": 261,
+   "w": 68,
+   "h": 76,
    "solid": false,
    "sw": 1.25
   },
   {
-   "tag": "proxy",
+   "tag": "proxy1",
    "kind": "guardfill",
-   "x": 464,
-   "y": 176,
-   "w": 104,
-   "h": 60,
+   "x": 474,
+   "y": 258,
+   "w": 68,
+   "h": 76,
    "solid": true,
    "sw": 2.0
   },
   {
-   "tag": "badgeproxy",
+   "tag": "badgeproxy1",
    "kind": "badge",
-   "x": 456,
-   "y": 168,
+   "x": 466,
+   "y": 250,
    "w": 16,
    "h": 16,
    "solid": true
   },
   {
-   "tag": "badgeproxy",
+   "tag": "badgeproxy1",
    "kind": "badge",
-   "x": 498,
-   "y": 228,
+   "x": 514,
+   "y": 250,
    "w": 16,
    "h": 16,
    "solid": true
   },
   {
-   "tag": "dest0",
-   "kind": "card",
-   "x": 608,
-   "y": 134,
-   "w": 120,
-   "h": 44,
-   "solid": true,
-   "sw": 1
-  },
-  {
-   "tag": "dest1",
-   "kind": "card",
-   "x": 608,
-   "y": 190,
-   "w": 120,
-   "h": 44,
-   "solid": true,
-   "sw": 1
-  },
-  {
-   "tag": "dest2",
+   "tag": "sc",
    "kind": "guard",
-   "x": 608,
-   "y": 246,
-   "w": 120,
-   "h": 44,
+   "x": 592,
+   "y": 172,
+   "w": 136,
+   "h": 60,
    "solid": true,
    "sw": 1.25
   },
   {
-   "tag": "dest3",
+   "tag": "badgesc",
+   "kind": "badge",
+   "x": 584,
+   "y": 164,
+   "w": 16,
+   "h": 16,
+   "solid": true
+  },
+  {
+   "tag": "mg",
+   "kind": "guard",
+   "x": 592,
+   "y": 244,
+   "w": 136,
+   "h": 60,
+   "solid": true,
+   "sw": 1.25
+  },
+  {
+   "tag": "down",
    "kind": "card",
-   "x": 608,
-   "y": 302,
-   "w": 120,
-   "h": 44,
+   "x": 592,
+   "y": 316,
+   "w": 136,
+   "h": 60,
    "solid": true,
    "sw": 1
   },
   {
    "tag": "pr",
    "kind": "card",
-   "x": 142,
-   "y": 484,
-   "w": 104,
+   "x": 486,
+   "y": 534,
+   "w": 118,
    "h": 60,
    "solid": true,
    "sw": 1.75
@@ -228,9 +259,9 @@
   {
    "tag": "appr",
    "kind": "card",
-   "x": 266,
-   "y": 484,
-   "w": 174,
+   "x": 300,
+   "y": 534,
+   "w": 166,
    "h": 60,
    "solid": true,
    "sw": 1.75
@@ -238,9 +269,9 @@
   {
    "tag": "merge",
    "kind": "card",
-   "x": 460,
-   "y": 484,
-   "w": 96,
+   "x": 170,
+   "y": 534,
+   "w": 110,
    "h": 60,
    "solid": true,
    "sw": 1.75
@@ -248,18 +279,18 @@
   {
    "tag": "obs",
    "kind": "record",
-   "x": 8,
-   "y": 600,
-   "w": 720,
-   "h": 46,
+   "x": 124,
+   "y": 452,
+   "w": 414,
+   "h": 44,
    "solid": true,
    "sw": 1.25
   },
   {
    "tag": "dk0",
    "kind": "card",
-   "x": 608,
-   "y": 18,
+   "x": 598,
+   "y": 390,
    "w": 18,
    "h": 12,
    "solid": true,
@@ -268,43 +299,96 @@
   {
    "tag": "dk1",
    "kind": "card",
-   "x": 608,
-   "y": 37,
+   "x": 598,
+   "y": 409,
    "w": 18,
    "h": 12,
    "solid": true,
    "sw": 1
+  },
+  {
+   "tag": "badgelg1",
+   "kind": "badge",
+   "x": 216.34,
+   "y": 630,
+   "w": 16,
+   "h": 16,
+   "solid": true
+  },
+  {
+   "tag": "badgelg2",
+   "kind": "badge",
+   "x": 302.54,
+   "y": 630,
+   "w": 16,
+   "h": 16,
+   "solid": true
+  },
+  {
+   "tag": "badgelg3",
+   "kind": "badge",
+   "x": 387.84000000000003,
+   "y": 630,
+   "w": 16,
+   "h": 16,
+   "solid": true
+  },
+  {
+   "tag": "badgelg4",
+   "kind": "badge",
+   "x": 499.04,
+   "y": 630,
+   "w": 16,
+   "h": 16,
+   "solid": true
   }
  ],
  "links": [
   {
-   "tag": "sc.launch",
+   "tag": "req.in",
    "kind": "flow",
    "pts": [
     [
-     254,
-     58
+     128,
+     34
     ],
     [
-     254,
-     206
+     158,
+     34
     ]
    ],
-   "head": false,
+   "head": true,
    "group": null,
    "free": false
   },
   {
-   "tag": "sc.pkg",
+   "tag": "schedule",
    "kind": "flow",
    "pts": [
     [
-     538,
-     58
+     309,
+     60
     ],
     [
-     538,
-     176
+     309,
+     96
+    ]
+   ],
+   "head": true,
+   "group": null,
+   "free": false
+  },
+  {
+   "tag": "directs",
+   "kind": "flow",
+   "pts": [
+    [
+     309,
+     156
+    ],
+    [
+     309,
+     246
     ]
    ],
    "head": true,
@@ -316,46 +400,12 @@
    "kind": "grant",
    "pts": [
     [
-     492,
-     406
+     500,
+     140
     ],
     [
-     492,
-     242
-    ]
-   ],
-   "head": true,
-   "group": null,
-   "free": false
-  },
-  {
-   "tag": "starts",
-   "kind": "flow",
-   "pts": [
-    [
-     120,
-     206
-    ],
-    [
-     142,
-     206
-    ]
-   ],
-   "head": true,
-   "group": null,
-   "free": false
-  },
-  {
-   "tag": "launches",
-   "kind": "flow",
-   "pts": [
-    [
-     242,
-     206
-    ],
-    [
-     272,
-     206
+     500,
+     258
     ]
    ],
    "head": true,
@@ -367,12 +417,16 @@
    "kind": "flow",
    "pts": [
     [
-     348,
-     278
+     438,
+     246
     ],
     [
-     348,
-     406
+     438,
+     118
+    ],
+    [
+     468,
+     118
     ]
    ],
    "head": true,
@@ -384,12 +438,12 @@
    "kind": "flow",
    "pts": [
     [
-     436,
-     206
+     450,
+     296.0
     ],
     [
-     464,
-     206
+     474,
+     296.0
     ]
    ],
    "head": true,
@@ -397,16 +451,16 @@
    "free": false
   },
   {
-   "tag": "bus.in",
+   "tag": "bus.in1",
    "kind": "flow",
    "pts": [
     [
-     568,
-     206
+     542,
+     296.0
     ],
     [
-     590,
-     206
+     574,
+     296.0
     ]
    ],
    "head": false,
@@ -418,12 +472,12 @@
    "kind": "flow",
    "pts": [
     [
-     590,
-     156.0
+     574,
+     202.0
     ],
     [
-     590,
-     324.0
+     574,
+     346.0
     ]
    ],
    "head": false,
@@ -435,12 +489,12 @@
    "kind": "flow",
    "pts": [
     [
-     590,
-     156.0
+     574,
+     202.0
     ],
     [
-     608,
-     156.0
+     592,
+     202.0
     ]
    ],
    "head": true,
@@ -452,12 +506,12 @@
    "kind": "flow",
    "pts": [
     [
-     590,
-     212.0
+     574,
+     274.0
     ],
     [
-     608,
-     212.0
+     592,
+     274.0
     ]
    ],
    "head": true,
@@ -469,12 +523,12 @@
    "kind": "flow",
    "pts": [
     [
-     590,
-     268.0
+     574,
+     346.0
     ],
     [
-     608,
-     268.0
+     592,
+     346.0
     ]
    ],
    "head": true,
@@ -482,16 +536,16 @@
    "free": false
   },
   {
-   "tag": "bus.3",
+   "tag": "bus.pr",
    "kind": "flow",
    "pts": [
     [
-     590,
-     324.0
+     574,
+     346.0
     ],
     [
-     608,
-     324.0
+     574,
+     534
     ]
    ],
    "head": true,
@@ -499,24 +553,16 @@
    "free": false
   },
   {
-   "tag": "pr.exit",
+   "tag": "out.pr",
    "kind": "flow",
    "pts": [
     [
-     544,
-     236
+     486,
+     564.0
     ],
     [
-     544,
-     466
-    ],
-    [
-     194.0,
-     466
-    ],
-    [
-     194.0,
-     484
+     466,
+     564.0
     ]
    ],
    "head": true,
@@ -524,33 +570,16 @@
    "free": false
   },
   {
-   "tag": "out134",
+   "tag": "out.appr",
    "kind": "flow",
    "pts": [
     [
-     246,
-     514.0
+     300,
+     564.0
     ],
     [
-     266,
-     514.0
-    ]
-   ],
-   "head": true,
-   "group": null,
-   "free": false
-  },
-  {
-   "tag": "out258",
-   "kind": "flow",
-   "pts": [
-    [
-     440,
-     514.0
-    ],
-    [
-     460,
-     514.0
+     280,
+     564.0
     ]
    ],
    "head": true,
@@ -562,20 +591,32 @@
    "kind": "loop",
    "pts": [
     [
-     194.0,
-     544
+     545.0,
+     594
     ],
     [
-     194.0,
-     584
+     545.0,
+     610
     ],
     [
-     44,
-     584
+     16,
+     610
     ],
     [
-     44,
-     244
+     16,
+     108
+    ],
+    [
+     138,
+     108
+    ],
+    [
+     138,
+     52
+    ],
+    [
+     158,
+     52
     ]
    ],
    "head": true,
