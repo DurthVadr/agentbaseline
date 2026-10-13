@@ -475,12 +475,13 @@
      pill showing, plus about 20px; without the pill the bar is a row shorter
      at some widths and the gap only grows. The steps move if the bar's copy
      does — the published date, the pill, the version string, the mast
-     title. The roster's own anchors take the same margins. */
-  h2[id], ol.factors > li { scroll-margin-top:230px; }
-  @media (min-width:330px)  { h2[id], ol.factors > li { scroll-margin-top:190px; } }
-  @media (min-width:463px)  { h2[id], ol.factors > li { scroll-margin-top:150px; } }
-  @media (min-width:588px)  { h2[id], ol.factors > li { scroll-margin-top:110px; } }
-  @media (min-width:1242px) { h2[id], ol.factors > li { scroll-margin-top:64px; } }
+     title. They sit on the scroller, not the targets, so keyboard focus
+     clears the bar too (WCAG 2.4.11), and the roster's anchors with it. */
+  html { scroll-padding-top:230px; }
+  @media (min-width:330px)  { html { scroll-padding-top:190px; } }
+  @media (min-width:463px)  { html { scroll-padding-top:150px; } }
+  @media (min-width:588px)  { html { scroll-padding-top:110px; } }
+  @media (min-width:1242px) { html { scroll-padding-top:64px; } }
   .allcontrols { font-family:var(--labelfont); font-weight:500; font-size:12.5px;
     letter-spacing:.08em; text-transform:uppercase; margin:6px 0 0; }
   .allcontrols a { color:var(--accent); text-decoration:none; }

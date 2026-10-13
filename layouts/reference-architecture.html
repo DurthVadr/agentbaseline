@@ -288,15 +288,17 @@
     dl.tb .cell:nth-child(n+2) { border-top:1px solid var(--line); }
   }
 
-  /* Sections are anchors under a sticky bar that wraps to two or three
-     rows below about 1235px, so the margin steps down with it. */
-  /* On the scroller, not the targets: scroll-margin on targets clears the
-     sticky bar for anchor jumps only, and keyboard focus could still land a
-     control wholly under it (WCAG 2.4.11). scroll-padding covers both. */
-  html { scroll-padding-top:190px; }
-  @media (min-width:455px)  { html { scroll-padding-top:150px; } }
-  @media (min-width:580px)  { html { scroll-padding-top:110px; } }
-  @media (min-width:1235px) { html { scroll-padding-top:64px; } }
+  /* Sections are anchors under a sticky bar that is one row from about
+     563px, two rows below that and three below about 407px. The padding is
+     the bar's height plus about 15px, and each step comes a little after the
+     bar's own wrap point, so a font that sets a few pixels wider cannot leave
+     the bar taller than the padding. On the scroller, not the targets:
+     scroll-margin on targets clears the bar for anchor jumps only, and
+     keyboard focus could still land a control wholly under it (WCAG 2.4.11).
+     scroll-padding covers both. */
+  html { scroll-padding-top:122px; }
+  @media (min-width:455px) { html { scroll-padding-top:104px; } }
+  @media (min-width:580px) { html { scroll-padding-top:64px; } }
 
   /* The four boundaries: a numbered list, each number in the same circled
      mark the paper's figures use for that boundary, so the list is the key
