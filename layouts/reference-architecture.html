@@ -122,7 +122,6 @@
   .utility a.closes:hover {
     background:color-mix(in srgb, var(--accent) 22%, transparent);
     color:var(--accent); }
-  .utility .ver { color:var(--faint); }
   @media (max-width:760px) { .utility .pub { display:none; } }
   .themebtn { background:none; border:0; padding:2px; margin:0; cursor:pointer;
     color:var(--soft); display:inline-flex; align-self:center; }
@@ -372,7 +371,9 @@
          the bar's right-hand anchor instead. */}}
     <span class="right"></span>
     {{ partial "artifacts-menu.html" . }}
-    <span class="ver">v{{ .Site.Params.version }}</span>
+    {{/* No version chip either. The other pages' chip is the baseline's
+         version, and here, above the paper's own version, it read as the
+         paper's. The footer states it with its name: "Agent Baseline · v…". */}}
     {{/* aria-pressed is corrected by theme.js as soon as the body parses — the
          head script resolves the theme before this element exists, so the
          served value is a placeholder and never the source of truth. */}}
