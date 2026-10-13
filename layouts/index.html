@@ -507,18 +507,24 @@
     text-underline-offset:2px; }
   .prose .note { color:var(--soft); font-size:16px; }
 
-  /* The thanks under the bylines, kept quiet: a label rather than a numbered
-     section, one line, and one row of marks in the page's faint ink, each at
-     the height hugo.toml gives it, none linked. */
+  /* The thanks under the bylines: a label rather than a numbered section, one
+     line, then the marks set in the tenets' washed cards, three to a row (two
+     on a phone), each centred in an equal cell at the height hugo.toml gives
+     it, in the page's soft ink and none linked, so every organization gets
+     the same room. */
   h3.thanks { font-family:var(--labelfont); font-weight:500; font-size:12px;
     letter-spacing:.1em; text-transform:uppercase; color:var(--soft);
     margin:40px 0 8px; }
-  ul.orgs { list-style:none; margin:2px 0 0; padding:0; color:var(--faint);
-    display:flex; flex-wrap:wrap; align-items:center; gap:16px 24px; }
-  ul.orgs svg { display:block; width:auto; height:var(--h); }
+  ul.orgs { list-style:none; margin:6px 0 0; padding:0; color:var(--soft);
+    display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px; }
+  ul.orgs li { display:flex; align-items:center; justify-content:center;
+    min-height:104px; padding:20px 16px; background:var(--wash);
+    border:1px solid var(--line); border-radius:4px; }
+  ul.orgs svg { display:block; width:auto; max-width:100%; height:calc(var(--h) * 1.45); }
   @media (max-width:479px) {
-    ul.orgs { gap:14px 20px; }
-    ul.orgs svg { height:calc(var(--h) * .92); }
+    ul.orgs { grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; }
+    ul.orgs li { min-height:80px; padding:16px 12px; }
+    ul.orgs svg { height:calc(var(--h) * 1.15); }
   }
 
   /* The footer mirrors the title block — a document closes the way it opens.
@@ -756,7 +762,7 @@
        styled without markers. */}}
   <h3 class="thanks">With thanks</h3>
   <div class="prose">
-    <p>A special thank you to the organizations supporting, reviewing and adopting the framework.</p>
+    <p>Thanks to the teams who read the drafts, argued with them, and made them better.</p>
   </div>
   <ul class="orgs" role="list">
     {{- range sort .orgs "name" }}
