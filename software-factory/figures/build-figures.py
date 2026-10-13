@@ -37,11 +37,12 @@ sandbox is built from and every package the proxy fetches, and the runtime
 authorization service beneath it. The levels (Figures 3–5) share one skeleton
 drawn to the lead author's composition (LV): whoever orchestrates across the
 top; beneath it the durable execution layer, a separate card, and beside that
-the service, at the head of one column of trusted services (the firewall, the
-model gateway, what lies downstream); the frame where agents run, the record
-inside it; the outputs along the foot. Wherever it is drawn the service is a
-decision, not a container: what the agent (at Level 3, the orchestrator)
-proposes comes into it, and the scope it authorizes goes to the proxy.
+the service, above the column of what the proxies reach (the firewall and the
+model gateway, trusted, then what lies downstream); the frame where agents
+run, the record inside it; the outputs along the foot. Wherever it is drawn
+the service is a decision, not a container: what the agent (at Level 3, the
+orchestrator) proposes comes into it, and the scope it authorizes goes to the
+proxy.
 Figure 1 is the process the boundaries serve, so it has its own composition.
 
 The drawing names things; the paper and the caption explain them. A box is
@@ -424,8 +425,8 @@ def card_h(gloss, name=""):
 # supply chain mark. It checks the components a sandbox is built from, on the
 # path that launches the agent, and the proxy checks every package it fetches
 # with it, both ways. Its line is the checklist's ("approved versions allowed
-# by the agent's profile"). The levels draw it in the column of trusted
-# services the proxies reach (lv_column).
+# by the agent's profile"). The levels draw it at the head of the column of
+# what the proxies reach (lv_column).
 SC_NAME = "Supply chain firewall"
 SC_G = "approved versions the profile allows"
 SC_LAUNCH, SC_PKG = "checks components", "checks packages"
@@ -533,43 +534,76 @@ PROXY_G = ["default-deny"]
 F2_PROXY_G = ["default-deny,", "attaches credentials"]
 EXEC_G = ["CI/CD or a step runner", "that starts each agent"]
 
-# Words set on the tint, measured: Chrome, the site's fonts at the size each is
-# set, getComputedTextLength, without letter-spacing (12–13 Oct 2026). The tint
-# is drawn to the measured width; figkit's estimate overstates long runs by up
-# to a tenth, which would leave a ragged tail of tint. A run that isn't here
-# stops the build rather than guessing.
+# Runs measured: Chrome, the site's fonts at the size each is set,
+# getComputedTextLength, without letter-spacing (12–13 Oct 2026). Words set on
+# the tint are tinted to the measured width; figkit's estimate overstates long
+# runs by up to a tenth, which would leave a ragged tail of tint. A label set
+# right against its own line is placed by its measured width for the same
+# reason (gloss_to): placed by the estimate, it drifts off its line toward the
+# next one over. A run that isn't here stops the build rather than guessing.
 TINT_W = {
+    "label|500|12.25|DEVELOPER’S MACHINE": 133.72,
     "label|500|12.25|OUTER LOOP": 73.09,
     "label|500|12.25|THE FACTORY": 77.53,
+    "label|500|12.5|DEVELOPER’S MACHINE": 136.44,
     "label|500|12.5|OUTER LOOP": 74.58,
     "label|500|12.5|THE FACTORY": 79.11,
     "serif|400|12.25|a shared service": 93.75,
     "serif|400|12.25|all four boundaries’ records, linked by run": 242.52,
     "serif|400|12.25|and task scope": 85.08,
+    "serif|400|12.25|and updates the configuration": 172.98,
     "serif|400|12.25|drives the next run": 109.31,
     "serif|400|12.25|each part to its own agent,": 150.66,
+    "serif|400|12.25|inner loop, until it passes": 145.13,
     "serif|400|12.25|new work": 55.69,
+    "serif|400|12.25|opens": 34.92,
+    "serif|400|12.25|or a remote environment": 144.22,
     "serif|400|12.25|proposes profile": 93.53,
+    "serif|400|12.25|proposes scope": 89.05,
     "serif|400|12.25|review feedback": 93.75,
     "serif|400|12.25|schedules runs": 87.80,
     "serif|400|12.25|schedules tasks": 90.86,
     "serif|400|12.25|telemetry and evals across all runs": 199.83,
-    "serif|400|12.25|the developer drives": 117.13,
-    "serif|400|12.25|the next run": 70.78,
+    "serif|400|12.25|the developer drives the next run": 190.73,
     "serif|400|12.25|with narrowed authority": 140.03,
     "serif|400|12.5|a shared service": 95.67,
     "serif|400|12.5|all four boundaries’ records, by run": 207.36,
     "serif|400|12.5|and task scope": 86.81,
+    "serif|400|12.5|and updates the configuration": 176.50,
     "serif|400|12.5|each part to its own agent,": 153.73,
+    "serif|400|12.5|inner loop,": 63.67,
     "serif|400|12.5|new work": 56.81,
+    "serif|400|12.5|opens": 35.63,
+    "serif|400|12.5|or a remote environment": 147.16,
+    "serif|400|12.5|proposes": 54.00,
     "serif|400|12.5|proposes profile": 95.44,
     "serif|400|12.5|review feedback drives the next run": 210.11,
     "serif|400|12.5|schedules runs": 89.58,
     "serif|400|12.5|schedules tasks": 92.70,
+    "serif|400|12.5|scope": 33.97,
     "serif|400|12.5|telemetry and evals across all runs": 203.91,
     "serif|400|12.5|the developer drives the next run": 194.63,
+    "serif|400|12.5|until it passes": 81.52,
     "serif|400|12.5|with narrowed authority": 142.89,
 }
+
+
+def measured(f, s, face="serif", weight="400"):
+    """A run's measured width (TINT_W), at the size this figure sets it."""
+    key = f"{face}|{weight}|{(f.gs if face == 'serif' else f.ls):g}|{s}"
+    if key not in TINT_W:
+        raise SystemExit(f"measure {key!r} (TINT_W) before setting it against a line")
+    return TINT_W[key]
+
+
+def gloss_to(f, x, y, s, tag):
+    """A gloss right-aligned to end at x, by its measured width, and recorded
+    at that width, so the checker holds the run as drawn. On the tint, the
+    tint is already recorded."""
+    w = measured(f, s)
+    f.gloss(x - w, y, s, tag)
+    if f.state != "newtext":
+        f.boxes[-1]["w"] = w + 1
 
 
 class CF(SF):
@@ -645,9 +679,10 @@ class CF(SF):
     def link(self, pts, kind="flow", head=True, tag="", group=None, bar=False, free=False,
              heavy=False, stop=False, both=False, dot=False):
         """SF's connectors, plus watch (dotted, no head: watching, not acting)
-        and heavy (Level 3's proposal, the line that matters most). A grant,
-        the decision going out, is solid accent and heavier than any flow:
-        dashes already mean the frames, the outer loop and a stop. `both`
+        and heavy (the orchestrator's proposal, the line that matters most). A
+        grant, the decision going out, is solid accent and heavier than any
+        flow but that proposal: dashes already mean the frames, the outer loop
+        and a stop. `both`
         heads both ends: a check that goes and comes back (the proxy's
         packages, through the supply chain firewall). `dot` marks where a
         headless connector ends on another, joining it."""
@@ -858,9 +893,9 @@ def r_sandbox(f, label, name, gloss, loop=("inner loop,", "until it passes")):
 # then an orchestrator agent, with what starts the work coming in from the
 # left. Beneath it, a separate and plainer card, the durable execution layer
 # (Levels 2 and 3; at Level 1 the developer works through the agent harness)
-# and, beside that, the runtime authorization service, at the head of one
-# column on the right of trusted services: the supply chain firewall, the
-# model gateway, and what lies downstream. Below them the frame where agents
+# and, beside that, the runtime authorization service, above the column on the
+# right of what the proxies reach: the supply chain firewall and the model
+# gateway, trusted, then what lies downstream. Below them the frame where agents
 # run, with the record inside it; the outputs along the foot, right to left;
 # the outer loop up the left-hand side, back into the orchestrator's place.
 #
@@ -887,39 +922,39 @@ class LV:
     AGENT_PX, AGENT_PY = 430, 110          # the agent's own proposal, Levels 1 and 2
     LOOP_X, LOOP_Y, LOOP_RISE = 8, 100, 130
     # the frame, and its label in its top left-hand corner
-    FRAME = (104, 164, 546, 502)
+    FRAME = (104, 164, 546, 516)
     LAB = (114, 182)
     # Level 3: one line splits the work; each task is a sandbox, beside it its
     # proxy, beneath it the monitoring agent that watches it
     ARM_Y = 192
-    TOP, SH = 238, 100
+    TOP, SH = 238, 114
     S = ((116, 230), (334, 448))
     LEG = 74                               # where the split lands, right of "Task n"
     PY, PH = 250, 76                       # the proxies, centred on the sandboxes
     P = ((248, 316), (466, 534))
     GRANT_DX, RING_DX = 26, 48             # on a proxy's top: the scope in, its ring
-    M_Y = (356, 416)
+    M_Y = (370, 430)
     M = ((116, 246), (334, 464))
-    EGRESS_Y = 430                         # the left-hand proxy's traffic, out to the bus
+    EGRESS_Y = 444                         # the left-hand proxy's traffic, out to the bus
     # Levels 1 and 2: one sandbox where the tasks are, the agent harness in it
-    SB = (116, 442, 238, 424)
+    SB = (116, 442, 238, 430)
     HARNESS = (121, 437, 268, 372)
-    OBS = (116, 444, 530, 488)
-    SIG = (0, 404, 92, 502)
+    OBS = (116, 458, 530, 502)
+    SIG = (0, 418, 92, 516)
     BUS = 566
     COL = (584, 720)
     COL_Y = (164, 236, 308)                # the firewall, the gateway, downstream
-    OUT = (526, 586)
+    OUT = (540, 600)
     PROD, DEPLOY, APPR, PR = (16, 142), (162, 272), (292, 458), (478, 596)
     KEY = (590, 392)
-    LOOPB = 602                            # Levels 1 and 2: the outer loop's run home
-    LEGEND_Y = 634
+    LOOPB = 616                            # Levels 1 and 2: the outer loop's run home
+    LEGEND_Y = 648
 
 
 # The same words wherever the same part is drawn, set for the levels' narrower
 # cards: the proxy's default-deny broken at its hyphen, the firewall's name in
-# two lines and its line the lead author's ("approved, scanned components
-# only"), which the column holds.
+# two lines and its line shortened from the lead author's ("approved, scanned
+# components only") to what the column holds.
 LV_PROXY_G = ["default-", "deny"]
 SC_LINES = SC_NAME.rsplit(" ", 1)
 SC_COL_G = ["approved, scanned"]
@@ -927,7 +962,10 @@ MG_G = ["approved models", "and budgets"]
 DOWN_COL_G = ["source control,", "APIs, MCP servers"]
 HARNESS_G = "the coding agent, configured by its profile"
 HARNESS_PARTS = ["Skills", "Tools", "Hooks", "Context files"]   # the lead author's
-TASK_G = ["own identity", "and task scope"]
+# each task's own identity, and the profile and task scope the orchestrator
+# proposed for it: what its heaviest line carries lands in every task
+TASK_G = ["own identity,", "profile and", "task scope"]
+TASK_NG = ["own identity, profile", "and task scope"]          # the phone's wider card
 MON_G = ["watches work", "in progress"]
 
 
@@ -967,10 +1005,10 @@ def lv_proxy(f, i, s="old", stack=False):
 
 
 def lv_column(f, s_gateway="old", s_pr="old"):
-    """The trusted services the proxies reach, under the service: the supply
-    chain firewall, the model gateway, and what lies downstream, fed by one
-    bus that also carries the pull request down to the outputs. Returns where
-    each branch leaves the bus."""
+    """What the proxies reach, under the service: the supply chain firewall
+    and the model gateway, trusted, then what lies downstream, fed by one bus
+    that also carries the pull request the agent opens down to the outputs.
+    Returns where each branch leaves the bus."""
     cx0, cx1 = LV.COL
     hs = (card_h(SC_COL_G, SC_LINES), card_h(MG_G), card_h(DOWN_COL_G))
     f.node(cx0, LV.COL_Y[0], cx1 - cx0, hs[0], SC_LINES, SC_COL_G, kind="guard",
@@ -986,6 +1024,9 @@ def lv_column(f, s_gateway="old", s_pr="old"):
         f.link([(LV.BUS, y), (cx0, y)], tag=f"bus.{i}", group="bus")
     with f.at(s_pr):
         f.link([(LV.BUS, ys[-1]), (LV.BUS, LV.OUT[0])], tag="bus.pr", group="bus")
+    # its verb, the lead author's: the agent opens it, through the proxy
+    with f.at("newtext" if s_pr == "new" else "old"):
+        f.gloss(LV.BUS + 8, LV.OUT[0] - 10, "opens", "bus.pr.l")
     return ys
 
 
@@ -1039,7 +1080,7 @@ def lv_record(f, gloss, s="old"):
         f.gloss(gx, y0 + 28, gloss, "obs.g")
 
 
-def lv_sandbox(f, label, s="old", stack=False, s_harness="old"):
+def lv_sandbox(f, label, s="old", stack=False, s_harness="old", s_loop="old"):
     """Levels 1 and 2: one sandbox where Level 3's tasks are, holding the agent
     harness and what it is built from, its inner loop under it. At Level 2 it
     is a stack, a fresh one per run."""
@@ -1056,25 +1097,29 @@ def lv_sandbox(f, label, s="old", stack=False, s_harness="old"):
         f.node(hx0, hy0, hx1 - hx0, hy1 - hy0, "Agent harness", [HARNESS_G], kind="agent",
                tag="harness")
     # what the harness is built from, as the lead author draws it: four parts,
-    # each named, set on the plate so they read as parts, not as more agents
+    # each named, set on the plate so they read as parts, not as more agents,
+    # and new where the harness is
     cw = (hx1 - hx0 - 2 * PAD - 10) / 2
-    for i, n_ in enumerate(HARNESS_PARTS):
-        r, c = divmod(i, 2)
-        cx, cy = hx0 + PAD + c * (cw + 10), hy0 + 46 + r * 28
-        f.box(cx, cy, cw, 22, "card", f"part{i}", fill=PLATE)
-        f.name(cx + PAD, cy + 15.5, n_, f"part{i}.n")
+    with f.at(s_harness):
+        for i, n_ in enumerate(HARNESS_PARTS):
+            r, c = divmod(i, 2)
+            cx, cy = hx0 + PAD + c * (cw + 10), hy0 + 46 + r * 28
+            f.box(cx, cy, cw, 22, "card", f"part{i}", fill=PLATE)
+            f.name(cx + PAD, cy + 15.5, n_, f"part{i}.n")
     gy = y1 - 28
     f.loop_glyph(x0 + PAD + 11, gy - 4, "sbx.loop")
-    f.gloss(x0 + PAD + 26, gy, "inner loop, until it passes", "sbx.lp")
+    with f.at("newtext" if s_loop == "new" else "old"):
+        f.gloss(x0 + PAD + 26, gy, "inner loop, until it passes", "sbx.lp")
 
 
 def lv_agent_proposes(f):
     """Levels 1 and 2: the agent proposes the scope it needs, as in Figure 2,
-    from its sandbox up into the service's side."""
+    from its sandbox up into the service's side, its label set against its
+    own line, well clear of the line that starts the agent: here only the
+    agent proposes."""
     x, y = LV.AGENT_PX, LV.AGENT_PY
     f.link([(x, LV.SB[2]), (x, y), (LV.AUTH[0], y)], tag="propose")
-    f.gloss(x - 8 - f.width("proposes scope", "gloss"), LV.LAB[1] + 22, "proposes scope",
-            "propose.l")
+    gloss_to(f, x - 8, LV.LAB[1] + 22, "proposes scope", "propose.l")
 
 
 def lv_traffic(f, x0):
@@ -1087,14 +1132,15 @@ def lv_traffic(f, x0):
 # The developer orchestrates and, through the agent harness, is the execution
 # layer too, so the execution layer's place is empty: the developer's line
 # runs straight down into the sandbox. The sandbox shows what is in the box.
+# Against Figure 2, the machine it runs on and the inner loop are new too.
 def lv_level1(f):
-    lv_frame(f, "Developer’s machine", ["or a remote environment"])
+    lv_frame(f, "Developer’s machine", ["or a remote environment"], s="new")
     ox0, oy0, ox1, oy1 = LV.ORCH
     with f.at("new"):
         f.node(ox0, oy0, ox1 - ox0, oy1 - oy0, "Developer", ["kicks off each run"], tag="dev")
         f.link([(LV.TX, oy1), (LV.TX, LV.SB[2])], tag="directs")
     lv_service(f)
-    lv_sandbox(f, "Sandbox", s_harness="new")
+    lv_sandbox(f, "Sandbox", s_harness="new", s_loop="new")
     lv_agent_proposes(f)
     lv_proxy(f, 1)
     lv_traffic(f, LV.SB[1])
@@ -1102,7 +1148,10 @@ def lv_level1(f):
     with f.at("new"):
         lv_out(f, LV.PR, "Pull request", ["reviewed by", "the developer"], "pr")
     lv_home_from_pr(f, "new")
-    lv_loop_labels(f, ["the developer drives", "the next run"], "new")
+    # both halves of the outer loop: the next run, and the configuration the
+    # harness is built from
+    lv_loop_labels(f, ["the developer drives the next run", "and updates the configuration"],
+                   "new")
     lv_record(f, "harness logs, identity and proxy records")
 
 
@@ -1132,8 +1181,9 @@ def lv_level2(f):
     lv_proxy(f, 1, s="new", stack=True)
     lv_traffic(f, LV.SB[1])
     lv_column(f)
+    # the pull request is Level 1's, its words changed; what follows it is new
+    lv_out(f, LV.PR, "Pull request", ["reviewed", "until ready"], "pr")
     with f.at("new"):
-        lv_out(f, LV.PR, "Pull request", ["reviewed", "until ready"], "pr")
         lv_out(f, LV.APPR, "Approval", APPROVAL_G, "appr")
         lv_out(f, LV.DEPLOY, "Merge", ["approved", "changes"], "merge")
         lv_then(f, LV.PR, LV.APPR, "out.pr")
@@ -1177,8 +1227,7 @@ def lv_level3(f):
     with f.at("newtext"):
         f.gloss(LV.TX + 8, ey0 - 14, "schedules tasks", "schedule.l")
         for i, s_ in enumerate(("proposes profile", "and task scope")):
-            f.gloss(LV.PROP_X - 8 - TINT_W[f"serif|400|{f.gs:g}|{s_}"], ay0 - 22 + 14.5 * i, s_,
-                    f"propose.l{i}")
+            gloss_to(f, LV.PROP_X - 8, ay0 - 22 + 14.5 * i, s_, f"propose.l{i}")
     f.node(ex0, ey0, ex1 - ex0, ey1 - ey0, "Durable execution layer", EXEC_G, tag="exec")
     lv_service(f)
 
@@ -1203,8 +1252,8 @@ def lv_level3(f):
         f.name(tx0, LV.TOP + 39, "Coding agent", f"sbx{i}.n")
         for j, g in enumerate(TASK_G):
             f.gloss(tx0, LV.TOP + 55 + 14.5 * j, g, f"sbx{i}.g{j}")
-        f.loop_glyph(sx0 + PAD + 11, LV.TOP + 86, f"sbx{i}.loop")
-        f.gloss(sx0 + PAD + 26, LV.TOP + 90, "inner loop", f"sbx{i}.lp")
+        f.loop_glyph(sx0 + PAD + 11, LV.TOP + 100, f"sbx{i}.loop")
+        f.gloss(sx0 + PAD + 26, LV.TOP + 104, "inner loop", f"sbx{i}.lp")
         lv_proxy(f, i)
     pm = LV.PY + LV.PH / 2
     f.link([(LV.S[0][1], pm), (LV.P[0][0], pm)], tag="traffic0")
@@ -1218,10 +1267,11 @@ def lv_level3(f):
     lv_record(f, "telemetry and evals across all runs", "new")
     lv_column(f)
     # the left-hand proxy's traffic: down between the monitoring agents and
-    # along over the record, to the same bus
+    # along over the record, joining the same bus (every route in above the
+    # Downstream branch crosses the other task)
     dx = mid(LV.P[0])
     f.link([(dx, LV.PY + LV.PH), (dx, LV.EGRESS_Y), (LV.BUS, LV.EGRESS_Y)], head=False,
-           tag="bus.in0", group="bus")
+           tag="bus.in0", group="bus", dot=True)
 
     # ── what leaves, right to left, and the outer loop back to the orchestrator ──
     lv_out(f, LV.PR, "Pull request", ["reviewed", "until ready"], "pr")
@@ -1230,7 +1280,7 @@ def lv_level3(f):
     sx0, sy0, sx1, sy1 = LV.SIG
     ob = LV.OBS
     with f.at("new"):
-        lv_out(f, LV.DEPLOY, "Deploy", ["can be", "rolled back"], "deploy")
+        lv_out(f, LV.DEPLOY, "Deploy", ["merged, can be", "rolled back"], "deploy")
         lv_out(f, LV.PROD, "Production", ["emits incidents", "and metrics"], "prod")
         lv_then(f, LV.APPR, LV.DEPLOY, "out.appr")
         lv_then(f, LV.DEPLOY, LV.PROD, "out.deploy")
@@ -1344,9 +1394,9 @@ def narrow_task_sandbox(f, y, i):
     f.box(sx0, y, sx1 - sx0, h, "sandbox", f"sbx{i}")
     f.badge(sx0, y, BN[SANDBOX], f"sbx{i}")
     tx = sx0 + PAD + 4
-    f.lab(tx, y + 20, f"Task {i + 1}", f"sbx{i}.l")
+    f.lab(tx, y + 20, f"Task {i + 1} sandbox", f"sbx{i}.l")
     f.name(tx, y + 40, "Coding agent", f"sbx{i}.n")
-    for j, g in enumerate(TASK_G):
+    for j, g in enumerate(TASK_NG):
         f.gloss(tx, y + 56 + 14.5 * j, g, f"sbx{i}.g{j}")
     f.loop_glyph(sx0 + PAD + 11, y + 88, f"sbx{i}.loop")
     f.gloss(sx0 + PAD + 26, y + 92, "inner loop,", f"sbx{i}.lp0")
@@ -1354,7 +1404,7 @@ def narrow_task_sandbox(f, y, i):
     return h
 
 
-def narrow_harness_sandbox(f, y, label, s="old", stack=False, s_harness="old"):
+def narrow_harness_sandbox(f, y, label, s="old", stack=False, s_harness="old", s_loop="old"):
     """Levels 1 and 2 on a phone: the sandbox and the agent harness in it,
     its parts in a column; returns the sandbox's height."""
     sx0, sx1 = NV.S
@@ -1370,13 +1420,14 @@ def narrow_harness_sandbox(f, y, label, s="old", stack=False, s_harness="old"):
     with f.at(s_harness):
         f.node(hx0, hy0, hx1 - hx0, 190, "Agent harness",
                ["the coding agent,", "configured by", "its profile"], kind="agent", tag="harness")
-    for i, n_ in enumerate(HARNESS_PARTS):
-        cy = hy0 + 76 + 28 * i
-        f.box(hx0 + PAD, cy, hx1 - hx0 - 2 * PAD, 22, "card", f"part{i}", fill=PLATE)
-        f.name(hx0 + 2 * PAD, cy + 15.5, n_, f"part{i}.n")
+        for i, n_ in enumerate(HARNESS_PARTS):
+            cy = hy0 + 76 + 28 * i
+            f.box(hx0 + PAD, cy, hx1 - hx0 - 2 * PAD, 22, "card", f"part{i}", fill=PLATE)
+            f.name(hx0 + 2 * PAD, cy + 15.5, n_, f"part{i}.n")
     f.loop_glyph(sx0 + PAD + 11, y + 236, "sbx.loop")
-    f.gloss(sx0 + PAD + 26, y + 240, "inner loop,", "sbx.lp0")
-    f.gloss(sx0 + PAD + 26, y + 254.5, "until it passes", "sbx.lp1")
+    with f.at("newtext" if s_loop == "new" else "old"):
+        f.gloss(sx0 + PAD + 26, y + 240, "inner loop,", "sbx.lp0")
+        f.gloss(sx0 + PAD + 26, y + 254.5, "until it passes", "sbx.lp1")
     return h
 
 
@@ -1452,12 +1503,15 @@ def narrow_level(n):
     for i, s_ in enumerate(("authorized", "scope")):
         f.gloss(NV.GRANT_X + 8, sb + 18 + 14.5 * i, s_, f"grant.l{i}")
     # ── the frame ──
-    fy0 = sb + 40
+    # at Levels 1 and 2, room above it for the agent's proposal's label,
+    # clear of the execution layer's foot
+    fy0 = sb + (66 if n < 3 else 40)
     fx0, fx1 = NV.FRAME
     lx = NV.S[0]
     if n == 1:
-        f.lab(lx, fy0 + 22, "Developer’s machine", "frame.l")
-        f.gloss(lx, fy0 + 36.5, "or a remote environment", "frame.g0")
+        with f.at("newtext"):
+            f.lab(lx, fy0 + 22, "Developer’s machine", "frame.l")
+            f.gloss(lx, fy0 + 36.5, "or a remote environment", "frame.g0")
     else:
         with f.at("newtext" if n == 2 else "old"):
             f.lab(lx, fy0 + 22, "The factory", "frame.l")
@@ -1470,11 +1524,13 @@ def narrow_level(n):
                    tag="directs")
         sh = narrow_harness_sandbox(f, sy, "Sandbox" if n == 1 else "Sandbox per run",
                                     s="new" if n == 2 else "old", stack=n == 2,
-                                    s_harness="new" if n == 1 else "old")
-        # the agent proposes the scope it needs, up into the service
+                                    s_harness="new" if n == 1 else "old",
+                                    s_loop="new" if n == 1 else "old")
+        # the agent proposes the scope it needs, up into the service; its
+        # label hugs its own line, under the execution layer's foot
         f.link([(NV.AGENT_PX, sy), (NV.AGENT_PX, sb)], tag="propose")
-        f.gloss(NV.AGENT_PX - 8 - f.width("proposes scope", "gloss"), sb + 30, "proposes scope",
-                "propose.l")
+        for i, s_ in enumerate(("proposes", "scope")):
+            gloss_to(f, NV.AGENT_PX - 8, sb + 40 + 14.5 * i, s_, f"propose.l{i}")
         mids = [sy + sh / 2]
         py = narrow_proxy(f, mids[0], 0, s="new" if n == 2 else "old", stack=n == 2)
         grant_to = py
@@ -1513,6 +1569,10 @@ def narrow_level(n):
     record(f, X0, y, fx1 - 10, y + 48, two=True)
     with f.at("newtext" if n > 1 else "old"):
         f.gloss(X0 + PAD, y + 39, obs, "obs.g")
+    if n == 3:
+        # evals come back too: the record's dashed line joins the outer loop
+        with f.at("new"):
+            f.link([(X0, y + 24), (NV.RAIL, y + 24)], "loop", head=False, tag="evals", dot=True)
     fy1 = y + 48 + 12
     f.box(fx0, fy0, fx1 - fx0, fy1 - fy0, "zone", "frame")
     # ── what the proxies reach, and the pull request, down the bus ──
@@ -1526,7 +1586,9 @@ def narrow_level(n):
                    num=BN[SUPPLY] if tag == "sc" else None, tag=tag)
         ys.append(y + 22)
         y += 44 + STACK
-    y += (50 if n < 3 else 24) - STACK
+    # the gap above the pull request: at Levels 1 and 2 the outer loop
+    # leaves through it, with its label
+    y += (64 if n < 3 else 30) - STACK
     pr_mid = y + 23
     f.link([(NV.BUS, mids[0]), (NV.BUS, ys[-1])], head=False, tag="bus", group="bus")
     for i, yy in enumerate(ys):
@@ -1534,14 +1596,16 @@ def narrow_level(n):
     with f.at("new" if n == 1 else "old"):
         f.link([(NV.BUS, ys[-1]), (NV.BUS, pr_mid), (NV.DEST[1], pr_mid)], tag="bus.pr",
                group="bus")
+    with f.at("newtext" if n == 1 else "old"):
+        gloss_to(f, NV.BUS - 10, pr_mid - 23 - 8, "opens", "bus.pr.l")
     # ── the outputs, top to bottom, and the outer loop home ──
     outs = {1: [("Pull request", ["reviewed by the developer"], 1)],
-            2: [("Pull request", ["reviewed until ready"], 2),
+            2: [("Pull request", ["reviewed until ready"], 1),
                 ("Approval", APPROVAL_G, 2),
                 ("Merge", ["approved changes"], 2)],
             3: [("Pull request", ["reviewed until ready"], 2),
                 ("Approval", APPROVAL_G, 2),
-                ("Deploy", ["can be rolled back"], 3),
+                ("Deploy", ["merged, can be rolled back"], 3),
                 ("Production", ["emits incidents and metrics"], 3)]}[n]
     for i, (nm, g, since) in enumerate(outs):
         with f.at("new" if since == n else "old"):
@@ -1552,17 +1616,19 @@ def narrow_level(n):
                 f.link([(NV.IN_X, y), (NV.IN_X, y + 22)], tag=f"o{i}")
             y += 22
     if n < 3:
-        # the loop leaves the pull request's side; its label sits above that
-        # turn, beside the rail
-        ly = pr_mid - 23 - 30
+        # the loop leaves the pull request's top and turns for the rail in
+        # the gap above it; its label sits beside it, as at Level 3
+        pt = pr_mid - 23
         with f.at("new" if n == 1 else "old"):
-            f.link([(X0, pr_mid), (NV.RAIL, pr_mid), (NV.RAIL, o_mid), (X0, o_mid)], "loop",
-                   tag="outer")
+            f.link([(NV.IN_X, pt), (NV.IN_X, pt - 54), (NV.RAIL, pt - 54), (NV.RAIL, o_mid),
+                    (X0, o_mid)], "loop", tag="outer")
         with f.at("newtext" if n == 1 else "old"):
-            f.lab(X0, ly, "outer loop", "outer.l")
+            f.lab(NV.IN_X + 10, pt - 38, "outer loop", "outer.l")
+        lines = {1: ["the developer drives the next run", "and updates the configuration"],
+                 2: ["review feedback drives the next run"]}[n]
         with f.at("newtext"):
-            f.gloss(X0, ly + 16, {1: "the developer drives the next run",
-                                  2: "review feedback drives the next run"}[n], "outer.g")
+            for i, s_ in enumerate(lines):
+                f.gloss(NV.IN_X + 10, pt - 23.5 + 14.5 * i, s_, f"outer.g{i}")
     else:
         # production's signals, and from them the loop home
         sy0 = y + 40
