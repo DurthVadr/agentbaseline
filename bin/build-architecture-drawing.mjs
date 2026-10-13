@@ -10,10 +10,10 @@
 // asking, who it acts for, the task, policy, any delegation) and the profile's bounds
 // flow into it, with the agent's proposal for each task and each delegation, which it
 // doesn't take at face value; this task's scope (to the proxy, which enforces it),
-// approval and the record flow out, and anything else is denied or sent to a person. Task and delegation are
-// what the decision weighs, never boxes inside it: delegation only narrows a task, and
-// only a new decision widens one. The profile appears once, with its two jobs: it
-// configures the sandbox at launch and bounds every decision.
+// approval and the record flow out, and anything else is denied or sent to a person.
+// Task and delegation are what the decision weighs, never boxes inside it: delegation
+// only narrows a task, and only a new decision widens one. The profile appears once,
+// with its two jobs: it configures the sandbox at launch and bounds every decision.
 // The core path (agent to proxy, the proposal, trusted context into the decision, this
 // task's scope) is drawn heavier than the rest (.sfa-main).
 // Colours come from classes the page styles with its own tokens (.sfa-* in
@@ -21,13 +21,15 @@
 // Its text is never smaller than the paper's figures' beside it, at any width: they
 // share the figures' slot and switch point, and the smallest text here is at least
 // theirs in proportion (wide: 12.25 of 736 units, so 14.65 of 880; narrow: 12.5 of 376).
-import fs from 'fs';
-import path from 'path';
-import { fileURLToPath } from 'url';
+import fs from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 const REPO = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const icon = n => fs.readFileSync(`${REPO}/layouts/partials/icons/${n}.svg`, 'utf8').match(/ d="([^"]+)"/)[1];
 const SEAL = icon('seal-check'), HAND = icon('hand-palm');
-const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/'/g, '’');
+// Text and attribute values: escape what XML needs, and set a straight apostrophe curly.
+const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;')
+  .replace(/'/g, '’');
 const f1 = n => +(+n).toFixed(1);
 
 function kit(id, T) {
@@ -96,8 +98,20 @@ function kit(id, T) {
   return { r, btm, cx, cy, gl, lines, rect, card, doc, badge, wire, dot, lbl, capt, glyph, cycle, sandbox, deny, defs };
 }
 
-const ALT = 'The agent proposes, the runtime authorization service decides, and the egress proxy enforces. Trusted context (who’s asking, who it acts for, the task, policy, any delegation and the profile’s bounds) flows into each decision. For each task and each delegation, the agent, untrusted and holding no credentials, proposes the scope it needs, which the service doesn’t take at face value; delegation only narrows a task, and only a new decision widens it. The proxy enforces this task’s scope and attaches the credentials. High-impact actions go to approval the agent can’t give; anything else is denied or sent to a person. The profile also configures each sandbox at launch. Every grant is recorded, and every boundary keeps a tamper-evident record. Badges number the boundaries: 1 identity and access, 2 supply chain (the admission point), 3 sandbox, 4 network.';
-const svgOf = (W, H, L, defs) => `<svg xmlns="http://www.w3.org/2000/svg" class="sfa-d" viewBox="0 0 ${W} ${H}" role="img" aria-label="${ALT}">\n${defs}\n${L.flat().join('\n')}\n</svg>`;
+const ALT =
+  'The agent proposes, the runtime authorization service decides, and the egress proxy '
+  + 'enforces. Trusted context (who’s asking, who it acts for, the task, policy, any delegation '
+  + 'and the profile’s bounds) flows into each decision. For each task and each delegation, the '
+  + 'agent, untrusted and holding no credentials, proposes the scope it needs, which the '
+  + 'service doesn’t take at face value; delegation only narrows a task, and only a new '
+  + 'decision widens it. The proxy enforces this task’s scope and attaches the credentials. '
+  + 'High-impact actions go to approval the agent can’t give; anything else is denied or sent '
+  + 'to a person. The profile also configures each sandbox at launch. Every grant is recorded, '
+  + 'and every boundary keeps a tamper-evident record. Badges number the boundaries: 1 identity '
+  + 'and access, 2 supply chain (the admission point), 3 sandbox, 4 network.';
+const svgOf = (W, H, L, defs) =>
+  `<svg xmlns="http://www.w3.org/2000/svg" class="sfa-d" viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(ALT)}">`
+  + `\n${defs}\n${L.flat().join('\n')}\n</svg>`;
 
 // ── wide: the deck's row, set for an 880-unit canvas ─────────────────────────
 // Smallest text 14.75 units, above the paper's figures' 14.65 (12.25 of 736): 10.8px
