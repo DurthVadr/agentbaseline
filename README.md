@@ -3,8 +3,8 @@
 **Six security outcomes an enterprise must achieve to run AI agents, and the 35 controls
 that evidence them.**
 
-A draft for public comment, versioned in the open, and intended for donation to a community
-body as it matures.
+A working draft for community review, versioned in the open, and intended for donation to a
+community body as it matures.
 
 | | |
 |---|---|
@@ -90,22 +90,22 @@ authors have not yet met their own rule. Tracked as issue #1.
 | [`crosswalks/`](crosswalks/) | Mappings to NIST, ISO, OWASP and CIS — wanted, and better written from outside |
 | [`docs/decisions/`](docs/decisions/) | Decision records, including why identifiers carry no prefix |
 | [`bin/`](bin/) | Generators, and the checks that keep them honest |
-| `layouts/`, `content/` | The site, which renders from `controls.yaml` |
+| `layouts/`, `content/` | The site, which renders from `controls.yaml` and `software-factory/` |
 
 ## Working on this
 
 Everything a reader sees is generated. Edit `controls.yaml`; never edit a derived file.
 
 ```sh
-python3 whitepaper/figures/build-figure-1.py      # the figure, from controls.yaml
+python3 whitepaper/figures/build-figure-1.py      # the white paper's Figure 1, from controls.yaml
 python3 software-factory/figures/build-figures.py # the reference architecture's figures
 python3 bin/sync-figure-partial                   # theme-aware copies for the site, both papers
 node bin/build-architecture-drawing.mjs           # the reference architecture page's own drawing
 python3 bin/render-controls                       # CONTROLS.md
 hugo --gc --minify                                # the site, into public/
-python3 bin/build-pdf                             # the PDF, via pandoc and Chrome
+python3 bin/build-pdf                             # the white paper's PDF, via pandoc and Chrome
 python3 bin/build-pdf --paper software-factory    # the reference architecture's PDF
-python3 bin/build-social                          # the 1200x630 card
+python3 bin/build-social                          # the white paper's 1200x630 card
 python3 bin/build-social --paper software-factory # the reference architecture's card
 ```
 
@@ -138,7 +138,8 @@ page and cannot write the tracked PDF.
 PDFs were built on Chrome for Testing on macOS: the white paper on 150.0.7871.124, the
 reference architecture on 154.0.8037.57. Each manifest's `built_by` names it
 (`HeadlessChrome/150`, `HeadlessChrome/154`); rebuild a paper on that browser, or its bytes
-change.
+change. CI installs Chrome for Testing with `npx @puppeteer/browsers install chrome@<version>`;
+point `CHROME=` at the binary it prints.
 
 ```sh
 python3 bin/check-pdf-reproducible   # two builds of this source produce the same bytes

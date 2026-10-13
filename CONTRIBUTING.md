@@ -1,7 +1,7 @@
 # Contributing
 
-This is a draft for public comment. **Disagreement is the point.** What follows is how to
-file it so that it lands somewhere useful.
+This is a working draft for community review. **Disagreement is the point.** What follows is
+how to file it so that it lands somewhere useful.
 
 ## Read this first
 
@@ -15,7 +15,8 @@ file it so that it lands somewhere useful.
 what's wrong and, where you can, what would make it right. "This is not implementable in a
 regulated environment" is a good issue. So is "this reads like a vendor datasheet."
 
-**Comment on The Secure Software Factory** — open an issue through the software-factory form,
+**Comment on The Secure Software Factory** — open an issue through
+[the reference architecture form](https://github.com/agentbaseline/agentbaseline/issues/new?template=software-factory.yml),
 which labels it, and name the part you are disputing: one of the four boundaries (identity and
 access, supply chain, sandbox, network), execution and observability, or a level of autonomy.
 The paper has no identifiers of its own; where its appendix maps to a baseline control, cite
