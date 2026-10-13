@@ -28,6 +28,9 @@ never reused.
   papers, the catalogue and the site in JSON-LD, each paper with its own version, date and
   authors. Nothing a person sees has changed. `bin/check-seo` holds the build to all of it,
   and Lighthouse scores the pages in CI. *(2026-10-13)*
+- The catalogue is served as data, at `/controls.yaml`, mounted from `whitepaper/` so there
+  is still one copy of it. `/llms.txt`, the header of `/controls.md` and the controls page's
+  JSON-LD point there for it. *(2026-10-13, Nick Tassone, Keycard)*
 - The community Slack is linked from the utility bar on every page and, on the homepage,
   from the review section, with the invite address in one place in `hugo.toml`.
   CONTRIBUTING and GOVERNANCE say what belongs in Slack and what belongs in an issue, and

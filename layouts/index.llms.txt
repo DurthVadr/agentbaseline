@@ -39,7 +39,7 @@ Cite a control by its bare identifier and the version you read it in: `DIS-01 (A
 
 ## Optional
 {{ range site.Params.texts }}{{ with .data }}
-- [{{ path.Base . }}]({{ printf "%s/blob/main/%s" $repo . }}): The catalogue as data, and its source of truth. The controls page, the PDF's Appendix A and controls.md are rendered from it.
+- [{{ path.Base . }}]({{ absURL . }}): The catalogue as data, and its source of truth. The controls page, the PDF's Appendix A and controls.md are rendered from it.
 {{- end }}{{ end }}
 - [VERSIONING.md]({{ $repo }}/blob/main/VERSIONING.md): What an identifier means, and what is safe to cite.
 - [PROVENANCE.md]({{ $repo }}/blob/main/PROVENANCE.md): Who convened this work, and what each of them sells.

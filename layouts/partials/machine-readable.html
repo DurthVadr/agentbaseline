@@ -110,10 +110,11 @@
       {{- $ld = merge $ld (dict "encoding" $enc) -}}
     {{- else if eq $e.schema "Dataset" -}}
       {{- $dist := slice -}}
-      {{- /* GitHub's /raw/ address rather than /blob/: a distribution is the
-             file itself, not a page that shows it. */ -}}
+      {{- /* The site's own copy, mounted from the repository (hugo.toml): a
+             distribution is the file itself, at an address this site answers
+             for, not a page that shows it. */ -}}
       {{- with $e.data -}}
-        {{- $dist = $dist | append (dict "@type" "DataDownload" "name" (path.Base .) "contentUrl" (printf "%s/raw/main/%s" site.Params.repo .) "encodingFormat" "application/yaml") -}}
+        {{- $dist = $dist | append (dict "@type" "DataDownload" "name" (path.Base .) "contentUrl" (absURL .) "encodingFormat" "application/yaml") -}}
       {{- end -}}
       {{- $dist = $dist | append (dict "@type" "DataDownload" "name" (path.Base $md.RelPermalink) "contentUrl" $md.Permalink "encodingFormat" "text/markdown") -}}
       {{- $ld = merge $ld (dict "distribution" $dist) -}}

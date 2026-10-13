@@ -47,6 +47,17 @@ disableKinds = ["taxonomy", "term", "RSS", "section"]
 [[module.mounts]]
   source = "static"
   target = "static"
+# The catalogue itself, served at /controls.yaml: the file the pages, the PDF's
+# Appendix A and controls.md are rendered from, and the one an agent should read
+# rather than parse a rendering of. Mounted, not copied — a copy in static/
+# would be a second source of truth. vercel.json serves it as
+# `text/yaml; charset=utf-8` rather than application/yaml, the type RFC 9512
+# registers, because browsers download an application/yaml response instead of
+# showing it, and this file is meant to be read where it opens; YAML tools take
+# either. The JSON-LD still names its format as application/yaml.
+[[module.mounts]]
+  source = "whitepaper/controls.yaml"
+  target = "static/controls.yaml"
 # The paper's figures, served at /figures/ so its text version can point at
 # them. Filtered to the SVGs: the generator, its helper module and its box
 # manifest live in the same directory and are not for publishing.
@@ -271,7 +282,8 @@ disableKinds = ["taxonomy", "term", "RSS", "section"]
 #                own figures/ directory (a static mount above). The text's links
 #                to them point there rather than at the repository.
 #   pdf          optional: the typeset edition, a path under static/.
-#   data         optional: the machine-readable source, by repository path.
+#   data         optional: the machine-readable source, by the path this site
+#                serves it at (a static mount above puts it there).
 #   license      an SPDX identifier, and license_url the licence itself. Which
 #                licence applies is README's call, not this file's: prose and
 #                figures are CC BY 4.0; controls.yaml is Apache-2.0, and
@@ -305,7 +317,7 @@ disableKinds = ["taxonomy", "term", "RSS", "section"]
   title       = "Agent Baseline controls"
   page        = "/controls"
   schema      = "Dataset"
-  data        = "whitepaper/controls.yaml"
+  data        = "controls.yaml"
   license     = "Apache-2.0"
   license_url = "https://www.apache.org/licenses/LICENSE-2.0"
   description = "Every control, grouped by outcome, each with a permanent identifier you can cite and the requirement it states. Generated from controls.yaml, the source of truth."

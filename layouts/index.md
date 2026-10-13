@@ -28,7 +28,7 @@ license_url: {{ $e.license_url | jsonify }}
 pdf: {{ absURL . | jsonify }}
 {{- end }}
 {{- with $e.data }}
-data: {{ printf "%s/blob/main/%s" site.Params.repo . | jsonify }}
+data: {{ absURL . | jsonify }}
 {{- end }}
 source: {{ printf "%s/blob/main/%s" site.Params.repo $e.source | jsonify }}
 ---

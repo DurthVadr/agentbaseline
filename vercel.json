@@ -131,6 +131,15 @@
       ]
     },
     {
+      "source": "/controls.yaml",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "text/yaml; charset=utf-8"
+        }
+      ]
+    },
+    {
       "source": "/llms.txt",
       "headers": [
         {
