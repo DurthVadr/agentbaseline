@@ -8,4 +8,4 @@
 {{- /* A sentence does not open on a numeral. */ -}}
 {{- $words := slice "Zero" "One" "Two" "Three" "Four" "Five" "Six" "Seven" "Eight" "Nine" "Ten" "Eleven" "Twelve" -}}
 {{- $ow := cond (lt $o (len $words)) (index $words (cond (lt $o (len $words)) $o 0)) (string $o) -}}
-{{- return printf "# %s\n\n> %s security outcomes an enterprise must achieve to run AI agents, and the %d controls that evidence them. Agent Baseline v%s, published %s: a draft for public comment, versioned in the open." . $ow $n site.Params.version site.Params.published -}}
+{{- return printf "# %s\n\n> %s security outcomes an enterprise must achieve to run AI agents, and the %d controls that evidence them. Agent Baseline v%s, published %s, versioned in the open." . $ow $n site.Params.version site.Params.published -}}
