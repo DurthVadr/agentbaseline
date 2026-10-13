@@ -38,7 +38,8 @@
 <style>
   /* Same sheet language as the front page: title block, hairline frame,
      registration marks, mono structure around serif prose. See index.html for
-     the rationale; the tokens are identical. */
+     the rationale; the tokens are the same except --fig-rule and --fig-new
+     (below). */
   :root {
     --paper:#FBF9F3; --ink:#221F18; --soft:#5C5850; --faint:#736E60;
     --line:#E6E2D7; --link:#5A7A00; --link-hover:#3F5400; --visited:#66713F; --mark:#B3541E;
@@ -180,13 +181,9 @@
   .page > * { grid-column:2; min-width:0; }
   .page > .wide { grid-column:1 / -1; }
 
+  /* Full-sheet (.wide), like the other pages' title blocks: the field table
+     under the title is wide. */
   .titleblock { padding-top:80px; margin-bottom:52px; }
-  /* The other two pages put the title block in the full-sheet slot because
-     something wide follows it — the tenets, the catalogue's field table. Here
-     nothing does, so it stays in the prose column and the title shares a left
-     edge with the sentence under it. Same slot the grid gives by default; the
-     28px that would separate the title from a field table goes too, since
-     there is no field table. */
   h1 { font-family:var(--head); font-size:clamp(38px,5.5vw,50px);
     font-weight:600; line-height:1.05; margin:0; letter-spacing:-0.02em;
     text-wrap:balance; position:relative; }

@@ -81,9 +81,10 @@
      a new link is counted without anyone remembering to instrument it, and
      nothing drifts when the markup moves.
 
-     One property per event: the Pro plan allows two, and one is enough to say
-     which artifact. Nothing here identifies a person; it records which of the
-     things on the page a reader actually went to. */
+     At most two properties per event, the Pro plan's limit: one says which
+     artifact, and `from`, where there is one, says which link led there.
+     Nothing here identifies a person; it records which of the things on the
+     page a reader actually went to. */
   function tracked(a) {
     var h = a.getAttribute('href') || '';
     /* The file's own name, so each paper's PDF is its own series. */

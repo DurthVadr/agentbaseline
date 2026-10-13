@@ -30,10 +30,10 @@ So the two questions are separated and each is asked where it can be answered:
     browser and compares those two builds to each other.
 
 The evidence is each paper's pdf.provenance.json (whitepaper/ and
-software-factory/), which bin/build-pdf writes as it renders: the digest of every file the render actually read, the digest of the PDF
-it produced, and the browser that produced it. Recorded by the build rather than
-listed by hand, so adding a figure adds it to the manifest without anyone
-remembering to.
+software-factory/), which bin/build-pdf writes as it renders: the digest of
+every file the render actually read, the digest of the PDF it produced, and the
+browser that produced it. Recorded by the build rather than listed by hand, so
+adding a figure adds it to the manifest without anyone remembering to.
 
 What this does NOT prove, because it is worth being exact about a gate that runs
 on every commit:
@@ -45,8 +45,9 @@ on every commit:
 
 It does prove that the paper's source, controls.yaml and contributors.yaml where
 it reads them, the figures, the fonts and the scripts that turn them into a PDF
-are all at the versions the committed PDF was made from — which is exactly "nobody edited the paper and
-forgot to rebuild", and "nobody hand-patched the PDF".
+are all at the versions the committed PDF was made from — which is exactly
+"nobody edited the paper and forgot to rebuild", and "nobody hand-patched the
+PDF".
 
 That proof is only as good as the list of inputs it is checked against, and that
 list used to be the manifest's own. A manifest is checked against what it

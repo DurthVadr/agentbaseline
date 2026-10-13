@@ -133,9 +133,7 @@ disableKinds = ["taxonomy", "term", "RSS", "section"]
   published     = "13 October 2026"
   pdf           = "software-factory.pdf"
   source        = "software-factory"
-  # The paper's markdown inside `source`. Checked with fileExists like `pdf`,
-  # so a checkout without the paper gets no "View the source" that lands on a
-  # README instead.
+  # The paper's markdown inside `source`; checked with fileExists like `pdf`.
   paper         = "software-factory.md"
   template      = "software-factory.yml"
   commentsUntil = ""

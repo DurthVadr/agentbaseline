@@ -60,7 +60,8 @@
       if (focus) tabs[n].focus();
     }
 
-    /* The level holding the element the URL's fragment names, or -1. */
+    /* The level holding the element the URL's fragment names, and that
+       element; null when the fragment names nothing inside a level. */
     function target() {
       var id = location.hash.slice(1);
       if (!id) return null;

@@ -106,9 +106,8 @@ ALT = {
        "assembles, builds in a sandbox and verifies the change until it passes. After review "
        "and a deploy under approval policy, an outer loop carries review, evals and "
        "production feedback back to design, and production signals start new work.",
-    # Figure 2's is proposed, not yet the paper's: the paper's two sentences, in
-    # their order, with what the drawing now adds after them. The owner approves
-    # it and the paper takes it before this ships (check-copy holds the two equal).
+    # Figure 2's describes the redrawn figure. bin/check-copy holds every one
+    # to the alt text the paper carries.
     2: "An agent in a sandbox, holding no credentials, proposes the scope it needs; the "
        "runtime authorization service decides within the bounds of the agent's profile, using "
        "trusted context: the agent and whoever it acts for, its task, any delegation and "
