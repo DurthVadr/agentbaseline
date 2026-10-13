@@ -11,7 +11,7 @@ showing it advertised something the page does not contain — and at the size a
 feed renders an unfurl, six cards of 8pt labels are noise rather than
 information. An unfurl has one job, which is to be legible at thumbnail size.
 """
-import argparse, base64, pathlib, re, subprocess, sys
+import argparse, base64, importlib.util, pathlib, re, subprocess, sys
 
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
 import controls_source
@@ -101,9 +101,14 @@ if PAPER_ARG == "software-factory":
         return (f'<text x="{x}" y="456" font-family="{LABEL}" font-size="13" font-weight="500" '
                 f'letter-spacing="1.6" fill="{FAINT}">{label}</text>'
                 f'<text x="{x}" y="486" font-family="{MONO}" font-size="19" fill="{INK}">{value}</text>')
+    # The four boundaries in the paper's order, read by the parser that numbers the
+    # figures' badges, so a reorder of the paper renumbers the card with them.
+    _spec = importlib.util.spec_from_file_location(
+        "build_figures", ROOT / "software-factory" / "figures" / "build-figures.py")
+    _figures = importlib.util.module_from_spec(_spec)
+    _spec.loader.exec_module(_figures)
     marks = ""
-    for i, (n, name) in enumerate([("1", "Identity and access"), ("2", "Supply chain"),
-                                   ("3", "Sandbox"), ("4", "Network")]):
+    for i, (n, name) in enumerate(sorted((n, b) for b, n in _figures.boundary_numbers().items())):
         x = 80 + i * 262
         marks += (f'<circle cx="{x + 11}" cy="555" r="11" fill="{ACCENT}"/>'
                   f'<text x="{x + 11}" y="560" text-anchor="middle" font-family="{MONO}" '
