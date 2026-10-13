@@ -529,7 +529,10 @@ SF_CSS = """
 .cover .tb { display:grid; grid-template-columns:repeat(4,auto) 1fr; margin:auto 0 8mm;
   border-top:.4pt solid var(--rule); border-bottom:.4pt solid var(--rule); }
 .cover .tb .cell { padding:3.2mm 6mm 3.4mm 0; margin:0; }
-.cover .tb .cell + .cell { border-left:.4pt solid var(--line); padding-left:4mm; }
+/* Every cell after the first takes a rule and a gutter. A class, not `.cell + .cell`:
+   Paged.js drops sibling-combinator rules when it paginates, which left the text
+   against the rule in every cell after the first. */
+.cover .tb .cell.sep { border-left:.4pt solid var(--line); padding-left:4mm; }
 .cover .tb dt { font-family:"Chakra Petch",sans-serif; font-weight:500; font-size:6.8pt;
   letter-spacing:.13em; text-transform:uppercase; color:var(--faint); margin:0 0 1.2mm; }
 .cover .tb dd { margin:0; font-family:"IBM Plex Mono",monospace; font-size:8.5pt;
@@ -1308,9 +1311,9 @@ def build_software_factory(paper, draft):
   <h1 class="covertitle">{title_html}</h1>
   <dl class="tb">
     <div class="cell"><dt>Builds on</dt><dd>Agent Baseline</dd></div>
-    <div class="cell"><dt>Subject</dt><dd>The software factory</dd></div>
-    <div class="cell"><dt>Version</dt><dd>{html.escape(fm["version"])}</dd></div>
-    <div class="cell"><dt>Published</dt><dd>{date}</dd></div>
+    <div class="cell sep"><dt>Subject</dt><dd>The software factory</dd></div>
+    <div class="cell sep"><dt>Version</dt><dd>{html.escape(fm["version"])}</dd></div>
+    <div class="cell sep"><dt>Published</dt><dd>{date}</dd></div>
   </dl>
   <p class="by">{byline}</p>
   <p class="meta">

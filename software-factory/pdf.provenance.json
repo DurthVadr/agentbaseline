@@ -1,8 +1,8 @@
 {
   "artifact": "static/software-factory.pdf",
-  "bytes": 651371,
+  "bytes": 651368,
   "pages": 26,
-  "sha256": "d24dd2ade2a77d222b68559a2d06d0c974ff32d1e23acb24ee6dd7c50082de43",
+  "sha256": "6624daf845921073ea2d3df99cdbd98e4ff0eb99d67760e1e254ebd90a060aba",
   "source_date_epoch": "1791892800",
   "built_by": {
     "producer": "Skia/PDF m154",
@@ -10,7 +10,7 @@
     "pandoc": "pandoc 3.10.1"
   },
   "inputs": {
-    "bin/build-pdf": "f90c876b25d5b374efcc5f404a1ee8423d44d45986534a72ae69f692d5d9d95a",
+    "bin/build-pdf": "fafe8c6a273268dad88722a5a337e17dc54c87988659d34b2d4b90f43b899e49",
     "bin/papers.py": "ac0594f45c4810fabe6d7b840ce8b5916a88d4da68e8e609f0d444bd9404ed1c",
     "bin/print-page.mjs": "119d3f84951a91d113b1b9bc1d22114ab339dbcee5c1f3a025e2c2d51babd47d",
     "bin/vendor/paged.polyfill.js": "f59f361802416c770d549a647958649af2cf6601999924bc00e4f507dad5269f",
