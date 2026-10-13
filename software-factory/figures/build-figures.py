@@ -9,8 +9,14 @@ central distinction:
 
   * GUARD (the site's accent) marks what is enforced outside the agent's loop —
     the four boundaries, the enforcement infrastructure and the record. Each
-    boundary carries its number on the corner of the part that enforces it:
-    1 Identity and access, 2 Supply chain, 3 Sandbox, 4 Network.
+    boundary carries its number on the corner of the part that enforces it, and
+    the numbers are the paper's: each boundary's place among the sections of
+    "The four security boundaries", read when the figures are built
+    (boundary_numbers), so reordering the paper renumbers every drawing. The
+    egress proxy enforces two boundaries' decisions (the glossary's "both the
+    network boundary and the identity and access boundary's authorization
+    decisions"), so it carries the network's mark on its corner and, as a ring
+    on its foot beside the authorized scope coming in, identity and access's.
   * WASH marks untrusted agent execution: the inside of a sandbox, and any
     agent that plans or watches from outside one.
 
@@ -23,22 +29,25 @@ which survive a greyscale print and leave the accent its one meaning:
   new words      outside a card, set on the tint
   carried over   drawn as the level before drew it
 
-Figure 2 draws the architecture once, as one row — the profile, the agent in
-its sandbox, the egress proxy, and what lies behind it — with the runtime
-authorization service beneath it as a decision, not a container: the profile's
-bounds and the agent's proposal (a request, never a grant) come into it from
-above, the rest of the trusted context (the agent and whoever it acts for, the
-task, any delegation, policy) from below as one box and one arrow; up out of
-it goes the scope the proxy enforces, and to its right high-impact actions to
-approval and, ending in a stop, anything outside policy. Figures 3 to 6 reuse
-that row, the service as the bar beneath it, and the record as its own band,
-so flipping Figure 3 → 4 → 5 shows what was added and who took over, never a
-re-layout. Figure 1 is the process the boundaries serve, so it has its own
-composition.
+Figures 2 to 6 are each one row — what starts the work, the agent in its
+sandbox, the egress proxy, and what lies behind it — between two trusted
+controls: supply chain scanning above it and the runtime authorization
+service beneath it. The service is a decision, not a container: what the agent
+(or, at Level 3, the orchestrator) proposes comes into it, and the scope it
+authorizes goes up to the proxy. Scanning checks the components a sandbox
+is built from, on the path that launches the agent, and every package the
+proxy fetches. Figures 3 to 6 share one skeleton and the record is its own
+band, so flipping Figure 3 → 4 → 5 shows what was added and who took over,
+never a re-layout. Figure 1 is the process the boundaries serve, so it has its
+own composition.
 
-Every label is the paper's vocabulary (final draft, 12 October 2026). Sizes are
-set for the PDF column: at 150 mm (425.2 pt) a 736-unit canvas prints at 0.578
-pt per unit, so the smallest run here (12.25 units) prints at 7.08 pt.
+The drawing names things; the paper and the caption explain them. A box is
+its name and at most one short phrase, an arrow a verb or two.
+
+Every label is the paper's vocabulary (final draft, 13 October 2026), with the
+lead author's wording from his redrawn figures where it is the plainer one.
+Sizes are set for the PDF column: at 150 mm (425.2 pt) a 736-unit canvas prints
+at 0.578 pt per unit, so the smallest run here (12.25 units) prints at 7.08 pt.
 
 Writes figure-N.svg and figure-N-narrow.svg for N = 1…6, each with the box
 manifest bin/check-figure reads and a geometry manifest for the checks that
@@ -140,6 +149,32 @@ ALT = {
        "error rate afterward confirms it or starts the next run.",
 }
 LS = 0.04                             # label tracking (em)
+
+# ── the four boundaries, numbered by the paper ───────────────────────────────
+# A boundary's number is its place among the "## Name: ..." sections under
+# "# The four security boundaries" in the paper, read here at build time, so a
+# reorder there renumbers every badge and key on the next build. The page's
+# own drawing (bin/build-architecture-drawing.mjs) and its boundary list read
+# the same sections.
+PAPER = ROOT / "software-factory" / "software-factory.md"
+SANDBOX, NETWORK, SUPPLY, IAM = "Sandbox", "Network", "Supply chain", "Identity and access"
+
+
+def boundary_numbers(paper=PAPER):
+    """{boundary: its number}, from the order of the paper's sections. Stops
+    the build when the section has other boundaries than the four drawn."""
+    src = paper.read_text(encoding="utf-8")
+    sec = re.search(r"^# The four security boundaries\n(.*?)(?=^# |\Z)", src, re.M | re.S)
+    order = [h.split(":", 1)[0].strip()
+             for h in re.findall(r"^## (.+?)(?:\s*\{#[^}]*\})?$", sec.group(1), re.M)] if sec else []
+    want = (SANDBOX, NETWORK, SUPPLY, IAM)
+    if sorted(order) != sorted(want):
+        raise SystemExit(f"{paper.name}: \"The four security boundaries\" has the sections "
+                         f"{order}; the figures number {list(want)}")
+    return {b: order.index(b) + 1 for b in want}
+
+
+BN = boundary_numbers()
 
 
 class SF(Fig):
@@ -245,12 +280,20 @@ class SF(Fig):
         self.shapes.append({"tag": tag, "kind": kind, "x": x, "y": y, "w": w, "h": h,
                             "solid": kind in self.SOLID, "sw": sw})
 
-    def badge(self, cx, cy, n, tag):
+    def badge(self, cx, cy, n, tag, light=False):
         """A boundary number: an accent disc with the numeral knocked out. It
         sits on the corner of the part that enforces the boundary, so it reads
-        as a mark on that part rather than as a word in its name."""
-        self.parts.append(f'<circle cx="{cx}" cy="{cy}" r="8" fill="{GUARD}"/>')
-        self.text(cx - 3.3, cy + 3.9, str(n), self.ns, C["plate"], "600", True, tag=f"#{tag}")
+        as a mark on that part rather than as a word in its name. `light`: a
+        ring the same size with the numeral in the accent, for a part that
+        enforces another boundary's decision (the proxy, identity and access's)."""
+        if light:
+            self.parts.append(f'<circle cx="{cx}" cy="{cy}" r="7.4" fill="{C["plate"]}" '
+                              f'stroke="{GUARD}" stroke-width="1.2"/>')
+            self.text(cx - 3.3, cy + 3.9, str(n), self.ns, GUARD, "600", True, tag=f"#{tag}")
+        else:
+            self.parts.append(f'<circle cx="{cx}" cy="{cy}" r="8" fill="{GUARD}"/>')
+            self.text(cx - 3.3, cy + 3.9, str(n), self.ns, C["plate"], "600", True,
+                      tag=f"#{tag}")
         self.shapes.append({"tag": f"badge{tag}", "kind": "badge", "x": cx - 8, "y": cy - 8,
                             "w": 16, "h": 16, "solid": True})
 
@@ -291,6 +334,14 @@ class SF(Fig):
                                   f'stroke="{GUARD}" stroke-width="2"/>')
         self.links.append({"tag": tag, "kind": kind, "pts": pts, "head": head and not bar,
                            "group": group, "free": free})
+
+    def dot(self, x, y, tag, colour=None, r=2.6):
+        """Where one connector joins another: a small disc, so a line that
+        runs into a path reads as joining it rather than branching off it.
+        Recorded as a mark, so no text may sit on it."""
+        self.parts.append(f'<circle cx="{x:g}" cy="{y:g}" r="{r}" fill="{colour or C["faint"]}"/>')
+        self.shapes.append({"tag": tag, "kind": "glyph", "x": x - r, "y": y - r, "w": 2 * r,
+                            "h": 2 * r, "solid": False})
 
     def loop_glyph(self, cx, cy, tag, r=6.5):
         """The inner loop as a mark: an open circle that comes back round on
@@ -346,25 +397,55 @@ def mid(a):
     return (a[0] + a[1]) / 2
 
 
-# What the proxy lets through — the same four at every level. The admission
-# point is the paper's generic term ("an admission point, such as a registry or
-# a dedicated firewall"), so the label holds from Level 1, where it is an
-# approved registry, to Level 3, where it is usually a supply chain firewall.
-DEST = [  # (name, gloss lines, kind, boundary)
-    ("Source control", ["the repository"], "card", None),
-    ("Services", ["the task needs"], "card", None),
-    ("Model gateway", ["approved models"], "guard", None),
-    ("Admission point", ["approved,", "scanned", "packages"], "guard", 2),
+# What the proxy lets through, the same four at every level, by name only.
+# Packages come from the approved registries, but only through the proxy's
+# check with supply chain scanning (sc_card), a trusted control, never a
+# destination.
+DEST = [  # (name lines, gloss lines, kind)
+    (["Source control"], [], "card"),
+    (["Services"], [], "card"),
+    (["Model gateway"], [], "guard"),
+    (["Package", "registries"], [], "card"),
 ]
+DEST_H = 44
 
 
 def card_h(gloss, name=""):
-    """A destination card's height: one name line and one gloss line is 44;
-    each further line adds its leading."""
+    """A card's height: one name line and one gloss line is 44; each further
+    line adds its leading."""
     names = len(name) if isinstance(name, (list, tuple)) else 1
     # each further line at its leading (15 for names, 14.5 for glosses),
     # rounded up to even units so every fan branch lands on a whole unit
     return 44 + 16 * (names - 1) + 16 * max(len(gloss) - 1, 0)
+
+
+# ── supply chain scanning, and the proxy that checks with it ─────────────────
+# The supply chain boundary's trusted control; the glossary's Supply Chain
+# Firewall is one way to build it. It has the card the runtime authorization
+# service has, with the supply chain mark. It checks the components a sandbox
+# is built from, on the path that launches the agent, and the proxy checks
+# every package it fetches with it, both ways. Its line is the checklist's
+# ("approved versions allowed by the agent's profile").
+SC_NAME = "Supply chain scanning"
+SC_G = "approved versions the profile allows"
+SC_LAUNCH, SC_PKG = "checks components", "checks packages"
+
+
+def sc_card(f, x0, y0, x1, lines=(SC_G,), tag="sc"):
+    """Supply chain scanning as a card, its line set in `lines`; returns
+    its bottom."""
+    h = card_h(lines)
+    f.node(x0, y0, x1 - x0, h, SC_NAME, lines, kind="guard", num=BN[SUPPLY], tag=tag)
+    return y0 + h
+
+
+def proxy_card(f, x0, y0, x1, y1, gloss, grant_x, kind="guard", tag="proxy"):
+    """The egress proxy: the network's mark on its corner and, as a ring on
+    its foot just right of where the authorized scope (at grant_x) comes in,
+    the identity and access mark of the decision it enforces. The card keeps
+    its gloss clear of the ring."""
+    f.node(x0, y0, x1 - x0, y1 - y0, "Egress proxy", gloss, kind=kind, num=BN[NETWORK], tag=tag)
+    f.badge(grant_x + 14, y1, BN[IAM], tag, light=True)
 
 
 # The key's own text, measured: Chrome, the site's IBM Plex Serif 400 at 12.25
@@ -378,7 +459,11 @@ KEY_W = {"Enforced outside the agent’s loop:": 194.34, "Identity and access": 
 KEY_GAP = 14
 
 
-def legend(f, x, y, width, marks=((1, "Identity and access"), (3, "Sandbox"), (4, "Network"))):
+# the key, in the paper's order
+ALL_MARKS = tuple(sorted((n, b) for b, n in BN.items()))
+
+
+def legend(f, x, y, width, marks=ALL_MARKS):
     """The key, once, for the one thing a reader can't read off the drawing:
     the numbered marks are boundaries, enforced outside the agent's loop. It
     keys only the boundaries the figure draws. The arrows that matter carry
@@ -406,13 +491,10 @@ def legend(f, x, y, width, marks=((1, "Identity and access"), (3, "Sandbox"), (4
     return by + 6
 
 
-ALL_MARKS = ((1, "Identity and access"), (2, "Supply chain"), (3, "Sandbox"), (4, "Network"))
-
-
 def key_grid(f, x, y, marks=ALL_MARKS, cols=2):
-    """Figure 2's key in a block: its heading, then the marks in a grid, each
-    column as wide as its widest measured name, one gap between. For a figure
-    whose free space is a corner rather than a line."""
+    """The key in a block: its heading, then the marks in a grid, each column
+    as wide as its widest measured name, one gap between. For a figure whose
+    free space is a corner rather than a line."""
     k = f.gs / GLOSS
     head = "Enforced outside the agent’s loop:"
     f.text(x, y, head, f.gs, C["ink"], tag="lg.h")
@@ -438,34 +520,39 @@ INK, SOFT, FAINT, PLATE = C["ink"], C["soft"], C["faint"], C["plate"]
 NEWT = "#DCE4BE"
 KEY_W.update({"new at Level 1": 81.19, "new at Level 2": 81.19, "new at Level 3": 81.19,
               "as in Figure 2": 77.7, "as at Level 1": 69.94, "as at Level 2": 69.94})
-# Approval reads the same in Figures 2, 4, 5 and 6 (the glossary's approval
-# policy: "approved automatically or waits for a person"); the proxy, in every
-# level, where its card is too narrow for Figure 2's longer gloss.
-APPROVAL_G = ["a person, or automatic;", "never the agent"]
-PROXY_G = ["default-deny,", "enforces it,", "attaches", "credentials"]
+# The same words wherever the same part is drawn. Approval is the glossary's
+# approval policy ("approved automatically or waits for a person"); the
+# service's line is the lead author's ("authorizes each task's scope"); the
+# proxy's is the paper's default-deny, and in Figure 2, where who holds the
+# credentials is the point, where they are attached.
+APPROVAL_G = ["automatic or a person"]
+AUTH_G = "authorizes each task’s scope"
+PROXY_G = ["default-deny"]
+F2_PROXY_G = ["default-deny,", "attaches credentials"]
 
 # Words set on the tint, measured: Chrome, the site's fonts at the size each is
-# set, getComputedTextLength, without letter-spacing (12 Oct 2026). The tint is
-# drawn to the measured width; figkit's estimate overstates long runs by up to a
-# tenth, which would leave a ragged tail of tint. A run that isn't here stops
-# the build rather than guessing.
+# set, getComputedTextLength, without letter-spacing (12–13 Oct 2026). The tint
+# is drawn to the measured width; figkit's estimate overstates long runs by up
+# to a tenth, which would leave a ragged tail of tint. A run that isn't here
+# stops the build rather than guessing.
 TINT_W = {
     "label|500|12.25|OUTER LOOP": 73.09,
     "label|500|12.25|THE FACTORY": 77.53,
     "label|500|12.5|OUTER LOOP": 74.58,
     "label|500|12.5|THE FACTORY": 79.11,
-    "serif|400|12.25|a shared service with its own identity": 213.55,
+    "serif|400|12.25|a shared service": 93.75,
+    "serif|400|12.25|all four boundaries’ records, linked by run": 242.52,
     "serif|400|12.25|and task scope": 85.08,
     "serif|400|12.25|production signals start new work": 195.89,
     "serif|400|12.25|proposes profile": 93.53,
-    "serif|400|12.25|records from all four boundaries, linked by run; evals track quality": 381.53,
     "serif|400|12.25|review feedback drives the next run": 205.91,
-    "serif|400|12.25|telemetry and evals across runs; monitoring of running agents": 359.33,
+    "serif|400|12.25|telemetry and evals across all runs": 199.83,
     "serif|400|12.25|the developer drives the next run": 190.73,
+    "serif|400|12.5|a shared service": 95.67,
+    "serif|400|12.5|all four boundaries’ records, by run": 207.36,
     "serif|400|12.5|production signals start new work": 199.89,
-    "serif|400|12.5|records from all four boundaries, by run": 235.69,
     "serif|400|12.5|review feedback drives the next run": 210.11,
-    "serif|400|12.5|telemetry, evals, monitoring of agents": 220.86,
+    "serif|400|12.5|telemetry and evals across all runs": 203.91,
     "serif|400|12.5|the developer drives the next run": 194.63,
 }
 
@@ -502,6 +589,10 @@ class CF(SF):
             wd = TINT_W[key] + len(s) * ls * size
             self.parts.append(f'<rect x="{x - 3:g}" y="{y - size * 0.84:.2f}" width="{wd + 6:.2f}" '
                               f'height="{size * 1.14:.2f}" rx="2" fill="{NEWT}"/>')
+            w = super().text(x, y, s, size, fill, weight, mono, ls, tag, href, face)
+            # the run as drawn: its tint, which is measured, not figkit's estimate
+            self.boxes[-1].update(x=x - 3, w=wd + 6)
+            return w
         return super().text(x, y, s, size, fill, weight, mono, ls, tag, href, face)
 
     def box(self, x, y, w, h, kind, tag, fill=None):
@@ -537,11 +628,14 @@ class CF(SF):
                             "solid": False, "sw": sw})
 
     def link(self, pts, kind="flow", head=True, tag="", group=None, bar=False, free=False,
-             heavy=False, stop=False):
+             heavy=False, stop=False, both=False, dot=False):
         """SF's connectors, plus watch (dotted, no head: watching, not acting)
         and heavy (Level 3's proposal, the line that matters most). A grant,
         the decision going out, is solid accent and heavier than any flow:
-        dashes already mean the frames, the outer loop and a stop."""
+        dashes already mean the frames, the outer loop and a stop. `both`
+        heads both ends: a check that goes and comes back (the proxy's
+        packages, through supply chain scanning). `dot` marks where a
+        headless connector ends on another, joining it."""
         new = self.state in ("new", "newtext")
         dash = ""
         if kind == "grant":
@@ -559,6 +653,8 @@ class CF(SF):
             col, sw, m = INK, 2.25, "H"
         d = "M" + " L".join(f"{x:g} {y:g}" for x, y in pts)
         mk = f' marker-end="url(#{self.key}-{m})"' if head and not bar and m else ""
+        if both and mk:
+            mk += f' marker-start="url(#{self.key}-{m})"'
         self.parts.append(f'<path d="{d}" fill="none" stroke="{col}" stroke-width="{sw}"'
                           f'{dash}{mk}/>')
         if bar:  # the stop is enforcement outside the agent's loop, so it takes the accent
@@ -581,15 +677,20 @@ class CF(SF):
                                     "y": mark[1], "w": mark[2], "h": mark[3], "solid": False})
         self.links.append({"tag": tag, "kind": "flow" if kind == "watch" else kind, "pts": pts,
                            "head": bool(head and not bar and m), "group": group, "free": free})
+        if dot:
+            self.dot(*pts[-1], f"{tag}.dot", col)
 
 
 # ── shared pieces ────────────────────────────────────────────────────────────
 def node_c(f, x, y, w, h, name, kind="card", num=None, tag=""):
-    """A card carried over with its name only, centred in the same box it had."""
+    """A card with its name only, centred in the box, on one line or two."""
     f.box(x, y, w, h, kind, tag)
     if num:
         f.badge(x, y, num, tag)
-    f.name(x + PAD, y + h / 2 + 4.5, name, f"{tag}.n0")
+    names = name if isinstance(name, (list, tuple)) else [name]
+    y0 = y + h / 2 + 4.5 - 7.5 * (len(names) - 1)
+    for i, n in enumerate(names):
+        f.name(x + PAD, y0 + 15 * i, n, f"{tag}.n{i}")
 
 
 def record(f, x0, y0, x1, y1, tag="obs", two=False):
@@ -621,46 +722,78 @@ def delta_key(f, x, y, prev, gap=19):
 # ═════════════════════════════════════════════════════════════════════════════
 # The level skeleton. Columns: A who or what starts the work · B what
 # orchestrates and runs it · C the sandbox(es) · D the egress proxy · E what it
-# lets through. Rows: the frame where agents run, the runtime authorization
-# service as a bar beneath it, the outputs, the outer loop, the record.
+# lets through. Rows: supply chain scanning above the frame, the frame where
+# agents run, the runtime authorization service as a bar beneath it, the
+# outputs, the outer loop, the record.
 # ═════════════════════════════════════════════════════════════════════════════
 class R:
     A, B, BUS_B, C, D, BUS_E, E = (0, 112), (134, 234), 246, (264, 436), (456, 560), 582, (600, 720)
     FX = (122, 572)
-    FY0, LABY = 10, 30
-    ROW, MID = (46, 198), 122
-    PROXY = (456, 68, 560, 176)
-    LANE = (216, 276)
-    FY1, FY1_SHORT = 284, 214
-    # the bar reaches back to x 56, so Figure 2's "using trusted context" fits
-    # on its one line; nothing is drawn at x 56–134 under the frame. It sits
-    # 42 under Level 3's full frame, room for "authorized / scope" in two
-    # lines set against the grant, in the same place at every level.
-    BAR = (56, 326, 510, 378)
-    GRANT_X, GRANT_LY = 484, (300, 314.5)
-    PROP_X = 340              # the agent proposes the scope it needs, as in Figure 2
-    EXIT_X, EXIT_Y = 536, 394
-    OUT = (412, 472)
-    PR, APPROVAL, SLOT3, SLOT4 = (134, 238), (258, 432), (452, 548), (568, 672)
+    # supply chain scanning, above the frame and across the sandbox and
+    # proxy columns, as the service is a bar beneath them. Its component check
+    # drops at BUS_B into the path that starts the agent (the developer's
+    # arrow, the workflow's, the execution layer's bus), the same x at every
+    # level; its package check drops into the proxy. Each is labelled between
+    # the card and the frame.
+    SC = (236, 6, 560, 50)
+    PKG_X, SC_LY = 530, 67
+    # the frame's label sits in its top left-hand corner, set in lines short
+    # enough to stay left of the component check's line
+    FY0, LABX, LABY = 76, 134, 96
+    # the row starts 30 under the frame's label, so a label set on two lines
+    # (Levels 1 and 2) clears the sandbox's mark
+    ROW, MID = (126, 270), 198
+    PROXY = (456, 168, 560, 228)
+    LANE = (288, 348)
+    FY1, FY1_SHORT = 356, 286
+    # the bar reaches back to x 56; nothing is drawn at x 56–134 under the
+    # frame. It sits 42 under Level 3's full frame, room for "authorized /
+    # scope" in two lines set against the grant, in the same place at every
+    # level.
+    BAR = (56, 398, 510, 442)
+    GRANT_X, GRANT_LY = 484, (372, 386.5)
+    PROP_X, PROP_LY = 340, 342   # the agent proposes the scope it needs, as in Figure 2
+    EXIT_X, EXIT_Y = 536, 458
+    OUT = (476, 536)
+    PR, APPROVAL, SLOT3, SLOT4 = (134, 238), (258, 432), (452, 548), (568, 700)
     # the outer loop's label sits above its return line, right of the pull
     # request's leg, at the same place in every level
-    LOOPY, LOOP_X, LOOP_LABEL_X = 512, 36, 198
-    FLOOR = (528, 574)
-    H = 576
+    LOOPY, LOOP_X, LOOP_LABEL_X = 576, 36, 198
+    FLOOR = (592, 638)
+    H = 640
     KEY = (600, 20)
 
 
-def r_frame(f, full=False, label="", gloss="", s_label="old"):
+def r_frame(f, full=False, label=(), gloss=(), s_label="old"):
+    """The frame and, in its corner, its label and gloss, each given as the
+    lines it is set in."""
     y1 = R.FY1 if full else R.FY1_SHORT
     f.box(R.FX[0], R.FY0, R.FX[1] - R.FX[0], y1 - R.FY0, "zone", "frame")
+    y = R.LABY
     with f.at("newtext" if s_label == "new" else "old"):
-        w = f.lab(R.B[0], R.LABY, label, "frame.l")
-    if gloss:
-        with f.at("newtext" if s_label in ("new", "gloss") else "old"):
-            f.gloss(R.B[0] + w + 8, R.LABY, gloss, "frame.g")
+        for i, s in enumerate(label):
+            f.lab(R.LABX, y, s, f"frame.l{i}")
+            y += 14.5
+        for i, s in enumerate(gloss):
+            f.gloss(R.LABX, y, s, f"frame.g{i}")
+            y += 14.5
 
 
-LEVEL_AUTH_G = "decides what access each task gets, using trusted context"   # Figure 2's
+def r_sc(f, launch=None):
+    """Supply chain scanning above the frame. Its component check drops
+    into the path that starts the agent (`launch`: the point it joins, (x,
+    y)) or, where the figure draws no such path, into the sandbox's top
+    (`launch` (x, None)); the proxy's package check goes and comes back. Each
+    label sits right of its line, or left where it would meet the other."""
+    x0, y0, x1, y1 = R.SC
+    sc_card(f, x0, y0, x1)
+    lx, ly = launch or (R.BUS_B, R.MID)
+    f.link([(lx, y1), (lx, ly or R.ROW[0])], tag="sc.launch", head=ly is None, dot=ly is not None)
+    lw = f.width(SC_LAUNCH, "gloss")
+    f.gloss(lx + 8 if lx + 8 + lw < R.PKG_X - 8 else lx - 8 - lw, R.SC_LY, SC_LAUNCH,
+            "sc.launch.l")
+    f.link([(R.PKG_X, y1), (R.PKG_X, R.PROXY[1])], tag="sc.pkg", both=True)
+    f.gloss(R.PKG_X + 8, R.SC_LY, SC_PKG, "sc.pkg.l")
 
 
 def r_grant(f, x, y0, y1):
@@ -671,14 +804,14 @@ def r_grant(f, x, y0, y1):
         f.gloss(x - 8 - f.width(s_, "gloss"), R.GRANT_LY[i], s_, f"grant.l{i}")
 
 
-def r_bar(f, stack=False):
+def r_bar(f, stack=False, gloss=AUTH_G):
     """The runtime authorization service: a decision, drawn as Figure 2 draws
     it — what the agent proposes comes in, the scope it authorizes goes up to
     the proxy that enforces it. Behind a stack of proxies the grant ends on the
     back card, so its head is not drawn over by the cards in front."""
     x0, y0, x1, y1 = R.BAR
-    f.node(x0, y0, x1 - x0, y1 - y0, "Runtime authorization service", [LEVEL_AUTH_G],
-           kind="guard", num=1, tag="auth")
+    f.node(x0, y0, x1 - x0, y1 - y0, "Runtime authorization service", [gloss],
+           kind="guard", num=BN[IAM], tag="auth")
     r_grant(f, R.GRANT_X, y0, R.PROXY[3] + (6 if stack else 0))
 
 
@@ -688,31 +821,26 @@ def r_proxy(f, stack=False, s="old"):
         if stack:
             for d in (6, 3):
                 f.ghost(x0 + d, y0 + d, x1 - x0, y1 - y0, f"pghost{d}", "proxy")
-        f.node(x0, y0, x1 - x0, y1 - y0, "Egress proxy", PROXY_G,
-               kind="guardfill" if stack else "guard", num=4, tag="proxy")
+        proxy_card(f, x0, y0, x1, y1, PROXY_G, R.GRANT_X, kind="guardfill" if stack else "guard")
 
 
-def r_dest(f, names_only=False):
-    """The four destinations; from Level 2 the sublines, which repeat Level 1's
-    word for word, are dropped, and each name sits centred in the box it had."""
+def r_dest(f, dest=DEST):
+    """What the proxy lets through, by name, fed down one bus."""
     ys, y = [], R.ROW[0]
-    for i, (n, g, kind, num) in enumerate(DEST):
-        h = card_h(g, n)
-        if names_only:
-            # each card keeps its centre, so names and arrows stay put between
-            # tabs; a card Level 1 drew taller for its gloss closes to the
-            # others' height round that centre rather than standing empty
-            hh = min(h, card_h([]))
-            node_c(f, R.E[0], y + (h - hh) / 2, R.E[1] - R.E[0], hh, n, kind=kind, num=num,
-                   tag=f"dest{i}")
+    for i, (n, g, kind) in enumerate(dest):
+        if g:
+            h = card_h(g, n)
+            f.node(R.E[0], y, R.E[1] - R.E[0], h, n, g, kind=kind, tag=f"dest{i}")
         else:
-            f.node(R.E[0], y, R.E[1] - R.E[0], h, n, g, kind=kind, num=num, tag=f"dest{i}")
-        ys.append(y + h / 2)
+            h = DEST_H
+            node_c(f, R.E[0], y, R.E[1] - R.E[0], h, n, kind=kind, tag=f"dest{i}")
+        ys.append((y + h / 2, kind))
         y += h + STACK
     f.link([(R.PROXY[2], R.MID), (R.BUS_E, R.MID)], head=False, tag="bus.in", group="bus")
-    f.link([(R.BUS_E, ys[0]), (R.BUS_E, ys[-1])], head=False, tag="bus", group="bus")
-    for i, yy in enumerate(ys):
-        f.link([(R.BUS_E, yy), (R.E[0], yy)], tag=f"bus.{i}", group="bus")
+    f.link([(R.BUS_E, ys[0][0]), (R.BUS_E, ys[-1][0])], head=False, tag="bus", group="bus")
+    for i, (yy, kind) in enumerate(ys):
+        f.link([(R.BUS_E, yy), (R.E[0], yy)], tag=f"bus.{i}", group="bus",
+               bar=(kind == "blocked"))
 
 
 def r_sandbox(f, label, name, gloss, s="old", stack=False, loop=("inner loop,", "until it passes")):
@@ -724,12 +852,12 @@ def r_sandbox(f, label, name, gloss, s="old", stack=False, loop=("inner loop,", 
                 f.ghost(x0 + d, y0 + d, x1 - x0 - 8, y1 - y0 - 8, f"ghost{d}", "sandbox")
             x1, y1 = x1 - 8, y1 - 8
         f.box(x0, y0, x1 - x0, y1 - y0, "sandbox", "sbx")
-        f.badge(x0, y0, 3, "sbx")
+        f.badge(x0, y0, BN[SANDBOX], "sbx")
     f.lab(x0 + PAD + 4, y0 + 24, label, "sbx.l")
     f.name(x0 + PAD + 4, y0 + 52, name, "sbx.n")
     for i, g in enumerate(gloss):
         f.gloss(x0 + PAD + 4, y0 + 68 + i * 14.5, g, f"sbx.g{i}")
-    gy = y1 - 30
+    gy = y1 - 28
     f.loop_glyph(x0 + PAD + 11, gy - 4, "sbx.loop")
     f.gloss(x0 + PAD + 26, gy, loop[0], "sbx.lp0")
     f.gloss(x0 + PAD + 26, gy + 14.5, loop[1], "sbx.lp1")
@@ -739,7 +867,8 @@ def r_proposes(f):
     """The agent proposes the scope it needs: Figure 2's arrow, at every level
     where the agent's own request is the only proposal."""
     f.link([(R.PROP_X, R.ROW[1]), (R.PROP_X, R.BAR[1])], tag="propose")
-    f.gloss(R.PROP_X - 8 - f.width("proposes scope", "gloss"), 262, "proposes scope", "propose.l")
+    f.gloss(R.PROP_X - 8 - f.width("proposes scope", "gloss"), R.PROP_LY, "proposes scope",
+            "propose.l")
 
 
 def r_pr_exit(f):
@@ -779,38 +908,39 @@ def r_floor(f, gloss, s_gloss="old"):
 
 # ── Level 1 ──────────────────────────────────────────────────────────────────
 def r_level1(f):
-    r_frame(f, label="Developer’s machine", gloss="or a remote environment")
+    r_frame(f, label=["Developer’s", "machine"], gloss=["or a remote", "environment"])
+    r_sc(f)
     r_bar(f)
     with f.at("new"):
-        f.node(R.A[0], R.MID - 40, R.A[1] - R.A[0], 80, "Developer",
-               ["directs the", "agent, reviews", "its output"], tag="dev")
+        f.node(R.A[0], R.MID - 36, R.A[1] - R.A[0], 72, "Developer", ["kicks off", "each run"],
+               tag="dev")
         f.link([(R.A[1], R.MID), (R.C[0], R.MID)], tag="directs")
-    r_sandbox(f, "Sandbox", "Coding agent", ["profile across its", "harness and sandbox,",
-                                              "workflow in a skill"])
+    r_sandbox(f, "Sandbox", "Coding agent", ["configured by", "its profile"])
     r_proposes(f)
     r_proxy(f)
     f.link([(R.C[1], R.MID), (R.PROXY[0], R.MID)], tag="traffic")
     r_dest(f)
     with f.at("new"):
         r_pr_exit(f)
-        out_card(f, R.PR, "Pull request", ["the developer", "reviews it"], "pr")
-        r_outer(f, mid(R.PR), R.MID + 40)
+        out_card(f, R.PR, "Pull request", ["reviewed by", "the developer"], "pr")
+        r_outer(f, mid(R.PR), R.MID + 36)
     r_outer_labels(f, "the developer drives the next run", "new", "new")
     # Figure 3 is the first level to draw all four boundaries, so it keys them,
     # in the corner Levels 2 and 3 fill with approval and what follows it
     key_grid(f, 300, R.OUT[0] + 12)
-    r_floor(f, "harness logs, identity and proxy records, reviewed by the developer")
+    r_floor(f, "harness logs, identity and proxy records")
 
 
 # ── Level 2 ──────────────────────────────────────────────────────────────────
 def r_level2(f):
-    r_frame(f, label="The factory", gloss="a shared service with its own identity", s_label="new")
+    r_frame(f, label=["The factory"], gloss=["a shared service"], s_label="new")
+    r_sc(f)
     r_bar(f, stack=True)
     with f.at("new"):
-        f.node(R.A[0], R.MID - 48, R.A[1] - R.A[0], 96, "Request",
+        f.node(R.A[0], R.MID - 38, R.A[1] - R.A[0], 76, "Request",
                ["or an event,", "a schedule", "or a ticket"], tag="req")
-        f.node(R.B[0], R.MID - 48, R.B[1] - R.B[0], 96, "Workflow",
-               ["on CI/CD or", "a durable", "execution", "engine"], tag="wf")
+        f.node(R.B[0], R.MID - 38, R.B[1] - R.B[0], 76, "Workflow",
+               ["on CI/CD or", "durable", "execution"], tag="wf")
         f.link([(R.A[1], R.MID), (R.B[0], R.MID)], tag="starts")
         f.link([(R.B[1], R.MID), (R.C[0], R.MID)], tag="launches")
     r_sandbox(f, "Sandbox per run", "Coding agent", ["own identity,", "authenticated profile"],
@@ -818,7 +948,7 @@ def r_level2(f):
     r_proposes(f)
     r_proxy(f, stack=True, s="new")
     f.link([(R.C[1] - 8, R.MID), (R.PROXY[0], R.MID)], tag="traffic")
-    r_dest(f, names_only=True)
+    r_dest(f)
     r_pr_exit(f)
     with f.at("new"):
         out_card(f, R.PR, "Pull request", ["reviewed", "until ready"], "pr")
@@ -826,23 +956,30 @@ def r_level2(f):
         out_card(f, R.SLOT3, "Merge", ["approved", "changes"], "merge")
         out_link(f, R.PR, R.APPROVAL)
         out_link(f, R.APPROVAL, R.SLOT3)
-    r_outer(f, mid(R.PR), R.MID + 48)
+    r_outer(f, mid(R.PR), R.MID + 38)
     r_outer_labels(f, "review feedback drives the next run", "old", "new")
-    r_floor(f, "records from all four boundaries, linked by run; evals track quality", "new")
+    r_floor(f, "all four boundaries’ records, linked by run", "new")
 
 
 # ── Level 3 ──────────────────────────────────────────────────────────────────
-SIG = (R.A[0], 106, R.A[1], 218)           # signals and requests
+SIG = (R.A[0], 186, R.A[1], 290)           # signals and requests
 ORCH = (R.B[0], R.LANE[0], R.B[1], R.LANE[1])
-FLAGS_Y = 208
+FLAGS_Y = 279                              # between the row and the lane
 
 
 def r_level3(f):
-    r_frame(f, full=True, label="The factory")
+    r_frame(f, full=True, label=["The factory"])
+    # each agent in its own sandbox; what they're built from is checked on
+    # the way in, so scanning's line joins the bus that starts them
+    x0, x1 = R.C
+    hh = (R.ROW[1] - R.ROW[0] - 2 * STACK) / 3
+    tops = [R.ROW[0] + i * (hh + STACK) for i in range(3)]
+    mids = [t + hh / 2 for t in tops]
+    r_sc(f, launch=(R.BUS_B, mids[0]))
     r_bar(f, stack=True)
     with f.at("new"):
-        x0, y0, x1, y1 = SIG
-        f.node(x0, y0, x1 - x0, y1 - y0, ["Signals and", "requests"],
+        x0_, y0_, x1_, y1_ = SIG
+        f.node(x0_, y0_, x1_ - x0_, y1_ - y0_, ["Signals and", "requests"],
                ["incidents,", "scanner", "findings,", "evals"], tag="sig")
     # the execution layer (Level 2's durable system) starts each agent
     eb = (R.B[0], R.ROW[0], R.B[1] - R.B[0], R.ROW[1] - R.ROW[0])
@@ -857,24 +994,17 @@ def r_level3(f):
         f.link([(px, ORCH[3]), (px, R.BAR[1])], tag="propose", heavy=True)
     with f.at("newtext"):
         for i, s in enumerate(("proposes profile", "and task scope")):
-            f.gloss(px + 8, 296 + i * 14.5, s, f"propose.l{i}")
-    # each agent in its own sandbox
-    x0, x1 = R.C
-    hh = (R.ROW[1] - R.ROW[0] - 2 * STACK) / 3
-    mids = []
+            f.gloss(px + 8, R.GRANT_LY[i], s, f"propose.l{i}")
     with f.at("new"):
-        for i in range(3):
-            y0 = R.ROW[0] + i * (hh + STACK)
+        for i, y0 in enumerate(tops):
             f.box(x0, y0, x1 - x0, hh, "sandbox", f"sbx{i}")
-            f.badge(x0, y0, 3, f"sbx{i}")
-            mids.append(y0 + hh / 2)
-    for i in range(3):
-        y0 = R.ROW[0] + i * (hh + STACK)
-        f.name(x0 + PAD + 4, y0 + 19, f"Agent, task {i + 1}", f"sbx{i}.n")
-        f.gloss(x0 + PAD + 4, y0 + 34, "own identity and scope", f"sbx{i}.g")
-        f.loop_glyph(x1 - 16, y0 + 14, f"sbx{i}.loop")
+            f.badge(x0, y0, BN[SANDBOX], f"sbx{i}")
+    for i, y0 in enumerate(tops):
+        f.name(x0 + PAD + 4, y0 + 18, f"Agent, task {i + 1}", f"sbx{i}.n")
+        f.gloss(x0 + PAD + 4, y0 + 32.5, "own identity and scope", f"sbx{i}.g")
+        f.loop_glyph(x1 - 16, y0 + 13, f"sbx{i}.loop")
     ey = mid(R.ROW)
-    f.link([(R.B[1], ey), (R.BUS_B, ey)], head=False, tag="exec.bus", group="xb")
+    f.link([(R.B[1], ey), (R.BUS_B, ey)], head=False, tag="exec.bus", group="xb", dot=True)
     f.link([(R.BUS_B, mids[0]), (R.BUS_B, mids[-1])], head=False, tag="xbus", group="xb")
     for i, m in enumerate(mids):
         f.link([(R.BUS_B, m), (R.C[0], m)], tag=f"xb{i}", group="xb")
@@ -882,24 +1012,24 @@ def r_level3(f):
     # work back into signals and requests, as an untrusted request
     with f.at("new"):
         f.node(R.C[0], R.LANE[0], R.C[1] - R.C[0], R.LANE[1] - R.LANE[0], "Monitoring agent",
-               ["flags new work,", "never grants"], kind="agent", tag="mon")
+               ["watches work", "in progress"], kind="agent", tag="mon")
         f.link([(mid(R.C), R.LANE[0]), (mid(R.C), R.ROW[1])], "watch", tag="watch")
         f.link([(R.C[0] + 20, R.LANE[0]), (R.C[0] + 20, FLAGS_Y), (SIG[2], FLAGS_Y)], tag="flags")
     r_proxy(f, stack=True)
     f.link([(R.C[1], R.MID), (R.PROXY[0], R.MID)], tag="traffic")
-    r_dest(f, names_only=True)
+    r_dest(f)
     r_pr_exit(f)
     out_card(f, R.PR, "Pull request", ["reviewed", "until ready"], "pr")
     out_card(f, R.APPROVAL, "Approval", APPROVAL_G, "appr")
     out_link(f, R.PR, R.APPROVAL)
     with f.at("new"):
         out_card(f, R.SLOT3, "Deploy", ["can be", "rolled back"], "deploy")
-        out_card(f, R.SLOT4, "Production", ["sends back", "signals"], "prod")
+        out_card(f, R.SLOT4, "Production", ["emits incidents", "and metrics"], "prod")
         out_link(f, R.APPROVAL, R.SLOT3)
         out_link(f, R.SLOT3, R.SLOT4)
         r_outer(f, mid(R.SLOT4), SIG[3])
     r_outer_labels(f, "production signals start new work", "old", "new")
-    r_floor(f, "telemetry and evals across runs; monitoring of running agents", "new")
+    r_floor(f, "telemetry and evals across all runs", "new")
 
 
 PREV = {1: "as in Figure 2", 2: "as at Level 1", 3: "as at Level 2"}
@@ -931,55 +1061,102 @@ class NR:
     PROP_X = 150
     GUTTER = 16
     KEY = (232, 30)
+    # supply chain scanning, between the start card and the frame, clear
+    # of the line from one to the other. Its component check drops right of
+    # the frame's label and turns into the path that starts the agent; its
+    # package check drops down the frame's right-hand side, which is empty
+    # above the proxy
+    SC = (96, 352)
+    LAUNCH_X, PKG_X = 262, 328
+
+
+def narrow_sc(f, y):
+    """Supply chain scanning on a phone, its line in two, its component
+    check's label under it, left of the line; returns its foot."""
+    bot = sc_card(f, NR.SC[0], y, NR.SC[1], ("approved versions", "the profile allows"))
+    f.gloss(NR.LAUNCH_X - 8 - f.width(SC_LAUNCH, "gloss"), bot + 18, SC_LAUNCH, "sc.launch.l")
+    return bot
+
+
+def narrow_launch(f, bot, y_turn, join=None, into=None):
+    """Scanning's component check: down the right-hand side, then left
+    at y_turn, either joining the line that launches the agent (`join`, its
+    x) or turning down into the sandbox's top (`into`, (x, top))."""
+    if into:
+        x, top = into
+        f.link([(NR.LAUNCH_X, bot), (NR.LAUNCH_X, y_turn), (x, y_turn), (x, top)],
+               tag="sc.launch")
+    else:
+        f.link([(NR.LAUNCH_X, bot), (NR.LAUNCH_X, y_turn), (join, y_turn)], tag="sc.launch",
+               head=False, dot=True)
+
+
+def narrow_pkg(f, bot, py0):
+    """The proxy's package check, both ways, labelled just above the proxy."""
+    f.link([(NR.PKG_X, bot), (NR.PKG_X, py0)], tag="sc.pkg", both=True)
+    for i, s in enumerate(("checks", "packages")):
+        f.gloss(NR.PKG_X - 8 - f.width(s, "gloss"), py0 - 22.5 + i * 14.5, s, f"sc.pkg.l{i}")
 
 
 def narrow_level(n):
-    f = CF(f"sf{n + 2}n", NW, 1400, CAPTION[n + 2], ALT[n + 2], narrow=True, level=n)
+    f = CF(f"sf{n + 2}n", NW, 1600, CAPTION[n + 2], ALT[n + 2], narrow=True, level=n)
     y = 10
-    a = {1: ("Developer", ["directs the agent and", "reviews its output"]),
+    a = {1: ("Developer", ["kicks off each run"]),
          2: ("Request", ["or an event, a schedule", "or a ticket"]),
          3: ("Signals and requests", ["incidents, scanner", "findings, evals"])}[n]
+    ah = card_h(a[1])
     with f.at("new"):
-        f.node(NR.A[0], y, NR.A[1] - NR.A[0], 66, a[0], a[1], tag="start")
+        f.node(NR.A[0], y, NR.A[1] - NR.A[0], ah, a[0], a[1], tag="start")
     delta_key(f, NR.KEY[0], NR.KEY[1], PREV[n])
-    a_mid = y + 33
-    prev = y + 66
-    y += 66 + 24
-    fy0 = y
+    a_mid = y + ah / 2
+    prev = y + ah
+    sc_bot = narrow_sc(f, prev + 24)
+    # at Level 1 the component check joins the developer's line above the
+    # frame, in a gap made for it, so it never runs under the frame's label
+    fy0 = sc_bot + (42 if n == 1 else 28)
+    if n == 1:
+        narrow_launch(f, sc_bot, sc_bot + 28, join=NR.GX)
     with f.at("newtext" if n == 2 else "old"):
         f.lab(NR.GX + 14, fy0 + 22, "Developer’s machine" if n == 1 else "The factory", "frame.l")
-    if n == 1:                     # as wide, and as the alt text says
-        f.gloss(NR.GX + 14, fy0 + 38, "or a remote environment", "frame.g")
+    y = fy0 + 40
+    if n in (1, 2):                # as wide, and as the alt text says
+        with f.at("newtext" if n == 2 else "old"):
+            f.gloss(NR.GX + 14, fy0 + 38, "or a remote environment" if n == 1 else "a shared service",
+                    "frame.g")
         y += 14.5
-    y += 40
     ix0, ix1 = NR.IN
     orch = None
     if n == 2:
         with f.at("new"):
-            f.node(ix0, y, ix1 - ix0, 66, "Workflow", ["on CI/CD or a durable", "execution engine"],
+            f.node(ix0, y, ix1 - ix0, 60, "Workflow", ["on CI/CD or durable", "execution"],
                    tag="wf")
             f.link([(NR.GX, prev), (NR.GX, y)], tag="starts")
-        prev = y + 66
-        y += 66 + 24
+        prev = y + 60
+        y += 60 + 24
+        narrow_launch(f, sc_bot, prev + 12, join=NR.GX)
     elif n == 3:
         oy = y
         with f.at("new"):
-            f.node(ix0, y, ix1 - ix0, 66, "Orchestrator agent",
-                   ["preflight: proposes", "profile and task scope"], kind="agent", tag="orch")
+            # the wide figure's words on its proposal, which here runs down
+            # the gutter with no room for them
+            og = ["proposes profile", "and task scope"]
+            oh = card_h(og)
+            f.node(ix0, y, ix1 - ix0, oh, "Orchestrator agent", og, kind="agent", tag="orch")
             f.link([(NR.GX, prev), (NR.GX, y)], tag="takes")
-        orch = oy + 46
-        y += 66 + 24
+        orch = oy + 22
+        y += oh + 24
         # no line from the orchestrator: its plan is a proposal to the
         # service, never an instruction that starts agents
-        f.node(ix0, y, ix1 - ix0, 52, "Execution layer", ["starts each agent"], tag="exec")
-        prev = y + 52
-        y += 52 + 24
+        f.node(ix0, y, ix1 - ix0, 44, "Execution layer", ["starts each agent"], tag="exec")
+        prev = y + 44
+        y += 44 + 24
+        narrow_launch(f, sc_bot, prev + 12, join=NR.GX)
     if n == 3:
         mids = []
         for i in range(3):
             with f.at("new"):
                 f.box(ix0, y, ix1 - ix0, 46, "sandbox", f"sbx{i}")
-                f.badge(ix0, y, 3, f"sbx{i}")
+                f.badge(ix0, y, BN[SANDBOX], f"sbx{i}")
             f.name(ix0 + PAD + 4, y + 20, f"Agent, task {i + 1}", f"sbx{i}.n")
             f.gloss(ix0 + PAD + 4, y + 36, "own identity and scope", f"sbx{i}.g")
             f.loop_glyph(ix1 - 16, y + 14, f"sbx{i}.loop")
@@ -991,51 +1168,50 @@ def narrow_level(n):
         sb_bottom = y - STACK
         y += 16
         with f.at("new"):
-            f.node(ix0, y, ix1 - ix0, 60, "Monitoring agent",
-                   ["flags new work,", "never grants"], kind="agent", tag="mon")
+            f.node(ix0, y, ix1 - ix0, 60, "Monitoring agent", ["watches work", "in progress"],
+                   kind="agent", tag="mon")
             f.link([(NR.GX + 60, y), (NR.GX + 60, sb_bottom)], "watch", tag="watch")
         y += 60 + 16
     else:
         glosses = (["own identity,", "authenticated profile"] if n == 2 else
-                   ["profile across", "harness and sandbox,", "workflow in a skill"])
-        extra = (len(glosses) - 2) * 14.5
-        sh = 132 + extra
+                   ["configured by", "its profile"])
+        sh = 132
         with f.at("new" if n == 2 else "old"):
             if n == 2:
                 for d in (6, 3):
                     f.ghost(ix0 + d, y + d, ix1 - ix0 - 6, sh - 6, f"ghost{d}", "sandbox")
             sw = ix1 - ix0 - (6 if n == 2 else 0)
             f.box(ix0, y, sw, sh - (6 if n == 2 else 0), "sandbox", "sbx")
-            f.badge(ix0, y, 3, "sbx")
+            f.badge(ix0, y, BN[SANDBOX], "sbx")
         f.lab(ix0 + PAD + 4, y + 24, "Sandbox per run" if n == 2 else "Sandbox", "sbx.l")
         f.name(ix0 + PAD + 4, y + 50, "Coding agent", "sbx.n")
         for i, g_ in enumerate(glosses):
             f.gloss(ix0 + PAD + 4, y + 66 + i * 14.5, g_, f"sbx.g{i}")
         with f.at("new" if n == 1 else "old"):
             f.link([(NR.GX, prev), (NR.GX, y)], tag="into")
-        f.loop_glyph(ix0 + PAD + 11, y + 100 + extra, "sbx.loop")
-        f.gloss(ix0 + PAD + 26, y + 104 + extra, "inner loop,", "sbx.lp0")
-        f.gloss(ix0 + PAD + 26, y + 118.5 + extra, "until it passes", "sbx.lp1")
+        f.loop_glyph(ix0 + PAD + 11, y + 100, "sbx.loop")
+        f.gloss(ix0 + PAD + 26, y + 104, "inner loop,", "sbx.lp0")
+        f.gloss(ix0 + PAD + 26, y + 118.5, "until it passes", "sbx.lp1")
         sb_mid = y + 62
         sb_bottom = y + sh
         y += sh + 16
     fy1 = y
-    ph = card_h(PROXY_G)
+    ph = card_h(PROXY_G) + 8           # room under its line for the ring on its foot
     py0 = sb_mid - ph / 2
     f.box(NR.X0, fy0, NR.X1 - NR.X0, fy1 - fy0, "zone", "frame")
     with f.at("new" if n == 2 else "old"):
         if n > 1:
             for d in (6, 3):
                 f.ghost(NR.PROXY[0] + d, py0 + d, NR.PROXY[1] - NR.PROXY[0], ph, f"pghost{d}", "proxy")
-        f.node(NR.PROXY[0], py0, NR.PROXY[1] - NR.PROXY[0], ph, "Egress proxy", PROXY_G,
-               kind="guardfill" if n > 1 else "guard", num=4, tag="proxy")
+        proxy_card(f, NR.PROXY[0], py0, NR.PROXY[1], py0 + ph, PROXY_G, NR.GRANT_X,
+                   kind="guardfill" if n > 1 else "guard")
+    narrow_pkg(f, sc_bot, py0)
     f.link([(ix1 - (6 if n == 2 else 0), sb_mid), (NR.PROXY[0], sb_mid)], tag="traffic")
     # the authorization service, beneath the frame; its decision rises into the proxy
     by0 = fy1 + 40
-    nb = ["decides what access each task gets,", "using trusted context"]   # LEVEL_AUTH_G
-    bh = card_h(nb)
-    f.node(NR.BAR[0], by0, NR.BAR[1] - NR.BAR[0], bh, "Runtime authorization service", nb,
-           kind="guard", num=1, tag="auth")
+    bh = card_h([AUTH_G])
+    f.node(NR.BAR[0], by0, NR.BAR[1] - NR.BAR[0], bh, "Runtime authorization service", [AUTH_G],
+           kind="guard", num=BN[IAM], tag="auth")
     f.link([(NR.GRANT_X, by0), (NR.GRANT_X, py0 + ph + (6 if n > 1 else 0))], "grant",
            tag="grant")
     for i, s in enumerate(("authorized", "scope")):
@@ -1052,15 +1228,11 @@ def narrow_level(n):
     order = [DEST[2], DEST[3], DEST[1], DEST[0]]
     y = by0 + bh + 24
     ys = []
-    for i, (nm, g, kind, num) in enumerate(order):
-        if n == 1:
-            f.node(NR.DEST[0], y, NR.DEST[1] - NR.DEST[0], 44, nm, [" ".join(g)], kind=kind,
-                   num=num, tag=f"dest{i}")
-        else:
-            node_c(f, NR.DEST[0], y, NR.DEST[1] - NR.DEST[0], 44, nm, kind=kind, num=num,
-                   tag=f"dest{i}")
-        ys.append(y + 22)
-        y += 44 + STACK
+    for i, (nm, _, kind) in enumerate(order):
+        node_c(f, NR.DEST[0], y, NR.DEST[1] - NR.DEST[0], DEST_H, " ".join(nm), kind=kind,
+               tag=f"dest{i}")
+        ys.append(y + DEST_H / 2)
+        y += DEST_H + STACK
     # the pull request leaves through the proxy like everything else, as it
     # does wide and in Figure 6: the same bus, one more branch
     y += 16
@@ -1072,14 +1244,14 @@ def narrow_level(n):
     with f.at("new" if n == 1 else "old"):
         f.link([(NR.BUS, ys[-1]), (NR.BUS, pr_mid)], head=False, tag="bus.prx", group="bus")
         f.link([(NR.BUS, pr_mid), (NR.DEST[1], pr_mid)], tag="bus.pr", group="bus")
-    appr = " ".join(APPROVAL_G)
-    outs = {1: [("Pull request", ["the developer reviews it"], 1)],
+    outs = {1: [("Pull request", ["reviewed by the developer"], 1)],
             2: [("Pull request", ["reviewed until ready"], 2),
-                ("Approval", [appr], 2),
+                ("Approval", APPROVAL_G, 2),
                 ("Merge", ["approved changes"], 2)],
             3: [("Pull request", ["reviewed until ready"], 2),
-                ("Approval", [appr], 2),
-                ("Deploy", ["can be rolled back"], 3), ("Production", ["sends back signals"], 3)]}[n]
+                ("Approval", APPROVAL_G, 2),
+                ("Deploy", ["can be rolled back"], 3),
+                ("Production", ["emits incidents and metrics"], 3)]}[n]
     for i, (nm, g, since) in enumerate(outs):
         with f.at("new" if since == n else "old"):
             f.node(NR.X0, y, (NR.DEST[1] if i == 0 else NR.X1) - NR.X0, 46, nm, g, tag=f"out{i}")
@@ -1100,8 +1272,8 @@ def narrow_level(n):
         f.gloss(NR.GX + 10, ly + 14, gloss, "outer.g")
     y = ly + 32
     obs = {1: "harness logs, identity and proxy records",
-           2: "records from all four boundaries, by run",
-           3: "telemetry, evals, monitoring of agents"}[n]
+           2: "all four boundaries’ records, by run",
+           3: "telemetry and evals across all runs"}[n]
     record(f, NR.X0, y, NR.X1, y + 48, two=True)
     with f.at("newtext" if n > 1 else "old"):
         f.gloss(NR.X0 + PAD, y + 39, obs, "obs.g")
@@ -1228,76 +1400,54 @@ def figure1_narrow():
 # ═════════════════════════════════════════════════════════════════════════════
 # Figure 2 — the agent proposes, policy authorizes, infrastructure enforces.
 # One row: the profile, the agent in its sandbox, the egress proxy, and what
-# lies behind it. Beneath it the runtime authorization service, drawn as a
-# decision rather than a container. Into it come the profile's bounds and the
-# agent's proposal (a request, never a grant) from above, and the rest of the
-# trusted context from below, as one box and one arrow that enters clear of
-# every line above, so nothing seems to pass straight through. Out of it go the
-# scope the proxy enforces (the strongest line in the figure), high-impact
-# actions to approval and, ending in a stop, anything outside policy. The
-# agent works task after task and hands work to other agents; each is a new
-# decision, which the service says in words. Profile ⊇ task ⊇ delegation is
-# the shape of the scope it grants, not something it holds, so the task and
-# delegation are inputs here, beside who's asking and policy.
+# lies behind it. Above it, supply chain scanning, on the profile's launch
+# path: the profile configures the sandbox at launch through it, and the proxy
+# checks every package with it. Beneath it, the runtime authorization service,
+# drawn as a decision rather than a container. Into it come the profile's
+# bounds and the agent's proposal from above, and the rest of the trusted
+# context from below, as one box and one arrow; out of it go the scope the
+# proxy enforces, high-impact actions to approval and, ending in a stop,
+# anything outside policy. The words are names; the caption, the alt text and
+# the paper say what each part does.
 # ═════════════════════════════════════════════════════════════════════════════
-PROFILE_G = ["one per kind of agent,", "the most it can ever do"]
-AGENT_G = ["untrusted, holds", "no credentials"]
-# the proxy knows the task, so it enforces that task's scope (the paper's
-# "knows the task and can allow only the repositories, operations, and
-# resources it covers"); the levels' narrower cards keep PROXY_G
-F2_PROXY_G = ["default-deny,", "knows the task and", "enforces its scope,", "attaches credentials"]
-F2_AUTH_G = ["decides what access each task gets, using trusted context,",
-             "a new decision for every task and delegation, and records every grant"]
-F2_AUTH_GN = ["decides what access each task gets,", "using trusted context, a new decision",
-              "for every task and delegation,", "and records every grant"]
-F2_PROPOSE = ["proposes scope,", "never a grant"]
-F2_DENY = ["outside policy: denied,", "or sent to a person"]
-REC2 = "each boundary keeps a tamper-evident record, out of any agent’s reach"
-# the trusted context besides the profile, each in the paper's own words:
-# "each action is attributed to both the agent and whoever it acts for", a
-# task "narrows that to the work at hand", delegation "to another agent ...
-# can narrow that scope but never expand it", "policy written in advance"
-CONTEXT = [("Identity", ["the agent, and", "whoever it acts for"]),
-           ("Task", ["the work", "at hand"]),
-           ("Delegation", ["to another agent,", "only narrows scope"]),
-           ("Policy", ["written", "in advance"])]
+PROFILE_G = ["the most it can ever do"]
+AGENT_G = ["untrusted,", "no credentials"]
+DOWN_G = ["only authorized", "operations"]
+F2_DENY = "outside policy"
+# the record: one event of each boundary's, as the observability checklist
+# names them, so no boundary reads as unrecorded
+REC2 = "every grant, admission, process start and request"
+# the trusted context besides the profile, by name: the agent and whoever it
+# acts for, its task, any delegation, policy (the alt text says which is which)
+CONTEXT = ["Identity", "Task", "Delegation", "Policy"]
 
 
-def f2_sandbox(f, x0, x1, y0, h, gloss):
+def f2_sandbox(f, x0, x1, y0, h):
     f.box(x0, y0, x1 - x0, h, "sandbox", "sbx")
-    f.badge(x0, y0, 3, "sbx")
+    f.badge(x0, y0, BN[SANDBOX], "sbx")
     f.lab(x0 + PAD + 4, y0 + 24, "Sandbox", "sbx.l")
-    f.name(x0 + PAD + 4, y0 + 52 if not f.narrow else y0 + 50, "Agent", "sbx.n")
-    gy = y0 + (68 if not f.narrow else 66)
-    for i, g in enumerate(gloss):
-        f.gloss(x0 + PAD + 4, gy + i * 14.5, g, f"sbx.g{i}")
-    ly = y0 + h - 30
-    f.loop_glyph(x0 + PAD + 11, ly - 4, "sbx.loop")
-    f.gloss(x0 + PAD + 26, ly, "free to reason", "sbx.lp0")
-    f.gloss(x0 + PAD + 26, ly + 14.5, "and try things", "sbx.lp1")
+    f.name(x0 + PAD + 4, y0 + 50, "Agent", "sbx.n")
+    for i, g in enumerate(AGENT_G):
+        f.gloss(x0 + PAD + 4, y0 + 66 + i * 14.5, g, f"sbx.g{i}")
 
 
 def context_box(f, x0, y0, x1, cols):
     """The trusted context as one input, not four more components: one card,
-    each part a name and its gloss, in `cols` columns with hairlines between
-    them, each column as wide as its widest run and the slack shared. Returns
-    the card's bottom."""
+    each part named, in `cols` columns with hairlines between them, each
+    column as wide as its name and the slack shared. Returns the card's
+    bottom."""
     rows = [CONTEXT[i:i + cols] for i in range(0, len(CONTEXT), cols)]
-    rh = card_h(CONTEXT[0][1])
+    rh = DEST_H
     h = rh * len(rows)
     f.box(x0, y0, x1 - x0, h, "card", "ctx")
-    need = [max(max(f.width(n_, "name"), *(f.width(g, "gloss") for g in g_)) + 2 * PAD
-                for n_, g_ in CONTEXT[c::cols]) for c in range(cols)]
+    need = [max(f.width(n_, "name") for n_ in CONTEXT[c::cols]) + 2 * PAD for c in range(cols)]
     slack = (x1 - x0 - sum(need)) / cols
     xs = [x0]
     for w_ in need[:-1]:
         xs.append(round(xs[-1] + w_ + slack))
     for r, row in enumerate(rows):
-        for c, (n_, g_) in enumerate(row):
-            k = r * cols + c
-            f.name(xs[c] + PAD, y0 + r * rh + 21, n_, f"ctx{k}.n0")
-            for i, g in enumerate(g_):
-                f.gloss(xs[c] + PAD, y0 + r * rh + 37 + i * 14.5, g, f"ctx{k}.g{i}")
+        for c, n_ in enumerate(row):
+            f.name(xs[c] + PAD, y0 + r * rh + rh / 2 + 4.5, n_, f"ctx{r * cols + c}.n0")
     for x in xs[1:]:
         f.parts.append(f'<path d="M{x + .5:g} {y0 + 9:g} L{x + .5:g} {y0 + h - 9:g}" '
                        f'stroke="{RULE}" stroke-width="0.75"/>')
@@ -1310,64 +1460,58 @@ def context_box(f, x0, y0, x1, cols):
 
 def figure2():
     f = CF("sf2", W, 600, CAPTION[2], ALT[2])
-    PR_, SB, PX, BUS, DN = (6, 180), (194, 342), (362, 514), 530, (548, 720)
-    y0, y1 = 46, 178
+    PR_, SB, PX, DN = (6, 178), (198, 356), (376, 530), (562, 720)
+    y0, y1 = 84, 176                       # the sandbox
     ym = mid((y0, y1))
-    # the profile, once: one per kind of agent, the most it can ever do
-    f.node(PR_[0], y0, PR_[1] - PR_[0], y1 - y0, "Profile", PROFILE_G, tag="prof")
-    f2_sandbox(f, SB[0], SB[1], y0, y1 - y0, AGENT_G)
-    # its first job: it configures the sandbox at launch, over the top of the row
-    lx0, lx1, ly = 80, 262, 22
-    f.link([(lx0, y0), (lx0, ly), (lx1, ly), (lx1, y0)], tag="launch")
-    f.gloss(lx0 + 8, ly - 8, "configures the sandbox at launch", "launch.l")
-    # the egress proxy, the sandbox's one way out
-    f.node(PX[0], y0, PX[1] - PX[0], y1 - y0, "Egress proxy", F2_PROXY_G, kind="guard", num=4,
-           tag="proxy")
+    # the profile, the proxy, downstream; tall enough that the proxy's two
+    # lines clear the ring on its foot
+    c0, c1 = ym - 33, ym + 33
+    # supply chain scanning, above the row: the profile configures the
+    # sandbox at launch through it, and the proxy checks packages with it
+    sx0 = 262
+    sb_ = sc_card(f, sx0, 6, PX[1])
+    f.node(PR_[0], c0, PR_[1] - PR_[0], c1 - c0, "Profile", PROFILE_G, tag="prof")
+    lx, ly = 92, mid((6, sb_))
+    f.link([(lx, c0), (lx, ly), (sx0, ly)], tag="launch")
+    f.gloss(lx + 8, ly - 8, "configures at launch", "launch.l")
+    f.link([(300, sb_), (300, y0)], tag="sc.launch")
+    f.gloss(308, 73, SC_LAUNCH, "sc.launch.l")
+    f2_sandbox(f, SB[0], SB[1], y0, y1 - y0)
+    bx, ux, gx = 40, 330, 420
+    proxy_card(f, PX[0], c0, PX[1], c1, F2_PROXY_G, gx)
+    f.link([(470, sb_), (470, c0)], tag="sc.pkg", both=True)
+    f.gloss(478, 73, SC_PKG, "sc.pkg.l")
     f.link([(SB[1], ym), (PX[0], ym)], tag="request")
-    # downstream, and the admission point packages come through
-    dh = (y1 - y0 - STACK) / 2
-    f.node(DN[0], y0, DN[1] - DN[0], dh, "Downstream", ["only authorized", "operations reach it"],
-           tag="down")
-    f.node(DN[0], y0 + dh + STACK, DN[1] - DN[0], dh, "Admission point",
-           ["approved, scanned", "packages"], kind="guard", num=2, tag="adm")
-    m1, m2 = y0 + dh / 2, y0 + dh + STACK + dh / 2
-    f.link([(PX[1], ym), (BUS, ym)], head=False, tag="out.in", group="out")
-    f.link([(BUS, m1), (BUS, m2)], head=False, tag="out.bus", group="out")
-    f.link([(BUS, m1), (DN[0], m1)], tag="out.0", group="out")
-    f.link([(BUS, m2), (DN[0], m2)], tag="out.1", group="out")
+    f.node(DN[0], c0, DN[1] - DN[0], c1 - c0, "Downstream", DOWN_G, tag="down")
+    f.link([(PX[1], ym), (DN[0], ym)], tag="out")
     # the decision, beneath the row from the profile's edge to the proxy's
-    s0, s1 = 234, 300
-    f.node(PR_[0], s0, PX[1] - PR_[0], s1 - s0, "Runtime authorization service", F2_AUTH_G,
-           kind="guard", num=1, tag="auth")
-    # from above: the profile's second job, and the agent's proposal, a
-    # request it can't grant itself; up to the proxy, the scope it authorizes
-    bx, ux, gx = 48, 322, 470
-    f.link([(bx, y1), (bx, s0)], tag="bounds")
+    s0, s1 = 226, 270
+    f.node(PR_[0], s0, PX[1] - PR_[0], s1 - s0, "Runtime authorization service", [AUTH_G],
+           kind="guard", num=BN[IAM], tag="auth")
+    # from above: the profile's bounds, and the agent's proposal; up to the
+    # proxy, the scope it authorizes
+    f.link([(bx, c1), (bx, s0)], tag="bounds")
     for i, s in enumerate(("bounds every", "decision")):
-        f.gloss(bx + 8, 200 + i * 14.5, s, f"bounds.l{i}")
+        f.gloss(bx + 8, 192 + i * 14.5, s, f"bounds.l{i}")
     f.link([(ux, y1), (ux, s0)], tag="propose")
-    for i, s in enumerate(F2_PROPOSE):
-        f.gloss(ux - 8 - f.width(s, "gloss"), 200 + i * 14.5, s, f"propose.l{i}")
-    f.link([(gx, s0), (gx, y1)], "grant", tag="grant")
+    f.gloss(ux - 8 - f.width("proposes scope", "gloss"), 206.5, "proposes scope", "propose.l")
+    f.link([(gx, s0), (gx, c1)], "grant", tag="grant")
     for i, s in enumerate(("authorized", "scope")):
-        f.gloss(gx - 8 - f.width(s, "gloss"), 200 + i * 14.5, s, f"grant.l{i}")
-    # from below: the rest of the trusted context, one card, one arrow, which
-    # enters clear of every line above the service
-    cx, c0 = 190, s1 + 30
-    end = context_box(f, PR_[0], c0, PX[1], 4)
-    f.link([(cx, c0), (cx, s1)], tag="ctx.in")
+        f.gloss(gx - 8 - f.width(s, "gloss"), 192 + i * 14.5, s, f"grant.l{i}")
+    # from below: the rest of the trusted context, one card, one arrow
+    cx, cy0 = 190, s1 + 30
+    end = context_box(f, PR_[0], cy0, PX[1], 4)
+    f.link([(cx, cy0), (cx, s1)], tag="ctx.in")
     f.lab(cx + 8, s1 + 19, "Trusted context", "ctx.l")
-    # out to the right, apart from what the proxy lets through: high-impact
-    # actions to approval, and anything outside policy stopped there, denied
-    # or sent to a person
-    ay0 = 214
-    f.node(DN[0], ay0, DN[1] - DN[0], 60, "Approval", APPROVAL_G, tag="appr")
+    # out to the right: high-impact actions to approval, and anything outside
+    # policy stopped there
+    ay0 = 206
+    f.node(DN[0], ay0, DN[1] - DN[0], 44, "Approval", APPROVAL_G, tag="appr")
     f.link([(PX[1], ay0 + 30), (DN[0], ay0 + 30)], tag="route")
     f.gloss(DN[0], ay0 - 8, "high-impact actions", "route.l")
     dy, dx = s1 - 8, PX[1] + 20
     f.link([(PX[1], dy), (dx, dy)], tag="deny", bar=True, stop=True)
-    for i, s in enumerate(F2_DENY):
-        f.gloss(dx + 8, dy + 4 + i * 14.5, s, f"deny.l{i}")
+    f.gloss(dx + 8, dy + 4, F2_DENY, "deny.l")
     # the record, its own band
     r0 = end + 22
     gx2 = record(f, 0, r0, W, r0 + 48, tag="rec")
@@ -1378,82 +1522,77 @@ def figure2():
 
 
 def figure2_narrow():
-    """Figure 2 on a phone: the sandbox beside the proxy, what the proxy lets
-    through stacked under the proxy, the decision beneath both, its trusted
-    context in one card right under it, and what it routes elsewhere down the
-    right edge: approval, then a stop for anything outside policy."""
+    """Figure 2 on a phone: the profile, supply chain scanning on its
+    launch path, the sandbox beside the proxy, what the proxy lets through under the
+    proxy, the decision beneath both, its trusted context in one card under
+    it, and what it routes elsewhere down the right edge: approval, then a
+    stop for anything outside policy."""
     f = CF("sf2n", NW, 1400, CAPTION[2], ALT[2], narrow=True)
     X, R1 = 8, 352
     y = 10
-    f.node(X, y, R1 - X, 60, "Profile", PROFILE_G, tag="prof")
-    pb = y + 60
-    sy0 = pb + 44
+    f.node(X, y, R1 - X, 44, "Profile", PROFILE_G, tag="prof")
+    pb = y + 44
+    # supply chain scanning, on the profile's launch path; the profile's
+    # bounds run down the left edge, past it and the sandbox, into the service
+    s0 = pb + 42
+    sb_ = sc_card(f, 60, s0, R1)
+    lx, bx = 200, 22
+    f.link([(lx, pb), (lx, s0)], tag="launch")
+    f.gloss(lx + 8, pb + 24, "configures at launch", "launch.l")
+    f.gloss(bx + 8, pb + 24, "bounds every decision", "bounds.l")
     SB, PX, BUS = (38, 176), (194, 348), 360
-    sh = 132
-    # the profile configures the sandbox at launch, and bounds every decision;
-    # that line runs between the sandbox's badge and the service's, clear of both
-    lx, bx = 140, 22
-    f.link([(lx, pb), (lx, sy0)], tag="launch")
-    for i, s in enumerate(("configures the sandbox", "at launch")):
-        f.gloss(lx + 8, pb + 16 + i * 14.5, s, f"launch.l{i}")
-    for i, s in enumerate(("bounds every", "decision")):
-        f.gloss(bx + 8, pb + 16 + i * 14.5, s, f"bounds.l{i}")
-    f2_sandbox(f, SB[0], SB[1], sy0, sh, AGENT_G)
-    ph = card_h(F2_PROXY_G)
-    f.node(PX[0], sy0, PX[1] - PX[0], ph, "Egress proxy", F2_PROXY_G, kind="guard", num=4,
-           tag="proxy")
-    rm = sy0 + 46
+    sy0, sh = sb_ + 36, 98
+    f2_sandbox(f, SB[0], SB[1], sy0, sh)
+    ux, gx = 60, 206
+    ph = card_h(F2_PROXY_G) + 6            # its two lines clear the ring on its foot
+    proxy_card(f, PX[0], sy0, PX[1], sy0 + ph, F2_PROXY_G, gx)
+    f.link([(120, sb_), (120, sy0)], tag="sc.launch")
+    f.gloss(128, sb_ + 22, SC_LAUNCH, "sc.launch.l")
+    f.link([(280, sb_), (280, sy0)], tag="sc.pkg", both=True)
+    for i, s in enumerate(("checks", "packages")):
+        f.gloss(288, sb_ + 15 + i * 14.5, s, f"sc.pkg.l{i}")
+    rm = sy0 + ph / 2
     f.link([(SB[1], rm), (PX[0], rm)], tag="request")
     # under the proxy, what it lets through, fed down its right edge
     DC = (220, 340)
-    ys, yy = [], sy0 + ph + 18
-    for i, (n_, g_, kind, num, t_) in enumerate(
-            [("Downstream", ["only authorized", "operations", "reach it"], "card", None, "down"),
-             ("Admission point", ["approved,", "scanned", "packages"], "guard", 2, "adm")]):
-        h = card_h(g_)
-        f.node(DC[0], yy, DC[1] - DC[0], h, n_, g_, kind=kind, num=num, tag=t_)
-        ys.append(yy + h / 2)
-        yy += h + STACK
-    f.link([(PX[1], rm), (BUS, rm)], head=False, tag="out.in", group="out")
-    f.link([(BUS, rm), (BUS, ys[-1])], head=False, tag="out.bus", group="out")
-    for i, m in enumerate(ys):
-        f.link([(BUS, m), (DC[1], m)], tag=f"out.{i}", group="out")
+    dy0 = sy0 + ph + 18
+    dh = card_h(DOWN_G)
+    f.node(DC[0], dy0, DC[1] - DC[0], dh, "Downstream", DOWN_G, tag="down")
+    dm = dy0 + dh / 2
+    f.link([(PX[1], rm), (BUS, rm), (BUS, dm), (DC[1], dm)], tag="out")
     # the decision, beneath both columns
-    b0 = yy - STACK + 24
-    bh = card_h(F2_AUTH_GN)
-    f.node(X, b0, R1 - X, bh, "Runtime authorization service", F2_AUTH_GN, kind="guard", num=1,
-           tag="auth")
+    b0 = max(sy0 + sh, dy0 + dh) + 24
+    bh = card_h([AUTH_G])
+    f.node(X, b0, R1 - X, bh, "Runtime authorization service", [AUTH_G], kind="guard",
+           num=BN[IAM], tag="auth")
     # into it from above: the profile's bounds (left edge) and the proposal;
     # up into the proxy, the scope it authorizes
     f.link([(bx, pb), (bx, b0)], tag="bounds")
-    ux, gx = 60, 206
     f.link([(ux, sy0 + sh), (ux, b0)], tag="propose")
-    for i, s in enumerate(F2_PROPOSE):
-        f.gloss(ux + 8, sy0 + sh + 22 + i * 14.5, s, f"propose.l{i}")
+    f.gloss(ux + 8, sy0 + sh + 16, "proposes scope", "propose.l")
     f.link([(gx, b0), (gx, sy0 + ph)], "grant", tag="grant")
     for i, s in enumerate(("authorized", "scope")):
-        f.gloss(gx - 8 - f.width(s, "gloss"), sy0 + sh + 70 + i * 14.5, s, f"grant.l{i}")
+        f.gloss(gx - 8 - f.width(s, "gloss"), b0 - 22.5 + i * 14.5, s, f"grant.l{i}")
     # into it from below: the rest of the trusted context, one card, one arrow
     cx, c0 = 140, b0 + bh + 30
-    end = context_box(f, X, c0, 326, 2)
+    end = context_box(f, X, c0, 326, 4)
     f.link([(cx, c0), (cx, b0 + bh)], tag="ctx.in")
     f.lab(cx + 8, b0 + bh + 19, "Trusted context", "ctx.l")
     # out of it, down the right edge: high-impact actions to approval, and
-    # anything outside policy stopped there, denied or sent to a person
+    # anything outside policy stopped there
     rx = 344
     ay0 = end + 34
     f.gloss(336 - f.width("high-impact actions", "gloss"), ay0 - 8, "high-impact actions",
             "route.l")
-    f.node(X, ay0, 326 - X, 46, "Approval", [" ".join(APPROVAL_G)], tag="appr")
-    dy = ay0 + 46 + 26
+    f.node(X, ay0, 326 - X, 44, "Approval", APPROVAL_G, tag="appr")
+    dy = ay0 + 44 + 24
     f.link([(rx, b0 + bh), (rx, dy)], tag="deny", group="route", bar=True, stop=True)
-    f.link([(rx, ay0 + 23), (326, ay0 + 23)], tag="route", group="route")
-    for i, s in enumerate(F2_DENY):
-        f.gloss(334 - f.width(s, "gloss"), dy - 10 + i * 14.5, s, f"deny.l{i}")
-    r0 = dy + 26
+    f.link([(rx, ay0 + 22), (326, ay0 + 22)], tag="route", group="route")
+    f.gloss(334 - f.width(F2_DENY, "gloss"), dy + 4, F2_DENY, "deny.l")
+    r0 = dy + 24
     record(f, X, r0, R1, r0 + 62, tag="rec", two=True)
-    f.gloss(X + PAD, r0 + 39, "each boundary keeps a tamper-evident", "rec.g0")
-    f.gloss(X + PAD, r0 + 53.5, "record, out of any agent’s reach", "rec.g1")
+    for i, s in enumerate(("every grant, admission,", "process start and request")):
+        f.gloss(X + PAD, r0 + 39 + i * 14.5, s, f"rec.g{i}")
     f.rule(r0 + 62 + 20, X, R1)
     end = key_grid(f, X, r0 + 62 + 42)
     f.set_height(end)
@@ -1461,60 +1600,51 @@ def figure2_narrow():
 
 
 # ═════════════════════════════════════════════════════════════════════════════
-# Figure 6 — only a new authorization decision can widen a task. Figure 2's
-# skeleton, as the levels draw it, with one incident's values ("A factory in
-# action").
+# Figure 6 — only a new authorization decision can widen a task. The levels'
+# skeleton with one incident's values ("A factory in action").
 # ═════════════════════════════════════════════════════════════════════════════
-FIG6_AUTH = ["checks it against policy and", "the alert’s authenticated source"]
+FIG6_AUTH = "checks policy and the alert’s source"
 BLOCKED_G = ["blocked: not", "in the task"]   # the proxy blocking, never "outside policy"
+# what the orchestrator proposes, wide and narrow alike
+FIG6_TASK = ["proposes payments", "logs, last hour;", "one pull request"]
+FIG6_ALERT = ["payments", "errors"]
 
 
 def figure6():
-    f = CF("sf6", W, 700, CAPTION[6], ALT[6])
-    f.box(R.FX[0], R.FY0, R.FX[1] - R.FX[0], R.FY1_SHORT - R.FY0, "zone", "frame")
-    f.lab(R.B[0], R.LABY, "The factory", "frame.l")
-    f.node(R.A[0], 66, R.A[1] - R.A[0], 112, ["Production", "alert"],
-           ["elevated", "errors in a", "payments", "service"], tag="sig")
-    f.node(R.B[0], R.ROW[0], R.B[1] - R.B[0], 112, ["Orchestrator", "agent"],
-           ["proposes a", "task for an", "incident", "agent"], kind="agent", tag="orch")
+    f = CF("sf6", W, 800, CAPTION[6], ALT[6])
+    r_frame(f, label=["The factory"])
+    # no path starts the agent here, so the component check lands on the
+    # sandbox itself
+    r_sc(f, launch=(420, None))
+    f.node(R.A[0], R.MID - 38, R.A[1] - R.A[0], 76, ["Production", "alert"], FIG6_ALERT,
+           tag="sig")
+    node_c(f, R.B[0], R.MID - 26, R.B[1] - R.B[0], 52, ["Orchestrator", "agent"], kind="agent",
+           tag="orch")
     f.link([(R.A[1], R.MID), (R.B[0], R.MID)], tag="takes")
     # what the task asks for rides on the proposal, into the authorization service
     px = 210
-    f.link([(px, R.ROW[0] + 112), (px, R.BAR[1])], tag="propose")
-    for i, s in enumerate(("payments", "service logs,", "last hour;", "one pull request")):
-        f.gloss(px + 8, 226 + i * 14.5, s, f"propose.l{i}")
-    r_sandbox(f, "Sandbox", "Incident agent", ["configured from", "its profile"],
+    f.link([(px, R.MID + 26), (px, R.BAR[1])], tag="propose")
+    for i, s in enumerate(FIG6_TASK):
+        f.gloss(px + 8, 302 + i * 14.5, s, f"propose.l{i}")
+    r_sandbox(f, "Sandbox", "Incident agent", ["configured by", "its profile"],
               loop=("inner loop,", "until tests pass"))
     # wanting more is a request for a new decision, never a grant; its words
     # sit right of its own line, so the line parts them from the proposal's
     wx = 356
     f.link([(wx, R.ROW[1]), (wx, R.BAR[1])], tag="wider")
     for i, s in enumerate(("needs a new", "decision")):
-        f.gloss(wx + 8, 236 + i * 14.5, s, f"wider.l{i}")
+        f.gloss(wx + 8, 302 + i * 14.5, s, f"wider.l{i}")
     r_proxy(f)
     f.link([(R.C[1], R.MID), (R.PROXY[0], R.MID)], tag="traffic")
-    x0, y0, x1, y1 = R.BAR[0], R.BAR[1], R.BAR[2], R.BAR[1] + 60
-    f.node(x0, y0, x1 - x0, y1 - y0, "Runtime authorization service", FIG6_AUTH, kind="guard",
-           num=1, tag="auth")
-    r_grant(f, R.GRANT_X, y0, R.PROXY[3])
-    dest = [(["Payments", "service logs"], ["last hour only"], "card", None),
-            (["Authentication", "service logs"], BLOCKED_G, "blocked", None),
-            ("Admission point", ["serves the", "approved", "library"], "guard", 2)]
-    ys, yy = [], R.ROW[0]
-    for i, (n_, g_, kind, num) in enumerate(dest):
-        h = card_h(g_, n_)
-        f.node(R.E[0], yy, R.E[1] - R.E[0], h, n_, g_, kind=kind, num=num, tag=f"dest{i}")
-        ys.append((yy + h / 2, kind))
-        yy += h + STACK
-    f.link([(R.PROXY[2], R.MID), (R.BUS_E, R.MID)], head=False, tag="bus.in", group="bus")
-    f.link([(R.BUS_E, ys[0][0]), (R.BUS_E, ys[-1][0])], head=False, tag="bus", group="bus")
-    for i, (m_, kind) in enumerate(ys):
-        f.link([(R.BUS_E, m_), (R.E[0], m_)], tag=f"bus.{i}", group="bus", bar=(kind == "blocked"))
+    r_bar(f, gloss=FIG6_AUTH)
+    r_dest(f, [(["Payments", "service logs"], ["last hour only"], "card"),
+               (["Authentication", "service logs"], BLOCKED_G, "blocked"),
+               (["Package", "registries"], [], "card")])
     # the fix: one pull request, approval, a small first deploy, the error rate
-    ex_y, o0, o1 = y1 + 16, y1 + 34, y1 + 94
     slots = [(134, 238), (258, 432), (452, 568), (588, 696)]
-    f.link([(R.EXIT_X, R.PROXY[3]), (R.EXIT_X, ex_y), (mid(slots[0]), ex_y), (mid(slots[0]), o0)],
-           tag="pr.exit")
+    o0, o1 = R.OUT
+    f.link([(R.EXIT_X, R.PROXY[3]), (R.EXIT_X, R.EXIT_Y), (mid(slots[0]), R.EXIT_Y),
+            (mid(slots[0]), o0)], tag="pr.exit")
     for slot, (n_, g_, t_) in zip(slots, [("Pull request", ["one, as", "granted"], "pr"),
                                           ("Approval", APPROVAL_G, "appr"),
                                           ("Deploy", ["small share of", "traffic first"], "deploy"),
@@ -1522,9 +1652,9 @@ def figure6():
         f.node(slot[0], o0, slot[1] - slot[0], o1 - o0, n_, g_, tag=t_)
     for a, b in zip(slots, slots[1:]):
         f.link([(a[1], mid((o0, o1))), (b[0], mid((o0, o1)))], tag=f"out{a[0]}")
-    loopy = o1 + 40
-    f.link([(mid(slots[3]), o1), (mid(slots[3]), loopy), (R.LOOP_X, loopy), (R.LOOP_X, 178)],
-           "loop", tag="outer")
+    loopy = R.LOOPY
+    f.link([(mid(slots[3]), o1), (mid(slots[3]), loopy), (R.LOOP_X, loopy),
+            (R.LOOP_X, R.MID + 38)], "loop", tag="outer")
     f.lab(R.LOOP_LABEL_X, loopy - 24, "outer loop", "outer.l")
     f.gloss(R.LOOP_LABEL_X, loopy - 8, "confirms the fix or starts the next run", "outer.g")
     f.set_height(loopy + 8)
@@ -1534,62 +1664,66 @@ def figure6():
 def figure6_narrow():
     f = CF("sf6n", NW, 1600, CAPTION[6], ALT[6], narrow=True)
     y = 10
-    f.node(NR.A[0], y, NR.A[1] - NR.A[0], 66, "Production alert",
-           ["elevated errors in a", "payments service"], tag="start")
-    a_mid = y + 33
-    prev = y + 66
-    y += 66 + 24
-    fy0 = y
+    f.node(NR.A[0], y, NR.A[1] - NR.A[0], 44, "Production alert", [" ".join(FIG6_ALERT)],
+           tag="start")
+    a_mid = y + 22
+    prev = y + 44
+    sc_bot = narrow_sc(f, prev + 24)
+    fy0 = sc_bot + 28
     f.lab(NR.GX + 14, fy0 + 22, "The factory", "frame.l")
-    y += 40
+    y = fy0 + 40
     ix0, ix1 = NR.IN
-    f.node(ix0, y, ix1 - ix0, 112, "Orchestrator agent",
-           ["proposes a task for an", "incident agent:", "payments service logs,", "last hour,",
-            "one pull request"], kind="agent", tag="orch")
+    oh = card_h(FIG6_TASK)
+    f.node(ix0, y, ix1 - ix0, oh, "Orchestrator agent", FIG6_TASK, kind="agent", tag="orch")
     f.link([(NR.GX, prev), (NR.GX, y)], tag="takes")
-    orch = y + 88
-    y += 112 + 24
+    orch = y + 22
+    y += oh + 40                   # room for supply chain's line to turn into the sandbox
     sy0, sh = y, 132
     f.box(ix0, sy0, ix1 - ix0, sh, "sandbox", "sbx")
-    f.badge(ix0, sy0, 3, "sbx")
+    f.badge(ix0, sy0, BN[SANDBOX], "sbx")
     f.lab(ix0 + PAD + 4, sy0 + 24, "Sandbox", "sbx.l")
     f.name(ix0 + PAD + 4, sy0 + 50, "Incident agent", "sbx.n")
-    f.gloss(ix0 + PAD + 4, sy0 + 66, "configured from", "sbx.g0")
+    f.gloss(ix0 + PAD + 4, sy0 + 66, "configured by", "sbx.g0")
     f.gloss(ix0 + PAD + 4, sy0 + 80.5, "its profile", "sbx.g1")
     f.loop_glyph(ix0 + PAD + 11, sy0 + 100, "sbx.loop")
     f.gloss(ix0 + PAD + 26, sy0 + 104, "inner loop,", "sbx.lp0")
     f.gloss(ix0 + PAD + 26, sy0 + 118.5, "until tests pass", "sbx.lp1")
+    narrow_launch(f, sc_bot, sy0 - 20, into=(190, sy0))
     sb_mid = sy0 + 62
     fy1 = sy0 + sh + 16
     f.box(NR.X0, fy0, NR.X1 - NR.X0, fy1 - fy0, "zone", "frame")
-    ph = card_h(PROXY_G)
+    ph = card_h(PROXY_G) + 8
     py0 = sb_mid - ph / 2
-    f.node(NR.PROXY[0], py0, NR.PROXY[1] - NR.PROXY[0], ph, "Egress proxy", PROXY_G, kind="guard",
-           num=4, tag="proxy")
+    proxy_card(f, NR.PROXY[0], py0, NR.PROXY[1], py0 + ph, PROXY_G, NR.GRANT_X)
+    narrow_pkg(f, sc_bot, py0)
     f.link([(ix1, sb_mid), (NR.PROXY[0], sb_mid)], tag="traffic")
-    by0, bh = fy1 + 40, 66
-    f.node(NR.BAR[0], by0, NR.BAR[1] - NR.BAR[0], bh, "Runtime authorization service", FIG6_AUTH,
-           kind="guard", num=1, tag="auth")
+    by0 = fy1 + 40
+    bh = card_h([FIG6_AUTH])
+    f.node(NR.BAR[0], by0, NR.BAR[1] - NR.BAR[0], bh, "Runtime authorization service",
+           [FIG6_AUTH], kind="guard", num=BN[IAM], tag="auth")
     f.link([(NR.GRANT_X, by0), (NR.GRANT_X, py0 + ph)], "grant", tag="grant")
     for i, s in enumerate(("authorized", "scope")):
         f.gloss(NR.GRANT_X - 8 - f.width(s, "gloss"), fy1 + 14 + i * 14.5, s, f"grant.l{i}")
-    f.link([(ix0, orch), (NR.GUTTER, orch), (NR.GUTTER, by0 + 26), (NR.BAR[0], by0 + 26)],
+    f.link([(ix0, orch), (NR.GUTTER, orch), (NR.GUTTER, by0 + bh / 2), (NR.BAR[0], by0 + bh / 2)],
            tag="propose")
     wx = 150
     f.link([(wx, sy0 + sh), (wx, by0)], tag="wider")
     for i, s in enumerate(("needs a new", "decision")):
         f.gloss(wx - 8 - f.width(s, "gloss"), fy1 + 14 + i * 14.5, s, f"wider.l{i}")
     y = by0 + bh + 24
-    dests = [("Payments service logs", ["last hour only"], "card", None),
-             ("Authentication service logs", [" ".join(BLOCKED_G)], "blocked", None),
-             ("Admission point", ["serves the approved library"], "guard", 2)]
+    dests = [("Payments service logs", ["last hour only"], "card"),
+             ("Authentication service logs", [" ".join(BLOCKED_G)], "blocked"),
+             ("Package registries", [], "card")]
     ys = []
-    for i, (nm, g, kind, num) in enumerate(dests):
-        f.node(NR.DEST[0], y, NR.DEST[1] - NR.DEST[0], 44, nm, g, kind=kind, num=num, tag=f"dest{i}")
+    for i, (nm, g, kind) in enumerate(dests):
+        if g:
+            f.node(NR.DEST[0], y, NR.DEST[1] - NR.DEST[0], 44, nm, g, kind=kind, tag=f"dest{i}")
+        else:
+            node_c(f, NR.DEST[0], y, NR.DEST[1] - NR.DEST[0], 44, nm, kind=kind, tag=f"dest{i}")
         ys.append((y + 22, kind))
         y += 44 + STACK
     # the pull request leaves through the proxy like everything else: the
-    # same bus, one more branch, never out of the admission point above it
+    # same bus, one more branch
     y += 16
     pr_mid = y + 23
     f.link([(NR.PROXY[1], sb_mid), (NR.BUS, sb_mid)], head=False, tag="bus.in", group="bus")
@@ -1598,7 +1732,7 @@ def figure6_narrow():
         f.link([(NR.BUS, yy), (NR.DEST[1], yy)], tag=f"bus.{i}", group="bus", bar=(kind == "blocked"))
     f.link([(NR.BUS, pr_mid), (NR.DEST[1], pr_mid)], tag="bus.pr", group="bus")
     outs = [("Pull request", ["one, as granted"]),
-            ("Approval", [" ".join(APPROVAL_G)]),
+            ("Approval", APPROVAL_G),
             ("Deploy", ["small share of traffic first"]), ("Production", ["error rate afterward"])]
     for i, (nm, g) in enumerate(outs):
         f.node(NR.X0, y, (NR.DEST[1] if i == 0 else NR.X1) - NR.X0, 46, nm, g, tag=f"out{i}")

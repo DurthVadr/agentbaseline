@@ -1,6 +1,6 @@
 {
  "W": 376,
- "H": 960,
+ "H": 762,
  "shapes": [
   {
    "tag": "prof",
@@ -8,17 +8,36 @@
    "x": 16,
    "y": 18,
    "w": 344,
-   "h": 60,
+   "h": 44,
    "solid": true,
    "sw": 1
+  },
+  {
+   "tag": "sc",
+   "kind": "guard",
+   "x": 68,
+   "y": 104,
+   "w": 292,
+   "h": 44,
+   "solid": true,
+   "sw": 1.25
+  },
+  {
+   "tag": "badgesc",
+   "kind": "badge",
+   "x": 60,
+   "y": 96,
+   "w": 16,
+   "h": 16,
+   "solid": true
   },
   {
    "tag": "sbx",
    "kind": "sandbox",
    "x": 46,
-   "y": 122,
+   "y": 184,
    "w": 138,
-   "h": 132,
+   "h": 98,
    "solid": true,
    "sw": 1.25
   },
@@ -26,27 +45,18 @@
    "tag": "badgesbx",
    "kind": "badge",
    "x": 38,
-   "y": 114,
+   "y": 176,
    "w": 16,
    "h": 16,
    "solid": true
   },
   {
-   "tag": "sbx.loop",
-   "kind": "glyph",
-   "x": 57.5,
-   "y": 210.5,
-   "w": 19.0,
-   "h": 19.0,
-   "solid": false
-  },
-  {
    "tag": "proxy",
    "kind": "guard",
    "x": 202,
-   "y": 122,
+   "y": 184,
    "w": 154,
-   "h": 92,
+   "h": 66,
    "solid": true,
    "sw": 1.25
   },
@@ -54,7 +64,16 @@
    "tag": "badgeproxy",
    "kind": "badge",
    "x": 194,
-   "y": 114,
+   "y": 176,
+   "w": 16,
+   "h": 16,
+   "solid": true
+  },
+  {
+   "tag": "badgeproxy",
+   "kind": "badge",
+   "x": 220,
+   "y": 242,
    "w": 16,
    "h": 16,
    "solid": true
@@ -63,38 +82,19 @@
    "tag": "down",
    "kind": "card",
    "x": 228,
-   "y": 232,
+   "y": 268,
    "w": 120,
-   "h": 76,
+   "h": 60,
    "solid": true,
    "sw": 1
-  },
-  {
-   "tag": "adm",
-   "kind": "guard",
-   "x": 228,
-   "y": 320,
-   "w": 120,
-   "h": 76,
-   "solid": true,
-   "sw": 1.25
-  },
-  {
-   "tag": "badgeadm",
-   "kind": "badge",
-   "x": 220,
-   "y": 312,
-   "w": 16,
-   "h": 16,
-   "solid": true
   },
   {
    "tag": "auth",
    "kind": "guard",
    "x": 16,
-   "y": 420,
+   "y": 352,
    "w": 344,
-   "h": 92,
+   "h": 44,
    "solid": true,
    "sw": 1.25
   },
@@ -102,7 +102,7 @@
    "tag": "badgeauth",
    "kind": "badge",
    "x": 8,
-   "y": 412,
+   "y": 344,
    "w": 16,
    "h": 16,
    "solid": true
@@ -111,9 +111,9 @@
    "tag": "ctx",
    "kind": "card",
    "x": 16,
-   "y": 542,
+   "y": 426,
    "w": 318,
-   "h": 120,
+   "h": 44,
    "solid": true,
    "sw": 1
   },
@@ -121,9 +121,9 @@
    "tag": "appr",
    "kind": "card",
    "x": 16,
-   "y": 696,
+   "y": 504,
    "w": 318,
-   "h": 46,
+   "h": 44,
    "solid": true,
    "sw": 1
   },
@@ -131,7 +131,7 @@
    "tag": "deny.stop",
    "kind": "stop",
    "x": 345,
-   "y": 765.0,
+   "y": 569.0,
    "w": 14,
    "h": 2,
    "solid": false
@@ -140,7 +140,7 @@
    "tag": "rec",
    "kind": "record",
    "x": 16,
-   "y": 794,
+   "y": 596,
    "w": 344,
    "h": 62,
    "solid": true,
@@ -150,7 +150,7 @@
    "tag": "badgelg1",
    "kind": "badge",
    "x": 16,
-   "y": 910,
+   "y": 712,
    "w": 16,
    "h": 16,
    "solid": true
@@ -158,8 +158,8 @@
   {
    "tag": "badgelg2",
    "kind": "badge",
-   "x": 164.5612244897959,
-   "y": 910,
+   "x": 128.73469387755102,
+   "y": 712,
    "w": 16,
    "h": 16,
    "solid": true
@@ -168,7 +168,7 @@
    "tag": "badgelg3",
    "kind": "badge",
    "x": 16,
-   "y": 934,
+   "y": 736,
    "w": 16,
    "h": 16,
    "solid": true
@@ -176,8 +176,8 @@
   {
    "tag": "badgelg4",
    "kind": "badge",
-   "x": 164.5612244897959,
-   "y": 934,
+   "x": 128.73469387755102,
+   "y": 736,
    "w": 16,
    "h": 16,
    "solid": true
@@ -189,12 +189,46 @@
    "kind": "flow",
    "pts": [
     [
-     148,
-     78
+     208,
+     62
     ],
     [
-     148,
-     122
+     208,
+     104
+    ]
+   ],
+   "head": true,
+   "group": null,
+   "free": false
+  },
+  {
+   "tag": "sc.launch",
+   "kind": "flow",
+   "pts": [
+    [
+     128,
+     148
+    ],
+    [
+     128,
+     184
+    ]
+   ],
+   "head": true,
+   "group": null,
+   "free": false
+  },
+  {
+   "tag": "sc.pkg",
+   "kind": "flow",
+   "pts": [
+    [
+     288,
+     148
+    ],
+    [
+     288,
+     184
     ]
    ],
    "head": true,
@@ -207,11 +241,11 @@
    "pts": [
     [
      184,
-     168
+     217.0
     ],
     [
      202,
-     168
+     217.0
     ]
    ],
    "head": true,
@@ -219,71 +253,28 @@
    "free": false
   },
   {
-   "tag": "out.in",
+   "tag": "out",
    "kind": "flow",
    "pts": [
     [
      356,
-     168
+     217.0
     ],
     [
      368,
-     168
-    ]
-   ],
-   "head": false,
-   "group": "out",
-   "free": false
-  },
-  {
-   "tag": "out.bus",
-   "kind": "flow",
-   "pts": [
-    [
-     368,
-     168
+     217.0
     ],
     [
      368,
-     358.0
-    ]
-   ],
-   "head": false,
-   "group": "out",
-   "free": false
-  },
-  {
-   "tag": "out.0",
-   "kind": "flow",
-   "pts": [
-    [
-     368,
-     270.0
+     298.0
     ],
     [
      348,
-     270.0
+     298.0
     ]
    ],
    "head": true,
-   "group": "out",
-   "free": false
-  },
-  {
-   "tag": "out.1",
-   "kind": "flow",
-   "pts": [
-    [
-     368,
-     358.0
-    ],
-    [
-     348,
-     358.0
-    ]
-   ],
-   "head": true,
-   "group": "out",
+   "group": null,
    "free": false
   },
   {
@@ -292,11 +283,11 @@
    "pts": [
     [
      30,
-     78
+     62
     ],
     [
      30,
-     420
+     352
     ]
    ],
    "head": true,
@@ -309,11 +300,11 @@
    "pts": [
     [
      68,
-     254
+     282
     ],
     [
      68,
-     420
+     352
     ]
    ],
    "head": true,
@@ -326,11 +317,11 @@
    "pts": [
     [
      214,
-     420
+     352
     ],
     [
      214,
-     214
+     250
     ]
    ],
    "head": true,
@@ -343,11 +334,11 @@
    "pts": [
     [
      148,
-     542
+     426
     ],
     [
      148,
-     512
+     396
     ]
    ],
    "head": true,
@@ -360,11 +351,11 @@
    "pts": [
     [
      352,
-     512
+     396
     ],
     [
      352,
-     768
+     572
     ]
    ],
    "head": false,
@@ -377,11 +368,11 @@
    "pts": [
     [
      352,
-     719
+     526
     ],
     [
      334,
-     719
+     526
     ]
    ],
    "head": true,

@@ -377,20 +377,19 @@
   .sfa .sfa-stop { stroke-width:2.5; }
   .sfa .sfa-mk { fill:var(--fig-faint); }
   /* the core path, heavier than the rest: the agent's requests to the proxy, its
-     proposal, trusted context into the decision, and this task's scope */
+     proposal, trusted context into the decision, and the authorized scope */
   .sfa .sfa-main { stroke:var(--fig-soft); stroke-width:1.9; }
   .sfa .sfa-mk-main { fill:var(--fig-soft); }
   .sfa .sfa-dot { fill:var(--fig-soft); }
   .sfa .sfa-ico { fill:var(--fig-soft); }
-  /* over time: task after task, delegation after delegation, each proposed and
-     checked; a loop on the proposal wire, which runs through it */
-  .sfa .sfa-disc { fill:var(--paper); }
-  .sfa .sfa-cyc { fill:none; stroke:var(--fig-soft); stroke-width:1.35; }
-  .sfa .sfa-cyc-h { fill:var(--fig-soft); }
   /* what is enforced outside the agent's loop */
   .sfa .sfa-b { stroke:var(--fig-accent); stroke-width:1.5; }
   .sfa .sfa-badge circle { fill:var(--fig-accent); }
   .sfa .sfa-badge text { font-family:var(--mono); font-weight:600; fill:var(--paper); }
+  /* a boundary's mark as a ring: the proxy enforces the authorization
+     service's decisions as well as the network's */
+  .sfa .sfa-badge.sfa-ring circle { fill:var(--paper); stroke:var(--fig-accent); stroke-width:1.5; }
+  .sfa .sfa-badge.sfa-ring text { fill:var(--fig-accent); }
   /* the record reads as significant: a heavier rule in ink, its seal (kept
      under the boundaries' weight plus a little, so in dark it doesn't
      outweigh the decision) */
@@ -402,16 +401,17 @@
     font-family:var(--labelfont); font-size:13.5px; letter-spacing:.03em; }
   /* The boundaries' outlines draw in once as the drawing comes into view,
      then turn the accent, as they do in the talk (static/js/draw.js sets
-     .is-armed, then .is-drawn). Screens only and only with motion allowed;
+     .is-armed, then .is-drawn), one after another in the paper's order:
+     data-k is each one's number. Screens only and only with motion allowed;
      everywhere else, and without the script, the drawing is simply there,
      finished. The words never wait for the lines. */
   @media screen and (prefers-reduced-motion:no-preference) {
     .sfa.is-armed .sfa-b { stroke-dasharray:1; stroke-dashoffset:1; stroke:var(--fig-rule); }
     .sfa.is-drawn .sfa-b { animation:sfa-draw .9s ease-out both; }
-    .sfa.is-drawn .sfa-b[data-k="3"] { animation-delay:.15s; }
-    .sfa.is-drawn .sfa-b[data-k="1"] { animation-delay:.3s; }
-    .sfa.is-drawn .sfa-b[data-k="4"] { animation-delay:.45s; }
-    .sfa.is-drawn .sfa-b[data-k="2"] { animation-delay:.6s; }
+    .sfa.is-drawn .sfa-b[data-k="1"] { animation-delay:.15s; }
+    .sfa.is-drawn .sfa-b[data-k="2"] { animation-delay:.3s; }
+    .sfa.is-drawn .sfa-b[data-k="3"] { animation-delay:.45s; }
+    .sfa.is-drawn .sfa-b[data-k="4"] { animation-delay:.6s; }
     @keyframes sfa-draw {
       0% { stroke-dasharray:1; stroke-dashoffset:1; stroke:var(--fig-rule); }
       70% { stroke-dasharray:1; stroke-dashoffset:0; stroke:var(--fig-rule); }
