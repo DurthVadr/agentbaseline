@@ -248,6 +248,8 @@
   sup.aff { font-family:var(--labelfont); font-weight:500; font-size:10px;
     letter-spacing:.07em; text-transform:uppercase; color:var(--faint);
     line-height:0; margin-left:3px; white-space:nowrap; }
+  /* The byline wraps between people, never inside a name ("Ranti / Familusi"). */
+  .nb { white-space:nowrap; }
   .sr-only { position:absolute; width:1px; height:1px; padding:0; margin:-1px;
     overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0; }
 
@@ -489,7 +491,8 @@
     {{- range $i, $c := . }}
     {{- if not (and .name .affiliation) }}{{ errorf "software-factory/contributors.yaml: contributor %d needs name and affiliation" (add $i 1) }}{{ end }}
     {{- if $i }}{{ if eq (add $i 1) $n }}{{ if gt $n 2 }},{{ end }} and {{ else }}, {{ end }}{{ end }}
-    {{- .name }}<sup class="aff">{{ .affiliation }}</sup>
+    {{- /* A name and its affiliation never split across lines. */ -}}
+    <span class="nb">{{ .name }}<sup class="aff">{{ .affiliation }}</sup></span>
     {{- end }}.</p>
     {{- else }}
     <p>{{ .statement }}</p>
