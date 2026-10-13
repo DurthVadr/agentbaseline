@@ -351,11 +351,13 @@
     letter-spacing:.1em; text-transform:uppercase; color:var(--soft);
     margin:76px 0 22px; counter-increment:sec; position:relative;
     display:flex; align-items:baseline; gap:12px; }
+  /* One mark at every width: on phones "§ 4" broke into "§" and "4" on two
+     lines beside a heading that wraps. */
   h2::before { content:"§ " counter(sec); color:var(--accent);
-    letter-spacing:.06em; font-weight:600; }
+    letter-spacing:.06em; font-weight:600; white-space:nowrap; }
   /* Hanging punctuation: the mark lives in the margin, the text on the datum. */
   @media (min-width:720px) {
-    h2::before { position:absolute; right:calc(100% + 14px); white-space:nowrap; }
+    h2::before { position:absolute; right:calc(100% + 14px); }
   }
   h2::after { content:""; flex:1; height:1px; background:var(--line);
     align-self:center; }
