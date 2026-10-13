@@ -6,10 +6,11 @@
 
    A progressive enhancement. The drawings ship finished; this script only
    adds .is-armed (which the page's CSS uses, on screens and only without
-   reduced motion, to start the outlines undrawn) and then .is-drawn when a
-   drawing is a third in view. Readers who ask for reduced motion, and
-   browsers without IntersectionObserver, get the finished drawing and no
-   script work. */
+   reduced motion, to start the outlines undrawn) and then .is-drawn once a
+   drawing reaches the top two-thirds of the screen. That is measured against
+   the screen, not the drawing, so a drawing taller than the screen still
+   draws. Readers who ask for reduced motion, and browsers without
+   IntersectionObserver, get the finished drawing and no script work. */
 (function () {
   if (!('IntersectionObserver' in window)) return;
   if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
@@ -21,7 +22,7 @@
       e.target.classList.add('is-drawn');
       io.unobserve(e.target);
     });
-  }, { threshold: 0.33 });
+  }, { rootMargin: '0px 0px -33% 0px' });
   Array.prototype.forEach.call(figs, function (f) {
     f.classList.add('is-armed');
     io.observe(f);
