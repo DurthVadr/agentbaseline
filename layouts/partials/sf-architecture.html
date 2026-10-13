@@ -20,11 +20,12 @@
        Context: dict "caption" (the deck's line), "n" (the paper's figure
        number for the pointer) and "pdf" (the PDF's path, or empty when the
        checkout has none, which drops the pointer). Styles: .sfa in the
-       page's sheet; static/js/draw.js draws the outlines in, once. */ -}}
+       page's sheet, and the paper's figures' wide/narrow switch (.sff-d);
+       static/js/draw.js draws the outlines in, once. */ -}}
 <figure class="sff sfa" id="figure-{{ .n }}" data-draw>
-  <div class="sfa-v">
-    <div class="sfa-w">{{ partial "sf-architecture.svg" . }}</div>
-    <div class="sfa-n">{{ partial "sf-architecture-narrow.svg" . }}</div>
+  <div class="sff-d has-n">
+    <div class="sff-w">{{ partial "sf-architecture.svg" . }}</div>
+    <div class="sff-n">{{ partial "sf-architecture-narrow.svg" . }}</div>
   </div>
   <figcaption>{{ .caption }}{{ with .pdf }} <a class="sfa-ref" href="/{{ . }}#nameddest=identity-and-access-who-the-agent-acts-for-and-what-it-may-do">The paper’s own drawing: Figure {{ $.n }} (PDF)</a>{{ end }}</figcaption>
 </figure>
