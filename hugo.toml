@@ -150,20 +150,17 @@ disableKinds = ["taxonomy", "term", "RSS", "section"]
   # Set false and the band leaves in one line.
   showLevels    = true
 
-# Thanked on the homepage, under the bylines, for supporting and adopting the
-# framework. Organizations, not authors: the bylines are people. One line each:
-# the name, which is what a screen reader hears for the mark; the mark, a
-# partial under layouts/partials/logos; and its height in px, set by eye so
-# every mark sits at one optical size and none outweighs the rest. The page
-# sorts the row by name, whatever the order here. A mark is the organization's
-# own file from its press kit, recoloured to currentColor and never redrawn.
+# Thanked on the homepage under the bylines, sorted by name there. Each mark is
+# the organization's published one (its press kit, or a logo library built from
+# media kits), recoloured to currentColor, never redrawn; `name` is what a
+# screen reader hears, and `height` (px) is set by eye so none outweighs the rest.
 [params.thanks]
   orgs = [
-    { name = "Browserbase", logo = "browserbase", height = 21 },
+    { name = "Browserbase", logo = "browserbase", height = 19 },
     { name = "Datadog",     logo = "datadog",     height = 20.5 },
     { name = "Docker",      logo = "docker",      height = 17 },
     { name = "Keycard",     logo = "keycard",     height = 17.5 },
-    { name = "Snyk",        logo = "snyk",        height = 26 },
+    { name = "Snyk",        logo = "snyk",        height = 24 },
     { name = "Socket",      logo = "socket",      height = 19 },
     { name = "Tessl",       logo = "tessl",       height = 22 },
   ]

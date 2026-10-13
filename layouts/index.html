@@ -730,12 +730,13 @@
   {{- with .Site.Params.thanks }}
   {{/* Sorted here, so no organization leads because of where its line sits
        in hugo.toml. The row is a list; each mark is an image named for its
-       organization. */}}
+       organization. role="list" because Safari drops the role of a list
+       styled without markers. */}}
   <h3 class="thanks">With thanks</h3>
   <div class="prose">
     <p>A special thank you to the organizations supporting and adopting the framework.</p>
   </div>
-  <ul class="orgs">
+  <ul class="orgs" role="list">
     {{- range sort .orgs "name" }}
     {{- if not (and .name .logo .height) }}{{ errorf "hugo.toml: every params.thanks org needs name, logo and height" }}{{ end }}
     <li style="--h:{{ .height }}px">{{ partial (printf "logos/%s.svg" .logo) . }}</li>
