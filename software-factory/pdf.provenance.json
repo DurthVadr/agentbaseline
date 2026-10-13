@@ -1,8 +1,8 @@
 {
   "artifact": "static/software-factory.pdf",
-  "bytes": 651840,
+  "bytes": 651371,
   "pages": 26,
-  "sha256": "5cd089a9335b6bae79cfd84b817c744ec43af0c28b3fa0f25c3b67ed1dacc49e",
+  "sha256": "d24dd2ade2a77d222b68559a2d06d0c974ff32d1e23acb24ee6dd7c50082de43",
   "source_date_epoch": "1791892800",
   "built_by": {
     "producer": "Skia/PDF m154",
@@ -21,7 +21,7 @@
     "software-factory/figures/figure-4.svg": "7fa0a65c76794448b14e44cfb347a552fcdd046c44fae06761bf3ba62bf166a6",
     "software-factory/figures/figure-5.svg": "143b17ad59fb55d25fa30f6d2d3f4fe14b824c7296a14530d635fe0704b5ffdf",
     "software-factory/figures/figure-6.svg": "650c399b68c534050d97ca329683fbc06a1cedaf33401fc63760384a400088a2",
-    "software-factory/software-factory.md": "36ab4f9675435887952af34d10f76dca553f341122df1259c123c19de89a9f4f",
+    "software-factory/software-factory.md": "de32d6f2428a4b9fffd26030aad536e5b406ae15eaf63d04d7b6e74d5f18f0c2",
     "static/fonts/chakra-petch-normal-500-latin.woff2": "adf007cd277ef6dac0c8cecacfb60cc5e24e7c8bcce4db98aa233bd3a88ef5a3",
     "static/fonts/chakra-petch-normal-600-latin.woff2": "4d6d5f0b31b3a471a843779c4ecada040e5bc291f96bca9805a94293fe8003fa",
     "static/fonts/figtree-italic-400-latin.woff2": "9341f363343c85f00e5a23573accc776baaf0b59ab2eda0560f206e22ac57c04",
