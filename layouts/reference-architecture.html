@@ -552,8 +552,8 @@
   <h2 id="authors">Who wrote it</h2>
   <div class="prose">
     {{- /* The paper's byline, in surname order. Only confirmed people
-           render; the yaml's statement when none has. The second paper's
-           authors are credited here only, not on the baseline's homepage. */ -}}
+           render; the yaml's statement when none has. The homepage names
+           them too, under the baseline's byline, in a sentence of its own. */ -}}
     {{- with hugo.Data.sfcontributors }}
     {{- $sfa := sort (where .contributors "confirmed" true) "sortkey" }}
     {{- with $sfa }}

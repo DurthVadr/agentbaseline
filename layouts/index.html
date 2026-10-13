@@ -401,6 +401,9 @@
     line-height:0; }
   /* The byline wraps between people, never inside a name ("Kamil / Potrec"). */
   .nb { white-space:nowrap; }
+  /* Two papers, two groups of people: the second paper's byline sits under a
+     hairline, never run on as one list with the baseline's. */
+  .prose p.sf-byline { border-top:1px solid var(--line); padding-top:18px; }
 
   ol.factors + .prose { margin-top:28px; }
   /* The three ways out of the page, on one line, in the label voice. */
@@ -666,9 +669,10 @@
   {{/* The second paper, after the baseline's own and smaller than it: a
        heading that says how the two relate, one sentence that names it, the
        three links. The heading is not "Reference architecture": on the
-       baseline's page that reads as the baseline's own. Its authors, its
-       figures and its "open for comment" live on its page, not here. The id
-       is the launch address, agentbaseline.org/#software-factory. */}}
+       baseline's page that reads as the baseline's own. Its figures and its
+       "open for comment" live on its page, not here; its authors are named
+       under "Who wrote it". The id is the launch address,
+       agentbaseline.org/#software-factory. */}}
   <h2 id="software-factory" data-depth="software-factory">Built on the baseline</h2>
 
   <div class="prose">
@@ -718,12 +722,30 @@
 
   <h2 data-depth="authors">Who wrote it</h2>
   <div class="prose">
-    <p>Drafted by&#32;
+    {{- /* Each byline opens with its paper, so a reader knows which one a
+           name belongs to; two authors are in both. */ -}}
+    <p>Agent Baseline was drafted by&#32;
     {{- /* Surname order — see the note in contributors.yaml. First-name order
            clusters these six into three company pairs, which is the one
            arrangement that makes a joint document read as three delegations. */ -}}
     {{- $authors := sort (where $people.contributors "confirmed" true) "sortkey" }}
     {{- partial "byline-names.html" (dict "people" $authors "source" "whitepaper/contributors.yaml") }}.</p>
+    {{- with .Site.Params.softwareFactory }}
+    {{- with hugo.Data.sfcontributors }}
+    {{- /* The second paper's authors under the baseline's, as its own page
+           prints them. Only confirmed people; the yaml's statement when none
+           has. */ -}}
+    {{- $sfa := sort (where .contributors "confirmed" true) "sortkey" }}
+    {{- with $sfa }}
+    <p class="sf-byline"><a href="/reference-architecture">The Secure Software Factory: A Reference Architecture</a> was drafted by&#32;
+    {{- partial "byline-names.html" (dict "people" . "serial" true "source" "software-factory/contributors.yaml") }}.</p>
+    {{- else }}
+    <p class="sf-byline">{{ .statement }}</p>
+    {{- end }}
+    {{- else }}
+    {{- errorf "software-factory/contributors.yaml is not mounted — the homepage would drop the second paper's authors" }}
+    {{- end }}
+    {{- end }}
 
   </div>
 
