@@ -6,9 +6,10 @@
      layout, silently absent from the other.
 
      Called with a dict so each page supplies its own title and description,
-     and optionally its own card:
-       {{ partial "social-meta.html" (dict "ctx" . "title" "…" "desc" "…" "image" "…") }} */}}
+     and optionally its own card and that card's alt text:
+       {{ partial "social-meta.html" (dict "ctx" . "title" "…" "desc" "…" "image" "…" "alt" "…") }} */}}
 {{- $t := .title | default "Agent Baseline" -}}
+{{- $own := .alt -}}
 {{- $d := .desc -}}
 {{- $u := .ctx.Permalink | default .ctx.Site.BaseURL -}}
 {{- /* trailingSlash is false in vercel.json, so /controls/ 308s to
@@ -29,9 +30,15 @@
        unversioned card, which is always present. */ -}}
 {{- $n := len hugo.Data.controls.controls -}}
 {{- $file := printf "social-card-%d.png" $n -}}
+{{- /* The card's words, for a reader who cannot see it: X and others read
+       og:image:alt, and without it a screen reader announces an unlabelled
+       image. The count comes from the catalogue, as the filename's does. */ -}}
+{{- $alt := printf "Agent Baseline. Identify the agent. Bound its authority. Control its actions. Prove its outcomes. Six security outcomes, %d controls, versioned in the open." $n -}}
 {{- if not (fileExists (printf "static/%s" $file)) -}}
   {{- warnf "social-card-%d.png is missing — og:image falls back to social-card.png, which may show a stale count. Run bin/build-social." $n -}}
   {{- $file = "social-card.png" -}}
+  {{- /* That card may show another count, so its alt names none. */ -}}
+  {{- $alt = "Agent Baseline. Identify the agent. Bound its authority. Control its actions. Prove its outcomes. Six security outcomes, versioned in the open." -}}
 {{- end -}}
 {{- /* A page with a card of its own passes "image" (a file in static/), e.g.
        the second paper's page, whose share should name that paper. Missing,
@@ -39,6 +46,9 @@
 {{- with .image -}}
   {{- if fileExists (printf "static/%s" .) -}}
     {{- $file = . -}}
+    {{- /* Its own alt goes with its own card, and only then: a fallback
+           to the baseline's card keeps the baseline's alt. */ -}}
+    {{- $alt = $own -}}
   {{- else -}}
     {{- warnf "%s is missing — og:image falls back to %s. Run bin/build-social --paper." . $file -}}
   {{- end -}}
@@ -52,7 +62,11 @@
 <meta property="og:image" content="{{ $card }}">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
+{{ with $alt }}<meta property="og:image:alt" content="{{ . }}">
+{{ end -}}
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="{{ $t }}">
 <meta name="twitter:description" content="{{ $d }}">
 <meta name="twitter:image" content="{{ $card }}">
+{{ with $alt }}<meta name="twitter:image:alt" content="{{ . }}">
+{{ end -}}
