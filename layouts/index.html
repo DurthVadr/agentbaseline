@@ -120,21 +120,10 @@
   .utility .pub { font-family:var(--labelfont); font-size:11.5px;
     letter-spacing:.07em; text-transform:uppercase; color:var(--soft); }
   .utility .pub .k { color:var(--faint); margin-right:2px; }
-  /* The launch pill (partials/pill.html), the one tinted block in the chrome:
-     a translucent wash of the accent. Its text is --link-hover, not --accent:
-     accent on its own 12% wash was 4.06:1 at 11px in light mode, under AA;
-     this is 6.9:1 (6.0:1 hovered). */
-  .utility a.closes, .utility a.closes:visited {
-    background:color-mix(in srgb, var(--accent) 12%, transparent);
-    color:var(--link-hover); font-family:var(--labelfont); font-weight:500;
-    font-size:11px; letter-spacing:.06em; padding:3px 8px;
-    border-radius:3px; }
-  .utility a.closes:hover {
-    background:color-mix(in srgb, var(--accent) 22%, transparent);
-    color:var(--link-hover); }
-  /* The room's link wears its mark and the accent, and no wash: the pill
-     stays the one tinted block in the chrome. Inline, not flex, so the
-     bar's baseline alignment sees this link's text baseline like the others'.
+  /* The room's link wears its mark and the accent, and no wash: the New
+     tag (partials/ra-link.html) stays the one tinted block in the chrome.
+     Inline, not flex, so the bar's baseline alignment sees this link's text
+     baseline like the others'.
      Phosphor regular rather than the site's thin: at this size on a 1x screen
      the thin octothorpe dissolves, and the theme button's 15px is the size. */
   .utility a.slack { color:var(--accent); }
@@ -340,6 +329,19 @@
     ul.tenets li:nth-child(2n)::after { display:none; }
   }
 
+  /* The second paper, named on the first screen: a label and the paper's own
+     title, in the label voice of the page's link rows. No wash: the bar's New
+     tag is the one tinted block. It hangs off the tenets' track. */
+  .titleblock p.second { margin:-28px 0 0; display:flex; flex-wrap:wrap;
+    align-items:baseline; gap:4px 14px; font-family:var(--labelfont);
+    line-height:1.5; }
+  .titleblock p.second .k { font-size:11.5px; letter-spacing:.07em;
+    text-transform:uppercase; color:var(--faint); }
+  .titleblock p.second a { font-size:14.5px; letter-spacing:.03em;
+    color:var(--link); text-wrap:balance; }
+  .titleblock p.second a::after { content:" \2192"; }
+  .titleblock p.second a:hover { color:var(--link-hover); }
+
 
   .intro p { margin:0 0 22px; }
 
@@ -435,8 +437,8 @@
     font-size:11.5px; font-weight:700; color:var(--accent); vertical-align:6px;
     margin-right:11px; }
   ol.questions .a { display:flex; gap:8px; margin-top:10px; flex-wrap:wrap; }
-  /* Text in --link-hover, not --accent, as the pill's is: accent on its own
-     10% wash was 3.9:1 at 11px in light mode, under AA. */
+  /* Text in --link-hover, not --accent, as the bar's New tag's is: accent on
+     its own 10% wash was 3.9:1 at 11px in light mode, under AA. */
   ol.questions .a a { font-family:var(--labelfont); font-weight:500;
     font-size:11px; letter-spacing:.07em; text-transform:uppercase;
     color:var(--link-hover); text-decoration:none; border-radius:3px;
@@ -472,18 +474,19 @@
 
   /* ── the software factory section ───────────────────────────────────── */
   /* Anchored: #software-factory is the launch address. It lands under a
-     sticky bar that is one row only from 1242px up. The margins are the
-     bar's measured heights in the landed state (mast on) with the launch
-     pill showing, plus about 20px; without the pill the bar is a row shorter
-     at some widths and the gap only grows. The steps move if the bar's copy
-     does — the published date, the pill, the version string, the mast
-     title. They sit on the scroller, not the targets, so keyboard focus
-     clears the bar too (WCAG 2.4.11), and the roster's anchors with it. */
-  html { scroll-padding-top:230px; }
-  @media (min-width:330px)  { html { scroll-padding-top:190px; } }
-  @media (min-width:463px)  { html { scroll-padding-top:150px; } }
-  @media (min-width:588px)  { html { scroll-padding-top:110px; } }
-  @media (min-width:1242px) { html { scroll-padding-top:64px; } }
+     sticky bar that is one row only from 1243px up. The margins are the
+     bar's measured heights in the landed state (mast on) with the New tag
+     showing, plus about 20px; without the tag the bar is a row shorter at
+     some widths and the gap only grows. The steps move if the bar's copy
+     does — the published date, the reference architecture link and its
+     tag, the version string, the mast title. They sit on the scroller, not
+     the targets, so keyboard focus clears the bar too (WCAG 2.4.11), and
+     the roster's anchors with it. */
+  html { scroll-padding-top:225px; }
+  @media (min-width:354px)  { html { scroll-padding-top:185px; } }
+  @media (min-width:417px)  { html { scroll-padding-top:145px; } }
+  @media (min-width:566px)  { html { scroll-padding-top:105px; } }
+  @media (min-width:1243px) { html { scroll-padding-top:64px; } }
   .allcontrols { font-family:var(--labelfont); font-weight:500; font-size:12.5px;
     letter-spacing:.08em; text-transform:uppercase; margin:6px 0 0; }
   .allcontrols a { color:var(--accent); text-decoration:none; }
@@ -527,13 +530,13 @@
 <nav class="utility" aria-label="Document">
   <div class="in">
     <a class="mast home-mast" href="/">Agent Baseline</a>
+    {{ partial "ra-link.html" . }}
     <a href="{{ .Site.Params.repo }}">Source</a>
     <a href="{{ .Site.Params.repo }}/issues">Comment</a>
     <a href="{{ .Site.Params.repo }}/blob/main/CHANGELOG.md">Changelog</a>
     <a href="{{ .Site.Params.repo }}/blob/main/GOVERNANCE.md">Governance</a>
     {{ with .Site.Params.slack }}<a class="slack" href="{{ . }}">{{ partial "icons/slack-logo.svg" $ }}Slack</a>{{ end }}
     <span class="right pub"><span class="k">Published</span> {{ .Site.Params.published }}</span>
-    {{ partial "pill.html" . }}
     {{ partial "artifacts-menu.html" . }}
     <span class="ver">v{{ .Site.Params.version }}</span>
     {{/* aria-pressed is corrected by theme.js as soon as the body parses — the
@@ -559,6 +562,12 @@
       <li>Control its actions.</li>
       <li>Prove its outcomes.</li>
     </ul>
+
+    {{- with .Site.Params.softwareFactory }}
+    {{/* Its name is the paper's title, unlike any other link on the page. */}}
+    <p class="second"><span class="k">{{ if partial "sf-new.html" $ }}New · {{ end }}{{ .published }}</span>
+      <a href="/reference-architecture">The Secure Software Factory: A Reference Architecture</a></p>
+    {{- end }}
 
   </header>
 

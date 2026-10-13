@@ -8,12 +8,12 @@
      hugo.toml.
 
      Deliberately not accent-filled. The utility bar already carries one tinted
-     block (the pill, a.closes), and two tinted blocks in the same viewport fight.
-     Here the accent is spent on the registration mark and the link only; the
-     strip itself is the page's wash with a hairline under it — the same
-     treatment the questions band and the figure plate use. The label's text is
-     the darker link token, as the pill's is: the accent itself is under AA at
-     this size on the wash. */}}
+     block (the New tag, partials/ra-link.html), and two tinted blocks in the
+     same viewport fight. Here the accent is spent on the registration mark and
+     the link only; the strip itself is the page's wash with a hairline under
+     it — the same treatment the questions band and the figure plate use. The
+     label's text is the darker link token, as the New tag's is: the accent
+     itself is under AA at this size on the wash. */}}
 {{- $e := .Site.Params.event -}}
 {{- if $e -}}
 {{- $live := true -}}
@@ -30,7 +30,7 @@
 
   /* The event strip. Datum-sheet grammar: a registration mark, a mono label with
      the section-mark's tracking, a hairline beneath. No fill and no glow — the
-     utility bar already spends the accent on the pill (a.closes), and two
+     utility bar already spends the accent on the New tag (ra-link.html), and two
      tinted blocks in one viewport compete. Sits above the sticky masthead on
      purpose: it should scroll away, not follow you down the page. */
   .eventbar { background:var(--wash); border-bottom:1px solid var(--line);
@@ -40,7 +40,7 @@
   .eventbar .mark { width:7px; height:7px; flex:none; background:var(--accent);
     /* the corner fiducial, shrunk — a filled square reads as "now" where the
        sheet's open squares read as registration */ }
-  /* Text in --link-hover, not --accent, as the pill does: 11px accent on the
+  /* Text in --link-hover, not --accent, as the New tag does: 11px accent on the
      wash was 4.4:1 in light mode, under AA; this is 7.5:1. The square beside
      it keeps the accent. */
   .eventbar .tag { color:var(--link-hover); font-weight:600; letter-spacing:.1em;

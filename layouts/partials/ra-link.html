@@ -1,0 +1,28 @@
+{{- /* The bar's link to the second paper, after the masthead on every page,
+     so no reader has to scroll to the homepage's section to find it. One
+     partial for the four bars, so its name and address cannot drift.
+
+     Until params.softwareFactory.launchUntil (sf-new.html) it leads with a
+     "New" tag: the launch pill, folded in, so the bar never carries two links
+     to one page. The tag is the one tinted block in the chrome.
+
+     On the paper's own page it ends the crumb, as the current page, with no
+     tag: the reader is already there. */ -}}
+{{- with site.Params.softwareFactory -}}
+{{- $href := "/reference-architecture" -}}
+{{- $here := eq (strings.TrimSuffix "/" $.RelPermalink) $href -}}
+{{- $new := and (not $here) (partial "sf-new.html" $) -}}
+{{- if $new }}
+<style>
+  /* The pill's wash and ink: --link-hover, not --accent, because accent on
+     its own 12% wash was 4.06:1 at 11px in light mode, under AA; this is
+     6.9:1 (6.0:1 hovered). */
+  .utility a.ra .new { background:color-mix(in srgb, var(--accent) 12%, transparent);
+    color:var(--link-hover); font-weight:500; font-size:11px;
+    letter-spacing:.06em; padding:3px 7px; border-radius:3px; margin-right:3px; }
+  .utility a.ra:hover .new {
+    background:color-mix(in srgb, var(--accent) 22%, transparent); }
+</style>
+{{- end }}
+<a class="ra" href="{{ $href }}"{{ if $here }} aria-current="page"{{ end }}>{{ if $new }}<span class="new">New</span> {{ end }}Reference architecture</a>
+{{- end -}}

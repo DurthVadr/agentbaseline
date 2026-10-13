@@ -112,7 +112,7 @@ disableKinds = ["taxonomy", "term", "RSS", "section"]
 
 # The reference architecture: the second paper, built on the baseline, with
 # the software factory as its subject. The homepage section, its own page, the
-# Artifacts rows, the bar's pill and the controls page all read this table.
+# Artifacts rows, the bar's link and the controls page all read this table.
 # `pdf` and `paper` are checked with fileExists, so a checkout without the
 # file gets no dead link; `source` is the repo subfolder; `template` is the
 # issue form that applies the `software-factory` label, which an outside
@@ -137,12 +137,13 @@ disableKinds = ["taxonomy", "term", "RSS", "section"]
   paper         = "software-factory.md"
   template      = "software-factory.yml"
   commentsUntil = ""
-  # The bar's launch pill renders only before this moment, two weeks after
-  # the 13 October launch; after it the bar is the baseline's again. Compared
-  # at build time, like [params.event].until, and with the New York offset for
-  # the same reason (a bare date is midnight UTC, 8 pm the evening before in
-  # New York). The site does not rebuild on its own: redeploy on or after
-  # 27 October or the pill stays up.
+  # The bar link's New tag, and the New on the homepage's launch line, render
+  # only before this moment, two weeks after the 13 October launch; the link
+  # and the line stay (layouts/partials/sf-new.html). Compared at build time,
+  # like [params.event].until, and with the New York offset for the same
+  # reason (a bare date is midnight UTC, 8 pm the evening before in New York).
+  # The site does not rebuild on its own: redeploy on or after 27 October or
+  # the tag stays up.
   launchUntil   = "2026-10-27T00:00:00-04:00"
   # The levels band: the paper's level names, figures and captions, with one
   # sentence per level written for the page (software-factory/levels.yaml).
