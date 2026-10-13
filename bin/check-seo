@@ -30,6 +30,15 @@ Every indexable page (any built .html that is not noindex):
   JSON-LD      at least one block; every block parses as JSON, names
                schema.org as its @context and has an @type. A block that does
                not parse is ignored without a word by everything that reads it.
+               Every link in it to this site resolves to a built file.
+  paper facts  each TechArticle states its own paper's version and date — the
+               ones the paper's opening lines give — and its authors are the
+               confirmed entries of the contributors.yaml beside the paper; its
+               text version's header gives the same version and date. The paper
+               is found through the article's text/markdown encoding, whose
+               header names its source. Two papers share these templates, and
+               one that inherits the other's version, date or byline still
+               parses and still renders nothing a person sees.
   text version a <link rel="alternate" type="text/markdown"> whose href is a
                built, non-empty file on this site. Then the file itself: no
                relative link survives in it (it is served from the root, so a
@@ -224,6 +233,97 @@ def repo_file_missing(url):
     return bool(m) and not (ROOT / m.group(1)).exists()
 
 
+MONTHS = {m: i for i, m in enumerate(
+    "January February March April May June July August September October November December".split(), 1)}
+
+
+def paper_stated(md):
+    """The version and ISO date a paper states in its opening lines, in either
+    form this repository's papers use, or None. The same lines check-copy holds
+    hugo.toml to and bin/build-pdf reads:
+
+      Published as **Agent Baseline** · v1.0-draft · 30 July 2026 · …
+      Version 1, October 13, 2026
+    """
+    head = "\n".join(md.splitlines()[:12])
+    m = re.search(r"^Published as\b[^\n]*?·\s*v([0-9][^\s·]*)\s*·\s*(\d{1,2}) ([A-Z][a-z]+) (\d{4})", head, re.M)
+    if m and m.group(3) in MONTHS:
+        return m.group(1), f"{m.group(4)}-{MONTHS[m.group(3)]:02d}-{int(m.group(2)):02d}"
+    m = re.search(r"^Version (\S+), ([A-Z][a-z]+) (\d{1,2}), (\d{4})$", head, re.M)
+    if m and m.group(2) in MONTHS:
+        return m.group(1), f"{m.group(4)}-{MONTHS[m.group(2)]:02d}-{int(m.group(3)):02d}"
+    return None
+
+
+def confirmed_names(path):
+    """The names of the confirmed entries in a contributors.yaml, read without
+    a YAML library (nothing here needs one): each entry is a `- ` item at the
+    list's own indent, in flow (`- { name: …, confirmed: true }`) or block form.
+    Nested lists, such as an entry's sections, sit deeper and stay inside it."""
+    text = path.read_text(encoding="utf-8")
+    m = re.search(r"^contributors:\s*\n(.*)", text, re.M | re.S)
+    if not m:
+        return None
+    body = m.group(1)
+    first = re.search(r"^([ \t]*)-\s", body, re.M)
+    if not first:
+        return []
+    names = []
+    for item in re.split(rf"^{first.group(1)}-\s", body, flags=re.M)[1:]:
+        n = re.search(r"\bname:\s*([^,}\n#]+)", item)
+        c = re.search(r"\bconfirmed:\s*(true|false)\b", item)
+        if n and c and c.group(1) == "true":
+            names.append(n.group(1).strip())
+    return names
+
+
+def check_article(where, i, node):
+    """A TechArticle states its own paper's version, date and authors."""
+    mds = [e.get("contentUrl", "") for e in node.get("encoding", []) if isinstance(e, dict)
+           and e.get("encodingFormat") == "text/markdown"]
+    f = built(mds[0]) if len(mds) == 1 else None
+    if not f:
+        find(where, f"JSON-LD block {i} (TechArticle) has no text/markdown encoding that is a "
+                    f"built file, so its paper cannot be found to hold it to")
+        return
+    text = f.read_text(encoding="utf-8")
+    hdr = re.match(r"---\n(.*?)\n---\n", text, re.S)
+    hdr = hdr.group(1) if hdr else ""
+    field = lambda k: (re.search(rf'^{k}:\s*"([^"]*)"\s*$', hdr, re.M) or [None, None])[1]
+    src = field("source") or ""
+    m = REPO and re.match(re.escape(REPO) + r"/blob/main/([^#?]+)$", src)
+    paper = ROOT / m.group(1) if m else None
+    if not (paper and paper.is_file()):
+        find(where, f"JSON-LD block {i} (TechArticle): {f.name} names no source file in this "
+                    f"checkout ({src or 'no source: line'})")
+        return
+    rel = paper.relative_to(ROOT).as_posix()
+    stated = paper_stated(paper.read_text(encoding="utf-8"))
+    if not stated:
+        find(where, f"JSON-LD block {i} (TechArticle): {rel} states no version and date in its "
+                    f"opening lines, so there is nothing to hold the JSON-LD to")
+    else:
+        version, date = stated
+        for key, want in (("version", version), ("datePublished", date)):
+            if node.get(key) != want:
+                find(where, f"JSON-LD block {i} (TechArticle) has {key} {node.get(key)!r}; "
+                            f"{rel} says {want!r}")
+        for key, want in (("version", version), ("published", date)):
+            if field(key) != want:
+                find(f.name, f"header {key} is {field(key)!r}; {rel} says {want!r}")
+    people = paper.parent / "contributors.yaml"
+    names = confirmed_names(people) if people.is_file() else None
+    if names is None:
+        find(where, f"JSON-LD block {i} (TechArticle): no contributors list in "
+                    f"{people.relative_to(ROOT).as_posix()} to hold its authors to")
+        return
+    got = [a.get("name") for a in node.get("author", []) if isinstance(a, dict)]
+    if sorted(got) != sorted(names):
+        find(where, f"JSON-LD block {i} (TechArticle) names {len(got)} author(s), not the "
+                    f"{len(names)} {people.relative_to(ROOT).as_posix()} confirms — missing "
+                    f"{sorted(set(names) - set(got)) or 'none'}, extra {sorted(set(got) - set(names)) or 'none'}")
+
+
 def text_links(where, path):
     """A text version (or llms.txt) may hold only absolute links and fragments,
     and every link to this site must resolve. Inline links, reference-style
@@ -254,7 +354,7 @@ def text_links(where, path):
 
 # ── every page ───────────────────────────────────────────────────────────────
 pages = [p for p in sorted(PUBLIC.rglob("*.html")) if p.name != "404.html"]
-texts = 0
+texts = articles = 0
 for p in pages:
     where = p.relative_to(PUBLIC).as_posix()
     h = parse(p)
@@ -318,12 +418,17 @@ for p in pages:
                 stack.extend(v)
             elif isinstance(v, str) and repo_file_missing(v):
                 find(where, f"JSON-LD block {i} links {v}, a file the repository does not have")
+            elif isinstance(v, str) and (v == ORIGIN or v.startswith(ORIGIN + "/")) and not built(v):
+                find(where, f"JSON-LD block {i} links {v}, which resolves to no built file")
         for node in nodes:
             ctx = node.get("@context") if isinstance(node, dict) else None
             if not (isinstance(ctx, str) and re.fullmatch(r"https?://schema\.org/?", ctx)):
                 find(where, f"JSON-LD block {i} has @context {ctx!r}; want https://schema.org")
             if not (isinstance(node, dict) and node.get("@type")):
                 find(where, f"JSON-LD block {i} has no @type")
+            elif node.get("@type") == "TechArticle":
+                articles += 1
+                check_article(where, i, node)
 
     alts = rels(h, "alternate", type="text/markdown")
     if not alts:
@@ -418,7 +523,7 @@ for where, msg in findings:
     print(f"  FAIL  {where}: {msg}")
 for where, msg in warnings:
     print(f"  warn  {where}: {msg}")
-print(f"\nseo: {len(pages)} page(s) · {texts} text version(s) · {len(locs)} sitemap URL(s)"
-      f" · {off} off-site llms.txt link(s) not fetched")
+print(f"\nseo: {len(pages)} page(s) · {texts} text version(s) · {articles} paper(s) held to "
+      f"their source · {len(locs)} sitemap URL(s) · {off} off-site llms.txt link(s) not fetched")
 print(f"\n{len(findings)} finding(s), {len(warnings)} warning(s)")
 sys.exit(1 if findings else 0)

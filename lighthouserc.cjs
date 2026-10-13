@@ -13,8 +13,9 @@
 // headers or rewrites, so what is scored is the HTML, not the deployment. Two
 // things differ from production because of that, and neither is the page's
 // fault: /_vercel/insights/script.js does not exist locally, so best practices
-// sees a console error on every page; and the directory form /controls/ is
-// what this server answers, where Vercel answers /controls.
+// sees a console error on every page; and the directory forms /controls/ and
+// /reference-architecture/ are what this server answers, where Vercel answers
+// /controls and /reference-architecture.
 module.exports = {
   ci: {
     collect: {
@@ -22,6 +23,7 @@ module.exports = {
       url: [
         'http://localhost/',
         'http://localhost/controls/',
+        'http://localhost/reference-architecture/',
         'http://localhost/404.html',
       ],
       numberOfRuns: 1,

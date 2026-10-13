@@ -42,11 +42,12 @@ that convened this is a complete implementation.
 Full text: [`whitepaper/CONTROLS.md`](whitepaper/CONTROLS.md) ·
 machine-readable: [`whitepaper/controls.yaml`](whitepaper/controls.yaml)
 
-**For agents:** the site serves the paper and the controls as Markdown, at
-[`/whitepaper.md`](https://agentbaseline.org/whitepaper.md) and
-[`/controls.md`](https://agentbaseline.org/controls.md), and lists both in
+**For agents:** the site serves both papers and the controls as Markdown, at
+[`/whitepaper.md`](https://agentbaseline.org/whitepaper.md),
+[`/software-factory.md`](https://agentbaseline.org/software-factory.md) and
+[`/controls.md`](https://agentbaseline.org/controls.md), and lists them in
 [`/llms.txt`](https://agentbaseline.org/llms.txt). They are built from the same files
-as the PDF, so the text an agent quotes is the text a reader prints.
+as the PDFs, so the text an agent quotes is the text a reader prints.
 
 ## Using it
 

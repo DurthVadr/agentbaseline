@@ -64,7 +64,7 @@ founding maintainers too.
    affiliations disclosed — not as company logos.
 
 A new document on the site gets a Markdown edition by joining `params.texts` in
-`hugo.toml`; the comment there lists the four other places it has to be named.
+`hugo.toml`; the comment there lists the other places it has to be named.
 That is what puts it in `llms.txt`, and a page whose head names no Markdown
 edition fails `bin/check-seo`.
 

@@ -54,6 +54,11 @@ disableKinds = ["taxonomy", "term", "RSS", "section"]
   source = "whitepaper/figures"
   target = "static/figures"
   files = ["*.svg"]
+# The reference architecture's figures, the same way, at /software-factory/figures/.
+[[module.mounts]]
+  source = "software-factory/figures"
+  target = "static/software-factory/figures"
+  files = ["*.svg"]
 # The text versions read their documents from here — see params.texts. Mounted
 # at the same path they have in the repository, so a relative link inside one
 # resolves against the directory it was written in. Declaring any assets mount
@@ -65,12 +70,16 @@ disableKinds = ["taxonomy", "term", "RSS", "section"]
 [[module.mounts]]
   source = "whitepaper/CONTROLS.md"
   target = "assets/whitepaper/CONTROLS.md"
+[[module.mounts]]
+  source = "software-factory/software-factory.md"
+  target = "assets/software-factory/software-factory.md"
 
 # One output format per text version, all on the home page, so each lands at
-# the root of the site under its baseName: /whitepaper.md, /controls.md. One
-# template, layouts/index.md, renders every text/markdown format; it finds its
-# entry in params.texts by permalink, which works because `permalinkable` makes
-# .RelPermalink name the file being written rather than the HTML page.
+# the root of the site under its baseName: /whitepaper.md, /controls.md,
+# /software-factory.md. One template, layouts/index.md, renders every
+# text/markdown format; it finds its entry in params.texts by permalink, which
+# works because `permalinkable` makes .RelPermalink name the file being written
+# rather than the HTML page.
 # `notAlternative` keeps them out of .AlternativeOutputFormats: the <link
 # rel="alternate"> tags are written by hand, per page, in
 # partials/machine-readable.html, because /controls.md is the text of
@@ -84,6 +93,12 @@ disableKinds = ["taxonomy", "term", "RSS", "section"]
 [outputFormats.catalogue]
   mediaType = "text/markdown"
   baseName = "controls"
+  isPlainText = true
+  notAlternative = true
+  permalinkable = true
+[outputFormats.reference]
+  mediaType = "text/markdown"
+  baseName = "software-factory"
   isPlainText = true
   notAlternative = true
   permalinkable = true
@@ -103,7 +118,7 @@ disableKinds = ["taxonomy", "term", "RSS", "section"]
   permalinkable = true
 
 [outputs]
-  home = ["html", "paper", "catalogue", "llms", "llmsfull"]
+  home = ["html", "paper", "catalogue", "reference", "llms", "llmsfull"]
 
 [params]
   version       = "1.0-draft"
@@ -244,6 +259,17 @@ disableKinds = ["taxonomy", "term", "RSS", "section"]
 #                whose <head> links to it. vercel.json carries the same pairing
 #                as a Link header, and bin/check-seo fails if the two disagree.
 #   schema       the schema.org type of the page's JSON-LD for this document.
+#   facts        optional: the [params] table holding this document's own
+#                `version` and `published`, for a document versioned apart from
+#                the baseline. Without it, the baseline's params.version and
+#                params.published. The text's header, llms-full.txt and the
+#                JSON-LD all read them through partials/text-facts.html.
+#   contributors optional, for a TechArticle: the data file (mounted above)
+#                whose confirmed entries are its authors. Without it, the
+#                baseline's, `contributors`.
+#   figures      optional: where this site serves the SVGs in the document's
+#                own figures/ directory (a static mount above). The text's links
+#                to them point there rather than at the repository.
 #   pdf          optional: the typeset edition, a path under static/.
 #   data         optional: the machine-readable source, by repository path.
 #   license      an SPDX identifier, and license_url the licence itself. Which
@@ -254,20 +280,21 @@ disableKinds = ["taxonomy", "term", "RSS", "section"]
 #                first, then here.
 #   description  one sentence, for llms.txt and the JSON-LD.
 #
-# The reference architecture joins the same way when software-factory/
-# software-factory.md lands, with no new template: mount it at
-# assets/software-factory/software-factory.md, add an output format with
-# baseName "software-factory", add that format to outputs.home, and add an
-# entry here. Set `page` to the HTML page that presents it, or to the text's
-# own address if there is none — then no page links to it and no Link header is
-# needed. Add the vercel.json headers for the new file, and llms.txt and
-# llms-full.txt pick it up on the next build.
+# A new document joins the way the reference architecture did, with no new
+# template: mount it under assets/ at its repository path, add an output format
+# with the file's baseName, add that format to outputs.home, and add an entry
+# here. Set `page` to the HTML page that presents it, and put
+# partials/machine-readable.html in that page's <head>; or set it to the text's
+# own address if there is no page — then no page links to it and no Link header
+# or redirect is needed. Add the vercel.json redirect and headers for the new
+# file, and llms.txt and llms-full.txt pick it up on the next build.
 [[params.texts]]
   format      = "paper"
   source      = "whitepaper/whitepaper.md"
   title       = "Agent Baseline white paper"
   page        = "/"
   schema      = "TechArticle"
+  figures     = "/figures/"
   pdf         = "whitepaper.pdf"
   license     = "CC-BY-4.0"
   license_url = "https://creativecommons.org/licenses/by/4.0/"
@@ -282,6 +309,19 @@ disableKinds = ["taxonomy", "term", "RSS", "section"]
   license     = "Apache-2.0"
   license_url = "https://www.apache.org/licenses/LICENSE-2.0"
   description = "Every control, grouped by outcome, each with a permanent identifier you can cite and the requirement it states. Generated from controls.yaml, the source of truth."
+[[params.texts]]
+  format       = "reference"
+  source       = "software-factory/software-factory.md"
+  title        = "The Secure Software Factory: A Reference Architecture"
+  page         = "/reference-architecture"
+  schema       = "TechArticle"
+  facts        = "softwareFactory"
+  contributors = "sfcontributors"
+  figures      = "/software-factory/figures/"
+  pdf          = "software-factory.pdf"
+  license      = "CC-BY-4.0"
+  license_url  = "https://creativecommons.org/licenses/by/4.0/"
+  description  = "Four security boundaries for software factories, where AI agents turn tickets into tested code, enforced outside the agent at every level of autonomy. Built on Agent Baseline."
 
 # The event strip and the closing block render only while `until` is in the
 # future AT BUILD TIME. The site is static, so after `until` passes they stay

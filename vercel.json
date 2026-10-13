@@ -40,6 +40,18 @@
       ],
       "destination": "/controls.md",
       "permanent": false
+    },
+    {
+      "source": "/reference-architecture",
+      "has": [
+        {
+          "type": "header",
+          "key": "accept",
+          "value": ".*text/markdown.*"
+        }
+      ],
+      "destination": "/software-factory.md",
+      "permanent": false
     }
   ],
   "headers": [
@@ -71,6 +83,15 @@
       ]
     },
     {
+      "source": "/reference-architecture",
+      "headers": [
+        {
+          "key": "Vary",
+          "value": "Accept"
+        }
+      ]
+    },
+    {
       "source": "/whitepaper.md",
       "headers": [
         {
@@ -93,6 +114,19 @@
         {
           "key": "Link",
           "value": "<https://agentbaseline.org/controls>; rel=\"canonical\""
+        }
+      ]
+    },
+    {
+      "source": "/software-factory.md",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "text/markdown; charset=utf-8"
+        },
+        {
+          "key": "Link",
+          "value": "<https://agentbaseline.org/reference-architecture>; rel=\"canonical\""
         }
       ]
     },

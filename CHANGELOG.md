@@ -18,14 +18,16 @@ never reused.
   27 October; the homepage names it under the tenets and again in a section after the white
   paper. Comments go through an issue form that applies the
   `software-factory` label; CONTRIBUTING says how. *(2026-10-13, Matthew Creager, Keycard)*
-- The white paper and the controls are published as Markdown for agents, at `/whitepaper.md`
-  and `/controls.md`, with the paper's figures at `/figures/`. Hugo builds them from
-  `whitepaper.md`, the file the PDF is built from, and from `CONTROLS.md`, and each opens
-  with a short header naming its page, version and licence. Each page links its Markdown in
-  the head, a request that asks for `text/markdown` is redirected to it, and `/llms.txt` and
-  `/llms-full.txt` list and carry both. The pages describe the paper, the catalogue and the
-  site in JSON-LD. Nothing a person sees has changed. `bin/check-seo` holds the build to all
-  of it, and Lighthouse scores the pages in CI. *(2026-10-13)*
+- Both papers and the controls are published as Markdown for agents, at `/whitepaper.md`,
+  `/software-factory.md` and `/controls.md`, with each paper's figures beside it at
+  `/figures/` and `/software-factory/figures/`. Hugo builds them from `whitepaper.md` and
+  `software-factory.md`, the files the PDFs are built from, and from `CONTROLS.md`, and each
+  opens with a short header naming its page, its own version and date, and its licence. Each
+  page links its Markdown in the head, a request that asks for `text/markdown` is redirected
+  to it, and `/llms.txt` and `/llms-full.txt` list and carry all three. The pages describe the
+  papers, the catalogue and the site in JSON-LD, each paper with its own version, date and
+  authors. Nothing a person sees has changed. `bin/check-seo` holds the build to all of it,
+  and Lighthouse scores the pages in CI. *(2026-10-13)*
 - The community Slack is linked from the utility bar on every page and, on the homepage,
   from the review section, with the invite address in one place in `hugo.toml`.
   CONTRIBUTING and GOVERNANCE say what belongs in Slack and what belongs in an issue, and

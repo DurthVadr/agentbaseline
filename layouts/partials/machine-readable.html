@@ -32,25 +32,34 @@
      and crawlers read them as text.
 
      Every value comes from a source of record — hugo.toml, the params.texts
-     entry, contributors.yaml, the document's own heading — and a field with no
-     such source is left out rather than filled in. That is why there is no
-     publisher: the repository names who convened the work, not who publishes
-     it. And no image: the card's URL is chosen in social-meta.html with a
-     fallback, and a second copy of that choice would drift from the first.
+     entry, the document's contributors file, the document's own heading — and
+     a field with no such source is left out rather than filled in. That is why
+     there is no publisher: the repository names who convened the work, not who
+     publishes it. And no image: the card's URL is chosen in social-meta.html
+     with a fallback, and a second copy of that choice would drift from the
+     first. Version and date are each document's own (partials/
+     text-facts.html): the reference architecture is version 1 of 13 October
+     2026, not the baseline's draft of 30 July. bin/check-seo holds every
+     TechArticle's version, date and authors to its paper.
 
      The home page also describes the site, as a WebSite. Then each document
      whose page this is, typed by its entry's `schema`:
 
-       TechArticle  the white paper. schema.org's own description of the type
-                    names specifications, which is what the paper is; Report
+       TechArticle  the white paper and the reference architecture.
+                    schema.org's own description of the type names
+                    specifications, which is what each paper is; Report
                     would suit findings published by an organization, and its
                     one distinguishing property, reportNumber, has nothing to
-                    hold. Its PDF and Markdown are each an `encoding` of the
-                    same work — associatedMedia is for media that accompany a
+                    hold. A paper's PDF and Markdown are each an `encoding` of
+                    the same work — associatedMedia is for media that accompany a
                     work, not for the work in another format. Authors are the
-                    confirmed contributors, in the page's surname order, with
-                    the affiliation contributors.yaml states; an unconfirmed
-                    entry is never published here, as it is not on the page.
+                    confirmed entries of the document's own contributors file
+                    (the data file the entry's `contributors` names: the
+                    baseline's contributors.yaml, or software-factory/
+                    contributors.yaml as sfcontributors), in the page's
+                    surname order, each with the organization that file names
+                    as worksFor; an unconfirmed entry is never published here,
+                    as it is not on the page.
        Dataset      the controls. The catalogue is data first — controls.yaml
                     is the source of truth — and Dataset is the type that
                     carries downloads (`distribution`). No creator: neither the
@@ -64,14 +73,15 @@
 {{- range $e := site.Params.texts -}}
   {{- if eq $e.page $here -}}
     {{- $md := site.Home.OutputFormats.Get $e.format -}}
+    {{- $f := partial "text-facts.html" $e -}}
     {{- $ld := dict
           "@context" "https://schema.org"
           "@type" $e.schema
           "name" $e.title
           "description" $e.description
           "url" (absURL $e.page)
-          "version" site.Params.version
-          "datePublished" (partial "published-iso.html" .)
+          "version" $f.version
+          "datePublished" (partial "published-iso.html" $f.published)
           "inLanguage" $lang
           "isAccessibleForFree" true
           "license" $e.license_url -}}
@@ -82,9 +92,14 @@
       {{- with findRESubmatch `(?m)^# (.+?)(?:\s*\{#[^}]*\})?\s*$` $src 1 -}}
         {{- $ld = merge $ld (dict "headline" (index (index . 0) 1)) -}}
       {{- end -}}
+      {{- $key := $e.contributors | default "contributors" -}}
+      {{- $people := index hugo.Data $key -}}
+      {{- if not $people -}}
+        {{- errorf "params.texts %q: contributors = %q names no data file — see the mounts in hugo.toml" $e.format $key -}}
+      {{- end -}}
       {{- $authors := slice -}}
-      {{- range sort (where hugo.Data.contributors.contributors "confirmed" true) "sortkey" -}}
-        {{- $authors = $authors | append (dict "@type" "Person" "name" .name "affiliation" (dict "@type" "Organization" "name" .affiliation)) -}}
+      {{- range sort (where $people.contributors "confirmed" true) "sortkey" -}}
+        {{- $authors = $authors | append (dict "@type" "Person" "name" .name "worksFor" (dict "@type" "Organization" "name" .affiliation)) -}}
       {{- end -}}
       {{- with $authors }}{{ $ld = merge $ld (dict "author" .) }}{{ end -}}
       {{- $enc := slice -}}
