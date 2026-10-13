@@ -1,100 +1,81 @@
 {
  "W": 376,
- "H": 1360,
+ "H": 1513,
  "shapes": [
   {
-   "tag": "start",
+   "tag": "req",
    "kind": "card",
    "x": 32,
    "y": 18,
-   "w": 190,
-   "h": 60,
-   "solid": true,
-   "sw": 1.75
-  },
-  {
-   "tag": "dk0",
-   "kind": "card",
-   "x": 240,
-   "y": 28,
-   "w": 18,
-   "h": 12,
-   "solid": true,
-   "sw": 1.75
-  },
-  {
-   "tag": "dk1",
-   "kind": "card",
-   "x": 240,
-   "y": 47,
-   "w": 18,
-   "h": 12,
+   "w": 146,
+   "h": 44,
    "solid": true,
    "sw": 1
   },
   {
-   "tag": "sc",
-   "kind": "guard",
-   "x": 104,
-   "y": 102,
-   "w": 256,
+   "tag": "ctx",
+   "kind": "card",
+   "x": 196,
+   "y": 18,
+   "w": 164,
    "h": 60,
    "solid": true,
-   "sw": 1.25
-  },
-  {
-   "tag": "badgesc",
-   "kind": "badge",
-   "x": 96,
-   "y": 94,
-   "w": 16,
-   "h": 16,
-   "solid": true
+   "sw": 1.75
   },
   {
    "tag": "orch",
    "kind": "agent",
-   "x": 44,
-   "y": 230,
-   "w": 178,
-   "h": 60,
+   "x": 32,
+   "y": 102,
+   "w": 328,
+   "h": 44,
    "solid": true,
    "sw": 1.75
   },
   {
    "tag": "exec",
    "kind": "card",
-   "x": 44,
-   "y": 314,
-   "w": 178,
-   "h": 44,
+   "x": 32,
+   "y": 190,
+   "w": 152,
+   "h": 92,
    "solid": true,
    "sw": 1
   },
   {
-   "tag": "sc.launch.dot",
-   "kind": "glyph",
-   "x": 79.4,
-   "y": 367.4,
-   "w": 5.2,
-   "h": 5.2,
-   "solid": false
+   "tag": "auth",
+   "kind": "guard",
+   "x": 196,
+   "y": 190,
+   "w": 164,
+   "h": 76,
+   "solid": true,
+   "sw": 1.25
+  },
+  {
+   "tag": "badgeauth",
+   "kind": "badge",
+   "x": 188,
+   "y": 182,
+   "w": 16,
+   "h": 16,
+   "solid": true
   },
   {
    "tag": "sbx0",
    "kind": "sandbox",
-   "x": 44,
-   "y": 382,
-   "w": 178,
-   "h": 46,
+   "x": 62,
+   "y": 376,
+   "w": 184,
+   "h": 116,
    "solid": true,
-   "sw": 2.0
+   "sw": 1.25
   },
   {
    "tag": "badgesbx0",
    "kind": "badge",
-   "x": 36,
-   "y": 374,
+   "x": 54,
+   "y": 368,
    "w": 16,
    "h": 16,
    "solid": true
@@ -102,27 +83,65 @@
   {
    "tag": "sbx0.loop",
    "kind": "glyph",
-   "x": 196.5,
-   "y": 386.5,
+   "x": 73.5,
+   "y": 454.5,
    "w": 19.0,
    "h": 19.0,
    "solid": false
   },
   {
+   "tag": "proxy0",
+   "kind": "guard",
+   "x": 264,
+   "y": 396.0,
+   "w": 68,
+   "h": 76,
+   "solid": true,
+   "sw": 1.25
+  },
+  {
+   "tag": "badgeproxy0",
+   "kind": "badge",
+   "x": 256,
+   "y": 388.0,
+   "w": 16,
+   "h": 16,
+   "solid": true
+  },
+  {
+   "tag": "badgeproxy0",
+   "kind": "badge",
+   "x": 304,
+   "y": 388.0,
+   "w": 16,
+   "h": 16,
+   "solid": true
+  },
+  {
+   "tag": "mon0",
+   "kind": "agent",
+   "x": 62,
+   "y": 512,
+   "w": 184,
+   "h": 44,
+   "solid": true,
+   "sw": 1.75
+  },
+  {
    "tag": "sbx1",
    "kind": "sandbox",
-   "x": 44,
-   "y": 440,
-   "w": 178,
-   "h": 46,
+   "x": 62,
+   "y": 580,
+   "w": 184,
+   "h": 116,
    "solid": true,
-   "sw": 2.0
+   "sw": 1.25
   },
   {
    "tag": "badgesbx1",
    "kind": "badge",
-   "x": 36,
-   "y": 432,
+   "x": 54,
+   "y": 572,
    "w": 16,
    "h": 16,
    "solid": true
@@ -130,163 +149,105 @@
   {
    "tag": "sbx1.loop",
    "kind": "glyph",
-   "x": 196.5,
-   "y": 444.5,
+   "x": 73.5,
+   "y": 658.5,
    "w": 19.0,
    "h": 19.0,
    "solid": false
   },
   {
-   "tag": "sbx2",
-   "kind": "sandbox",
-   "x": 44,
-   "y": 498,
-   "w": 178,
-   "h": 46,
+   "tag": "proxy1",
+   "kind": "guard",
+   "x": 264,
+   "y": 600.0,
+   "w": 68,
+   "h": 76,
    "solid": true,
-   "sw": 2.0
+   "sw": 1.25
   },
   {
-   "tag": "badgesbx2",
+   "tag": "badgeproxy1",
    "kind": "badge",
-   "x": 36,
-   "y": 490,
+   "x": 256,
+   "y": 592.0,
    "w": 16,
    "h": 16,
    "solid": true
   },
   {
-   "tag": "sbx2.loop",
-   "kind": "glyph",
-   "x": 196.5,
-   "y": 502.5,
-   "w": 19.0,
-   "h": 19.0,
-   "solid": false
+   "tag": "badgeproxy1",
+   "kind": "badge",
+   "x": 304,
+   "y": 592.0,
+   "w": 16,
+   "h": 16,
+   "solid": true
   },
   {
-   "tag": "mon",
+   "tag": "mon1",
    "kind": "agent",
-   "x": 44,
-   "y": 572,
-   "w": 178,
-   "h": 60,
+   "x": 62,
+   "y": 716,
+   "w": 184,
+   "h": 44,
    "solid": true,
    "sw": 1.75
   },
   {
+   "tag": "obs",
+   "kind": "record",
+   "x": 32,
+   "y": 778,
+   "w": 300,
+   "h": 48,
+   "solid": true,
+   "sw": 1.25
+  },
+  {
    "tag": "frame",
    "kind": "zone",
-   "x": 32,
-   "y": 190,
-   "w": 336,
-   "h": 458,
+   "x": 22,
+   "y": 306,
+   "w": 320,
+   "h": 532,
    "solid": false,
    "sw": 1
   },
   {
-   "tag": "pghost6",
-   "kind": "ghost",
-   "x": 246,
-   "y": 443.0,
-   "w": 104,
-   "h": 52,
-   "solid": false,
-   "sw": 0.75
-  },
-  {
-   "tag": "pghost3",
-   "kind": "ghost",
-   "x": 243,
-   "y": 440.0,
-   "w": 104,
-   "h": 52,
-   "solid": false,
-   "sw": 0.75
-  },
-  {
-   "tag": "proxy",
-   "kind": "guardfill",
-   "x": 240,
-   "y": 437.0,
-   "w": 104,
-   "h": 52.0,
-   "solid": true,
-   "sw": 1.25
-  },
-  {
-   "tag": "badgeproxy",
-   "kind": "badge",
-   "x": 232,
-   "y": 429.0,
-   "w": 16,
-   "h": 16,
-   "solid": true
-  },
-  {
-   "tag": "badgeproxy",
-   "kind": "badge",
-   "x": 310,
-   "y": 481.0,
-   "w": 16,
-   "h": 16,
-   "solid": true
-  },
-  {
-   "tag": "auth",
-   "kind": "guard",
-   "x": 44,
-   "y": 688,
-   "w": 294,
-   "h": 44,
-   "solid": true,
-   "sw": 1.25
-  },
-  {
-   "tag": "badgeauth",
-   "kind": "badge",
-   "x": 36,
-   "y": 680,
-   "w": 16,
-   "h": 16,
-   "solid": true
-  },
-  {
-   "tag": "dest0",
+   "tag": "sc",
    "kind": "guard",
    "x": 32,
-   "y": 756,
-   "w": 302,
+   "y": 862,
+   "w": 308,
    "h": 44,
    "solid": true,
    "sw": 1.25
   },
   {
-   "tag": "dest1",
-   "kind": "card",
-   "x": 32,
-   "y": 812,
-   "w": 302,
-   "h": 44,
-   "solid": true,
-   "sw": 1
+   "tag": "badgesc",
+   "kind": "badge",
+   "x": 24,
+   "y": 854,
+   "w": 16,
+   "h": 16,
+   "solid": true
   },
   {
-   "tag": "dest2",
-   "kind": "card",
+   "tag": "mg",
+   "kind": "guard",
    "x": 32,
-   "y": 868,
-   "w": 302,
+   "y": 918,
+   "w": 308,
    "h": 44,
    "solid": true,
-   "sw": 1
+   "sw": 1.25
   },
   {
-   "tag": "dest3",
+   "tag": "down",
    "kind": "card",
    "x": 32,
-   "y": 924,
-   "w": 302,
+   "y": 974,
+   "w": 308,
    "h": 44,
    "solid": true,
    "sw": 1
@@ -295,8 +256,8 @@
    "tag": "out0",
    "kind": "card",
    "x": 32,
-   "y": 996,
-   "w": 302,
+   "y": 1042,
+   "w": 308,
    "h": 46,
    "solid": true,
    "sw": 1
@@ -305,8 +266,8 @@
    "tag": "out1",
    "kind": "card",
    "x": 32,
-   "y": 1064,
-   "w": 336,
+   "y": 1110,
+   "w": 308,
    "h": 46,
    "solid": true,
    "sw": 1
@@ -315,8 +276,8 @@
    "tag": "out2",
    "kind": "card",
    "x": 32,
-   "y": 1132,
-   "w": 336,
+   "y": 1178,
+   "w": 308,
    "h": 46,
    "solid": true,
    "sw": 1.75
@@ -325,35 +286,108 @@
    "tag": "out3",
    "kind": "card",
    "x": 32,
-   "y": 1200,
-   "w": 336,
+   "y": 1246,
+   "w": 308,
    "h": 46,
    "solid": true,
    "sw": 1.75
   },
   {
-   "tag": "obs",
-   "kind": "record",
+   "tag": "sig",
+   "kind": "card",
    "x": 32,
-   "y": 1302,
-   "w": 336,
-   "h": 48,
+   "y": 1332,
+   "w": 308,
+   "h": 44,
    "solid": true,
-   "sw": 1.25
+   "sw": 1.75
+  },
+  {
+   "tag": "badgelg1",
+   "kind": "badge",
+   "x": 32,
+   "y": 1424,
+   "w": 16,
+   "h": 16,
+   "solid": true
+  },
+  {
+   "tag": "badgelg2",
+   "kind": "badge",
+   "x": 144.73469387755102,
+   "y": 1424,
+   "w": 16,
+   "h": 16,
+   "solid": true
+  },
+  {
+   "tag": "badgelg3",
+   "kind": "badge",
+   "x": 32,
+   "y": 1448,
+   "w": 16,
+   "h": 16,
+   "solid": true
+  },
+  {
+   "tag": "badgelg4",
+   "kind": "badge",
+   "x": 144.73469387755102,
+   "y": 1448,
+   "w": 16,
+   "h": 16,
+   "solid": true
+  },
+  {
+   "tag": "dk0",
+   "kind": "card",
+   "x": 32,
+   "y": 1470,
+   "w": 18,
+   "h": 12,
+   "solid": true,
+   "sw": 1.75
+  },
+  {
+   "tag": "dk1",
+   "kind": "card",
+   "x": 32,
+   "y": 1489,
+   "w": 18,
+   "h": 12,
+   "solid": true,
+   "sw": 1
   }
  ],
  "links": [
   {
-   "tag": "takes",
+   "tag": "req.in",
    "kind": "flow",
    "pts": [
     [
-     82,
+     68,
+     62
+    ],
+    [
+     68,
+     102
+    ]
+   ],
+   "head": true,
+   "group": null,
+   "free": false
+  },
+  {
+   "tag": "ctx.in",
+   "kind": "flow",
+   "pts": [
+    [
+     278,
      78
     ],
     [
-     82,
-     230
+     278,
+     102
     ]
    ],
    "head": true,
@@ -361,105 +395,16 @@
    "free": false
   },
   {
-   "tag": "sc.launch",
+   "tag": "schedule",
    "kind": "flow",
    "pts": [
     [
-     270,
-     162
+     68,
+     146
     ],
     [
-     270,
-     370
-    ],
-    [
-     82,
-     370
-    ]
-   ],
-   "head": false,
-   "group": null,
-   "free": false
-  },
-  {
-   "tag": "starts",
-   "kind": "flow",
-   "pts": [
-    [
-     82,
-     358
-    ],
-    [
-     82,
-     382
-    ]
-   ],
-   "head": true,
-   "group": null,
-   "free": false
-  },
-  {
-   "tag": "watch",
-   "kind": "flow",
-   "pts": [
-    [
-     142,
-     572
-    ],
-    [
-     142,
-     544
-    ]
-   ],
-   "head": false,
-   "group": null,
-   "free": false
-  },
-  {
-   "tag": "sc.pkg",
-   "kind": "flow",
-   "pts": [
-    [
-     336,
-     162
-    ],
-    [
-     336,
-     437.0
-    ]
-   ],
-   "head": true,
-   "group": null,
-   "free": false
-  },
-  {
-   "tag": "traffic",
-   "kind": "flow",
-   "pts": [
-    [
-     222,
-     463
-    ],
-    [
-     240,
-     463
-    ]
-   ],
-   "head": true,
-   "group": null,
-   "free": false
-  },
-  {
-   "tag": "grant",
-   "kind": "grant",
-   "pts": [
-    [
-     304,
-     688
-    ],
-    [
-     304,
-     495.0
+     68,
+     190
     ]
    ],
    "head": true,
@@ -471,20 +416,12 @@
    "kind": "flow",
    "pts": [
     [
-     44,
-     252
+     338,
+     146
     ],
     [
-     24,
-     252
-    ],
-    [
-     24,
-     710.0
-    ],
-    [
-     44,
-     710.0
+     338,
+     190
     ]
    ],
    "head": true,
@@ -492,16 +429,33 @@
    "free": false
   },
   {
-   "tag": "bus.in",
+   "tag": "traffic0",
    "kind": "flow",
    "pts": [
     [
-     344,
-     463
+     246,
+     434.0
     ],
     [
-     356,
-     463
+     264,
+     434.0
+    ]
+   ],
+   "head": true,
+   "group": null,
+   "free": false
+  },
+  {
+   "tag": "bus.in0",
+   "kind": "flow",
+   "pts": [
+    [
+     332,
+     434.0
+    ],
+    [
+     360,
+     434.0
     ]
    ],
    "head": false,
@@ -509,16 +463,152 @@
    "free": false
   },
   {
+   "tag": "watch0",
+   "kind": "flow",
+   "pts": [
+    [
+     154.0,
+     512
+    ],
+    [
+     154.0,
+     492
+    ]
+   ],
+   "head": false,
+   "group": null,
+   "free": false
+  },
+  {
+   "tag": "traffic1",
+   "kind": "flow",
+   "pts": [
+    [
+     246,
+     638.0
+    ],
+    [
+     264,
+     638.0
+    ]
+   ],
+   "head": true,
+   "group": null,
+   "free": false
+  },
+  {
+   "tag": "bus.in1",
+   "kind": "flow",
+   "pts": [
+    [
+     332,
+     638.0
+    ],
+    [
+     360,
+     638.0
+    ]
+   ],
+   "head": false,
+   "group": "bus",
+   "free": false
+  },
+  {
+   "tag": "watch1",
+   "kind": "flow",
+   "pts": [
+    [
+     154.0,
+     716
+    ],
+    [
+     154.0,
+     696
+    ]
+   ],
+   "head": false,
+   "group": null,
+   "free": false
+  },
+  {
+   "tag": "split",
+   "kind": "flow",
+   "pts": [
+    [
+     44,
+     282
+    ],
+    [
+     44,
+     620
+    ]
+   ],
+   "head": false,
+   "group": "split",
+   "free": false
+  },
+  {
+   "tag": "split0",
+   "kind": "flow",
+   "pts": [
+    [
+     44,
+     416
+    ],
+    [
+     62,
+     416
+    ]
+   ],
+   "head": true,
+   "group": "split",
+   "free": false
+  },
+  {
+   "tag": "split1",
+   "kind": "flow",
+   "pts": [
+    [
+     44,
+     620
+    ],
+    [
+     62,
+     620
+    ]
+   ],
+   "head": true,
+   "group": "split",
+   "free": false
+  },
+  {
+   "tag": "grant",
+   "kind": "grant",
+   "pts": [
+    [
+     290,
+     266
+    ],
+    [
+     290,
+     396.0
+    ]
+   ],
+   "head": true,
+   "group": null,
+   "free": false
+  },
+  {
    "tag": "bus",
    "kind": "flow",
    "pts": [
     [
-     356,
-     463
+     360,
+     434.0
     ],
     [
-     356,
-     946.0
+     360,
+     996
     ]
    ],
    "head": false,
@@ -530,12 +620,12 @@
    "kind": "flow",
    "pts": [
     [
-     356,
-     778.0
+     360,
+     884
     ],
     [
-     334,
-     778.0
+     340,
+     884
     ]
    ],
    "head": true,
@@ -547,12 +637,12 @@
    "kind": "flow",
    "pts": [
     [
-     356,
-     834.0
+     360,
+     940
     ],
     [
-     334,
-     834.0
+     340,
+     940
     ]
    ],
    "head": true,
@@ -564,49 +654,15 @@
    "kind": "flow",
    "pts": [
     [
-     356,
-     890.0
+     360,
+     996
     ],
     [
-     334,
-     890.0
+     340,
+     996
     ]
    ],
    "head": true,
-   "group": "bus",
-   "free": false
-  },
-  {
-   "tag": "bus.3",
-   "kind": "flow",
-   "pts": [
-    [
-     356,
-     946.0
-    ],
-    [
-     334,
-     946.0
-    ]
-   ],
-   "head": true,
-   "group": "bus",
-   "free": false
-  },
-  {
-   "tag": "bus.prx",
-   "kind": "flow",
-   "pts": [
-    [
-     356,
-     946.0
-    ],
-    [
-     356,
-     1019
-    ]
-   ],
-   "head": false,
    "group": "bus",
    "free": false
   },
@@ -615,12 +671,16 @@
    "kind": "flow",
    "pts": [
     [
-     356,
-     1019
+     360,
+     996
     ],
     [
-     334,
-     1019
+     360,
+     1065
+    ],
+    [
+     340,
+     1065
     ]
    ],
    "head": true,
@@ -632,12 +692,12 @@
    "kind": "flow",
    "pts": [
     [
-     82,
-     1042
+     68,
+     1088
     ],
     [
-     82,
-     1064
+     68,
+     1110
     ]
    ],
    "head": true,
@@ -649,12 +709,12 @@
    "kind": "flow",
    "pts": [
     [
-     82,
-     1110
+     68,
+     1156
     ],
     [
-     82,
-     1132
+     68,
+     1178
     ]
    ],
    "head": true,
@@ -666,12 +726,29 @@
    "kind": "flow",
    "pts": [
     [
-     82,
-     1178
+     68,
+     1224
     ],
     [
-     82,
-     1200
+     68,
+     1246
+    ]
+   ],
+   "head": true,
+   "group": null,
+   "free": false
+  },
+  {
+   "tag": "incidents",
+   "kind": "loop",
+   "pts": [
+    [
+     68,
+     1292
+    ],
+    [
+     68,
+     1332
     ]
    ],
    "head": true,
@@ -683,24 +760,20 @@
    "kind": "loop",
    "pts": [
     [
-     82,
-     1246
-    ],
-    [
-     82,
-     1270
+     32,
+     1354
     ],
     [
      12,
-     1270
+     1354
     ],
     [
      12,
-     48.0
+     124
     ],
     [
      32,
-     48.0
+     124
     ]
    ],
    "head": true,
