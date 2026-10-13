@@ -502,6 +502,20 @@
     text-underline-offset:2px; }
   .prose .note { color:var(--soft); font-size:16px; }
 
+  /* The thanks under the bylines, kept quiet: a label rather than a numbered
+     section, one line, and one row of marks in the page's faint ink, each at
+     the height hugo.toml gives it, none linked. */
+  h3.thanks { font-family:var(--labelfont); font-weight:500; font-size:12px;
+    letter-spacing:.1em; text-transform:uppercase; color:var(--soft);
+    margin:40px 0 8px; }
+  ul.orgs { list-style:none; margin:2px 0 0; padding:0; color:var(--faint);
+    display:flex; flex-wrap:wrap; align-items:center; gap:16px 24px; }
+  ul.orgs svg { display:block; width:auto; height:var(--h); }
+  @media (max-width:479px) {
+    ul.orgs { gap:14px 20px; }
+    ul.orgs svg { height:calc(var(--h) * .92); }
+  }
+
   /* The footer mirrors the title block — a document closes the way it opens.
      It is a sibling of <main>, not a child of it: contentinfo is a landmark of
      the page, and a landmark nested inside main is not exposed as one. Outside
@@ -714,6 +728,22 @@
     {{- end }}.</p>
 
   </div>
+
+  {{- with .Site.Params.thanks }}
+  {{/* Sorted here, so no organization leads because of where its line sits
+       in hugo.toml. The row is a list; each mark is an image named for its
+       organization. */}}
+  <h3 class="thanks">With thanks</h3>
+  <div class="prose">
+    <p>A special thank you to the organizations supporting and adopting the framework.</p>
+  </div>
+  <ul class="orgs">
+    {{- range sort .orgs "name" }}
+    {{- if not (and .name .logo .height) }}{{ errorf "hugo.toml: every params.thanks org needs name, logo and height" }}{{ end }}
+    <li style="--h:{{ .height }}px">{{ partial (printf "logos/%s.svg" .logo) . }}</li>
+    {{- end }}
+  </ul>
+  {{- end }}
 
 {{ partial "event-block.html" . }}
 
