@@ -2,7 +2,7 @@
 
 Version 1, October 13, 2026
 
-Drafted by Eli Aleyner (Docker), Jet Anderson (GEICO), Michael Davis (J.P. Morgan), Ranti Familusi (Docker), Allie Howe (Keycard), Ian Livingstone (Keycard), William Manning (Docker), Andy McMahon (Barclays), Ahmad Nassri (Socket), Arjun Ramakrishnan (Mastercard), and Aaron Stanley (Secure Theory).
+Drafted by Eli Aleyner (Docker), Ranti Familusi (Docker), Allie Howe (Keycard), Ian Livingstone (Keycard), William Manning (Docker), Andy McMahon (Barclays), Ahmad Nassri (Socket), Arjun Ramakrishnan (Mastercard), and Aaron Stanley (Secure Theory).
 
 # Executive summary
 

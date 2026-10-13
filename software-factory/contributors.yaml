@@ -12,8 +12,6 @@ statement: >-
 
 contributors:
   - { name: Eli Aleyner,        sortkey: Aleyner,      affiliation: Docker,        confirmed: true }
-  - { name: Jet Anderson,       sortkey: Anderson,     affiliation: GEICO,         confirmed: true }
-  - { name: Michael Davis,      sortkey: Davis,        affiliation: J.P. Morgan,   confirmed: true }
   - { name: Ranti Familusi,     sortkey: Familusi,     affiliation: Docker,        confirmed: true }
   - { name: Allie Howe,         sortkey: Howe,         affiliation: Keycard,       confirmed: true }
   - { name: Ian Livingstone,    sortkey: Livingstone,  affiliation: Keycard,       confirmed: true }
