@@ -57,9 +57,11 @@
                     (the data file the entry's `contributors` names: the
                     baseline's contributors.yaml, or software-factory/
                     contributors.yaml as sfcontributors), in the page's
-                    surname order, each with the organization that file names
-                    as worksFor; an unconfirmed entry is never published here,
-                    as it is not on the page.
+                    surname order, each with the affiliation that file states.
+                    affiliation, not worksFor: a byline names an affiliation,
+                    and employment is a claim no file here makes. An
+                    unconfirmed entry is never published here, as it is not on
+                    the page.
        Dataset      the controls. The catalogue is data first — controls.yaml
                     is the source of truth — and Dataset is the type that
                     carries downloads (`distribution`). No creator: neither the
@@ -99,7 +101,7 @@
       {{- end -}}
       {{- $authors := slice -}}
       {{- range sort (where $people.contributors "confirmed" true) "sortkey" -}}
-        {{- $authors = $authors | append (dict "@type" "Person" "name" .name "worksFor" (dict "@type" "Organization" "name" .affiliation)) -}}
+        {{- $authors = $authors | append (dict "@type" "Person" "name" .name "affiliation" (dict "@type" "Organization" "name" .affiliation)) -}}
       {{- end -}}
       {{- with $authors }}{{ $ld = merge $ld (dict "author" .) }}{{ end -}}
       {{- $enc := slice -}}
