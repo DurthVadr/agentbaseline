@@ -74,6 +74,23 @@
     --baseline:#333531;
     --fig-ink:#DDDEDA; --fig-soft:#A2A6A2; --fig-faint:#868A86;
     --fig-hair:#333533; --fig-rule:#6A6D69; --fig-accent:#C6F13F; --fig-new:#2B3417; }
+  /* Print. Paper is white whatever the screen's theme: print the light
+     tokens, all of them, or a dark theme prints pale figure text on white,
+     the sandbox wash as a solid block and visited links at 2:1. The sticky
+     bar, the skip link and the event strip are for the screen: printed, they
+     land on top of whatever was under them. Each level and figure stays on
+     one page, and a section's heading stays with what follows it. */
+  @media print {
+    :root, :root[data-theme] { --paper:#FBF9F3; --ink:#221F18; --soft:#5C5850;
+      --faint:#736E60; --line:#E6E2D7; --link:#5A7A00; --link-hover:#3F5400;
+      --visited:#66713F; --mark:#B3541E; --wash:#F4F1E8;
+      --accent:#5A7A00; --baseline:#D9D4C6;
+      --fig-ink:#1C1A14; --fig-soft:#5F5B51; --fig-faint:#7E7969;
+      --fig-hair:#E6E2D7; --fig-rule:#8F8A7C; --fig-accent:#5A7A00; --fig-new:#DCE4BE; }
+    .skip, .eventbar, nav.utility { display:none; }
+    .mx .lvp, figure.sff { break-inside:avoid; }
+    h2 { break-after:avoid; }
+  }
 
   *,*::before,*::after { box-sizing: border-box; }
   body { margin:0; background:var(--paper); color:var(--ink);
@@ -307,16 +324,6 @@
      the wide drawing holds 10px text (bin/check-figure checks it at 644px),
      and the tall phone drawings no longer make the page outgrow the homepage
      on tablets. */
-  /* Paper is white whatever the screen's theme: print the light tokens, or a
-     dark theme prints pale figure text on white and the sandbox wash as a
-     solid block. */
-  @media print {
-    :root, :root[data-theme] { --paper:#FBF9F3; --ink:#221F18; --soft:#5C5850;
-      --faint:#736E60; --line:#E6E2D7; --link:#5A7A00; --wash:#F4F1E8;
-      --accent:#5A7A00; --baseline:#D9D4C6;
-      --fig-ink:#1C1A14; --fig-soft:#5F5B51; --fig-faint:#7E7969;
-      --fig-hair:#E6E2D7; --fig-rule:#8F8A7C; --fig-accent:#5A7A00; --fig-new:#DCE4BE; }
-  }
   figure.sff { margin:8px 0 0; position:relative; left:50%; transform:translateX(-50%);
     width:min(880px, calc(100vw - 2 * clamp(28px,4vw,56px))); }
   figure.sff > figcaption { max-width:680px; margin-inline:auto; }
