@@ -1,0 +1,15 @@
+{{- /* A byline's names, in the order given, joined as its paper joins them:
+       `serial` adds the comma before "and", which the reference
+       architecture's byline has and the white paper's does not. A name and
+       its affiliation never split across lines, and the space between them
+       is a real one, so copied text and screen readers get "Eli Aleyner
+       Docker", not "Eli AleynerDocker". `source` names the yaml in the
+       build error. */ -}}
+{{- $src := .source }}
+{{- $serial := .serial }}
+{{- $n := len .people }}
+{{- range $i, $c := .people }}
+{{- if not (and .name .affiliation) }}{{ errorf "%s: contributor %d needs name and affiliation" $src (add $i 1) }}{{ end }}
+{{- if $i }}{{ if eq (add $i 1) $n }}{{ if and $serial (gt $n 2) }},{{ end }} and {{ else }}, {{ end }}{{ end -}}
+<span class="nb">{{ .name }} <sup class="aff">{{ .affiliation }}</sup></span>
+{{- end -}}

@@ -558,15 +558,7 @@
     {{- $sfa := sort (where .contributors "confirmed" true) "sortkey" }}
     {{- with $sfa }}
     <p>Drafted by&#32;
-    {{- $n := len . }}
-    {{- range $i, $c := . }}
-    {{- if not (and .name .affiliation) }}{{ errorf "software-factory/contributors.yaml: contributor %d needs name and affiliation" (add $i 1) }}{{ end }}
-    {{- if $i }}{{ if eq (add $i 1) $n }}{{ if gt $n 2 }},{{ end }} and {{ else }}, {{ end }}{{ end }}
-    {{- /* A name and its affiliation never split across lines. The space
-           between them is a real one, so copied text and screen readers get
-           "Eli Aleyner Docker", not "Eli AleynerDocker". */ -}}
-    <span class="nb">{{ .name }} <sup class="aff">{{ .affiliation }}</sup></span>
-    {{- end }}.</p>
+    {{- partial "byline-names.html" (dict "people" . "serial" true "source" "software-factory/contributors.yaml") }}.</p>
     {{- else }}
     <p>{{ .statement }}</p>
     {{- end }}

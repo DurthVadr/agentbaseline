@@ -398,7 +398,9 @@
      voice, quiet as a footnote mark. */
   sup.aff { font-family:var(--labelfont); font-weight:500; font-size:10px;
     letter-spacing:.07em; text-transform:uppercase; color:var(--faint);
-    line-height:0; margin-left:3px; }
+    line-height:0; }
+  /* The byline wraps between people, never inside a name ("Kamil / Potrec"). */
+  .nb { white-space:nowrap; }
 
   ol.factors + .prose { margin-top:28px; }
   /* The three ways out of the page, on one line, in the label voice. */
@@ -721,11 +723,7 @@
            clusters these six into three company pairs, which is the one
            arrangement that makes a joint document read as three delegations. */ -}}
     {{- $authors := sort (where $people.contributors "confirmed" true) "sortkey" }}
-    {{- $n := len $authors }}
-    {{- range $i, $c := $authors }}
-    {{- if $i }}{{ if eq (add $i 1) $n }} and {{ else }}, {{ end }}{{ end }}
-    {{- .name }}<sup class="aff">{{ .affiliation }}</sup>
-    {{- end }}.</p>
+    {{- partial "byline-names.html" (dict "people" $authors "source" "whitepaper/contributors.yaml") }}.</p>
 
   </div>
 
