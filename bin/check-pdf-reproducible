@@ -71,7 +71,7 @@ exist and the only copy of it was in a temporary directory that died with the
 process. It now builds somewhere else entirely, via `bin/build-pdf --out`, so
 there is no window to lose it in.
 """
-import argparse, hashlib, importlib.machinery, importlib.util, json, pathlib, re, \
+import argparse, hashlib, importlib.machinery, importlib.util, json, pathlib, \
     subprocess, sys, tempfile
 
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
@@ -94,11 +94,6 @@ _loader.exec_module(current)
 CANNOT_JUDGE = 2
 
 
-def pdf_string(blob, key):
-    m = re.search(rb"/" + key.encode() + rb"\s*\((.*?)(?<!\\)\)", blob, re.S)
-    return re.sub(r"\\([()\\])", r"\1", m.group(1).decode("latin1")) if m else ""
-
-
 def judge(name):
     """(exit code, message) for one paper."""
     paper = PAPERS[name]
@@ -110,7 +105,10 @@ def judge(name):
             return 0, f"{name}: no committed PDF, nothing to reproduce"
         return 1, (f"{PROVENANCE.relative_to(ROOT)} is missing — run "
                    f"`python3 bin/build-pdf{flag}` first.")
-    manifest = json.loads(PROVENANCE.read_text(encoding="utf-8"))
+    try:
+        manifest = json.loads(PROVENANCE.read_text(encoding="utf-8"))
+    except json.JSONDecodeError as e:
+        return 1, f"{current.rel(PROVENANCE)} is not readable JSON: {e}"
     # A manifest of the other paper, or of nothing, matches its own inputs and its
     # own artifact, so every check below would pass and the rebuild would then
     # differ from the committed file for a reason that has nothing to do with
@@ -167,10 +165,10 @@ def judge(name):
     if rebuilt == committed:
         return 0, (f"reproducible · {tracked} · {len(rebuilt):,} bytes identical to the "
                    f"committed artifact\n"
-                   f"               built by {pdf_string(rebuilt, 'Producer')}")
+                   f"               built by {current.pdf_string(rebuilt, 'Producer')}")
 
     # ── the bytes differ, and now there is evidence for why ──────────────────
-    here = {k: pdf_string(rebuilt, k.capitalize()) for k in ("producer", "creator")}
+    here = {k: current.pdf_string(rebuilt, k.capitalize()) for k in ("producer", "creator")}
     there = {k: manifest.get("built_by", {}).get(k, "") for k in ("producer", "creator")}
     skew = [k for k in here if here[k] and there[k] and here[k] != there[k]]
 
