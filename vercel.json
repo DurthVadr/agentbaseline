@@ -52,6 +52,11 @@
       ],
       "destination": "/software-factory.md",
       "permanent": false
+    },
+    {
+      "source": "/(DIS|CON|AUT|VAL|OBS|RES)-(\\d{2})",
+      "destination": "/controls#$1-$2",
+      "permanent": false
     }
   ],
   "headers": [
