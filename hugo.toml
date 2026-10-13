@@ -137,13 +137,14 @@ disableKinds = ["taxonomy", "term", "RSS", "section"]
   paper         = "software-factory.md"
   template      = "software-factory.yml"
   commentsUntil = ""
-  # The bar link's New tag, and the New on the homepage's launch line, render
-  # only before this moment, two weeks after the 13 October launch; the link
-  # and the line stay (layouts/partials/sf-new.html). Compared at build time,
-  # like [params.event].until, and with the New York offset for the same
-  # reason (a bare date is midnight UTC, 8 pm the evening before in New York).
-  # The site does not rebuild on its own: redeploy on or after 27 October or
-  # the tag stays up.
+  # The bar button's launch plate (accent-filled, marked New), and the New on
+  # the homepage's launch line, render only before this moment, two weeks
+  # after the 13 October launch; the button, outlined, and the line stay
+  # (layouts/partials/sf-new.html). Compared at build time, like
+  # [params.event].until, and with the New York offset for the same reason (a
+  # bare date is midnight UTC, 8 pm the evening before in New York). The site
+  # does not rebuild on its own: redeploy on or after 27 October or the plate
+  # stays up.
   launchUntil   = "2026-10-27T00:00:00-04:00"
   # The levels band: the paper's level names, figures and captions, with one
   # sentence per level written for the page (software-factory/levels.yaml).

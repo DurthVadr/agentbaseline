@@ -120,8 +120,9 @@
   .utility .pub { font-family:var(--labelfont); font-size:11.5px;
     letter-spacing:.07em; text-transform:uppercase; color:var(--soft); }
   .utility .pub .k { color:var(--faint); margin-right:2px; }
-  /* The room's link wears its mark and the accent, and no wash: the New
-     tag (partials/ra-link.html) stays the one tinted block in the chrome.
+  /* The room's link wears its mark and the accent, and no wash: the
+     reference architecture button (partials/ra-link.html) stays the one
+     filled block in the chrome.
      Inline, not flex, so the bar's baseline alignment sees this link's text
      baseline like the others'.
      Phosphor regular rather than the site's thin: at this size on a 1x screen
@@ -330,8 +331,8 @@
   }
 
   /* The second paper, named on the first screen: a label and the paper's own
-     title, in the label voice of the page's link rows. No wash: the bar's New
-     tag is the one tinted block. It hangs off the tenets' track. */
+     title, in the label voice of the page's link rows. No wash: the bar's
+     button is the one filled block. It hangs off the tenets' track. */
   .titleblock p.second { margin:-28px 0 0; display:flex; flex-wrap:wrap;
     align-items:baseline; gap:4px 14px; font-family:var(--labelfont);
     line-height:1.5; }
@@ -442,8 +443,8 @@
     font-size:11.5px; font-weight:700; color:var(--accent); vertical-align:6px;
     margin-right:11px; }
   ol.questions .a { display:flex; gap:8px; margin-top:10px; flex-wrap:wrap; }
-  /* Text in --link-hover, not --accent, as the bar's New tag's is: accent on
-     its own 10% wash was 3.9:1 at 11px in light mode, under AA. */
+  /* Text in --link-hover, not --accent, as the event strip's label is:
+     accent on its own 10% wash was 3.9:1 at 11px in light mode, under AA. */
   ol.questions .a a { font-family:var(--labelfont); font-weight:500;
     font-size:11px; letter-spacing:.07em; text-transform:uppercase;
     color:var(--link-hover); text-decoration:none; border-radius:3px;
@@ -479,19 +480,20 @@
 
   /* ── the software factory section ───────────────────────────────────── */
   /* Anchored: #software-factory is the launch address. It lands under a
-     sticky bar that is one row only from 1243px up. The margins are the
-     bar's measured heights in the landed state (mast on) with the New tag
-     showing, plus about 20px; without the tag the bar is a row shorter at
-     some widths and the gap only grows. The steps move if the bar's copy
-     does — the published date, the reference architecture link and its
-     tag, the version string, the mast title. They sit on the scroller, not
+     sticky bar that is one row only from 1287px up. The margins are the
+     bar's measured heights in the landed state (mast on) with the launch
+     button showing, plus about 20px; the quiet button after launchUntil is
+     narrower, so the bar is then a row shorter at some widths and the gap
+     only grows. The steps move if the bar's copy does — the published date,
+     the reference architecture button and its plate, the version string,
+     the mast title. They sit on the scroller, not
      the targets, so keyboard focus clears the bar too (WCAG 2.4.11), and
      the roster's anchors with it. */
   html { scroll-padding-top:225px; }
   @media (min-width:354px)  { html { scroll-padding-top:185px; } }
-  @media (min-width:417px)  { html { scroll-padding-top:145px; } }
-  @media (min-width:566px)  { html { scroll-padding-top:105px; } }
-  @media (min-width:1243px) { html { scroll-padding-top:64px; } }
+  @media (min-width:419px)  { html { scroll-padding-top:145px; } }
+  @media (min-width:568px)  { html { scroll-padding-top:105px; } }
+  @media (min-width:1287px) { html { scroll-padding-top:64px; } }
   .allcontrols { font-family:var(--labelfont); font-weight:500; font-size:12.5px;
     letter-spacing:.08em; text-transform:uppercase; margin:6px 0 0; }
   .allcontrols a { color:var(--accent); text-decoration:none; }
