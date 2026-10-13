@@ -157,7 +157,6 @@ disableKinds = ["taxonomy", "term", "RSS", "section"]
 [params.thanks]
   orgs = [
     { name = "Browserbase", logo = "browserbase", height = 19 },
-    { name = "Datadog",     logo = "datadog",     height = 20.5 },
     { name = "Docker",      logo = "docker",      height = 17 },
     { name = "Keycard",     logo = "keycard",     height = 17.5 },
     { name = "Snyk",        logo = "snyk",        height = 24 },
