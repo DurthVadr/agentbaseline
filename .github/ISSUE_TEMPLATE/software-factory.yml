@@ -5,13 +5,17 @@ body:
   - type: dropdown
     id: boundary
     attributes:
-      label: Boundary
-      description: Leave blank if the comment cuts across the paper. These are the paper's four security boundaries, as named in software-factory/boundaries.yaml.
+      label: Part of the paper
+      description: Leave blank if the comment cuts across the paper.
       options:
         - Identity and access
         - Supply chain
         - Sandbox
         - Network
+        - Execution and observability
+        - "Level 1: Human-Orchestrated Factory"
+        - "Level 2: Workflow-Orchestrated Factory"
+        - "Level 3: Agent-Orchestrated Factory"
     validations:
       required: false
   - type: textarea
