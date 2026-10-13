@@ -100,6 +100,7 @@ Everything a reader sees is generated. Edit `controls.yaml`; never edit a derive
 python3 whitepaper/figures/build-figure-1.py      # the figure, from controls.yaml
 python3 software-factory/figures/build-figures.py # the reference architecture's figures
 python3 bin/sync-figure-partial                   # theme-aware copies for the site, both papers
+node bin/build-architecture-drawing.mjs           # the reference architecture page's own drawing
 python3 bin/render-controls                       # CONTROLS.md
 hugo --gc --minify                                # the site, into public/
 python3 bin/build-pdf                             # the PDF, via pandoc and Chrome
