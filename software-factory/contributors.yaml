@@ -18,5 +18,4 @@ contributors:
   - { name: William Manning,    sortkey: Manning,      affiliation: Docker,        confirmed: true }
   - { name: Andy McMahon,       sortkey: McMahon,      affiliation: Barclays,      confirmed: true }
   - { name: Ahmad Nassri,       sortkey: Nassri,       affiliation: Socket,        confirmed: true }
-  - { name: Arjun Ramakrishnan, sortkey: Ramakrishnan, affiliation: Mastercard,    confirmed: true }
   - { name: Aaron Stanley,      sortkey: Stanley,      affiliation: Secure Theory, confirmed: true }
