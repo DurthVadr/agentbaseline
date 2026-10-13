@@ -1290,7 +1290,7 @@ def build_software_factory(paper, draft):
              else f'<span class="nb">{html.escape(n)}</span>'
              for n, a in fm["people"]]
     # The last name is joined as the paper joins it. Its byline has a serial
-    # comma ("…Ramakrishnan (Mastercard), and Aaron Stanley…"); the cover used
+    # comma ("…Nassri (Socket), and Aaron Stanley…"); the cover used
     # the white paper's plain " and " and dropped it, so the cover did not
     # print what the paper says.
     serial = re.search(r",\s+and\s+[^,]+$", fm["byline"]) is not None
