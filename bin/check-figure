@@ -257,7 +257,8 @@ if GEOM.exists():
             for sh in shapes:
                 if sh["solid"] and seg_hits_rect(p, q, sh, 1.5):
                     errors.append(f"connector through a box: {l['tag']!r} crosses {sh['tag']!r}")
-    # 6c. connectors don't cross each other, except within one fan-out
+    # 6c. connectors don't cross each other, or run along each other, except
+    #     within one fan-out
     for i, l in enumerate(links):
         for m in links[i + 1:]:
             if l.get("group") and l.get("group") == m.get("group"):
@@ -266,6 +267,16 @@ if GEOM.exists():
                 for r, t in segs(m):
                     hz1, hz2 = p[1] == q[1], r[1] == t[1]
                     if hz1 == hz2:
+                        # Parallel. On the same line and overlapping, two
+                        # connectors read as one; meeting end to end is fine.
+                        k = 0 if hz1 else 1           # the axis they run along
+                        if p[1 - k] == q[1 - k] == r[1 - k] == t[1 - k]:
+                            lo = max(min(p[k], q[k]), min(r[k], t[k]))
+                            hi = min(max(p[k], q[k]), max(r[k], t[k]))
+                            if hi - lo > 1:
+                                errors.append(f"connectors overlap: {l['tag']!r} and {m['tag']!r} "
+                                              f"along {'y' if hz1 else 'x'}={p[1 - k]:.0f}, "
+                                              f"{lo:.0f} to {hi:.0f}")
                         continue
                     h_, v_ = ((p, q), (r, t)) if hz1 else ((r, t), (p, q))
                     yh, xv = h_[0][1], v_[0][0]
