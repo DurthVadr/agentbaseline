@@ -193,7 +193,7 @@
   /* The ways out of the page, on one line, in the label voice. */
   .prose p.ctas { font-family:var(--labelfont); font-size:13.5px;
     letter-spacing:.03em; color:var(--faint); margin-top:22px; }
-  .prose p.ctas a { color:var(--link); }
+  .prose p.ctas a { color:var(--link); white-space:nowrap; }
 
   /* The footer mirrors the title block — a document closes the way it opens.
      It is a sibling of <main>, not a child of it: contentinfo is a landmark of
@@ -266,9 +266,9 @@
          with the baseline's links, ahead of the second paper's. After "Read the
          reference architecture" a bare "Download the PDF" read as that paper's. */}}
     <p class="ctas">
-      <a href="/">Go to the overview</a> ·
-      <a href="/controls">Browse the controls</a> ·
-      {{ if fileExists "static/whitepaper.pdf" }}<a href="/whitepaper.pdf">Download the white paper (PDF)</a> · {{ end }}
+      <a href="/">Go to the overview</a>&nbsp;·
+      <a href="/controls">Browse the controls</a>&nbsp;·
+      {{ if fileExists "static/whitepaper.pdf" }}<a href="/whitepaper.pdf">Download the white paper (PDF)</a>&nbsp;· {{ end }}
       <a href="/reference-architecture">Read the reference architecture</a>
     </p>
   </div>

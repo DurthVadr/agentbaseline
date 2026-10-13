@@ -401,7 +401,7 @@
   /* The three ways out of the page, on one line, in the label voice. */
   .prose p.ctas { font-family:var(--labelfont); font-size:13.5px;
     letter-spacing:.03em; color:var(--faint); margin-top:18px; }
-  .prose p.ctas a { color:var(--link); }
+  .prose p.ctas a { color:var(--link); white-space:nowrap; }
   ol.questions + .prose { margin-top:30px; }
   .prose + h2 { margin-top:56px; }
 
@@ -625,8 +625,8 @@
     {{/* The heading already says "read the white paper"; the link says what you
          actually get. */}}
     <p class="ctas">
-      {{ if fileExists "static/whitepaper.pdf" }}<a href="/whitepaper.pdf">Download the PDF</a> · {{ end }}
-      <a href="{{ .Site.Params.repo }}">View the source</a> ·
+      {{ if fileExists "static/whitepaper.pdf" }}<a href="/whitepaper.pdf">Download the PDF</a>&nbsp;· {{ end }}
+      <a href="{{ .Site.Params.repo }}">View the source</a>&nbsp;·
       <a href="{{ .Site.Params.repo }}/issues">Share feedback</a>
     </p>
   </div>
@@ -652,8 +652,8 @@
          (WCAG 2.5.3). Spelled out in full, the row ran to two lines at 1440
          and the section was no longer smaller than the baseline's. */}}
     <p class="ctas">
-      <a href="/reference-architecture">Read the reference architecture</a> ·
-      {{ if fileExists (printf "static/%s" $sf.pdf) }}<a href="/{{ $sf.pdf }}">Download its PDF<span class="sr-only"> (the reference architecture)</span></a> · {{ end }}
+      <a href="/reference-architecture">Read the reference architecture</a>&nbsp;·
+      {{ if fileExists (printf "static/%s" $sf.pdf) }}<a href="/{{ $sf.pdf }}">Download its PDF<span class="sr-only"> (the reference architecture)</span></a>&nbsp;· {{ end }}
       <a href="{{ $.Site.Params.repo }}/issues/new?template={{ $sf.template }}">Comment on it<span class="sr-only"> (the reference architecture)</span></a>
     </p>
   </div>

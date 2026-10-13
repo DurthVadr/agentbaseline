@@ -199,11 +199,6 @@
 
   .prose p { margin:0 0 18px; }
   .prose .note { color:var(--soft); font-size:16px; }
-  /* The ways out of the page, on one line, in the label voice. */
-  .prose p.ctas { font-family:var(--labelfont); font-size:13.5px;
-    letter-spacing:.03em; color:var(--faint); margin-top:22px; }
-  .prose p.ctas a { color:var(--link); }
-
   /* The footer mirrors the title block — a document closes the way it opens.
      It is a sibling of <main>, not a child of it: contentinfo is a landmark of
      the page, and a landmark nested inside main is not exposed as one. */
@@ -239,7 +234,7 @@
   /* The three ways out of the page, on one line, in the label voice. */
   .prose p.ctas { font-family:var(--labelfont); font-size:13.5px;
     letter-spacing:.03em; color:var(--faint); margin-top:18px; }
-  .prose p.ctas a { color:var(--link); }
+  .prose p.ctas a { color:var(--link); white-space:nowrap; }
   .prose + h2 { margin-top:56px; }
 
   /* Affiliations ride each name as a superscript tag — the label layer's
@@ -467,8 +462,8 @@
     database in nine seconds, and names the control each one lacked. It then shows what to
     build at each level, mapped to Agent Baseline’s controls.</p>
     <p class="ctas">
-      {{ if fileExists (printf "static/%s" $sf.pdf) }}<a class="primary" href="/{{ $sf.pdf }}">Read the paper (PDF)</a> · {{ end }}
-      {{ if fileExists (printf "%s/%s" $sf.source $sf.paper) }}<a href="{{ .Site.Params.repo }}/blob/main/{{ $sf.source }}/{{ $sf.paper }}?plain=1">Source on GitHub</a> · {{ end }}
+      {{ if fileExists (printf "static/%s" $sf.pdf) }}<a class="primary" href="/{{ $sf.pdf }}">Read the paper (PDF)</a>&nbsp;· {{ end }}
+      {{ if fileExists (printf "%s/%s" $sf.source $sf.paper) }}<a href="{{ .Site.Params.repo }}/blob/main/{{ $sf.source }}/{{ $sf.paper }}?plain=1">Source on GitHub</a>&nbsp;· {{ end }}
       <a href="{{ .Site.Params.repo }}/issues/new?template={{ $sf.template }}">Share feedback</a>
     </p>
   </div>
