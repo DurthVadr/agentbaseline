@@ -1,21 +1,15 @@
 #!/usr/bin/env python3
 """Hold static/software-factory.pdf to its source, the way the white paper's is held.
 
-This began as a one-line refusal of the spike's stand-in PDF, by its digest. That
-caught exactly one wrong file: any other placeholder, a stale build, a draft or a
-hand-edited PDF passed it. The reference architecture now has a source and a
-build (`bin/build-pdf --paper software-factory`) with a provenance manifest, so
-it gets the same proof as the white paper instead: bin/check-pdf-current, for
-this paper.
-
-The PDF is published, so it is required (bin/papers.py): an absent PDF fails,
-where it used to pass while the paper was a draft. The PDF must have software-factory/pdf.provenance.json describing
-it, every input recorded there must be unchanged, and it must not be a draft. The
-manifest must also record this paper's own inputs — software-factory.md, every
-figure it references, the files that render it and the fonts it embeds — which
-are computed from the tree, not taken from the manifest: the white paper built to
-this paper's paths had a manifest that matched itself perfectly and passed here.
-The stand-in has no manifest, so it is refused like any other unexplained file.
+This is bin/check-pdf-current for this paper, under the name CI runs it by. The
+PDF is published, so it is required (bin/papers.py): an absent PDF fails. It
+must have software-factory/pdf.provenance.json describing it, every input
+recorded there must be unchanged, and it must not be a draft. The manifest must
+also record this paper's own inputs — software-factory.md, every figure it
+references, the files that render it and the fonts it embeds — which are
+computed from the tree, not taken from the manifest: a manifest always matches
+itself, so the white paper built to this paper's paths would otherwise pass
+here. A PDF with no manifest is refused like any other unexplained file.
 """
 import os, pathlib, sys
 
