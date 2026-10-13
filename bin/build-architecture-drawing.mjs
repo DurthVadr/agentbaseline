@@ -1,7 +1,7 @@
 // node bin/build-architecture-drawing.mjs
 // Writes layouts/partials/sf-architecture.svg (wide) and sf-architecture-narrow.svg:
 // the talk deck's one-row architecture (profile · agent in its sandbox · egress proxy ·
-// what lies behind it, between two trusted controls: supply chain scanning above,
+// what lies behind it, between two trusted controls: the supply chain firewall above,
 // the runtime authorization service beneath, and the tamper-evident record under
 // everything), redrawn for /reference-architecture.
 // The page's own drawing, not one of the paper's figures: the paper's stay in
@@ -11,7 +11,7 @@
 // enforces. The service is drawn as a decision, not a container: trusted context and the
 // profile's bounds flow into it with the agent's proposal; the scope it authorizes goes
 // up to the proxy and high-impact actions out to approval. The profile configures the
-// sandbox at launch through scanning, which checks the components it is built from,
+// sandbox at launch through the firewall, which checks the components it is built from,
 // and the proxy checks every package it fetches with it.
 // A box is its name and at most one short line, a wire a verb or two: the drawing names
 // things, and the caption, the alt text and the paper explain them.
@@ -126,12 +126,14 @@ function kit(id, T) {
 // record names one event of each boundary's, as the paper's observability checklist does.
 const SAYS = {
   profile: 'the most it can ever do',
-  scanning: 'approved versions the profile allows',
+  firewall: 'approved versions the profile allows',
   auth: 'authorizes each task’s scope',
   approval: 'automatic or a person',
   record: ['grants, admissions, process starts,', 'requests, linked by run'],
 };
-const SCANNING = 'Supply chain scanning';
+// the paper's name for the supply chain boundary's trusted control (its glossary's
+// Supply Chain Firewall), as the figures name it
+const FIREWALL = 'Supply chain firewall';
 const ALT =
   'The agent proposes, the runtime authorization service decides, and the egress proxy '
   + 'enforces. The agent runs in a sandbox, untrusted and holding no credentials, and proposes '
@@ -140,7 +142,7 @@ const ALT =
   + 'proxy enforces it and attaches the credentials. Delegation only narrows a task, and only '
   + 'a new decision widens it. High-impact actions go to approval the agent can’t give; '
   + 'anything else is denied or sent to a person. The profile configures the sandbox at '
-  + 'launch through supply chain scanning, which checks the components it is built from, '
+  + 'launch through the supply chain firewall, which checks the components it is built from, '
   + 'and the proxy checks every package it fetches with it, so only approved versions the '
   + 'profile allows get in and new versions wait out a cooldown. Every grant, '
   + 'admission, process start and request goes into a tamper-evident record, linked by run. '
@@ -159,7 +161,7 @@ const svgOf = (W, H, L, defs) =>
 function wide() {
   const W = 880, T = { title: 16, gloss: 14.75, lab: 14.75, cap: 14.75, num: 14.75, lead: 19, badge: 11, pad: 12, mk: 7 };
   const K = kit('sfa-w', T);
-  // above the row: the profile, and beside it supply chain scanning, across the
+  // above the row: the profile, and beside it the supply chain firewall, across the
   // sandbox and the proxy, on the profile's launch path
   const PROF = { x: 14, y: 14, w: 184, h: 62 };
   const SC = { x: 300, y: 14, w: 360, h: 62 };
@@ -182,7 +184,7 @@ function wide() {
   const PROPX = 300, AUTHX = K.cx(PX), BNX = 181, APRX = APR.x + 30;
   const L = [[], [], [], []]; // 0 zones, 1 cards, 2 wires, 3 labels and badges
   L[0].push(K.sandbox(SB));
-  L[1].push(K.card(SC, SCANNING, [SAYS.scanning], { cls: 'sfa-box sfa-b', k: N.supply }));
+  L[1].push(K.card(SC, FIREWALL, [SAYS.firewall], { cls: 'sfa-box sfa-b', k: N.supply }));
   L[1].push(K.doc(PROF, 'Profile', [SAYS.profile]));
   L[1].push(K.card(AG, 'Agent', ['untrusted, no credentials'], { cls: 'sfa-box sfa-plate' }));
   L[1].push(K.card(PX, 'Egress proxy', ['default-deny,', 'attaches credentials'], { cls: 'sfa-box sfa-b', k: N.network }));
@@ -193,7 +195,7 @@ function wide() {
   L[1].push(K.card(APR, 'Approval', [SAYS.approval], { after: K.glyph(HAND, APR.x + 90, APR.y + 12, 18, 'sfa-ico') }));
   L[1].push(K.record(REC, { s: T.title + 2, y: K.cy(REC) + 6, dx: 50 },
     { x: REC.x + 262, y: K.cy(REC) + 5, lines: [SAYS.record.join(' ')] }));
-  // the launch path, straight across from the profile and through scanning into the
+  // the launch path, straight across from the profile and through the firewall into the
   // sandbox, and the proxy's package check
   L[2].push(K.wire([[K.r(PROF), LY], [SC.x, LY]]));
   L[3].push(K.lbl(K.r(PROF) + 9, LY - 25, 'configures'), K.lbl(K.r(PROF) + 9, LY - 8, 'at launch'));
@@ -228,7 +230,7 @@ function wide() {
 }
 
 // ── narrow: the same parts and relationships for phones, as the paper's Figure 2 sets
-// them on a phone: the profile, scanning on its launch path, the sandbox beside the
+// them on a phone: the profile, the firewall on its launch path, the sandbox beside the
 // proxy, the decision beneath both with trusted context and approval under it, and
 // what the proxy lets through fed down the right-hand edge past them. Smallest text
 // 11.75 units: 10.3px at 320, where the drawing is 304px wide and the paper's narrow
@@ -254,7 +256,7 @@ function narrow() {
   const L = [[], [], [], []];
   L[0].push(K.sandbox(SB));
   L[1].push(K.doc(PROF, 'Profile', [SAYS.profile]));
-  L[1].push(K.card(SC, SCANNING, [SAYS.scanning], { cls: 'sfa-box sfa-b', k: N.supply }));
+  L[1].push(K.card(SC, FIREWALL, [SAYS.firewall], { cls: 'sfa-box sfa-b', k: N.supply }));
   L[1].push(K.card(AG, 'Agent', ['untrusted,', 'no credentials'], { cls: 'sfa-box sfa-plate' }));
   L[1].push(K.card(PX, 'Egress proxy', ['default-deny,', 'attaches credentials'], { cls: 'sfa-box sfa-b', k: N.network }));
   L[1].push(K.card(AU, 'Runtime authorization service', [SAYS.auth], { cls: 'sfa-box sfa-b', k: N.identity, dx: 14 }));
@@ -266,12 +268,12 @@ function narrow() {
     { x: REC.x + 12, y: REC.y + 50, lines: SAYS.record }));
   // the profile's two jobs, labelled side by side under it: it bounds the decision (its
   // wire runs down the left edge into the service) and configures the sandbox at launch,
-  // through scanning
+  // through the firewall
   L[2].push(K.wire([[LL, K.btm(PROF)], [LL, AU.y]]));
   L[3].push(K.lbl(LL + 8, 83, 'bounds every decision'));
   L[2].push(K.wire([[CFX, K.btm(PROF)], [CFX, SC.y]]));
   L[3].push(K.lbl(CFX + 8, 83, 'configures at launch'));
-  // scanning's two checks, each labelled left of its own wire
+  // the firewall's two checks, each labelled left of its own wire
   L[2].push(K.wire([[INTO, K.btm(SC)], [INTO, SB.y]]));
   L[3].push(K.lbl(INTO - 8, K.btm(SC) + 22, 'checks components', { end: 1 }));
   L[2].push(K.wire([[CHK, K.btm(SC)], [CHK, PX.y]], { both: 1 }));

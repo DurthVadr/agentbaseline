@@ -404,7 +404,7 @@ def mid(a):
 
 # What the proxy lets through, the same four at every level, by name only.
 # Packages come from the approved registries, but only through the proxy's
-# check with supply chain scanning (sc_card), a trusted control, never a
+# check with the supply chain firewall (sc_card), a trusted control, never a
 # destination.
 DEST = [  # (name lines, gloss lines, kind)
     (["Source control"], [], "card"),
@@ -439,7 +439,7 @@ SC_LAUNCH, SC_PKG = "checks components", "checks packages"
 
 
 def sc_card(f, x0, y0, x1, lines=(SC_G,), tag="sc"):
-    """Supply chain scanning as a card, its line set in `lines`; returns
+    """The supply chain firewall as a card, its line set in `lines`; returns
     its bottom."""
     h = card_h(lines)
     f.node(x0, y0, x1 - x0, h, SC_NAME, lines, kind="guard", num=BN[SUPPLY], tag=tag)
@@ -648,7 +648,7 @@ class CF(SF):
         the decision going out, is solid accent and heavier than any flow:
         dashes already mean the frames, the outer loop and a stop. `both`
         heads both ends: a check that goes and comes back (the proxy's
-        packages, through supply chain scanning). `dot` marks where a
+        packages, through the supply chain firewall). `dot` marks where a
         headless connector ends on another, joining it."""
         new = self.state in ("new", "newtext")
         dash = ""
@@ -736,14 +736,14 @@ def delta_key(f, x, y, prev, gap=19):
 # ═════════════════════════════════════════════════════════════════════════════
 # The level skeleton. Columns: A who or what starts the work · B what
 # orchestrates and runs it · C the sandbox(es) · D the egress proxy · E what it
-# lets through. Rows: supply chain scanning above the frame, the frame where
+# lets through. Rows: the supply chain firewall above the frame, the frame where
 # agents run, the runtime authorization service as a bar beneath it, the
 # outputs, the outer loop, the record.
 # ═════════════════════════════════════════════════════════════════════════════
 class R:
     A, B, BUS_B, C, D, BUS_E, E = (0, 112), (134, 234), 246, (264, 436), (456, 560), 582, (600, 720)
     FX = (122, 572)
-    # supply chain scanning, above the frame and across the sandbox and
+    # the supply chain firewall, above the frame and across the sandbox and
     # proxy columns, as the service is a bar beneath them. Its component check
     # drops at BUS_B into the path that starts the agent (the developer's
     # arrow, the workflow's, the execution layer's bus), the same x at every
@@ -794,7 +794,7 @@ def r_frame(f, full=False, label=(), gloss=(), s_label="old"):
 
 
 def r_sc(f, launch=None):
-    """Supply chain scanning above the frame. Its component check drops
+    """The supply chain firewall above the frame. Its component check drops
     into the path that starts the agent (`launch`: the point it joins, (x,
     y)) or, where the figure draws no such path, into the sandbox's top
     (`launch` (x, None)); the proxy's package check goes and comes back. Each
@@ -1198,7 +1198,7 @@ class NR:
     PROP_X = 150
     GUTTER = 16
     KEY = (232, 30)
-    # supply chain scanning, between the start card and the frame, clear
+    # the supply chain firewall, between the start card and the frame, clear
     # of the line from one to the other. Its component check drops right of
     # the frame's label and turns into the path that starts the agent; its
     # package check drops down the frame's right-hand side, which is empty
@@ -1208,7 +1208,7 @@ class NR:
 
 
 def narrow_sc(f, y):
-    """Supply chain scanning on a phone, its line in two, its component
+    """The supply chain firewall on a phone, its line in two, its component
     check's label under it, left of the line; returns its foot."""
     bot = sc_card(f, NR.SC[0], y, NR.SC[1], ("approved versions", "the profile allows"))
     f.gloss(NR.LAUNCH_X - 8 - f.width(SC_LAUNCH, "gloss"), bot + 18, SC_LAUNCH, "sc.launch.l")
@@ -1216,7 +1216,7 @@ def narrow_sc(f, y):
 
 
 def narrow_launch(f, bot, y_turn, join=None, into=None):
-    """Scanning's component check: down the right-hand side, then left
+    """The firewall's component check: down the right-hand side, then left
     at y_turn, either joining the line that launches the agent (`join`, its
     x) or turning down into the sandbox's top (`into`, (x, top))."""
     if into:
@@ -1537,7 +1537,7 @@ def figure1_narrow():
 # ═════════════════════════════════════════════════════════════════════════════
 # Figure 2 — the agent proposes, policy authorizes, infrastructure enforces.
 # One row: the profile, the agent in its sandbox, the egress proxy, and what
-# lies behind it. Above it, supply chain scanning, on the profile's launch
+# lies behind it. Above it, the supply chain firewall, on the profile's launch
 # path: the profile configures the sandbox at launch through it, and the proxy
 # checks every package with it. Beneath it, the runtime authorization service,
 # drawn as a decision rather than a container. Into it come the profile's
@@ -1603,7 +1603,7 @@ def figure2():
     # the profile, the proxy, downstream; tall enough that the proxy's two
     # lines clear the ring on its foot
     c0, c1 = ym - 33, ym + 33
-    # supply chain scanning, above the row: the profile configures the
+    # the supply chain firewall, above the row: the profile configures the
     # sandbox at launch through it, and the proxy checks packages with it
     sx0 = 262
     sb_ = sc_card(f, sx0, 6, PX[1])
@@ -1659,7 +1659,7 @@ def figure2():
 
 
 def figure2_narrow():
-    """Figure 2 on a phone: the profile, supply chain scanning on its
+    """Figure 2 on a phone: the profile, the supply chain firewall on its
     launch path, the sandbox beside the proxy, what the proxy lets through under the
     proxy, the decision beneath both, its trusted context in one card under
     it, and what it routes elsewhere down the right edge: approval, then a
@@ -1669,7 +1669,7 @@ def figure2_narrow():
     y = 10
     f.node(X, y, R1 - X, 44, "Profile", PROFILE_G, tag="prof")
     pb = y + 44
-    # supply chain scanning, on the profile's launch path; the profile's
+    # the supply chain firewall, on the profile's launch path; the profile's
     # bounds run down the left edge, past it and the sandbox, into the service
     s0 = pb + 42
     sb_ = sc_card(f, 60, s0, R1)
