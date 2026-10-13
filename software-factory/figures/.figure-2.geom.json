@@ -1,0 +1,380 @@
+{
+ "W": 736,
+ "H": 474,
+ "shapes": [
+  {
+   "tag": "sc",
+   "kind": "guard",
+   "x": 270,
+   "y": 14,
+   "w": 268,
+   "h": 44,
+   "solid": true,
+   "sw": 1.25
+  },
+  {
+   "tag": "badgesc",
+   "kind": "badge",
+   "x": 262,
+   "y": 6,
+   "w": 16,
+   "h": 16,
+   "solid": true
+  },
+  {
+   "tag": "prof",
+   "kind": "card",
+   "x": 14,
+   "y": 105.0,
+   "w": 172,
+   "h": 66.0,
+   "solid": true,
+   "sw": 1
+  },
+  {
+   "tag": "sbx",
+   "kind": "sandbox",
+   "x": 206,
+   "y": 92,
+   "w": 158,
+   "h": 92,
+   "solid": true,
+   "sw": 1.25
+  },
+  {
+   "tag": "badgesbx",
+   "kind": "badge",
+   "x": 198,
+   "y": 84,
+   "w": 16,
+   "h": 16,
+   "solid": true
+  },
+  {
+   "tag": "proxy",
+   "kind": "guard",
+   "x": 384,
+   "y": 105.0,
+   "w": 154,
+   "h": 66.0,
+   "solid": true,
+   "sw": 1.25
+  },
+  {
+   "tag": "badgeproxy",
+   "kind": "badge",
+   "x": 376,
+   "y": 97.0,
+   "w": 16,
+   "h": 16,
+   "solid": true
+  },
+  {
+   "tag": "badgeproxy",
+   "kind": "badge",
+   "x": 434,
+   "y": 163.0,
+   "w": 16,
+   "h": 16,
+   "solid": true
+  },
+  {
+   "tag": "down",
+   "kind": "card",
+   "x": 570,
+   "y": 105.0,
+   "w": 158,
+   "h": 66.0,
+   "solid": true,
+   "sw": 1
+  },
+  {
+   "tag": "auth",
+   "kind": "guard",
+   "x": 14,
+   "y": 234,
+   "w": 524,
+   "h": 44,
+   "solid": true,
+   "sw": 1.25
+  },
+  {
+   "tag": "badgeauth",
+   "kind": "badge",
+   "x": 6,
+   "y": 226,
+   "w": 16,
+   "h": 16,
+   "solid": true
+  },
+  {
+   "tag": "ctx",
+   "kind": "card",
+   "x": 14,
+   "y": 308,
+   "w": 524,
+   "h": 44,
+   "solid": true,
+   "sw": 1
+  },
+  {
+   "tag": "appr",
+   "kind": "card",
+   "x": 570,
+   "y": 214,
+   "w": 158,
+   "h": 44,
+   "solid": true,
+   "sw": 1
+  },
+  {
+   "tag": "deny.stop",
+   "kind": "stop",
+   "x": 555.0,
+   "y": 263,
+   "w": 2,
+   "h": 14,
+   "solid": false
+  },
+  {
+   "tag": "rec",
+   "kind": "record",
+   "x": 8,
+   "y": 374,
+   "w": 720,
+   "h": 48,
+   "solid": true,
+   "sw": 1.25
+  },
+  {
+   "tag": "badgelg1",
+   "kind": "badge",
+   "x": 216.34,
+   "y": 448,
+   "w": 16,
+   "h": 16,
+   "solid": true
+  },
+  {
+   "tag": "badgelg2",
+   "kind": "badge",
+   "x": 302.54,
+   "y": 448,
+   "w": 16,
+   "h": 16,
+   "solid": true
+  },
+  {
+   "tag": "badgelg3",
+   "kind": "badge",
+   "x": 387.84000000000003,
+   "y": 448,
+   "w": 16,
+   "h": 16,
+   "solid": true
+  },
+  {
+   "tag": "badgelg4",
+   "kind": "badge",
+   "x": 499.04,
+   "y": 448,
+   "w": 16,
+   "h": 16,
+   "solid": true
+  }
+ ],
+ "links": [
+  {
+   "tag": "launch",
+   "kind": "flow",
+   "pts": [
+    [
+     100,
+     105.0
+    ],
+    [
+     100,
+     36.0
+    ],
+    [
+     270,
+     36.0
+    ]
+   ],
+   "head": true,
+   "group": null,
+   "free": false
+  },
+  {
+   "tag": "sc.launch",
+   "kind": "flow",
+   "pts": [
+    [
+     308,
+     58
+    ],
+    [
+     308,
+     92
+    ]
+   ],
+   "head": true,
+   "group": null,
+   "free": false
+  },
+  {
+   "tag": "sc.pkg",
+   "kind": "flow",
+   "pts": [
+    [
+     478,
+     58
+    ],
+    [
+     478,
+     105.0
+    ]
+   ],
+   "head": true,
+   "group": null,
+   "free": false
+  },
+  {
+   "tag": "request",
+   "kind": "flow",
+   "pts": [
+    [
+     364,
+     138.0
+    ],
+    [
+     384,
+     138.0
+    ]
+   ],
+   "head": true,
+   "group": null,
+   "free": false
+  },
+  {
+   "tag": "out",
+   "kind": "flow",
+   "pts": [
+    [
+     538,
+     138.0
+    ],
+    [
+     570,
+     138.0
+    ]
+   ],
+   "head": true,
+   "group": null,
+   "free": false
+  },
+  {
+   "tag": "bounds",
+   "kind": "flow",
+   "pts": [
+    [
+     48,
+     171.0
+    ],
+    [
+     48,
+     234
+    ]
+   ],
+   "head": true,
+   "group": null,
+   "free": false
+  },
+  {
+   "tag": "propose",
+   "kind": "flow",
+   "pts": [
+    [
+     338,
+     184
+    ],
+    [
+     338,
+     234
+    ]
+   ],
+   "head": true,
+   "group": null,
+   "free": false
+  },
+  {
+   "tag": "grant",
+   "kind": "grant",
+   "pts": [
+    [
+     428,
+     234
+    ],
+    [
+     428,
+     171.0
+    ]
+   ],
+   "head": true,
+   "group": null,
+   "free": false
+  },
+  {
+   "tag": "ctx.in",
+   "kind": "flow",
+   "pts": [
+    [
+     198,
+     308
+    ],
+    [
+     198,
+     278
+    ]
+   ],
+   "head": true,
+   "group": null,
+   "free": false
+  },
+  {
+   "tag": "route",
+   "kind": "flow",
+   "pts": [
+    [
+     538,
+     244
+    ],
+    [
+     570,
+     244
+    ]
+   ],
+   "head": true,
+   "group": null,
+   "free": false
+  },
+  {
+   "tag": "deny",
+   "kind": "flow",
+   "pts": [
+    [
+     538,
+     270
+    ],
+    [
+     558,
+     270
+    ]
+   ],
+   "head": false,
+   "group": null,
+   "free": false
+  }
+ ],
+ "margin": 8
+}

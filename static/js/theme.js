@@ -81,12 +81,14 @@
      a new link is counted without anyone remembering to instrument it, and
      nothing drifts when the markup moves.
 
-     One property per event: the Pro plan allows two, and one is enough to say
-     which artifact. Nothing here identifies a person; it records which of the
-     four things on the page a reader actually went to. */
+     At most two properties per event, the Pro plan's limit: one says which
+     artifact, and `from`, where there is one, says which link led there.
+     Nothing here identifies a person; it records which of the things on the
+     page a reader actually went to. */
   function tracked(a) {
     var h = a.getAttribute('href') || '';
-    if (/\.pdf($|[?#])/.test(h)) return ['download', { file: 'whitepaper.pdf' }];
+    /* The file's own name, so each paper's PDF is its own series. */
+    if (/\.pdf($|[?#])/.test(h)) return ['download', { file: h.replace(/[?#].*$/, '').split('/').pop() }];
     if (h.indexOf('luma.com') > -1) {
       /* Two links now point at the same event: the strip above the masthead and
          the block that closes the page. Without `from` they collapse into one
@@ -126,8 +128,12 @@
     if (h.indexOf('github.com/') > -1) {
       var seg = h.replace(/[?#].*$/, '').split('/').filter(Boolean);
       var last = seg[seg.length - 1] || '';
+      /* An issue form is named by its template, which the query carries:
+         without it every form link is the path's last segment, 'new', and
+         reads as the bare repository. */
       var what = /\.(ya?ml|md)$/.test(last) ? last
                : last === 'issues' ? 'issues'
+               : last === 'new' ? ((h.match(/[?&]template=([^&#]+)/) || [])[1] || 'new-issue')
                : 'repository';
       return ['source', { path: what }];
     }

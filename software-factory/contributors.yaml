@@ -1,0 +1,21 @@
+# Contributors to the reference architecture (the software factory paper). Same rules as
+# whitepaper/contributors.yaml: people, not logos; surname order; nothing is
+# published with `confirmed: false`.
+#
+# Every entry below is the paper's own byline, name and affiliation word for
+# word: "Drafted by …" on the first lines of software-factory.md (the working
+# group's Final Draft of 12 October 2026). The site prints exactly what the
+# paper prints; change the paper first, then this file.
+statement: >-
+  The reference architecture was drafted by a working group building on
+  Agent Baseline.
+
+contributors:
+  - { name: Eli Aleyner,        sortkey: Aleyner,      affiliation: Docker,        confirmed: true }
+  - { name: Ranti Familusi,     sortkey: Familusi,     affiliation: Docker,        confirmed: true }
+  - { name: Allie Howe,         sortkey: Howe,         affiliation: Keycard,       confirmed: true }
+  - { name: Ian Livingstone,    sortkey: Livingstone,  affiliation: Keycard,       confirmed: true }
+  - { name: William Manning,    sortkey: Manning,      affiliation: Docker,        confirmed: true }
+  - { name: Andy McMahon,       sortkey: McMahon,      affiliation: Barclays,      confirmed: true }
+  - { name: Ahmad Nassri,       sortkey: Nassri,       affiliation: Socket,        confirmed: true }
+  - { name: Aaron Stanley,      sortkey: Stanley,      affiliation: Secure Theory, confirmed: true }

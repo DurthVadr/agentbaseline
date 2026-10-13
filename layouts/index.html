@@ -6,9 +6,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Agent Baseline — six security outcomes for enterprise AI agents</title>
-<meta name="description" content="An open reference architecture and controls for running AI agents in the enterprise. A draft for public comment, versioned in the open.">
+<meta name="description" content="Six security outcomes and {{ len $cat.controls }} controls for running AI agents in the enterprise. Versioned in the open.">
 <link rel="canonical" href="{{ .Site.BaseURL }}">
-{{ partial "social-meta.html" (dict "ctx" . "title" "Agent Baseline" "desc" "Six outcomes, because together they answer the three questions you are already being asked. A draft for public comment.") }}
+{{ partial "social-meta.html" (dict "ctx" . "title" "Agent Baseline" "desc" "Six outcomes, because together they answer the three questions you are already being asked.") }}
 {{ partial "machine-readable.html" . }}
 <link rel="icon" href="/icon.svg" type="image/svg+xml">
 {{/* PNG fallback: Safari's touch icon and older contexts do not take SVG.
@@ -20,6 +20,11 @@
 <link rel="stylesheet" href="/css/fonts.css">
 <link rel="preload" href="/fonts/figtree-normal-400-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/ibm-plex-serif-normal-400-latin.woff2" as="font" type="font/woff2" crossorigin>
+{{/* The top bar is set in Chakra Petch; swapping it in late took a row off the
+     bar at 393–414px and moved the whole sheet up 38px (CLS 0.225). */}}
+<link rel="preload" href="/fonts/chakra-petch-normal-400-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/chakra-petch-normal-500-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/chakra-petch-normal-600-latin.woff2" as="font" type="font/woff2" crossorigin>
 {{/* External and synchronous: the deployment CSP allows script-src 'self'
      only, and the stored theme must apply before first paint. */}}
 <script src="/js/theme.js"></script>
@@ -116,19 +121,11 @@
   .utility .pub { font-family:var(--labelfont); font-size:11.5px;
     letter-spacing:.07em; text-transform:uppercase; color:var(--soft); }
   .utility .pub .k { color:var(--faint); margin-right:2px; }
-  /* The one tinted block in the chrome: the deadline is the site's ask.
-     Soft treatment — accent text on a translucent wash of itself. */
-  .utility a.closes, .utility a.closes:visited {
-    background:color-mix(in srgb, var(--accent) 12%, transparent);
-    color:var(--accent); font-family:var(--labelfont); font-weight:500;
-    font-size:11px; letter-spacing:.06em; padding:3px 8px;
-    border-radius:3px; }
-  .utility a.closes:hover {
-    background:color-mix(in srgb, var(--accent) 22%, transparent);
-    color:var(--accent); }
-  /* The room's link wears its mark and the accent, and no wash: the deadline
-     pill stays the one tinted block in the chrome. Inline, not flex, so the
-     bar's baseline alignment sees this link's text baseline like the others'.
+  /* The room's link wears its mark and the accent, and no wash: the
+     reference architecture button (partials/ra-link.html) stays the one
+     filled block in the chrome.
+     Inline, not flex, so the bar's baseline alignment sees this link's text
+     baseline like the others'.
      Phosphor regular rather than the site's thin: at this size on a 1x screen
      the thin octothorpe dissolves, and the theme button's 15px is the size. */
   .utility a.slack { color:var(--accent); }
@@ -334,6 +331,19 @@
     ul.tenets li:nth-child(2n)::after { display:none; }
   }
 
+  /* The second paper, named on the first screen: a label and the paper's own
+     title, in the label voice of the page's link rows. No wash: the bar's
+     button is the one filled block. It hangs off the tenets' track. */
+  .titleblock p.second { margin:-28px 0 0; display:flex; flex-wrap:wrap;
+    align-items:baseline; gap:4px 14px; font-family:var(--labelfont);
+    line-height:1.5; }
+  .titleblock p.second .k { font-size:11.5px; letter-spacing:.07em;
+    text-transform:uppercase; color:var(--faint); }
+  .titleblock p.second a { font-size:14.5px; letter-spacing:.03em;
+    color:var(--link); text-wrap:balance; }
+  .titleblock p.second a::after { content:" \2192"; }
+  .titleblock p.second a:hover { color:var(--link-hover); }
+
 
   .intro p { margin:0 0 22px; }
 
@@ -344,11 +354,13 @@
     letter-spacing:.1em; text-transform:uppercase; color:var(--soft);
     margin:76px 0 22px; counter-increment:sec; position:relative;
     display:flex; align-items:baseline; gap:12px; }
+  /* One mark at every width: on phones "§ 4" broke into "§" and "4" on two
+     lines beside a heading that wraps. */
   h2::before { content:"§ " counter(sec); color:var(--accent);
-    letter-spacing:.06em; font-weight:600; }
+    letter-spacing:.06em; font-weight:600; white-space:nowrap; }
   /* Hanging punctuation: the mark lives in the margin, the text on the datum. */
   @media (min-width:720px) {
-    h2::before { position:absolute; right:calc(100% + 14px); white-space:nowrap; }
+    h2::before { position:absolute; right:calc(100% + 14px); }
   }
   h2::after { content:""; flex:1; height:1px; background:var(--line);
     align-self:center; }
@@ -388,16 +400,20 @@
      voice, quiet as a footnote mark. */
   sup.aff { font-family:var(--labelfont); font-weight:500; font-size:10px;
     letter-spacing:.07em; text-transform:uppercase; color:var(--faint);
-    line-height:0; margin-left:3px; }
+    line-height:0; }
+  /* The byline wraps between people, never inside a name ("Kamil / Potrec"). */
+  .nb { white-space:nowrap; }
+  /* Two papers, two groups of people: the second paper's byline sits under a
+     hairline, never run on as one list with the baseline's. */
+  .prose p.sf-byline { border-top:1px solid var(--line); padding-top:18px; }
 
   ol.factors + .prose { margin-top:28px; }
   /* The three ways out of the page, on one line, in the label voice. */
   .prose p.ctas { font-family:var(--labelfont); font-size:13.5px;
     letter-spacing:.03em; color:var(--faint); margin-top:18px; }
-  .prose p.ctas a { color:var(--link); }
+  .prose p.ctas a { color:var(--link); white-space:nowrap; }
   ol.questions + .prose { margin-top:30px; }
   .prose + h2 { margin-top:56px; }
-  ol.factors > li { scroll-margin-top:64px; }
 
   /* One accent, matching the figure. Punch comes from scale, the rail and the
      chips — not from three hues, which would be the loudest thing on the page
@@ -428,20 +444,23 @@
     font-size:11.5px; font-weight:700; color:var(--accent); vertical-align:6px;
     margin-right:11px; }
   ol.questions .a { display:flex; gap:8px; margin-top:10px; flex-wrap:wrap; }
+  /* Text in --link-hover, not --accent, as the event strip's label is:
+     accent on its own 10% wash was 3.9:1 at 11px in light mode, under AA. */
   ol.questions .a a { font-family:var(--labelfont); font-weight:500;
     font-size:11px; letter-spacing:.07em; text-transform:uppercase;
-    color:var(--accent); text-decoration:none; border-radius:3px;
+    color:var(--link-hover); text-decoration:none; border-radius:3px;
     padding:4px 9px;
     background:color-mix(in srgb, var(--accent) 10%, transparent); }
   ol.questions .a a:hover {
     background:color-mix(in srgb, var(--accent) 20%, transparent);
-    color:var(--accent); }
+    color:var(--link-hover); }
 
   /* The community chip sits at the end of the review section's rule: the
      heading names the review, the chip is where it is talked about. The chip
      the meetup wears — a size up from the tags under the questions, because
-     it stands alone rather than in a row — with the mark set in the accent
-     like the label beside it. Where the row is too narrow for both, the chip
+     it stands alone rather than in a row — with the mark in the colour of
+     the label beside it, --link-hover like the tags' text (the accent was
+     4.2:1 here, under AA). Where the row is too narrow for both, the chip
      takes its own line beneath the heading; narrower still, the heading
      wraps as it always did. Flex places the chip against the heading's full
      one-line width, so the heading is never squeezed to make room for it. */
@@ -451,15 +470,31 @@
   .h2row h2 { flex:1 1 auto; margin:0; }
   .h2row a.slack { display:inline-flex; align-items:center; gap:8px;
     font-family:var(--labelfont); font-weight:500; font-size:11.5px;
-    letter-spacing:.08em; text-transform:uppercase; color:var(--accent);
+    letter-spacing:.08em; text-transform:uppercase; color:var(--link-hover);
     text-decoration:none; border-radius:3px; padding:7px 14px 7px 11px;
     background:color-mix(in srgb, var(--accent) 10%, transparent); }
   .h2row a.slack:hover {
     background:color-mix(in srgb, var(--accent) 20%, transparent);
-    color:var(--accent); }
+    color:var(--link-hover); }
   .h2row a.slack:focus-visible { outline:2px solid var(--accent); outline-offset:2px; }
   .h2row a.slack svg.ph { width:15px; height:15px; }
 
+  /* ── the software factory section ───────────────────────────────────── */
+  /* Anchored: #software-factory is the launch address. It lands under a
+     sticky bar that is one row only from 1287px up. The margins are the
+     bar's measured heights in the landed state (mast on) with the launch
+     button showing, plus about 20px; the quiet button after launchUntil is
+     narrower, so the bar is then a row shorter at some widths and the gap
+     only grows. The steps move if the bar's copy does — the published date,
+     the reference architecture button and its plate, the version string,
+     the mast title. They sit on the scroller, not
+     the targets, so keyboard focus clears the bar too (WCAG 2.4.11), and
+     the roster's anchors with it. */
+  html { scroll-padding-top:225px; }
+  @media (min-width:354px)  { html { scroll-padding-top:185px; } }
+  @media (min-width:419px)  { html { scroll-padding-top:145px; } }
+  @media (min-width:568px)  { html { scroll-padding-top:105px; } }
+  @media (min-width:1287px) { html { scroll-padding-top:64px; } }
   .allcontrols { font-family:var(--labelfont); font-weight:500; font-size:12.5px;
     letter-spacing:.08em; text-transform:uppercase; margin:6px 0 0; }
   .allcontrols a { color:var(--accent); text-decoration:none; }
@@ -467,7 +502,33 @@
   .allcontrols a:hover { color:var(--link-hover); }
 
   .prose p { margin:0 0 18px; }
+  /* A link inside running prose is underlined: colour alone does not mark it,
+     and in the dark theme the link green is 1.05:1 against the body text
+     (WCAG 1.4.1). The label-voice rows, .ctas and .allcontrols, are links
+     and nothing else, so they keep their plain set. */
+  .prose p:not(.ctas):not(.allcontrols) a { text-decoration:underline;
+    text-underline-offset:2px; }
   .prose .note { color:var(--soft); font-size:16px; }
+
+  /* The thanks under the bylines: a label rather than a numbered section, one
+     line, then the marks set in the tenets' washed cards, three to a row (two
+     on a phone), each centred in an equal cell at the height hugo.toml gives
+     it, in the page's soft ink and none linked, so every organization gets
+     the same room. */
+  h3.thanks { font-family:var(--labelfont); font-weight:500; font-size:12px;
+    letter-spacing:.1em; text-transform:uppercase; color:var(--soft);
+    margin:40px 0 8px; }
+  ul.orgs { list-style:none; margin:6px 0 0; padding:0; color:var(--soft);
+    display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px; }
+  ul.orgs li { display:flex; align-items:center; justify-content:center;
+    min-height:104px; padding:20px 16px; background:var(--wash);
+    border:1px solid var(--line); border-radius:4px; }
+  ul.orgs svg { display:block; width:auto; max-width:100%; height:calc(var(--h) * 1.45); }
+  @media (max-width:479px) {
+    ul.orgs { grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; }
+    ul.orgs li { min-height:80px; padding:16px 12px; }
+    ul.orgs svg { height:calc(var(--h) * 1.15); }
+  }
 
   /* The footer mirrors the title block — a document closes the way it opens.
      It is a sibling of <main>, not a child of it: contentinfo is a landmark of
@@ -478,6 +539,8 @@
     border-top:1px solid var(--line); padding-top:16px;
     font-family:var(--mono); font-size:11.5px; color:var(--faint); line-height:1.9;
     display:flex; gap:12px 32px; flex-wrap:wrap; justify-content:space-between; }
+  /* Underlined: in the footer's faint text, colour alone was 1.02:1. */
+  footer a { text-decoration:underline; text-underline-offset:2px; }
   footer .sig { font-family:var(--labelfont); letter-spacing:.12em;
     text-transform:uppercase; }
 
@@ -495,13 +558,13 @@
 <nav class="utility" aria-label="Document">
   <div class="in">
     <a class="mast home-mast" href="/">Agent Baseline</a>
+    {{ partial "ra-link.html" . }}
     <a href="{{ .Site.Params.repo }}">Source</a>
     <a href="{{ .Site.Params.repo }}/issues">Comment</a>
     <a href="{{ .Site.Params.repo }}/blob/main/CHANGELOG.md">Changelog</a>
     <a href="{{ .Site.Params.repo }}/blob/main/GOVERNANCE.md">Governance</a>
     {{ with .Site.Params.slack }}<a class="slack" href="{{ . }}">{{ partial "icons/slack-logo.svg" $ }}Slack</a>{{ end }}
     <span class="right pub"><span class="k">Published</span> {{ .Site.Params.published }}</span>
-    <a class="closes" href="{{ .Site.Params.repo }}/issues">Comment closes {{ .Site.Params.commentsUntil }}</a>
     {{ partial "artifacts-menu.html" . }}
     <span class="ver">v{{ .Site.Params.version }}</span>
     {{/* aria-pressed is corrected by theme.js as soon as the body parses — the
@@ -527,6 +590,12 @@
       <li>Control its actions.</li>
       <li>Prove its outcomes.</li>
     </ul>
+
+    {{- with .Site.Params.softwareFactory }}
+    {{/* Its name is the paper's title, unlike any other link on the page. */}}
+    <p class="second"><span class="k">{{ if partial "sf-new.html" $ }}New · {{ end }}{{ .published }}</span>
+      <a href="/reference-architecture">The Secure Software Factory: A Reference Architecture</a></p>
+    {{- end }}
 
   </header>
 
@@ -598,12 +667,40 @@
     {{/* The heading already says "read the white paper"; the link says what you
          actually get. */}}
     <p class="ctas">
-      {{ if fileExists "static/whitepaper.pdf" }}<a href="/whitepaper.pdf">Download the PDF</a> · {{ end }}
-      <a href="{{ .Site.Params.repo }}">View the source</a> ·
+      {{ if fileExists "static/whitepaper.pdf" }}<a href="/whitepaper.pdf">Download the PDF</a>&nbsp;· {{ end }}
+      <a href="{{ .Site.Params.repo }}">View the source</a>&nbsp;·
       <a href="{{ .Site.Params.repo }}/issues">Share feedback</a>
     </p>
   </div>
 
+  {{- with .Site.Params.softwareFactory }}
+  {{- $sf := . }}
+  {{/* The second paper, after the baseline's own and smaller than it: a
+       heading that says how the two relate, one sentence that names it, the
+       three links. The heading is not "Reference architecture": on the
+       baseline's page that reads as the baseline's own. Its figures and its
+       "open for comment" live on its page, not here; its authors are named
+       under "Who wrote it". The id is the launch address,
+       agentbaseline.org/#software-factory. */}}
+  <h2 id="software-factory" data-depth="software-factory">Built on the baseline</h2>
+
+  <div class="prose">
+    <p>{{ $sf.summary }}</p>
+    {{/* "Download the PDF" and "Share feedback" are the baseline's links, in
+         the section above. Here the same two read "its PDF" and "on it",
+         after the link that names the paper, so no two links on the page
+         share a name and none reads as the baseline's. A screen reader's
+         links list hears each without the row around it, so the paper's
+         name follows in .sr-only; the visible words still lead the name
+         (WCAG 2.5.3). Spelled out in full, the row ran to two lines at 1440
+         and the section was no longer smaller than the baseline's. */}}
+    <p class="ctas">
+      <a href="/reference-architecture">Read the reference architecture</a>&nbsp;·
+      {{ if fileExists (printf "static/%s" $sf.pdf) }}<a href="/{{ $sf.pdf }}">Download its PDF<span class="sr-only"> (the reference architecture)</span></a>&nbsp;· {{ end }}
+      <a href="{{ $.Site.Params.repo }}/issues/new?template={{ $sf.template }}">Comment on it<span class="sr-only"> (the reference architecture)</span></a>
+    </p>
+  </div>
+  {{- end }}
 
   {{- with .Site.Params.slack }}
   {{/* The heading names the review; the chip at the end of its rule is where
@@ -622,27 +719,61 @@
 
   <div class="prose">
     {{/* The heading carries "working draft", so the paragraph does not repeat it. */}}
-    <p>Open for comment until {{ .Site.Params.commentsUntil }}. The current structure
-    reflects our experience so far. We welcome implementation feedback, uncovered control
-    gaps, and evidence that a control is ineffective or creates disproportionate
-    maintainer burden. See
+    {{/* Comment closed on commentsUntil, so the paragraph says so and where
+         it went. The second paper's comment is asked for in its own section
+         and on its page, not here: this section is the baseline's. */}}
+    <p>Comment on v{{ .Site.Params.version }} closed on {{ .Site.Params.commentsUntil }}; what it raised
+    is in the <a href="{{ .Site.Params.repo }}/issues">issues</a>, each decided in the open. We welcome
+    implementation feedback, uncovered control gaps, and evidence that a control is ineffective
+    or creates disproportionate maintainer burden. See
     <a href="{{ .Site.Params.repo }}/blob/main/CONTRIBUTING.md">CONTRIBUTING</a>.</p>
   </div>
 
   <h2 data-depth="authors">Who wrote it</h2>
   <div class="prose">
-    <p>Drafted by&#32;
+    {{- /* Each byline opens with its paper, so a reader knows which one a
+           name belongs to; two authors are in both. */ -}}
+    <p>Agent Baseline was drafted by&#32;
     {{- /* Surname order — see the note in contributors.yaml. First-name order
            clusters these six into three company pairs, which is the one
            arrangement that makes a joint document read as three delegations. */ -}}
     {{- $authors := sort (where $people.contributors "confirmed" true) "sortkey" }}
-    {{- $n := len $authors }}
-    {{- range $i, $c := $authors }}
-    {{- if $i }}{{ if eq (add $i 1) $n }} and {{ else }}, {{ end }}{{ end }}
-    {{- .name }}<sup class="aff">{{ .affiliation }}</sup>
-    {{- end }}.</p>
+    {{- partial "byline-names.html" (dict "people" $authors "source" "whitepaper/contributors.yaml") }}.</p>
+    {{- with .Site.Params.softwareFactory }}
+    {{- with hugo.Data.sfcontributors }}
+    {{- /* The second paper's authors under the baseline's, as its own page
+           prints them. Only confirmed people; the yaml's statement when none
+           has. */ -}}
+    {{- $sfa := sort (where .contributors "confirmed" true) "sortkey" }}
+    {{- with $sfa }}
+    <p class="sf-byline"><a href="/reference-architecture">The Secure Software Factory: A Reference Architecture</a> was drafted by&#32;
+    {{- partial "byline-names.html" (dict "people" . "serial" true "source" "software-factory/contributors.yaml") }}.</p>
+    {{- else }}
+    <p class="sf-byline">{{ .statement }}</p>
+    {{- end }}
+    {{- else }}
+    {{- errorf "software-factory/contributors.yaml is not mounted — the homepage would drop the second paper's authors" }}
+    {{- end }}
+    {{- end }}
 
   </div>
+
+  {{- with .Site.Params.thanks }}
+  {{/* Sorted here, so no organization leads because of where its line sits
+       in hugo.toml. The row is a list; each mark is an image named for its
+       organization. role="list" because Safari drops the role of a list
+       styled without markers. */}}
+  <h3 class="thanks">With thanks</h3>
+  <div class="prose">
+    <p>Thanks to the teams who read the drafts, argued with them, and made them better.</p>
+  </div>
+  <ul class="orgs" role="list">
+    {{- range sort .orgs "name" }}
+    {{- if not (and .name .logo .height) }}{{ errorf "hugo.toml: every params.thanks org needs name, logo and height" }}{{ end }}
+    <li style="--h:{{ .height }}px">{{ partial (printf "logos/%s.svg" .logo) . }}</li>
+    {{- end }}
+  </ul>
+  {{- end }}
 
 {{ partial "event-block.html" . }}
 

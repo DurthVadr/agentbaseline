@@ -3,14 +3,14 @@
 **Six security outcomes an enterprise must achieve to run AI agents, and the 35 controls
 that evidence them.**
 
-A draft for public comment, versioned in the open, and intended for donation to a community
-body as it matures.
+A working draft for community review, versioned in the open, and intended for donation to a
+community body as it matures.
 
 | | |
 |---|---|
 | **Status** | `v1.0-draft` — not a standard, no conformance programme |
 | **Identifiers** | not yet frozen; they freeze at `v1.0`. See [VERSIONING.md](VERSIONING.md) before citing |
-| **Comment closes** | 30 September 2026 |
+| **Comment** | closed 30 September 2026 |
 | **Source of truth** | [`whitepaper/controls.yaml`](whitepaper/controls.yaml) |
 
 An agent's behaviour is not settled before it ships: an end user reprograms it at runtime,
@@ -19,6 +19,11 @@ rather than by product category.
 
 **The argument, in full: [agentbaseline.org](https://agentbaseline.org)**
 — why product categories do not map to the problem, and the three questions the six answer.
+
+Built on the baseline: [The Secure Software Factory: A Reference
+Architecture](https://agentbaseline.org/reference-architecture), version 1 (13 October 2026).
+It applies the baseline to AI agents that write and ship code: four security boundaries that
+hold at three levels of autonomy. Source in [`software-factory/`](software-factory/).
 
 ## The six outcomes
 
@@ -87,22 +92,27 @@ authors have not yet met their own rule. Tracked as issue #1.
 | Path | |
 |---|---|
 | [`whitepaper/`](whitepaper/) | The paper, the controls, and the figure |
+| [`software-factory/`](software-factory/) | The Secure Software Factory, the second paper, built on the baseline |
 | [`crosswalks/`](crosswalks/) | Mappings to NIST, ISO, OWASP and CIS — wanted, and better written from outside |
 | [`docs/decisions/`](docs/decisions/) | Decision records, including why identifiers carry no prefix |
 | [`bin/`](bin/) | Generators, and the checks that keep them honest |
-| `layouts/`, `content/` | The site, which renders from `controls.yaml` |
+| `layouts/`, `content/` | The site, which renders from `controls.yaml` and `software-factory/` |
 
 ## Working on this
 
 Everything a reader sees is generated. Edit `controls.yaml`; never edit a derived file.
 
 ```sh
-python3 whitepaper/figures/build-figure-1.py   # the figure, from controls.yaml
-python3 bin/sync-figure-partial                # theme-aware copy for the site
-python3 bin/render-controls                    # CONTROLS.md
-hugo --gc --minify                             # the site, into public/
-python3 bin/build-pdf                          # the PDF, via pandoc and Chrome
-python3 bin/build-social                       # the 1200x630 card
+python3 whitepaper/figures/build-figure-1.py      # the white paper's Figure 1, from controls.yaml
+python3 software-factory/figures/build-figures.py # the reference architecture's figures
+python3 bin/sync-figure-partial                   # theme-aware copies for the site, both papers
+node bin/build-architecture-drawing.mjs           # the reference architecture page's own drawing
+python3 bin/render-controls                       # CONTROLS.md
+hugo --gc --minify                                # the site, into public/
+python3 bin/build-pdf                             # the white paper's PDF, via pandoc and Chrome
+python3 bin/build-pdf --paper software-factory    # the reference architecture's PDF
+python3 bin/build-social                          # the white paper's 1200x630 card
+python3 bin/build-social --paper software-factory # the reference architecture's card
 ```
 
 These checks run in CI and are worth running before you push. Each one exists because
@@ -111,11 +121,13 @@ something broke and nothing caught it:
 ```sh
 python3 bin/check-controls      # identifiers, required fields, paper/controls agreement
 python3 bin/check-figure        # figure geometry: overlaps, containment, arrows, stale ranges
+for f in software-factory/figures/figure-*.svg; do python3 bin/check-figure "$f"; done
+                                # the same, for each of the reference architecture's figures
 python3 bin/check-copy          # repeated phrasing, dead titles, self-contradictions
 python3 bin/check-appendix      # Appendix A still agrees with the catalogue
 python3 bin/check-bindings      # templates only read fields the catalogue has
 python3 bin/check-js            # scripts parse, source and minified
-python3 bin/check-pdf-current   # the committed PDF is the one this source builds
+python3 bin/check-pdf-current   # each committed PDF is the one its source builds
 python3 bin/check-seo           # what crawlers and agents are told: meta, JSON-LD, llms.txt
 ```
 
@@ -127,6 +139,18 @@ to score the build locally, `npx --yes @lhci/cli@0.15.1 autorun` (thresholds in
 `whitepaper/pdf.provenance.json`, which `bin/build-pdf` writes as it renders — the digest
 of every file the render read, and of the PDF it produced. **Edit the paper and you must
 rebuild: commit `static/whitepaper.pdf` and `whitepaper/pdf.provenance.json` together.**
+The reference architecture is the same with `--paper software-factory`, committing
+`static/software-factory.pdf` and `software-factory/pdf.provenance.json`. Its build refuses a
+missing figure, and alt text that is empty or a TODO unless `--draft`, which stamps every
+page and cannot write the tracked PDF.
+
+`bin/build-pdf` drives the browser named by `CHROME=` (by default
+`/Applications/Google Chrome.app`), and the committed bytes depend on its exact build. Both
+PDFs were built on Chrome for Testing on macOS: the white paper on 150.0.7871.124, the
+reference architecture on 154.0.8037.57. Each manifest's `built_by` names it
+(`HeadlessChrome/150`, `HeadlessChrome/154`); rebuild a paper on that browser, or its bytes
+change. CI installs Chrome for Testing with `npx @puppeteer/browsers install chrome@<version>`;
+point `CHROME=` at the binary it prints.
 
 ```sh
 python3 bin/check-pdf-reproducible   # two builds of this source produce the same bytes

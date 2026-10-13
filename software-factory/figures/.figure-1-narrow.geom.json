@@ -1,0 +1,293 @@
+{
+ "W": 376,
+ "H": 620,
+ "shapes": [
+  {
+   "tag": "in",
+   "kind": "card",
+   "x": 48,
+   "y": 18,
+   "w": 320,
+   "h": 46,
+   "solid": true,
+   "sw": 1
+  },
+  {
+   "tag": "design",
+   "kind": "card",
+   "x": 48,
+   "y": 86,
+   "w": 320,
+   "h": 46,
+   "solid": true,
+   "sw": 1
+  },
+  {
+   "tag": "assemble",
+   "kind": "card",
+   "x": 60,
+   "y": 190,
+   "w": 274,
+   "h": 46,
+   "solid": true,
+   "sw": 1
+  },
+  {
+   "tag": "build",
+   "kind": "card",
+   "x": 60,
+   "y": 258,
+   "w": 274,
+   "h": 46,
+   "solid": true,
+   "sw": 1
+  },
+  {
+   "tag": "verify",
+   "kind": "card",
+   "x": 60,
+   "y": 326,
+   "w": 274,
+   "h": 46,
+   "solid": true,
+   "sw": 1
+  },
+  {
+   "tag": "inner",
+   "kind": "zone",
+   "x": 48,
+   "y": 154,
+   "w": 320,
+   "h": 250,
+   "solid": false,
+   "sw": 1
+  },
+  {
+   "tag": "review",
+   "kind": "card",
+   "x": 48,
+   "y": 426,
+   "w": 320,
+   "h": 46,
+   "solid": true,
+   "sw": 1
+  },
+  {
+   "tag": "deploy",
+   "kind": "card",
+   "x": 48,
+   "y": 494,
+   "w": 320,
+   "h": 46,
+   "solid": true,
+   "sw": 1
+  },
+  {
+   "tag": "production",
+   "kind": "card",
+   "x": 48,
+   "y": 562,
+   "w": 320,
+   "h": 46,
+   "solid": true,
+   "sw": 1
+  }
+ ],
+ "links": [
+  {
+   "tag": "a0",
+   "kind": "flow",
+   "pts": [
+    [
+     88,
+     64
+    ],
+    [
+     88,
+     86
+    ]
+   ],
+   "head": true,
+   "group": null,
+   "free": false
+  },
+  {
+   "tag": "a1",
+   "kind": "flow",
+   "pts": [
+    [
+     88,
+     132
+    ],
+    [
+     88,
+     154
+    ]
+   ],
+   "head": true,
+   "group": null,
+   "free": false
+  },
+  {
+   "tag": "s1",
+   "kind": "flow",
+   "pts": [
+    [
+     100,
+     236
+    ],
+    [
+     100,
+     258
+    ]
+   ],
+   "head": true,
+   "group": null,
+   "free": false
+  },
+  {
+   "tag": "s2",
+   "kind": "flow",
+   "pts": [
+    [
+     100,
+     304
+    ],
+    [
+     100,
+     326
+    ]
+   ],
+   "head": true,
+   "group": null,
+   "free": false
+  },
+  {
+   "tag": "again",
+   "kind": "flow",
+   "pts": [
+    [
+     334,
+     349
+    ],
+    [
+     354,
+     349
+    ],
+    [
+     354,
+     213
+    ],
+    [
+     334,
+     213
+    ]
+   ],
+   "head": true,
+   "group": null,
+   "free": false
+  },
+  {
+   "tag": "a2",
+   "kind": "flow",
+   "pts": [
+    [
+     88,
+     404
+    ],
+    [
+     88,
+     426
+    ]
+   ],
+   "head": true,
+   "group": null,
+   "free": false
+  },
+  {
+   "tag": "b1",
+   "kind": "flow",
+   "pts": [
+    [
+     88,
+     472
+    ],
+    [
+     88,
+     494
+    ]
+   ],
+   "head": true,
+   "group": null,
+   "free": false
+  },
+  {
+   "tag": "b2",
+   "kind": "flow",
+   "pts": [
+    [
+     88,
+     540
+    ],
+    [
+     88,
+     562
+    ]
+   ],
+   "head": true,
+   "group": null,
+   "free": false
+  },
+  {
+   "tag": "outer",
+   "kind": "loop",
+   "pts": [
+    [
+     48,
+     578
+    ],
+    [
+     30,
+     578
+    ],
+    [
+     30,
+     109
+    ],
+    [
+     48,
+     109
+    ]
+   ],
+   "head": true,
+   "group": null,
+   "free": false
+  },
+  {
+   "tag": "signals",
+   "kind": "loop",
+   "pts": [
+    [
+     48,
+     594
+    ],
+    [
+     14,
+     594
+    ],
+    [
+     14,
+     41
+    ],
+    [
+     48,
+     41
+    ]
+   ],
+   "head": true,
+   "group": null,
+   "free": false
+  }
+ ],
+ "margin": 8
+}

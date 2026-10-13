@@ -1,0 +1,63 @@
+{{- /* The bar's link to the second paper, after the masthead on every page,
+     so no reader has to scroll to the homepage's section to find it. One
+     partial for the four bars, so its name and address cannot drift.
+
+     It is a button, not a bar link: the one filled block in the chrome. Set
+     in the bar's own voice, the link read as one more word in a row of grey
+     words and was scrolled past, so it is drawn as a stamp instead: an
+     accent plate with the paper's ink knocked out of it, the label face and
+     tracking unchanged, an arrow to say it goes somewhere.
+
+     Until params.softwareFactory.launchUntil (sf-new.html) the plate is
+     filled and leads with "New", divided from the name by a hairline, as a
+     title block divides its cells: the launch pill, folded in, so the bar
+     never carries two links to one page. After it the button stays and goes
+     quiet: an ink outline on the paper, filled only under the pointer.
+
+     On the paper's own page it ends the crumb, as the current page, with no
+     plate and no tag: the reader is already there. */ -}}
+{{- with site.Params.softwareFactory -}}
+{{- $href := "/reference-architecture" -}}
+{{- $here := eq (strings.TrimSuffix "/" $.RelPermalink) $href -}}
+{{- $new := and (not $here) (partial "sf-new.html" $) -}}
+{{- if not $here }}
+<style>
+  /* Negative margins equal to the padding and border, so the plate sits over
+     the bar's row instead of deepening it: the bar keeps its height. Flex,
+     not inline, for the gaps; it aligns on its first line's baseline, so on
+     the homepage's baseline-aligned bar the name sits on the same line as
+     the words beside it, and on the other bars, where items align to the
+     top, the negative margin puts the text where theirs is. A border, not
+     an inset shadow, so the button keeps an outline in forced colours. */
+  .utility a.ra-btn, .utility a.ra-btn:visited { display:inline-flex;
+    align-items:baseline; align-self:baseline; gap:7px;
+    padding:4px 10px 4px 11px; margin-block:-5px; border:1px solid var(--ink);
+    border-radius:3px; font-weight:600; white-space:nowrap; color:var(--ink); }
+  .utility a.ra-btn:hover { background:var(--ink); color:var(--paper); }
+  .utility a.ra-btn:focus-visible { outline:2px solid var(--accent); outline-offset:2px; }
+  .utility a.ra-btn .go { font-weight:400; }
+  {{- if $new }}
+  /* Launch: the accent plate. Paper on --accent is 4.7:1 in light mode, AA
+     at the plate's 12px and its phone 11px; on --link-hover, the hovered
+     plate, 8.0:1. In dark mode the plate is the lime and the knocked-out
+     ink is the dark paper, 13.8:1. The hairline is the paper at 45%, a cell
+     divider, not a second colour. */
+  .utility a.ra-btn.is-new, .utility a.ra-btn.is-new:visited {
+    background:var(--accent); border-color:transparent; color:var(--paper); }
+  .utility a.ra-btn.is-new:hover { background:var(--link-hover); color:var(--paper); }
+  .utility a.ra-btn .new { font-weight:500; padding-right:7px;
+    border-right:1px solid color-mix(in srgb, var(--paper) 45%, transparent); }
+  /* On a phone the plate and the next word share the bar's first row, or
+     the bar gains one: the plate drops to the chips' 11px and gives up its
+     arrow, and then takes the room the tagged link took, so the bar wraps
+     where it did. */
+  @media (max-width:640px) {
+    .utility a.ra-btn.is-new { font-size:11px; gap:6px; padding-inline:9px; }
+    .utility a.ra-btn.is-new .new { padding-right:6px; }
+    .utility a.ra-btn.is-new .go { display:none; }
+  }
+  {{- end }}
+</style>
+{{- end }}
+<a class="ra{{ if not $here }} ra-btn{{ if $new }} is-new{{ end }}{{ end }}" href="{{ $href }}"{{ if $here }} aria-current="page"{{ end }}>{{ if $new }}<span class="new">New</span> {{ end }}<span>Reference architecture</span>{{ if not $here }}<span class="go" aria-hidden="true">→</span>{{ end }}</a>
+{{- end -}}

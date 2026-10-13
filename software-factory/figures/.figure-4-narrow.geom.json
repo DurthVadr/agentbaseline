@@ -1,0 +1,624 @@
+{
+ "W": 376,
+ "H": 1297,
+ "shapes": [
+  {
+   "tag": "req",
+   "kind": "card",
+   "x": 32,
+   "y": 18,
+   "w": 328,
+   "h": 44,
+   "solid": true,
+   "sw": 1.75
+  },
+  {
+   "tag": "wf",
+   "kind": "card",
+   "x": 32,
+   "y": 102,
+   "w": 328,
+   "h": 44,
+   "solid": true,
+   "sw": 1.75
+  },
+  {
+   "tag": "exec",
+   "kind": "card",
+   "x": 32,
+   "y": 190,
+   "w": 152,
+   "h": 92,
+   "solid": true,
+   "sw": 1.75
+  },
+  {
+   "tag": "auth",
+   "kind": "guard",
+   "x": 196,
+   "y": 190,
+   "w": 164,
+   "h": 76,
+   "solid": true,
+   "sw": 1.25
+  },
+  {
+   "tag": "badgeauth",
+   "kind": "badge",
+   "x": 188,
+   "y": 182,
+   "w": 16,
+   "h": 16,
+   "solid": true
+  },
+  {
+   "tag": "ghost6",
+   "kind": "ghost",
+   "x": 68,
+   "y": 388,
+   "w": 184,
+   "h": 268,
+   "solid": false,
+   "sw": 1.25
+  },
+  {
+   "tag": "ghost3",
+   "kind": "ghost",
+   "x": 65,
+   "y": 385,
+   "w": 184,
+   "h": 268,
+   "solid": false,
+   "sw": 1.25
+  },
+  {
+   "tag": "sbx",
+   "kind": "sandbox",
+   "x": 62,
+   "y": 382,
+   "w": 184,
+   "h": 268,
+   "solid": true,
+   "sw": 2.0
+  },
+  {
+   "tag": "badgesbx",
+   "kind": "badge",
+   "x": 54,
+   "y": 374,
+   "w": 16,
+   "h": 16,
+   "solid": true
+  },
+  {
+   "tag": "harness",
+   "kind": "agent",
+   "x": 68,
+   "y": 412,
+   "w": 172,
+   "h": 190,
+   "solid": true,
+   "sw": 1
+  },
+  {
+   "tag": "part0",
+   "kind": "card",
+   "x": 78,
+   "y": 488,
+   "w": 152,
+   "h": 22,
+   "solid": true,
+   "sw": 1
+  },
+  {
+   "tag": "part1",
+   "kind": "card",
+   "x": 78,
+   "y": 516,
+   "w": 152,
+   "h": 22,
+   "solid": true,
+   "sw": 1
+  },
+  {
+   "tag": "part2",
+   "kind": "card",
+   "x": 78,
+   "y": 544,
+   "w": 152,
+   "h": 22,
+   "solid": true,
+   "sw": 1
+  },
+  {
+   "tag": "part3",
+   "kind": "card",
+   "x": 78,
+   "y": 572,
+   "w": 152,
+   "h": 22,
+   "solid": true,
+   "sw": 1
+  },
+  {
+   "tag": "sbx.loop",
+   "kind": "glyph",
+   "x": 73.5,
+   "y": 608.5,
+   "w": 19.0,
+   "h": 19.0,
+   "solid": false
+  },
+  {
+   "tag": "pghost6",
+   "kind": "ghost",
+   "x": 270,
+   "y": 484.0,
+   "w": 68,
+   "h": 76,
+   "solid": false,
+   "sw": 1.25
+  },
+  {
+   "tag": "pghost3",
+   "kind": "ghost",
+   "x": 267,
+   "y": 481.0,
+   "w": 68,
+   "h": 76,
+   "solid": false,
+   "sw": 1.25
+  },
+  {
+   "tag": "proxy0",
+   "kind": "guardfill",
+   "x": 264,
+   "y": 478.0,
+   "w": 68,
+   "h": 76,
+   "solid": true,
+   "sw": 2.0
+  },
+  {
+   "tag": "badgeproxy0",
+   "kind": "badge",
+   "x": 256,
+   "y": 470.0,
+   "w": 16,
+   "h": 16,
+   "solid": true
+  },
+  {
+   "tag": "badgeproxy0",
+   "kind": "badge",
+   "x": 304,
+   "y": 470.0,
+   "w": 16,
+   "h": 16,
+   "solid": true
+  },
+  {
+   "tag": "obs",
+   "kind": "record",
+   "x": 32,
+   "y": 674,
+   "w": 300,
+   "h": 48,
+   "solid": true,
+   "sw": 1.25
+  },
+  {
+   "tag": "frame",
+   "kind": "zone",
+   "x": 22,
+   "y": 332,
+   "w": 320,
+   "h": 402,
+   "solid": false,
+   "sw": 1
+  },
+  {
+   "tag": "sc",
+   "kind": "guard",
+   "x": 32,
+   "y": 758,
+   "w": 308,
+   "h": 44,
+   "solid": true,
+   "sw": 1.25
+  },
+  {
+   "tag": "badgesc",
+   "kind": "badge",
+   "x": 24,
+   "y": 750,
+   "w": 16,
+   "h": 16,
+   "solid": true
+  },
+  {
+   "tag": "mg",
+   "kind": "guard",
+   "x": 32,
+   "y": 814,
+   "w": 308,
+   "h": 44,
+   "solid": true,
+   "sw": 1.25
+  },
+  {
+   "tag": "down",
+   "kind": "card",
+   "x": 32,
+   "y": 870,
+   "w": 308,
+   "h": 44,
+   "solid": true,
+   "sw": 1
+  },
+  {
+   "tag": "out0",
+   "kind": "card",
+   "x": 32,
+   "y": 978,
+   "w": 308,
+   "h": 46,
+   "solid": true,
+   "sw": 1
+  },
+  {
+   "tag": "out1",
+   "kind": "card",
+   "x": 32,
+   "y": 1046,
+   "w": 308,
+   "h": 46,
+   "solid": true,
+   "sw": 1.75
+  },
+  {
+   "tag": "out2",
+   "kind": "card",
+   "x": 32,
+   "y": 1114,
+   "w": 308,
+   "h": 46,
+   "solid": true,
+   "sw": 1.75
+  },
+  {
+   "tag": "badgelg1",
+   "kind": "badge",
+   "x": 32,
+   "y": 1208,
+   "w": 16,
+   "h": 16,
+   "solid": true
+  },
+  {
+   "tag": "badgelg2",
+   "kind": "badge",
+   "x": 144.73469387755102,
+   "y": 1208,
+   "w": 16,
+   "h": 16,
+   "solid": true
+  },
+  {
+   "tag": "badgelg3",
+   "kind": "badge",
+   "x": 32,
+   "y": 1232,
+   "w": 16,
+   "h": 16,
+   "solid": true
+  },
+  {
+   "tag": "badgelg4",
+   "kind": "badge",
+   "x": 144.73469387755102,
+   "y": 1232,
+   "w": 16,
+   "h": 16,
+   "solid": true
+  },
+  {
+   "tag": "dk0",
+   "kind": "card",
+   "x": 32,
+   "y": 1254,
+   "w": 18,
+   "h": 12,
+   "solid": true,
+   "sw": 1.75
+  },
+  {
+   "tag": "dk1",
+   "kind": "card",
+   "x": 32,
+   "y": 1273,
+   "w": 18,
+   "h": 12,
+   "solid": true,
+   "sw": 1
+  }
+ ],
+ "links": [
+  {
+   "tag": "req.in",
+   "kind": "flow",
+   "pts": [
+    [
+     68,
+     62
+    ],
+    [
+     68,
+     102
+    ]
+   ],
+   "head": true,
+   "group": null,
+   "free": false
+  },
+  {
+   "tag": "schedule",
+   "kind": "flow",
+   "pts": [
+    [
+     68,
+     146
+    ],
+    [
+     68,
+     190
+    ]
+   ],
+   "head": true,
+   "group": null,
+   "free": false
+  },
+  {
+   "tag": "directs",
+   "kind": "flow",
+   "pts": [
+    [
+     44,
+     282
+    ],
+    [
+     44,
+     422
+    ],
+    [
+     62,
+     422
+    ]
+   ],
+   "head": true,
+   "group": null,
+   "free": false
+  },
+  {
+   "tag": "propose",
+   "kind": "flow",
+   "pts": [
+    [
+     228,
+     382
+    ],
+    [
+     228,
+     266
+    ]
+   ],
+   "head": true,
+   "group": null,
+   "free": false
+  },
+  {
+   "tag": "traffic0",
+   "kind": "flow",
+   "pts": [
+    [
+     246,
+     516.0
+    ],
+    [
+     264,
+     516.0
+    ]
+   ],
+   "head": true,
+   "group": null,
+   "free": false
+  },
+  {
+   "tag": "bus.in0",
+   "kind": "flow",
+   "pts": [
+    [
+     332,
+     516.0
+    ],
+    [
+     360,
+     516.0
+    ]
+   ],
+   "head": false,
+   "group": "bus",
+   "free": false
+  },
+  {
+   "tag": "grant",
+   "kind": "grant",
+   "pts": [
+    [
+     290,
+     266
+    ],
+    [
+     290,
+     478.0
+    ]
+   ],
+   "head": true,
+   "group": null,
+   "free": false
+  },
+  {
+   "tag": "bus",
+   "kind": "flow",
+   "pts": [
+    [
+     360,
+     516.0
+    ],
+    [
+     360,
+     892
+    ]
+   ],
+   "head": false,
+   "group": "bus",
+   "free": false
+  },
+  {
+   "tag": "bus.0",
+   "kind": "flow",
+   "pts": [
+    [
+     360,
+     780
+    ],
+    [
+     340,
+     780
+    ]
+   ],
+   "head": true,
+   "group": "bus",
+   "free": false
+  },
+  {
+   "tag": "bus.1",
+   "kind": "flow",
+   "pts": [
+    [
+     360,
+     836
+    ],
+    [
+     340,
+     836
+    ]
+   ],
+   "head": true,
+   "group": "bus",
+   "free": false
+  },
+  {
+   "tag": "bus.2",
+   "kind": "flow",
+   "pts": [
+    [
+     360,
+     892
+    ],
+    [
+     340,
+     892
+    ]
+   ],
+   "head": true,
+   "group": "bus",
+   "free": false
+  },
+  {
+   "tag": "bus.pr",
+   "kind": "flow",
+   "pts": [
+    [
+     360,
+     892
+    ],
+    [
+     360,
+     1001
+    ],
+    [
+     340,
+     1001
+    ]
+   ],
+   "head": true,
+   "group": "bus",
+   "free": false
+  },
+  {
+   "tag": "o0",
+   "kind": "flow",
+   "pts": [
+    [
+     68,
+     1024
+    ],
+    [
+     68,
+     1046
+    ]
+   ],
+   "head": true,
+   "group": null,
+   "free": false
+  },
+  {
+   "tag": "o1",
+   "kind": "flow",
+   "pts": [
+    [
+     68,
+     1092
+    ],
+    [
+     68,
+     1114
+    ]
+   ],
+   "head": true,
+   "group": null,
+   "free": false
+  },
+  {
+   "tag": "outer",
+   "kind": "loop",
+   "pts": [
+    [
+     68,
+     978
+    ],
+    [
+     68,
+     924
+    ],
+    [
+     12,
+     924
+    ],
+    [
+     12,
+     124
+    ],
+    [
+     32,
+     124
+    ]
+   ],
+   "head": true,
+   "group": null,
+   "free": false
+  }
+ ],
+ "margin": 8
+}

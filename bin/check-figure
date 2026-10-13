@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Visual regression gate for Figure 1.
+Visual regression gate for the papers' figures.
 
 Two earlier revisions shipped with colliding labels and a band running underneath
 a terminal, and both passed a clean build. This checks the geometry the build
@@ -12,17 +12,75 @@ cannot see:
   4. the identifier ranges match controls.yaml
 
 Run after every figure change. bin/snapshot does it automatically.
+
+  bin/check-figure                 the first paper's Figure 1
+  bin/check-figure figure-1-narrow a figure in whitepaper/figures, by name
+  bin/check-figure path/to/x.svg   any generated figure, by path (the box
+                                   manifest .x.boxes.json sits beside it)
+
+A figure that is drawn in boxes — the software factory's — also writes
+.x.geom.json, its shapes and connectors, and is held to the checks such a
+figure needs on top of 1–4. They read only that manifest, so they cannot change
+what the first paper's figures are held to:
+
+  5. text never straddles a box edge: it is inside a box or clear of it; and
+     text inside a card keeps 2 units between its top and bottom (ascent and
+     descent included) and the inner edge of the card's stroke
+  6. no connector is drawn through text, a card, or another connector
+  7. every connector starts and ends on something — no arrow lands in air
+  8. an arrow's last leg is long enough to read as an arrow
+  9. text stays legible at every size the figure is shown, whatever the
+     figure's own data says: 7 pt at the PDF's figure width, and 10 px at the
+     narrowest width the page shows it (304 px, a 320 px phone's figure width,
+     for a narrow variant or for a wide figure that has none; the page's
+     narrowest wide slot otherwise). The widths are measured facts, set below.
+ 10. nothing touches the canvas edge: every box, text run and connector keeps
+     at least 6 units of air, so no stroke is clipped and every figure sits
+     in the same margin
+ 11. a boundary badge keeps 2 units clear of every other box's edge, so a
+     number on one card never touches the card stacked above it
 """
-import json, re, sys, pathlib
+import json, math, re, sys, pathlib
 
 HERE = pathlib.Path(__file__).resolve().parents[1] / "whitepaper"
 NAME = sys.argv[1] if len(sys.argv) > 1 and not sys.argv[1].startswith("-") else "figure-1"
 BOXES = HERE / "figures" / f".{NAME}.boxes.json"
 SVG = HERE / "figures" / f"{NAME}.svg"
 CAT = HERE / "controls.yaml"
+if NAME.endswith(".svg"):
+    SVG = pathlib.Path(NAME).resolve()
+    NAME = SVG.stem
+    BOXES = SVG.parent / f".{NAME}.boxes.json"
+GEOM = SVG.parent / f".{NAME}.geom.json"
+
+# ── the sizes a boxed figure is shown at (rule 9) ────────────────────────────
+# Print: measured from the built PDF, not assumed. `bin/build-pdf --paper
+# software-factory --draft` on 12 Oct 2026 (A4, 30 mm side margins): in Figure 3,
+# "Runtime" (canvas x 282) and "Source" (canvas x 618) start 194.13 pt apart, and
+# "Developer" (x 18) to "Source" is 346.67 pt over 600 units — 0.5778 pt a unit
+# both ways, so the 736-unit canvas prints 425.24 pt, the 150 mm text column. An
+# earlier version of this rule assumed a 6.5 in (468 pt) column and so passed
+# text that prints at 6.5 pt.
+PRINT_WIDTH_PT, MIN_PT = 425.2, 7.0
+# Screen: the page's narrowest figure slot, measured. Below 480 px a figure
+# spans calc(100vw - 16px) (reference-architecture's `.sff` rules), so on a
+# 320 px phone, the narrowest the page supports, a narrow variant (or a wide
+# figure without one) is 304 px wide. An earlier version of this rule assumed a
+# 343 px column the page never uses, and passed text that rendered at 8.6 px on
+# a 320 px phone. A wide figure with a narrow variant is shown only from 700 px
+# up, where its slot is 700 − 2 × 28 = 644 px at its narrowest.
+PHONE_PX, WIDE_MIN_PX, MIN_PX = 304, 644, 10.0
+# A text run's manifest height is its type size × 1.02 (figkit's text box), so
+# the type size is the height over this.
+TEXT_BOX_H = 1.02
+
+if not SVG.exists():
+    sys.exit(f"no such figure: {SVG}")
 
 if not BOXES.exists():
-    sys.exit("no box manifest — run whitepaper/figures/build-figure-1.py first")
+    gen = ("software-factory/figures/build-figures.py" if "software-factory" in SVG.parts
+           else "whitepaper/figures/build-figure-1.py")
+    sys.exit(f"no box manifest ({BOXES.name}) — run {gen} first")
 
 boxes = json.loads(BOXES.read_text(encoding="utf-8"))
 svg = SVG.read_text(encoding="utf-8")
@@ -107,7 +165,209 @@ if present:
             errors.append(f"{fam} range missing — a figure carries all identifier "
                           f"ranges or none, not some")
 
-print(f"{NAME}: {W}×{H} · {len(boxes)} text runs")
+# 5–11. boxed figures only: geometry the text manifest cannot see.
+# A boxed figure (the software factory's) must carry its geometry manifest:
+# without it rules 5–11 have nothing to read, and a run of rules 1–4 alone
+# would print the same clean pass as the full check.
+BOXED = "software-factory" in SVG.parts and "figures" in SVG.parts
+if BOXED and not GEOM.exists():
+    errors.append(f"no geometry manifest ({GEOM.name}): a boxed figure is held to rules 5–11, "
+                  f"which read it — rebuild with software-factory/figures/build-figures.py")
+
+if GEOM.exists():
+    geom = json.loads(GEOM.read_text(encoding="utf-8"))
+    shapes, links = geom["shapes"], geom["links"]
+    T = 0.5
+
+    def inside(a, s, tol=T):
+        return (a["x"] >= s["x"] - tol and a["y"] >= s["y"] - tol and
+                a["x"] + a["w"] <= s["x"] + s["w"] + tol and
+                a["y"] + a["h"] <= s["y"] + s["h"] + tol)
+
+    def meets(a, s, inset=0.0):
+        return not (a["x"] + a["w"] <= s["x"] + inset or s["x"] + s["w"] - inset <= a["x"] or
+                    a["y"] + a["h"] <= s["y"] + inset or s["y"] + s["h"] - inset <= a["y"])
+
+    def seg_hits_rect(p, q, r, inset):
+        """Does the axis-parallel segment p→q pass through r shrunk by inset?"""
+        x0, y0 = r["x"] + inset, r["y"] + inset
+        x1, y1 = r["x"] + r["w"] - inset, r["y"] + r["h"] - inset
+        if x1 <= x0 or y1 <= y0:
+            return False
+        (ax, ay), (bx, by) = p, q
+        if ay == by:
+            return y0 < ay < y1 and min(ax, bx) < x1 and max(ax, bx) > x0
+        if ax == bx:
+            return x0 < ax < x1 and min(ay, by) < y1 and max(ay, by) > y0
+        return True  # diagonals are not drawn here; flag any that appear
+
+    def segs(l):
+        return list(zip(l["pts"], l["pts"][1:]))
+
+    def on_rect_edge(pt, s, tol=1.5):
+        x, y = pt
+        inx = s["x"] - tol <= x <= s["x"] + s["w"] + tol
+        iny = s["y"] - tol <= y <= s["y"] + s["h"] + tol
+        return ((inx and (abs(y - s["y"]) <= tol or abs(y - s["y"] - s["h"]) <= tol)) or
+                (iny and (abs(x - s["x"]) <= tol or abs(x - s["x"] - s["w"]) <= tol)))
+
+    def on_seg(pt, p, q, tol=1.0):
+        (x, y), (ax, ay), (bx, by) = pt, p, q
+        return (min(ax, bx) - tol <= x <= max(ax, bx) + tol and
+                min(ay, by) - tol <= y <= max(ay, by) + tol and
+                (abs(ax - bx) <= tol and abs(x - ax) <= tol or
+                 abs(ay - by) <= tol and abs(y - ay) <= tol))
+
+    edged = [s for s in shapes if s["kind"] not in ("glyph", "badge")]
+    # 5. text inside a box or clear of it; nothing on a glyph or a badge's disc
+    for a in boxes:
+        if a["tag"].startswith("#"):          # a badge's numeral sits on its disc
+            continue
+        for sh in shapes:
+            if sh["kind"] in ("glyph", "badge"):
+                if meets(a, sh):
+                    errors.append(f"text on a mark: {a['tag']!r} touches {sh['tag']!r}")
+            elif meets(a, sh) and not inside(a, sh):
+                errors.append(f"text straddles a box edge: {a['tag']!r} "
+                              f"({a['x']:.0f},{a['y']:.0f} {a['w']:.0f}×{a['h']:.0f}) "
+                              f"and {sh['tag']!r} ({sh['x']},{sh['y']} {sh['w']}×{sh['h']})")
+            elif sh["kind"] != "ghost" and inside(a, sh):
+                # Inside: keep clear of the stroke, not just its centre. A box is
+                # drawn half a unit in from its record with its stroke centred
+                # there, so the stroke's inner edge is 0.5 + width/2 in. The
+                # vertical extent is exact (it comes from the type size); the
+                # width is figkit's estimate, already pessimistic, so the sides
+                # keep the plain containment above.
+                inner = 0.5 + sh.get("sw", 1) / 2
+                top = a["y"] - (sh["y"] + inner)
+                bottom = (sh["y"] + sh["h"] - inner) - (a["y"] + a["h"])
+                if min(top, bottom) < 2 - 0.005:
+                    side, gap = ("top", top) if top < bottom else ("bottom", bottom)
+                    errors.append(f"text too close to its card's {side} edge: {a['tag']!r} is "
+                                  f"{gap:.2f} units inside {sh['tag']!r}'s stroke (min 2)")
+    # 6a. no connector through text
+    for l in links:
+        for p, q in segs(l):
+            for a in boxes:
+                if seg_hits_rect(p, q, a, 0.5):
+                    errors.append(f"connector through text: {l['tag']!r} crosses {a['tag']!r}")
+    # 6b. no connector through a card (its own ends touch only the edge)
+    for l in links:
+        for p, q in segs(l):
+            for sh in shapes:
+                if sh["solid"] and seg_hits_rect(p, q, sh, 1.5):
+                    errors.append(f"connector through a box: {l['tag']!r} crosses {sh['tag']!r}")
+    # 6c. connectors don't cross each other, or run along each other, except
+    #     within one fan-out
+    for i, l in enumerate(links):
+        for m in links[i + 1:]:
+            if l.get("group") and l.get("group") == m.get("group"):
+                continue
+            for p, q in segs(l):
+                for r, t in segs(m):
+                    hz1, hz2 = p[1] == q[1], r[1] == t[1]
+                    if hz1 == hz2:
+                        # Parallel. On the same line and overlapping, two
+                        # connectors read as one; meeting end to end is fine.
+                        k = 0 if hz1 else 1           # the axis they run along
+                        if p[1 - k] == q[1 - k] == r[1 - k] == t[1 - k]:
+                            lo = max(min(p[k], q[k]), min(r[k], t[k]))
+                            hi = min(max(p[k], q[k]), max(r[k], t[k]))
+                            if hi - lo > 1:
+                                errors.append(f"connectors overlap: {l['tag']!r} and {m['tag']!r} "
+                                              f"along {'y' if hz1 else 'x'}={p[1 - k]:.0f}, "
+                                              f"{lo:.0f} to {hi:.0f}")
+                        continue
+                    h_, v_ = ((p, q), (r, t)) if hz1 else ((r, t), (p, q))
+                    yh, xv = h_[0][1], v_[0][0]
+                    if (min(h_[0][0], h_[1][0]) < xv < max(h_[0][0], h_[1][0]) and
+                            min(v_[0][1], v_[1][1]) < yh < max(v_[0][1], v_[1][1])):
+                        errors.append(f"connectors cross: {l['tag']!r} and {m['tag']!r} "
+                                      f"at ({xv:.0f},{yh:.0f})")
+    # 7. both ends land on a box edge or on another connector (a legend's
+    #    sample stroke is declared free: it stands for a connector, not one)
+    for l in links:
+        if l.get("free"):
+            continue
+        for end in (l["pts"][0], l["pts"][-1]):
+            ok = any(on_rect_edge(end, sh) for sh in edged)
+            ok = ok or any(on_seg(end, p, q) for m in links if m is not l for p, q in segs(m))
+            if not ok:
+                errors.append(f"connector lands in air: {l['tag']!r} at "
+                              f"({end[0]:.0f},{end[1]:.0f})")
+    # 8. an arrow's last leg reads as an arrow
+    for l in links:
+        if l["head"]:
+            (ax, ay), (bx, by) = l["pts"][-2], l["pts"][-1]
+            leg = abs(bx - ax) + abs(by - ay)
+            if leg < 18:
+                errors.append(f"arrow {l['tag']!r} ends in a {leg:.0f}px leg — "
+                              f"too short to read as an arrow")
+    # 9. legible at every size it is shown — decided here, never by the
+    #    figure's own manifest, so no figure can opt out by omission
+    narrow = NAME.endswith("-narrow")
+    has_narrow = (SVG.parent / f"{NAME}-narrow.svg").exists()
+    shown = []
+    if not narrow:
+        shown.append(("in print", PRINT_WIDTH_PT / W, MIN_PT, "pt",
+                      f"across the PDF's {PRINT_WIDTH_PT} pt figure width"))
+    if narrow or not has_narrow:
+        shown.append(("on a phone", PHONE_PX / W, MIN_PX, "px",
+                      f"across a {PHONE_PX} px phone column"
+                      + ("" if narrow else " (this figure has no narrow variant)")))
+    else:
+        shown.append(("on the page", WIDE_MIN_PX / W, MIN_PX, "px",
+                      f"in the page's narrowest wide slot, {WIDE_MIN_PX} px"))
+    for where, k, least, unit, at in shown:
+        worst = min(boxes, key=lambda a: a["h"])
+        size = worst["h"] / TEXT_BOX_H * k
+        if size < least - 0.005:
+            small = [a["tag"] for a in boxes if a["h"] / TEXT_BOX_H * k < least - 0.005]
+            errors.append(f"text too small {where}: {len(small)} run(s), smallest "
+                          f"{worst['tag']!r} at {size:.2f} {unit} {at} (min {least:g} {unit}); "
+                          f"e.g. {', '.join(map(repr, small[:4]))}")
+    for sh in shapes:
+        if sh["x"] < -T or sh["y"] < -T or sh["x"] + sh["w"] > W + T or sh["y"] + sh["h"] > H + T:
+            errors.append(f"box outside canvas: {sh['tag']!r}")
+    # 11. a badge's disc clears every edge but its own card's (and that card's
+    #     stack, drawn behind it). Distance is from the disc's centre to the
+    #     nearest edge of the other box, less the radius.
+    for b in [x for x in shapes if x["kind"] == "badge"]:
+        own = b["tag"][len("badge"):]
+        cx, cy, r = b["x"] + b["w"] / 2, b["y"] + b["h"] / 2, b["w"] / 2
+        for sh in shapes:
+            if sh is b or sh["tag"] == own or sh["kind"] in ("ghost", "glyph"):
+                continue
+            x0, y0, x1, y1 = sh["x"], sh["y"], sh["x"] + sh["w"], sh["y"] + sh["h"]
+            if x0 < cx < x1 and y0 < cy < y1:
+                d = min(cx - x0, x1 - cx, cy - y0, y1 - cy)
+            else:
+                d = math.hypot(max(x0 - cx, 0, cx - x1), max(y0 - cy, 0, cy - y1))
+            if d - r < 2 - 0.005:
+                errors.append(f"badge too close to another box: {b['tag']!r} is "
+                              f"{d - r:.2f} units from {sh['tag']!r} (min 2)")
+
+    # 10. a margin of air on every side
+    EDGE = 6
+    def near_edge(x0, y0, x1, y1):
+        return x0 < EDGE - T or y0 < EDGE - T or x1 > W - EDGE + T or y1 > H - EDGE + T
+    for sh in shapes:
+        if near_edge(sh["x"], sh["y"], sh["x"] + sh["w"], sh["y"] + sh["h"]):
+            errors.append(f"box touches the canvas edge: {sh['tag']!r} "
+                          f"({sh['x']:.0f},{sh['y']:.0f} {sh['w']:.0f}×{sh['h']:.0f}) — "
+                          f"keep {EDGE} units clear")
+    for a in boxes:
+        if near_edge(a["x"], a["y"], a["x"] + a["w"], a["y"] + a["h"]):
+            errors.append(f"text touches the canvas edge: {a['tag']!r}")
+    for l in links:
+        for x, y in l["pts"]:
+            if near_edge(x, y, x, y):
+                errors.append(f"connector touches the canvas edge: {l['tag']!r} at "
+                              f"({x:.0f},{y:.0f})")
+                break
+
+print(f"{NAME}: {W}×{H} · {len(boxes)} text runs"
+      + (f" · rules 1–{11 if GEOM.exists() else 4}" if BOXED else ""))
 for e in errors:
     print(f"  ERROR  {e}")
 print(f"\n{len(errors)} error(s)")

@@ -6,9 +6,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Controls — Agent Baseline</title>
-<meta name="description" content="An open reference architecture and controls for running AI agents in the enterprise. A draft for public comment, versioned in the open.">
+<meta name="description" content="Six security outcomes and {{ len hugo.Data.controls.controls }} controls for running AI agents in the enterprise. Versioned in the open.">
 <link rel="canonical" href="{{ strings.TrimSuffix "/" .Permalink }}">
-{{ partial "social-meta.html" (dict "ctx" . "title" "Controls — Agent Baseline" "desc" (printf "All %d controls, grouped by outcome, each with a permanent identifier you can cite. A draft for public comment." (len hugo.Data.controls.controls))) }}
+{{ partial "social-meta.html" (dict "ctx" . "title" "Controls — Agent Baseline" "desc" (printf "All %d controls, grouped by outcome, each with a permanent identifier you can cite." (len hugo.Data.controls.controls))) }}
 {{ partial "machine-readable.html" . }}
 <link rel="icon" href="/icon.svg" type="image/svg+xml">
 {{/* PNG fallback: Safari's touch icon and older contexts do not take SVG.
@@ -96,16 +96,6 @@
   .utility .pub { font-family:var(--labelfont); font-size:11.5px;
     letter-spacing:.07em; text-transform:uppercase; color:var(--soft); }
   .utility .pub .k { color:var(--faint); margin-right:2px; }
-  /* The one tinted block in the chrome: the deadline is the site's ask.
-     Soft treatment — accent text on a translucent wash of itself. */
-  .utility a.closes, .utility a.closes:visited {
-    background:color-mix(in srgb, var(--accent) 12%, transparent);
-    color:var(--accent); font-family:var(--labelfont); font-weight:500;
-    font-size:11px; letter-spacing:.06em; padding:3px 8px;
-    border-radius:3px; }
-  .utility a.closes:hover {
-    background:color-mix(in srgb, var(--accent) 22%, transparent);
-    color:var(--accent); }
   .utility .ver { color:var(--faint); }
   @media (max-width:760px) { .utility .pub { display:none; } }
   .themebtn { background:none; border:0; padding:2px; margin:0; cursor:pointer;
@@ -187,6 +177,18 @@
     dl.tb .cell:nth-child(odd) { border-left:none; padding-left:0; }
     dl.tb .cell:nth-child(n+3) { border-top:1px solid var(--line); }
   }
+  /* Below 375px two columns leave the Reference cell too narrow for its
+     longest names ("Secure Software Factory", "identifier stability"), and
+     since a name never splits, the cell ran past the block's rules and, at
+     320, past the viewport. Stacked, the cell takes the full width and its
+     list wraps between names. The reference architecture's title block
+     stacks the same way, below 480px: from 375 to 413 the two-column block
+     came back and squeezed the Catalogue cell. */
+  @media (max-width:479px) {
+    dl.tb { grid-template-columns:1fr; }
+    dl.tb .cell:nth-child(n) { border-left:none; padding-left:0; }
+    dl.tb .cell:nth-child(n+2) { border-top:1px solid var(--line); }
+  }
 
   nav.toc { display:flex; flex-wrap:wrap; gap:0 26px; margin:0 0 8px;
     font-family:var(--mono); font-size:12.5px; }
@@ -261,6 +263,8 @@
     border-top:1px solid var(--line); padding-top:16px;
     font-family:var(--mono); font-size:11.5px; color:var(--faint); line-height:1.9;
     display:flex; gap:12px 32px; flex-wrap:wrap; justify-content:space-between; }
+  /* Underlined: in the footer's faint text, colour alone was 1.02:1. */
+  footer a { text-decoration:underline; text-underline-offset:2px; }
   footer .sig { font-family:var(--labelfont); letter-spacing:.12em;
     text-transform:uppercase; }
 </style>
@@ -286,8 +290,8 @@
     </details>
     <span class="crumb"><a class="mast" href="/">Agent Baseline</a>
       <span class="sep">/</span> <span class="here">Controls</span></span>
+    {{ partial "ra-link.html" . }}
     <span class="right pub"><span class="k">Published</span> {{ .Site.Params.published }}</span>
-    <a class="closes" href="{{ .Site.Params.repo }}/issues">Comment closes {{ .Site.Params.commentsUntil }}</a>
     {{ partial "artifacts-menu.html" . }}
     <span class="ver">v{{ .Site.Params.version }}</span>
     {{/* aria-pressed is corrected by theme.js as soon as the body parses — the
@@ -311,7 +315,8 @@
       <div class="cell"><dt>Reference</dt><dd>
         <a href="/">overview</a> ·
         <a href="{{ .Site.Params.repo }}/blob/main/whitepaper/controls.yaml">controls.yaml</a> ·
-        <a href="{{ .Site.Params.repo }}/blob/main/VERSIONING.md">identifier stability</a>
+        <a href="{{ .Site.Params.repo }}/blob/main/VERSIONING.md">identifier stability</a>{{ with .Site.Params.softwareFactory }} ·
+        <a href="/reference-architecture">Secure Software Factory</a>{{ end }}
       </dd></div>
     </dl>
   </header>

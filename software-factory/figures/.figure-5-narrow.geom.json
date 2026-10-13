@@ -1,0 +1,811 @@
+{
+ "W": 376,
+ "H": 1519,
+ "shapes": [
+  {
+   "tag": "req",
+   "kind": "card",
+   "x": 32,
+   "y": 18,
+   "w": 146,
+   "h": 44,
+   "solid": true,
+   "sw": 1
+  },
+  {
+   "tag": "ctx",
+   "kind": "card",
+   "x": 196,
+   "y": 18,
+   "w": 164,
+   "h": 60,
+   "solid": true,
+   "sw": 1.75
+  },
+  {
+   "tag": "orch",
+   "kind": "agent",
+   "x": 32,
+   "y": 102,
+   "w": 328,
+   "h": 44,
+   "solid": true,
+   "sw": 1.75
+  },
+  {
+   "tag": "exec",
+   "kind": "card",
+   "x": 32,
+   "y": 190,
+   "w": 152,
+   "h": 92,
+   "solid": true,
+   "sw": 1
+  },
+  {
+   "tag": "auth",
+   "kind": "guard",
+   "x": 196,
+   "y": 190,
+   "w": 164,
+   "h": 76,
+   "solid": true,
+   "sw": 1.25
+  },
+  {
+   "tag": "badgeauth",
+   "kind": "badge",
+   "x": 188,
+   "y": 182,
+   "w": 16,
+   "h": 16,
+   "solid": true
+  },
+  {
+   "tag": "sbx0",
+   "kind": "sandbox",
+   "x": 62,
+   "y": 376,
+   "w": 184,
+   "h": 116,
+   "solid": true,
+   "sw": 1.25
+  },
+  {
+   "tag": "badgesbx0",
+   "kind": "badge",
+   "x": 54,
+   "y": 368,
+   "w": 16,
+   "h": 16,
+   "solid": true
+  },
+  {
+   "tag": "sbx0.loop",
+   "kind": "glyph",
+   "x": 73.5,
+   "y": 454.5,
+   "w": 19.0,
+   "h": 19.0,
+   "solid": false
+  },
+  {
+   "tag": "proxy0",
+   "kind": "guard",
+   "x": 264,
+   "y": 396.0,
+   "w": 68,
+   "h": 76,
+   "solid": true,
+   "sw": 1.25
+  },
+  {
+   "tag": "badgeproxy0",
+   "kind": "badge",
+   "x": 256,
+   "y": 388.0,
+   "w": 16,
+   "h": 16,
+   "solid": true
+  },
+  {
+   "tag": "badgeproxy0",
+   "kind": "badge",
+   "x": 304,
+   "y": 388.0,
+   "w": 16,
+   "h": 16,
+   "solid": true
+  },
+  {
+   "tag": "mon0",
+   "kind": "agent",
+   "x": 62,
+   "y": 512,
+   "w": 184,
+   "h": 44,
+   "solid": true,
+   "sw": 1.75
+  },
+  {
+   "tag": "sbx1",
+   "kind": "sandbox",
+   "x": 62,
+   "y": 580,
+   "w": 184,
+   "h": 116,
+   "solid": true,
+   "sw": 1.25
+  },
+  {
+   "tag": "badgesbx1",
+   "kind": "badge",
+   "x": 54,
+   "y": 572,
+   "w": 16,
+   "h": 16,
+   "solid": true
+  },
+  {
+   "tag": "sbx1.loop",
+   "kind": "glyph",
+   "x": 73.5,
+   "y": 658.5,
+   "w": 19.0,
+   "h": 19.0,
+   "solid": false
+  },
+  {
+   "tag": "proxy1",
+   "kind": "guard",
+   "x": 264,
+   "y": 600.0,
+   "w": 68,
+   "h": 76,
+   "solid": true,
+   "sw": 1.25
+  },
+  {
+   "tag": "badgeproxy1",
+   "kind": "badge",
+   "x": 256,
+   "y": 592.0,
+   "w": 16,
+   "h": 16,
+   "solid": true
+  },
+  {
+   "tag": "badgeproxy1",
+   "kind": "badge",
+   "x": 304,
+   "y": 592.0,
+   "w": 16,
+   "h": 16,
+   "solid": true
+  },
+  {
+   "tag": "mon1",
+   "kind": "agent",
+   "x": 62,
+   "y": 716,
+   "w": 184,
+   "h": 44,
+   "solid": true,
+   "sw": 1.75
+  },
+  {
+   "tag": "obs",
+   "kind": "record",
+   "x": 32,
+   "y": 778,
+   "w": 300,
+   "h": 48,
+   "solid": true,
+   "sw": 1.25
+  },
+  {
+   "tag": "evals.dot",
+   "kind": "glyph",
+   "x": 9.4,
+   "y": 799.4,
+   "w": 5.2,
+   "h": 5.2,
+   "solid": false
+  },
+  {
+   "tag": "frame",
+   "kind": "zone",
+   "x": 22,
+   "y": 306,
+   "w": 320,
+   "h": 532,
+   "solid": false,
+   "sw": 1
+  },
+  {
+   "tag": "sc",
+   "kind": "guard",
+   "x": 32,
+   "y": 862,
+   "w": 308,
+   "h": 44,
+   "solid": true,
+   "sw": 1.25
+  },
+  {
+   "tag": "badgesc",
+   "kind": "badge",
+   "x": 24,
+   "y": 854,
+   "w": 16,
+   "h": 16,
+   "solid": true
+  },
+  {
+   "tag": "mg",
+   "kind": "guard",
+   "x": 32,
+   "y": 918,
+   "w": 308,
+   "h": 44,
+   "solid": true,
+   "sw": 1.25
+  },
+  {
+   "tag": "down",
+   "kind": "card",
+   "x": 32,
+   "y": 974,
+   "w": 308,
+   "h": 44,
+   "solid": true,
+   "sw": 1
+  },
+  {
+   "tag": "out0",
+   "kind": "card",
+   "x": 32,
+   "y": 1048,
+   "w": 308,
+   "h": 46,
+   "solid": true,
+   "sw": 1
+  },
+  {
+   "tag": "out1",
+   "kind": "card",
+   "x": 32,
+   "y": 1116,
+   "w": 308,
+   "h": 46,
+   "solid": true,
+   "sw": 1
+  },
+  {
+   "tag": "out2",
+   "kind": "card",
+   "x": 32,
+   "y": 1184,
+   "w": 308,
+   "h": 46,
+   "solid": true,
+   "sw": 1.75
+  },
+  {
+   "tag": "out3",
+   "kind": "card",
+   "x": 32,
+   "y": 1252,
+   "w": 308,
+   "h": 46,
+   "solid": true,
+   "sw": 1.75
+  },
+  {
+   "tag": "sig",
+   "kind": "card",
+   "x": 32,
+   "y": 1338,
+   "w": 308,
+   "h": 44,
+   "solid": true,
+   "sw": 1.75
+  },
+  {
+   "tag": "badgelg1",
+   "kind": "badge",
+   "x": 32,
+   "y": 1430,
+   "w": 16,
+   "h": 16,
+   "solid": true
+  },
+  {
+   "tag": "badgelg2",
+   "kind": "badge",
+   "x": 144.73469387755102,
+   "y": 1430,
+   "w": 16,
+   "h": 16,
+   "solid": true
+  },
+  {
+   "tag": "badgelg3",
+   "kind": "badge",
+   "x": 32,
+   "y": 1454,
+   "w": 16,
+   "h": 16,
+   "solid": true
+  },
+  {
+   "tag": "badgelg4",
+   "kind": "badge",
+   "x": 144.73469387755102,
+   "y": 1454,
+   "w": 16,
+   "h": 16,
+   "solid": true
+  },
+  {
+   "tag": "dk0",
+   "kind": "card",
+   "x": 32,
+   "y": 1476,
+   "w": 18,
+   "h": 12,
+   "solid": true,
+   "sw": 1.75
+  },
+  {
+   "tag": "dk1",
+   "kind": "card",
+   "x": 32,
+   "y": 1495,
+   "w": 18,
+   "h": 12,
+   "solid": true,
+   "sw": 1
+  }
+ ],
+ "links": [
+  {
+   "tag": "req.in",
+   "kind": "flow",
+   "pts": [
+    [
+     68,
+     62
+    ],
+    [
+     68,
+     102
+    ]
+   ],
+   "head": true,
+   "group": null,
+   "free": false
+  },
+  {
+   "tag": "ctx.in",
+   "kind": "flow",
+   "pts": [
+    [
+     278,
+     78
+    ],
+    [
+     278,
+     102
+    ]
+   ],
+   "head": true,
+   "group": null,
+   "free": false
+  },
+  {
+   "tag": "schedule",
+   "kind": "flow",
+   "pts": [
+    [
+     68,
+     146
+    ],
+    [
+     68,
+     190
+    ]
+   ],
+   "head": true,
+   "group": null,
+   "free": false
+  },
+  {
+   "tag": "propose",
+   "kind": "flow",
+   "pts": [
+    [
+     338,
+     146
+    ],
+    [
+     338,
+     190
+    ]
+   ],
+   "head": true,
+   "group": null,
+   "free": false
+  },
+  {
+   "tag": "traffic0",
+   "kind": "flow",
+   "pts": [
+    [
+     246,
+     434.0
+    ],
+    [
+     264,
+     434.0
+    ]
+   ],
+   "head": true,
+   "group": null,
+   "free": false
+  },
+  {
+   "tag": "bus.in0",
+   "kind": "flow",
+   "pts": [
+    [
+     332,
+     434.0
+    ],
+    [
+     360,
+     434.0
+    ]
+   ],
+   "head": false,
+   "group": "bus",
+   "free": false
+  },
+  {
+   "tag": "watch0",
+   "kind": "flow",
+   "pts": [
+    [
+     154.0,
+     512
+    ],
+    [
+     154.0,
+     492
+    ]
+   ],
+   "head": false,
+   "group": null,
+   "free": false
+  },
+  {
+   "tag": "traffic1",
+   "kind": "flow",
+   "pts": [
+    [
+     246,
+     638.0
+    ],
+    [
+     264,
+     638.0
+    ]
+   ],
+   "head": true,
+   "group": null,
+   "free": false
+  },
+  {
+   "tag": "bus.in1",
+   "kind": "flow",
+   "pts": [
+    [
+     332,
+     638.0
+    ],
+    [
+     360,
+     638.0
+    ]
+   ],
+   "head": false,
+   "group": "bus",
+   "free": false
+  },
+  {
+   "tag": "watch1",
+   "kind": "flow",
+   "pts": [
+    [
+     154.0,
+     716
+    ],
+    [
+     154.0,
+     696
+    ]
+   ],
+   "head": false,
+   "group": null,
+   "free": false
+  },
+  {
+   "tag": "split",
+   "kind": "flow",
+   "pts": [
+    [
+     44,
+     282
+    ],
+    [
+     44,
+     620
+    ]
+   ],
+   "head": false,
+   "group": "split",
+   "free": false
+  },
+  {
+   "tag": "split0",
+   "kind": "flow",
+   "pts": [
+    [
+     44,
+     416
+    ],
+    [
+     62,
+     416
+    ]
+   ],
+   "head": true,
+   "group": "split",
+   "free": false
+  },
+  {
+   "tag": "split1",
+   "kind": "flow",
+   "pts": [
+    [
+     44,
+     620
+    ],
+    [
+     62,
+     620
+    ]
+   ],
+   "head": true,
+   "group": "split",
+   "free": false
+  },
+  {
+   "tag": "grant",
+   "kind": "grant",
+   "pts": [
+    [
+     290,
+     266
+    ],
+    [
+     290,
+     396.0
+    ]
+   ],
+   "head": true,
+   "group": null,
+   "free": false
+  },
+  {
+   "tag": "evals",
+   "kind": "loop",
+   "pts": [
+    [
+     32,
+     802
+    ],
+    [
+     12,
+     802
+    ]
+   ],
+   "head": false,
+   "group": null,
+   "free": false
+  },
+  {
+   "tag": "bus",
+   "kind": "flow",
+   "pts": [
+    [
+     360,
+     434.0
+    ],
+    [
+     360,
+     996
+    ]
+   ],
+   "head": false,
+   "group": "bus",
+   "free": false
+  },
+  {
+   "tag": "bus.0",
+   "kind": "flow",
+   "pts": [
+    [
+     360,
+     884
+    ],
+    [
+     340,
+     884
+    ]
+   ],
+   "head": true,
+   "group": "bus",
+   "free": false
+  },
+  {
+   "tag": "bus.1",
+   "kind": "flow",
+   "pts": [
+    [
+     360,
+     940
+    ],
+    [
+     340,
+     940
+    ]
+   ],
+   "head": true,
+   "group": "bus",
+   "free": false
+  },
+  {
+   "tag": "bus.2",
+   "kind": "flow",
+   "pts": [
+    [
+     360,
+     996
+    ],
+    [
+     340,
+     996
+    ]
+   ],
+   "head": true,
+   "group": "bus",
+   "free": false
+  },
+  {
+   "tag": "bus.pr",
+   "kind": "flow",
+   "pts": [
+    [
+     360,
+     996
+    ],
+    [
+     360,
+     1071
+    ],
+    [
+     340,
+     1071
+    ]
+   ],
+   "head": true,
+   "group": "bus",
+   "free": false
+  },
+  {
+   "tag": "o0",
+   "kind": "flow",
+   "pts": [
+    [
+     68,
+     1094
+    ],
+    [
+     68,
+     1116
+    ]
+   ],
+   "head": true,
+   "group": null,
+   "free": false
+  },
+  {
+   "tag": "o1",
+   "kind": "flow",
+   "pts": [
+    [
+     68,
+     1162
+    ],
+    [
+     68,
+     1184
+    ]
+   ],
+   "head": true,
+   "group": null,
+   "free": false
+  },
+  {
+   "tag": "o2",
+   "kind": "flow",
+   "pts": [
+    [
+     68,
+     1230
+    ],
+    [
+     68,
+     1252
+    ]
+   ],
+   "head": true,
+   "group": null,
+   "free": false
+  },
+  {
+   "tag": "incidents",
+   "kind": "loop",
+   "pts": [
+    [
+     68,
+     1298
+    ],
+    [
+     68,
+     1338
+    ]
+   ],
+   "head": true,
+   "group": null,
+   "free": false
+  },
+  {
+   "tag": "outer",
+   "kind": "loop",
+   "pts": [
+    [
+     32,
+     1360
+    ],
+    [
+     12,
+     1360
+    ],
+    [
+     12,
+     124
+    ],
+    [
+     32,
+     124
+    ]
+   ],
+   "head": true,
+   "group": null,
+   "free": false
+  }
+ ],
+ "margin": 8
+}

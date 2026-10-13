@@ -1,0 +1,36 @@
+{
+  "artifact": "static/software-factory.pdf",
+  "bytes": 694409,
+  "pages": 26,
+  "sha256": "3303946554c18d04295a10525aff601db552f6ae2ed8f6599e439d83a710f628",
+  "source_date_epoch": "1791892800",
+  "built_by": {
+    "producer": "Skia/PDF m155",
+    "creator": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/155.0.0.0 Safari/537.36",
+    "pandoc": "pandoc 3.10.1"
+  },
+  "inputs": {
+    "bin/build-pdf": "ee69520654e93b95d66a02a56bd6e662c9f00a5b40e8c78912e5339e35ab885c",
+    "bin/papers.py": "ac0594f45c4810fabe6d7b840ce8b5916a88d4da68e8e609f0d444bd9404ed1c",
+    "bin/print-page.mjs": "119d3f84951a91d113b1b9bc1d22114ab339dbcee5c1f3a025e2c2d51babd47d",
+    "bin/vendor/paged.polyfill.js": "f59f361802416c770d549a647958649af2cf6601999924bc00e4f507dad5269f",
+    "software-factory/contributors.yaml": "56e901447fd70be77c7682de596b84e0a17f62b1b1eed3ea988e2068ae9eb488",
+    "software-factory/figures/figure-1.svg": "ed8183c3d93aa171393f01b0425f0e2eb562466189af624b9f238b9fcde2347c",
+    "software-factory/figures/figure-2.svg": "7fd60d2d492e51ac89ec90940bdc593229ee78db499041842ffb965a64f33def",
+    "software-factory/figures/figure-3.svg": "5cc2afc3ed6def46c83632058afbfe55e6206d892fed9786bb71f44b73a278bb",
+    "software-factory/figures/figure-4.svg": "929c90e07f4b17f0ae4ca9ca91a3606fe85168ee6f3e3ae75ca99b017e644157",
+    "software-factory/figures/figure-5.svg": "d9a6bbcaba68ef22f353dece5c26063409ddbd92aaa0956ba76e263b6810922a",
+    "software-factory/figures/figure-6.svg": "dba18bc7510ce0e8d353e88971608cd89e5ff50934396c070faf77462e5c5e6c",
+    "software-factory/software-factory.md": "1ff29872bbb029b5b48f448e3a0e91d89be8feb82bf84a14ef6aaa61ad6a1e47",
+    "static/fonts/chakra-petch-normal-500-latin.woff2": "adf007cd277ef6dac0c8cecacfb60cc5e24e7c8bcce4db98aa233bd3a88ef5a3",
+    "static/fonts/chakra-petch-normal-600-latin.woff2": "4d6d5f0b31b3a471a843779c4ecada040e5bc291f96bca9805a94293fe8003fa",
+    "static/fonts/figtree-italic-400-latin.woff2": "9341f363343c85f00e5a23573accc776baaf0b59ab2eda0560f206e22ac57c04",
+    "static/fonts/figtree-normal-400-latin.woff2": "8330490a01c60c196eae00b823de8102275aaa5862e7b76a7af21b8745338928",
+    "static/fonts/ibm-plex-mono-normal-400-latin.woff2": "c36f509c0a8f9f85f29cb44bc8701d8a9e0b14c499e77a884f789ead7093a7ac",
+    "static/fonts/ibm-plex-mono-normal-600-latin.woff2": "ad4580d8cb4b5f627c2d18457656732f7f7b070f7837fbc380e08054157e6f6c",
+    "static/fonts/ibm-plex-serif-italic-400-latin.woff2": "9daa6f3da3e4917e5da8537fe9b42a1d764f967e40920ef91cb1b01e069bd241",
+    "static/fonts/ibm-plex-serif-normal-400-latin.woff2": "9fbb32c4c07037bc1e9107ee9cbf3a84662449cb36511138d5adb80e195b9302",
+    "static/fonts/ibm-plex-serif-normal-600-latin.woff2": "d8bf89a58f34027c1ee0b24d4bd66f19a782887980e3ce149519c2c527cac3ce",
+    "static/fonts/ibm-plex-serif-normal-700-latin.woff2": "8d256fda8c12db0d7bbde004f3e844ba23cfaa3e764880b24056d6f0b79d70dd"
+  }
+}
