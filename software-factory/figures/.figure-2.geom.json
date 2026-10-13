@@ -1,71 +1,32 @@
 {
  "W": 736,
- "H": 346,
+ "H": 520,
  "shapes": [
-  {
-   "tag": "auth",
-   "kind": "guard",
-   "x": 272,
-   "y": 18,
-   "w": 296,
-   "h": 66,
-   "solid": true,
-   "sw": 1.25
-  },
-  {
-   "tag": "badgeauth",
-   "kind": "badge",
-   "x": 264,
-   "y": 10,
-   "w": 16,
-   "h": 16,
-   "solid": true
-  },
   {
    "tag": "prof",
    "kind": "card",
-   "x": 8,
-   "y": 142,
-   "w": 234,
-   "h": 152,
-   "solid": true,
-   "sw": 1
-  },
-  {
-   "tag": "task",
-   "kind": "card",
-   "x": 18,
-   "y": 188,
-   "w": 214,
-   "h": 99,
-   "solid": true,
-   "sw": 1
-  },
-  {
-   "tag": "dlg",
-   "kind": "card",
-   "x": 28,
-   "y": 234,
-   "w": 194,
-   "h": 46,
+   "x": 14,
+   "y": 54,
+   "w": 174,
+   "h": 132,
    "solid": true,
    "sw": 1
   },
   {
    "tag": "sbx",
    "kind": "sandbox",
-   "x": 272,
-   "y": 142,
-   "w": 172,
-   "h": 152,
+   "x": 202,
+   "y": 54,
+   "w": 148,
+   "h": 132,
    "solid": true,
    "sw": 1.25
   },
   {
    "tag": "badgesbx",
    "kind": "badge",
-   "x": 264,
-   "y": 134,
+   "x": 194,
+   "y": 46,
    "w": 16,
    "h": 16,
    "solid": true
@@ -73,8 +34,8 @@
   {
    "tag": "sbx.loop",
    "kind": "glyph",
-   "x": 283.5,
-   "y": 250.5,
+   "x": 213.5,
+   "y": 142.5,
    "w": 19.0,
    "h": 19.0,
    "solid": false
@@ -82,18 +43,18 @@
   {
    "tag": "proxy",
    "kind": "guard",
-   "x": 464,
-   "y": 176,
-   "w": 104,
-   "h": 84,
+   "x": 370,
+   "y": 54,
+   "w": 152,
+   "h": 132,
    "solid": true,
    "sw": 1.25
   },
   {
    "tag": "badgeproxy",
    "kind": "badge",
-   "x": 456,
-   "y": 168,
+   "x": 362,
+   "y": 46,
    "w": 16,
    "h": 16,
    "solid": true
@@ -101,18 +62,104 @@
   {
    "tag": "down",
    "kind": "card",
-   "x": 608,
-   "y": 176,
-   "w": 120,
-   "h": 84,
+   "x": 556,
+   "y": 54,
+   "w": 172,
+   "h": 60.0,
    "solid": true,
    "sw": 1
+  },
+  {
+   "tag": "adm",
+   "kind": "guard",
+   "x": 556,
+   "y": 126.0,
+   "w": 172,
+   "h": 60.0,
+   "solid": true,
+   "sw": 1.25
+  },
+  {
+   "tag": "badgeadm",
+   "kind": "badge",
+   "x": 548,
+   "y": 118.0,
+   "w": 16,
+   "h": 16,
+   "solid": true
+  },
+  {
+   "tag": "auth",
+   "kind": "guard",
+   "x": 14,
+   "y": 242,
+   "w": 508,
+   "h": 66,
+   "solid": true,
+   "sw": 1.25
+  },
+  {
+   "tag": "badgeauth",
+   "kind": "badge",
+   "x": 6,
+   "y": 234,
+   "w": 16,
+   "h": 16,
+   "solid": true
+  },
+  {
+   "tag": "ctx",
+   "kind": "card",
+   "x": 14,
+   "y": 338,
+   "w": 508,
+   "h": 60,
+   "solid": true,
+   "sw": 1
+  },
+  {
+   "tag": "appr",
+   "kind": "card",
+   "x": 556,
+   "y": 222,
+   "w": 172,
+   "h": 60,
+   "solid": true,
+   "sw": 1
+  },
+  {
+   "tag": "deny.stop",
+   "kind": "stop",
+   "x": 539.0,
+   "y": 293,
+   "w": 2,
+   "h": 14,
+   "solid": false
+  },
+  {
+   "tag": "rec",
+   "kind": "record",
+   "x": 8,
+   "y": 420,
+   "w": 720,
+   "h": 48,
+   "solid": true,
+   "sw": 1.25
   },
   {
    "tag": "badgelg1",
    "kind": "badge",
    "x": 216.34,
-   "y": 320,
+   "y": 494,
+   "w": 16,
+   "h": 16,
+   "solid": true
+  },
+  {
+   "tag": "badgelg2",
+   "kind": "badge",
+   "x": 362.65,
+   "y": 494,
    "w": 16,
    "h": 16,
    "solid": true
@@ -120,8 +167,8 @@
   {
    "tag": "badgelg3",
    "kind": "badge",
-   "x": 362.65,
-   "y": 320,
+   "x": 473.84999999999997,
+   "y": 494,
    "w": 16,
    "h": 16,
    "solid": true
@@ -129,8 +176,8 @@
   {
    "tag": "badgelg4",
    "kind": "badge",
-   "x": 448.84999999999997,
-   "y": 320,
+   "x": 560.05,
+   "y": 494,
    "w": 16,
    "h": 16,
    "solid": true
@@ -138,54 +185,24 @@
  ],
  "links": [
   {
-   "tag": "grant",
-   "kind": "grant",
-   "pts": [
-    [
-     516.0,
-     84
-    ],
-    [
-     516.0,
-     176
-    ]
-   ],
-   "head": true,
-   "group": null,
-   "free": false
-  },
-  {
-   "tag": "bound",
+   "tag": "launch",
    "kind": "flow",
    "pts": [
     [
-     125.0,
-     142
+     88,
+     54
     ],
     [
-     125.0,
-     51.0
+     88,
+     30
     ],
     [
-     272,
-     51.0
-    ]
-   ],
-   "head": true,
-   "group": null,
-   "free": false
-  },
-  {
-   "tag": "propose",
-   "kind": "flow",
-   "pts": [
-    [
-     404,
-     142
+     270,
+     30
     ],
     [
-     404,
-     84
+     270,
+     54
     ]
    ],
    "head": true,
@@ -197,12 +214,12 @@
    "kind": "flow",
    "pts": [
     [
-     444,
-     218
+     350,
+     120.0
     ],
     [
-     464,
-     218
+     370,
+     120.0
     ]
    ],
    "head": true,
@@ -210,19 +227,172 @@
    "free": false
   },
   {
-   "tag": "out",
+   "tag": "out.in",
    "kind": "flow",
    "pts": [
     [
-     568,
-     218
+     522,
+     120.0
     ],
     [
-     608,
-     218
+     538,
+     120.0
+    ]
+   ],
+   "head": false,
+   "group": "out",
+   "free": false
+  },
+  {
+   "tag": "out.bus",
+   "kind": "flow",
+   "pts": [
+    [
+     538,
+     84.0
+    ],
+    [
+     538,
+     156.0
+    ]
+   ],
+   "head": false,
+   "group": "out",
+   "free": false
+  },
+  {
+   "tag": "out.0",
+   "kind": "flow",
+   "pts": [
+    [
+     538,
+     84.0
+    ],
+    [
+     556,
+     84.0
     ]
    ],
    "head": true,
+   "group": "out",
+   "free": false
+  },
+  {
+   "tag": "out.1",
+   "kind": "flow",
+   "pts": [
+    [
+     538,
+     156.0
+    ],
+    [
+     556,
+     156.0
+    ]
+   ],
+   "head": true,
+   "group": "out",
+   "free": false
+  },
+  {
+   "tag": "bounds",
+   "kind": "flow",
+   "pts": [
+    [
+     56,
+     186
+    ],
+    [
+     56,
+     242
+    ]
+   ],
+   "head": true,
+   "group": null,
+   "free": false
+  },
+  {
+   "tag": "propose",
+   "kind": "flow",
+   "pts": [
+    [
+     330,
+     186
+    ],
+    [
+     330,
+     242
+    ]
+   ],
+   "head": true,
+   "group": null,
+   "free": false
+  },
+  {
+   "tag": "grant",
+   "kind": "grant",
+   "pts": [
+    [
+     478,
+     242
+    ],
+    [
+     478,
+     186
+    ]
+   ],
+   "head": true,
+   "group": null,
+   "free": false
+  },
+  {
+   "tag": "ctx.in",
+   "kind": "flow",
+   "pts": [
+    [
+     198,
+     338
+    ],
+    [
+     198,
+     308
+    ]
+   ],
+   "head": true,
+   "group": null,
+   "free": false
+  },
+  {
+   "tag": "route",
+   "kind": "flow",
+   "pts": [
+    [
+     522,
+     252
+    ],
+    [
+     556,
+     252
+    ]
+   ],
+   "head": true,
+   "group": null,
+   "free": false
+  },
+  {
+   "tag": "deny",
+   "kind": "flow",
+   "pts": [
+    [
+     522,
+     300
+    ],
+    [
+     542,
+     300
+    ]
+   ],
+   "head": false,
    "group": null,
    "free": false
   }

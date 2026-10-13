@@ -1,64 +1,113 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 376 594" width="376" height="594" role="img" aria-labelledby="sf2n-t sf2n-d">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 376 960" width="376" height="960" role="img" aria-labelledby="sf2n-t sf2n-d">
   <title id="sf2n-t">The agent proposes, policy authorizes, and infrastructure enforces</title>
-  <desc id="sf2n-d">An agent in a sandbox, holding no credentials, proposes the scope it needs; the runtime authorization service decides within the bounds of the agent's profile, its task and any delegation. The egress proxy enforces that decision and attaches the credentials, so only authorized operations reach anything downstream.</desc>
-  <rect width="376" height="594" fill="#FFFFFF"/>
-  <defs><marker id="sf2n-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#797D79"/></marker><marker id="sf2n-g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#5A7A00"/></marker><marker id="sf2n-s" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#5A5E5A"/></marker><linearGradient id="sf2n-fadeE4E5E112x360" gradientUnits="userSpaceOnUse" x1="12" y1="0" x2="360" y2="0"><stop offset="0" stop-color="#E4E5E1" stop-opacity="0"/><stop offset="0.06" stop-color="#E4E5E1" stop-opacity="1"/><stop offset="0.82" stop-color="#E4E5E1" stop-opacity="1"/><stop offset="1" stop-color="#E4E5E1" stop-opacity="0"/></linearGradient></defs>
+  <desc id="sf2n-d">An agent in a sandbox, holding no credentials, proposes the scope it needs; the runtime authorization service decides within the bounds of the agent's profile, using trusted context: the agent and whoever it acts for, its task, any delegation and policy. The egress proxy enforces that decision and attaches the credentials, so only authorized operations reach anything downstream and packages come only through an admission point. High-impact actions go to an approval the agent can't give, anything outside policy is denied or sent to a person, and every grant is recorded. The profile also configures the sandbox at launch, and each boundary keeps a tamper-evident record.</desc>
+  <rect width="376" height="960" fill="#FFFFFF"/>
+  <defs><marker id="sf2n-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#797D79"/></marker><marker id="sf2n-g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#5A7A00"/></marker><marker id="sf2n-s" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#5A5E5A"/></marker><marker id="sf2n-n" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4.4" markerHeight="4.4" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#1A1C1A"/></marker><marker id="sf2n-H" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="3.0" markerHeight="3.0" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#1A1C1A"/></marker><marker id="sf2n-G" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="3.8" markerHeight="3.8" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#5A7A00"/></marker><linearGradient id="sf2n-fadeE4E5E18x352" gradientUnits="userSpaceOnUse" x1="8" y1="0" x2="352" y2="0"><stop offset="0" stop-color="#E4E5E1" stop-opacity="0"/><stop offset="0.06" stop-color="#E4E5E1" stop-opacity="1"/><stop offset="0.82" stop-color="#E4E5E1" stop-opacity="1"/><stop offset="1" stop-color="#E4E5E1" stop-opacity="0"/></linearGradient></defs>
   <g transform="translate(8 8)">
-  <rect x="12.5" y="10.5" width="347" height="151" rx="4" fill="none" stroke="#8F8A7C" stroke-width="1"/>
-  <text x="22" y="31" font-family="Figtree,'Avenir Next','Helvetica Neue',sans-serif" font-size="12.5" fill="#1A1C1A" font-weight="600">Profile</text>
-  <text x="22" y="47" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.5" fill="#5A5E5A" font-weight="400">the most it can ever do</text>
-  <rect x="22.5" y="56.5" width="327" height="98" rx="4" fill="none" stroke="#8F8A7C" stroke-width="1"/>
-  <text x="32" y="77" font-family="Figtree,'Avenir Next','Helvetica Neue',sans-serif" font-size="12.5" fill="#1A1C1A" font-weight="600">Task</text>
-  <text x="32" y="93" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.5" fill="#5A5E5A" font-weight="400">narrows it to the work</text>
-  <rect x="32.5" y="102.5" width="307" height="45" rx="4" fill="none" stroke="#8F8A7C" stroke-width="1"/>
-  <text x="42" y="123" font-family="Figtree,'Avenir Next','Helvetica Neue',sans-serif" font-size="12.5" fill="#1A1C1A" font-weight="600">Delegation</text>
-  <text x="42" y="139" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.5" fill="#5A5E5A" font-weight="400">only narrows it further</text>
-  <path d="M60 162 L60 192" fill="none" stroke="#797D79" stroke-width="1.1" marker-end="url(#sf2n-a)"/>
-  <text x="70" y="181" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.5" fill="#5A5E5A" font-weight="400">bound the decision</text>
-  <rect x="12.5" y="192.5" width="347" height="69" rx="4" fill="none" stroke="#5A7A00" stroke-width="1.25"/>
-  <circle cx="12" cy="192" r="8" fill="#5A7A00"/>
-  <text x="8.7" y="195.9" font-family="'IBM Plex Mono',ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="12.5" fill="#FFFFFF" font-weight="600">1</text>
-  <text x="22" y="213" font-family="Figtree,'Avenir Next','Helvetica Neue',sans-serif" font-size="12.5" fill="#1A1C1A" font-weight="600">Runtime authorization service</text>
-  <text x="22" y="229.0" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.5" fill="#5A5E5A" font-weight="400">decides what access each task gets,</text>
-  <text x="22" y="243.5" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.5" fill="#5A5E5A" font-weight="400">routes high-impact actions to approval</text>
-  <rect x="12.5" y="306.5" width="197" height="131" rx="4" fill="#F1F2EC" stroke="#5A7A00" stroke-width="1.25"/>
-  <circle cx="12" cy="306" r="8" fill="#5A7A00"/>
-  <text x="8.7" y="309.9" font-family="'IBM Plex Mono',ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="12.5" fill="#FFFFFF" font-weight="600">3</text>
-  <text x="26" y="330" font-family="'Chakra Petch','Avenir Next',sans-serif" font-size="12.5" fill="#5A5E5A" font-weight="500" letter-spacing="0.04em">SANDBOX</text>
-  <text x="26" y="356" font-family="Figtree,'Avenir Next','Helvetica Neue',sans-serif" font-size="12.5" fill="#1A1C1A" font-weight="600">Agent</text>
-  <text x="26" y="372" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.5" fill="#5A5E5A" font-weight="400">untrusted, and holds</text>
-  <text x="26" y="386.5" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.5" fill="#5A5E5A" font-weight="400">no credentials</text>
-  <path d="M37.98 401.82 A6.5 6.5 0 1 1 30.78 399.89" fill="none" stroke="#797D79" stroke-width="1.2"/>
-  <path d="M34.16 398.66 L31.67 402.34 L29.89 397.45 z" fill="#797D79"/>
-  <text x="48" y="410" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.5" fill="#5A5E5A" font-weight="400">free to reason</text>
-  <text x="48" y="424.5" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.5" fill="#5A5E5A" font-weight="400">and try things</text>
-  <path d="M150 306 L150 262" fill="none" stroke="#797D79" stroke-width="1.1" marker-end="url(#sf2n-a)"/>
-  <text x="41.375000000000014" y="288" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.5" fill="#5A5E5A" font-weight="400">proposes scope</text>
-  <rect x="232.5" y="330.5" width="97" height="83" rx="4" fill="none" stroke="#5A7A00" stroke-width="1.25"/>
-  <circle cx="232" cy="330" r="8" fill="#5A7A00"/>
-  <text x="228.7" y="333.9" font-family="'IBM Plex Mono',ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="12.5" fill="#FFFFFF" font-weight="600">4</text>
-  <text x="242" y="351" font-family="Figtree,'Avenir Next','Helvetica Neue',sans-serif" font-size="12.5" fill="#1A1C1A" font-weight="600">Egress proxy</text>
-  <text x="242" y="367.0" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.5" fill="#5A5E5A" font-weight="400">enforces it,</text>
-  <text x="242" y="381.5" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.5" fill="#5A5E5A" font-weight="400">attaches</text>
-  <text x="242" y="396.0" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.5" fill="#5A5E5A" font-weight="400">credentials</text>
-  <path d="M281 262 L281 330" fill="none" stroke="#5A7A00" stroke-width="1.25" stroke-dasharray="5 3" marker-end="url(#sf2n-g)"/>
-  <text x="201.125" y="282" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.5" fill="#5A5E5A" font-weight="400">authorized</text>
-  <text x="237.0625" y="296.5" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.5" fill="#5A5E5A" font-weight="400">scope</text>
-  <path d="M210 372 L232 372" fill="none" stroke="#797D79" stroke-width="1.1" marker-end="url(#sf2n-a)"/>
-  <rect x="12.5" y="466.5" width="347" height="43" rx="4" fill="none" stroke="#8F8A7C" stroke-width="1"/>
-  <text x="22" y="487" font-family="Figtree,'Avenir Next','Helvetica Neue',sans-serif" font-size="12.5" fill="#1A1C1A" font-weight="600">Downstream</text>
-  <text x="22" y="503.0" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.5" fill="#5A5E5A" font-weight="400">only authorized operations reach it</text>
-  <path d="M281 414 L281 466" fill="none" stroke="#797D79" stroke-width="1.1" marker-end="url(#sf2n-a)"/>
-  <line x1="12" y1="530" x2="360" y2="530" stroke="url(#sf2n-fadeE4E5E112x360)" stroke-width="1"/>
-  <text x="12" y="548" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.5" fill="#1A1C1A" font-weight="400">Enforced outside the agent’s loop:</text>
-  <circle cx="20" cy="568" r="8" fill="#5A7A00"/>
-  <text x="16.7" y="571.9" font-family="'IBM Plex Mono',ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="12.5" fill="#FFFFFF" font-weight="600">1</text>
-  <text x="34" y="572" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.5" fill="#5A5E5A" font-weight="400">Identity and access</text>
-  <circle cx="168.5612244897959" cy="568" r="8" fill="#5A7A00"/>
-  <text x="165.2612244897959" y="571.9" font-family="'IBM Plex Mono',ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="12.5" fill="#FFFFFF" font-weight="600">3</text>
-  <text x="182.5612244897959" y="572" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.5" fill="#5A5E5A" font-weight="400">Sandbox</text>
-  <circle cx="255.78571428571428" cy="568" r="8" fill="#5A7A00"/>
-  <text x="252.48571428571427" y="571.9" font-family="'IBM Plex Mono',ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="12.5" fill="#FFFFFF" font-weight="600">4</text>
-  <text x="269.7857142857143" y="572" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.5" fill="#5A5E5A" font-weight="400">Network</text>
+  <rect x="8.5" y="10.5" width="343" height="59" rx="4" fill="none" stroke="#8F8A7C" stroke-width="1"/>
+  <text x="18" y="31" font-family="Figtree,'Avenir Next','Helvetica Neue',sans-serif" font-size="12.5" fill="#1A1C1A" font-weight="600">Profile</text>
+  <text x="18" y="47.0" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.5" fill="#5A5E5A" font-weight="400">one per kind of agent,</text>
+  <text x="18" y="61.5" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.5" fill="#5A5E5A" font-weight="400">the most it can ever do</text>
+  <path d="M140 70 L140 114" fill="none" stroke="#797D79" stroke-width="1.1" marker-end="url(#sf2n-a)"/>
+  <text x="148" y="86.0" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.5" fill="#5A5E5A" font-weight="400">configures the sandbox</text>
+  <text x="148" y="100.5" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.5" fill="#5A5E5A" font-weight="400">at launch</text>
+  <text x="30" y="86.0" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.5" fill="#5A5E5A" font-weight="400">bounds every</text>
+  <text x="30" y="100.5" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.5" fill="#5A5E5A" font-weight="400">decision</text>
+  <rect x="38.5" y="114.5" width="137" height="131" rx="4" fill="#F1F2EC" stroke="#5A7A00" stroke-width="1.25"/>
+  <circle cx="38" cy="114" r="8" fill="#5A7A00"/>
+  <text x="34.7" y="117.9" font-family="'IBM Plex Mono',ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="12.5" fill="#FFFFFF" font-weight="600">3</text>
+  <text x="52" y="138" font-family="'Chakra Petch','Avenir Next',sans-serif" font-size="12.5" fill="#5A5E5A" font-weight="500" letter-spacing="0.04em">SANDBOX</text>
+  <text x="52" y="164" font-family="Figtree,'Avenir Next','Helvetica Neue',sans-serif" font-size="12.5" fill="#1A1C1A" font-weight="600">Agent</text>
+  <text x="52" y="180.0" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.5" fill="#5A5E5A" font-weight="400">untrusted, holds</text>
+  <text x="52" y="194.5" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.5" fill="#5A5E5A" font-weight="400">no credentials</text>
+  <path d="M63.98 207.82 A6.5 6.5 0 1 1 56.78 205.89" fill="none" stroke="#797D79" stroke-width="1.2"/>
+  <path d="M60.16 204.66 L57.67 208.34 L55.89 203.45 z" fill="#797D79"/>
+  <text x="74" y="216" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.5" fill="#5A5E5A" font-weight="400">free to reason</text>
+  <text x="74" y="230.5" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.5" fill="#5A5E5A" font-weight="400">and try things</text>
+  <rect x="194.5" y="114.5" width="153" height="91" rx="4" fill="none" stroke="#5A7A00" stroke-width="1.25"/>
+  <circle cx="194" cy="114" r="8" fill="#5A7A00"/>
+  <text x="190.7" y="117.9" font-family="'IBM Plex Mono',ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="12.5" fill="#FFFFFF" font-weight="600">4</text>
+  <text x="204" y="135" font-family="Figtree,'Avenir Next','Helvetica Neue',sans-serif" font-size="12.5" fill="#1A1C1A" font-weight="600">Egress proxy</text>
+  <text x="204" y="151.0" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.5" fill="#5A5E5A" font-weight="400">default-deny,</text>
+  <text x="204" y="165.5" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.5" fill="#5A5E5A" font-weight="400">knows the task and</text>
+  <text x="204" y="180.0" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.5" fill="#5A5E5A" font-weight="400">enforces its scope,</text>
+  <text x="204" y="194.5" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.5" fill="#5A5E5A" font-weight="400">attaches credentials</text>
+  <path d="M176 160 L194 160" fill="none" stroke="#797D79" stroke-width="1.1" marker-end="url(#sf2n-a)"/>
+  <rect x="220.5" y="224.5" width="119" height="75" rx="4" fill="none" stroke="#8F8A7C" stroke-width="1"/>
+  <text x="230" y="245" font-family="Figtree,'Avenir Next','Helvetica Neue',sans-serif" font-size="12.5" fill="#1A1C1A" font-weight="600">Downstream</text>
+  <text x="230" y="261.0" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.5" fill="#5A5E5A" font-weight="400">only authorized</text>
+  <text x="230" y="275.5" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.5" fill="#5A5E5A" font-weight="400">operations</text>
+  <text x="230" y="290.0" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.5" fill="#5A5E5A" font-weight="400">reach it</text>
+  <rect x="220.5" y="312.5" width="119" height="75" rx="4" fill="none" stroke="#5A7A00" stroke-width="1.25"/>
+  <circle cx="220" cy="312" r="8" fill="#5A7A00"/>
+  <text x="216.7" y="315.9" font-family="'IBM Plex Mono',ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="12.5" fill="#FFFFFF" font-weight="600">2</text>
+  <text x="230" y="333" font-family="Figtree,'Avenir Next','Helvetica Neue',sans-serif" font-size="12.5" fill="#1A1C1A" font-weight="600">Admission point</text>
+  <text x="230" y="349.0" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.5" fill="#5A5E5A" font-weight="400">approved,</text>
+  <text x="230" y="363.5" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.5" fill="#5A5E5A" font-weight="400">scanned</text>
+  <text x="230" y="378.0" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.5" fill="#5A5E5A" font-weight="400">packages</text>
+  <path d="M348 160 L360 160" fill="none" stroke="#797D79" stroke-width="1.1"/>
+  <path d="M360 160 L360 350" fill="none" stroke="#797D79" stroke-width="1.1"/>
+  <path d="M360 262 L340 262" fill="none" stroke="#797D79" stroke-width="1.1" marker-end="url(#sf2n-a)"/>
+  <path d="M360 350 L340 350" fill="none" stroke="#797D79" stroke-width="1.1" marker-end="url(#sf2n-a)"/>
+  <rect x="8.5" y="412.5" width="343" height="91" rx="4" fill="none" stroke="#5A7A00" stroke-width="1.25"/>
+  <circle cx="8" cy="412" r="8" fill="#5A7A00"/>
+  <text x="4.7" y="415.9" font-family="'IBM Plex Mono',ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="12.5" fill="#FFFFFF" font-weight="600">1</text>
+  <text x="18" y="433" font-family="Figtree,'Avenir Next','Helvetica Neue',sans-serif" font-size="12.5" fill="#1A1C1A" font-weight="600">Runtime authorization service</text>
+  <text x="18" y="449.0" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.5" fill="#5A5E5A" font-weight="400">decides what access each task gets,</text>
+  <text x="18" y="463.5" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.5" fill="#5A5E5A" font-weight="400">using trusted context, a new decision</text>
+  <text x="18" y="478.0" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.5" fill="#5A5E5A" font-weight="400">for every task and delegation,</text>
+  <text x="18" y="492.5" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.5" fill="#5A5E5A" font-weight="400">and records every grant</text>
+  <path d="M22 70 L22 412" fill="none" stroke="#797D79" stroke-width="1.1" marker-end="url(#sf2n-a)"/>
+  <path d="M60 246 L60 412" fill="none" stroke="#797D79" stroke-width="1.1" marker-end="url(#sf2n-a)"/>
+  <text x="68" y="268.0" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.5" fill="#5A5E5A" font-weight="400">proposes scope,</text>
+  <text x="68" y="282.5" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.5" fill="#5A5E5A" font-weight="400">never a grant</text>
+  <path d="M206 412 L206 206" fill="none" stroke="#5A7A00" stroke-width="1.75" marker-end="url(#sf2n-G)"/>
+  <text x="126.12500000000001" y="316.0" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.5" fill="#5A5E5A" font-weight="400">authorized</text>
+  <text x="162.0625" y="330.5" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.5" fill="#5A5E5A" font-weight="400">scope</text>
+  <rect x="8.5" y="534.5" width="317" height="119" rx="4" fill="none" stroke="#8F8A7C" stroke-width="1"/>
+  <text x="18" y="555" font-family="Figtree,'Avenir Next','Helvetica Neue',sans-serif" font-size="12.5" fill="#1A1C1A" font-weight="600">Identity</text>
+  <text x="18" y="571.0" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.5" fill="#5A5E5A" font-weight="400">the agent, and</text>
+  <text x="18" y="585.5" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.5" fill="#5A5E5A" font-weight="400">whoever it acts for</text>
+  <text x="209" y="555" font-family="Figtree,'Avenir Next','Helvetica Neue',sans-serif" font-size="12.5" fill="#1A1C1A" font-weight="600">Task</text>
+  <text x="209" y="571.0" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.5" fill="#5A5E5A" font-weight="400">the work</text>
+  <text x="209" y="585.5" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.5" fill="#5A5E5A" font-weight="400">at hand</text>
+  <text x="18" y="615" font-family="Figtree,'Avenir Next','Helvetica Neue',sans-serif" font-size="12.5" fill="#1A1C1A" font-weight="600">Delegation</text>
+  <text x="18" y="631.0" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.5" fill="#5A5E5A" font-weight="400">to another agent,</text>
+  <text x="18" y="645.5" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.5" fill="#5A5E5A" font-weight="400">only narrows scope</text>
+  <text x="209" y="615" font-family="Figtree,'Avenir Next','Helvetica Neue',sans-serif" font-size="12.5" fill="#1A1C1A" font-weight="600">Policy</text>
+  <text x="209" y="631.0" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.5" fill="#5A5E5A" font-weight="400">written</text>
+  <text x="209" y="645.5" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.5" fill="#5A5E5A" font-weight="400">in advance</text>
+  <path d="M199.5 543 L199.5 645" stroke="#8F8A7C" stroke-width="0.75"/>
+  <path d="M17 594.5 L317 594.5" stroke="#8F8A7C" stroke-width="0.75"/>
+  <path d="M140 534 L140 504" fill="none" stroke="#797D79" stroke-width="1.1" marker-end="url(#sf2n-a)"/>
+  <text x="148" y="523" font-family="'Chakra Petch','Avenir Next',sans-serif" font-size="12.5" fill="#5A5E5A" font-weight="500" letter-spacing="0.04em">TRUSTED CONTEXT</text>
+  <text x="199.43750000000003" y="680" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.5" fill="#5A5E5A" font-weight="400">high-impact actions</text>
+  <rect x="8.5" y="688.5" width="317" height="45" rx="4" fill="none" stroke="#8F8A7C" stroke-width="1"/>
+  <text x="18" y="709" font-family="Figtree,'Avenir Next','Helvetica Neue',sans-serif" font-size="12.5" fill="#1A1C1A" font-weight="600">Approval</text>
+  <text x="18" y="725.0" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.5" fill="#5A5E5A" font-weight="400">a person, or automatic; never the agent</text>
+  <path d="M344 504 L344 760" fill="none" stroke="#797D79" stroke-width="1.1"/>
+  <path d="M337 758.5 L351 758.5" stroke="#5A7A00" stroke-width="2"/>
+  <path d="M344 711 L326 711" fill="none" stroke="#797D79" stroke-width="1.1" marker-end="url(#sf2n-a)"/>
+  <text x="168.68750000000003" y="750.0" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.5" fill="#5A5E5A" font-weight="400">outside policy: denied,</text>
+  <text x="197.43750000000003" y="764.5" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.5" fill="#5A5E5A" font-weight="400">or sent to a person</text>
+  <rect x="8.5" y="786.5" width="343" height="61" rx="4" fill="none" stroke="#5A7A00" stroke-width="1.25"/>
+  <path d="M12 787.5 L348 787.5" stroke="#5A7A00" stroke-width="1.75"/>
+  <text x="18" y="809" font-family="Figtree,'Avenir Next','Helvetica Neue',sans-serif" font-size="12.5" fill="#5A7A00" font-weight="600">Observability</text>
+  <text x="18" y="825" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.5" fill="#5A5E5A" font-weight="400">each boundary keeps a tamper-evident</text>
+  <text x="18" y="839.5" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.5" fill="#5A5E5A" font-weight="400">record, out of any agent’s reach</text>
+  <line x1="8" y1="868" x2="352" y2="868" stroke="url(#sf2n-fadeE4E5E18x352)" stroke-width="1"/>
+  <text x="8" y="890" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.5" fill="#1A1C1A" font-weight="400">Enforced outside the agent’s loop:</text>
+  <circle cx="16" cy="910" r="8" fill="#5A7A00"/>
+  <text x="12.7" y="913.9" font-family="'IBM Plex Mono',ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="12.5" fill="#FFFFFF" font-weight="600">1</text>
+  <text x="30" y="914" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.5" fill="#5A5E5A" font-weight="400">Identity and access</text>
+  <circle cx="164.5612244897959" cy="910" r="8" fill="#5A7A00"/>
+  <text x="161.2612244897959" y="913.9" font-family="'IBM Plex Mono',ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="12.5" fill="#FFFFFF" font-weight="600">2</text>
+  <text x="178.5612244897959" y="914" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.5" fill="#5A5E5A" font-weight="400">Supply chain</text>
+  <circle cx="16" cy="934" r="8" fill="#5A7A00"/>
+  <text x="12.7" y="937.9" font-family="'IBM Plex Mono',ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="12.5" fill="#FFFFFF" font-weight="600">3</text>
+  <text x="30" y="938" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.5" fill="#5A5E5A" font-weight="400">Sandbox</text>
+  <circle cx="164.5612244897959" cy="934" r="8" fill="#5A7A00"/>
+  <text x="161.2612244897959" y="937.9" font-family="'IBM Plex Mono',ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="12.5" fill="#FFFFFF" font-weight="600">4</text>
+  <text x="178.5612244897959" y="938" font-family="'IBM Plex Serif',Charter,Georgia,serif" font-size="12.5" fill="#5A5E5A" font-weight="400">Network</text>
   </g>
   </svg>

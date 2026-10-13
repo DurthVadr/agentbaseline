@@ -42,10 +42,12 @@
     --line:#E6E2D7; --link:#5A7A00; --link-hover:#3F5400; --visited:#66713F; --mark:#B3541E;
     --wash:#F4F1E8; --accent:#5A7A00; --baseline:#D9D4C6;
     /* --fig-rule is darker here than on the homepage: these figures draw
-       meaning in outlines (Figure 2's profile, task and delegation nest),
-       so the outlines hold 3:1 against the page (3.3:1 light, 3.4:1 dark). */
+       meaning in outlines (Figure 2's trusted context, a blocked call),
+       so the outlines hold 3:1 against the page (3.3:1 light, 3.4:1 dark).
+       --fig-new tints what a level adds, dark enough to stay apart from
+       --wash in a greyscale print. */
     --fig-ink:#1C1A14; --fig-soft:#5F5B51; --fig-faint:#7E7969;
-    --fig-hair:#E6E2D7; --fig-rule:#8F8A7C; --fig-accent:#5A7A00;
+    --fig-hair:#E6E2D7; --fig-rule:#8F8A7C; --fig-accent:#5A7A00; --fig-new:#DCE4BE;
     --serif: "IBM Plex Serif",Charter,"Iowan Old Style",Georgia,serif;
     --labelfont: "Chakra Petch","Avenir Next",sans-serif;
     --head: "Figtree","Avenir Next","Helvetica Neue",sans-serif;
@@ -56,20 +58,20 @@
       --line:#2E302D; --link:#C6F13F; --link-hover:#DCFF66; --visited:#ABB584; --mark:#E08050;
       --wash:#1D1F1C; --accent:#C6F13F; --baseline:#333531;
       --fig-ink:#DDDEDA; --fig-soft:#A2A6A2; --fig-faint:#868A86;
-      --fig-hair:#333533; --fig-rule:#6A6D69; --fig-accent:#C6F13F; }
+      --fig-hair:#333533; --fig-rule:#6A6D69; --fig-accent:#C6F13F; --fig-new:#2B3417; }
   }
   :root[data-theme="light"] { --paper:#FBF9F3; --ink:#221F18; --soft:#5C5850;
     --faint:#736E60; --line:#E6E2D7; --link:#5A7A00; --link-hover:#3F5400;
     --visited:#66713F; --mark:#B3541E; --wash:#F4F1E8; --accent:#5A7A00;
     --baseline:#D9D4C6;
     --fig-ink:#1C1A14; --fig-soft:#5F5B51; --fig-faint:#7E7969;
-    --fig-hair:#E6E2D7; --fig-rule:#8F8A7C; --fig-accent:#5A7A00; }
+    --fig-hair:#E6E2D7; --fig-rule:#8F8A7C; --fig-accent:#5A7A00; --fig-new:#DCE4BE; }
   :root[data-theme="dark"] { --paper:#151714; --ink:#E6E7E3; --soft:#A7ABA7;
     --faint:#8B8F8B; --line:#2E302D; --link:#C6F13F; --link-hover:#DCFF66;
     --visited:#ABB584; --mark:#E08050; --wash:#1D1F1C; --accent:#C6F13F;
     --baseline:#333531;
     --fig-ink:#DDDEDA; --fig-soft:#A2A6A2; --fig-faint:#868A86;
-    --fig-hair:#333533; --fig-rule:#6A6D69; --fig-accent:#C6F13F; }
+    --fig-hair:#333533; --fig-rule:#6A6D69; --fig-accent:#C6F13F; --fig-new:#2B3417; }
 
   *,*::before,*::after { box-sizing: border-box; }
   body { margin:0; background:var(--paper); color:var(--ink);
@@ -327,7 +329,7 @@
       --faint:#736E60; --line:#E6E2D7; --link:#5A7A00; --wash:#F4F1E8;
       --accent:#5A7A00; --baseline:#D9D4C6;
       --fig-ink:#1C1A14; --fig-soft:#5F5B51; --fig-faint:#7E7969;
-      --fig-hair:#E6E2D7; --fig-rule:#8F8A7C; --fig-accent:#5A7A00; }
+      --fig-hair:#E6E2D7; --fig-rule:#8F8A7C; --fig-accent:#5A7A00; --fig-new:#DCE4BE; }
   }
   figure.sff { margin:8px 0 0; position:relative; left:50%; transform:translateX(-50%);
     width:min(880px, calc(100vw - 2 * clamp(28px,4vw,56px))); }
