@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Visual regression gate for Figure 1.
+Visual regression gate for the papers' figures.
 
 Two earlier revisions shipped with colliding labels and a band running underneath
 a terminal, and both passed a clean build. This checks the geometry the build
@@ -31,16 +31,16 @@ what the first paper's figures are held to:
   8. an arrow's last leg is long enough to read as an arrow
   9. text stays legible at every size the figure is shown, whatever the
      figure's own data says: 7 pt at the PDF's figure width, and 10 px at the
-     narrowest width the page shows it (a phone's 343 px column for a narrow
-     variant, or for a wide figure that has none; the page's narrowest wide
-     slot otherwise). The widths are measured facts, set below.
- 11. a boundary badge keeps 2 units clear of every other box's edge, so a
-     number on one card never touches the card stacked above it
+     narrowest width the page shows it (304 px, a 320 px phone's figure width,
+     for a narrow variant or for a wide figure that has none; the page's
+     narrowest wide slot otherwise). The widths are measured facts, set below.
  10. nothing touches the canvas edge: every box, text run and connector keeps
      at least 6 units of air, so no stroke is clipped and every figure sits
      in the same margin
+ 11. a boundary badge keeps 2 units clear of every other box's edge, so a
+     number on one card never touches the card stacked above it
 """
-import json, re, sys, pathlib
+import json, math, re, sys, pathlib
 
 HERE = pathlib.Path(__file__).resolve().parents[1] / "whitepaper"
 NAME = sys.argv[1] if len(sys.argv) > 1 and not sys.argv[1].startswith("-") else "figure-1"
@@ -66,13 +66,21 @@ PRINT_WIDTH_PT, MIN_PT = 425.2, 7.0
 # spans calc(100vw - 16px) (reference-architecture's `.sff` rules), so on a
 # 320 px phone, the narrowest the page supports, a narrow variant (or a wide
 # figure without one) is 304 px wide. An earlier version of this rule assumed a
-# 343 px column the page never uses; the final verification measured 8.6 px
-# text at 320 px. A wide figure with a narrow variant is shown only from 800 px
+# 343 px column the page never uses, and passed text that rendered at 8.6 px on
+# a 320 px phone. A wide figure with a narrow variant is shown only from 700 px
 # up, where its slot is 700 − 2 × 28 = 644 px at its narrowest.
 PHONE_PX, WIDE_MIN_PX, MIN_PX = 304, 644, 10.0
+# A text run's manifest height is its type size × 1.02 (figkit's text box), so
+# the type size is the height over this.
+TEXT_BOX_H = 1.02
+
+if not SVG.exists():
+    sys.exit(f"no such figure: {SVG}")
 
 if not BOXES.exists():
-    sys.exit("no box manifest — run whitepaper/figures/build-figure-1.py first")
+    gen = ("software-factory/figures/build-figures.py" if "software-factory" in SVG.parts
+           else "whitepaper/figures/build-figure-1.py")
+    sys.exit(f"no box manifest ({BOXES.name}) — run {gen} first")
 
 boxes = json.loads(BOXES.read_text(encoding="utf-8"))
 svg = SVG.read_text(encoding="utf-8")
@@ -157,13 +165,13 @@ if present:
             errors.append(f"{fam} range missing — a figure carries all identifier "
                           f"ranges or none, not some")
 
-# 5–9. boxed figures only: geometry the text manifest cannot see.
+# 5–11. boxed figures only: geometry the text manifest cannot see.
 # A boxed figure (the software factory's) must carry its geometry manifest:
-# without it rules 5–10 have nothing to read, and a run of rules 1–4 alone
+# without it rules 5–11 have nothing to read, and a run of rules 1–4 alone
 # would print the same clean pass as the full check.
 BOXED = "software-factory" in SVG.parts and "figures" in SVG.parts
 if BOXED and not GEOM.exists():
-    errors.append(f"no geometry manifest ({GEOM.name}): a boxed figure is held to rules 5–10, "
+    errors.append(f"no geometry manifest ({GEOM.name}): a boxed figure is held to rules 5–11, "
                   f"which read it — rebuild with software-factory/figures/build-figures.py")
 
 if GEOM.exists():
@@ -301,9 +309,9 @@ if GEOM.exists():
                       f"in the page's narrowest wide slot, {WIDE_MIN_PX} px"))
     for where, k, least, unit, at in shown:
         worst = min(boxes, key=lambda a: a["h"])
-        size = worst["h"] / 1.02 * k
+        size = worst["h"] / TEXT_BOX_H * k
         if size < least - 0.005:
-            small = [a["tag"] for a in boxes if a["h"] / 1.02 * k < least - 0.005]
+            small = [a["tag"] for a in boxes if a["h"] / TEXT_BOX_H * k < least - 0.005]
             errors.append(f"text too small {where}: {len(small)} run(s), smallest "
                           f"{worst['tag']!r} at {size:.2f} {unit} {at} (min {least:g} {unit}); "
                           f"e.g. {', '.join(map(repr, small[:4]))}")
@@ -313,7 +321,6 @@ if GEOM.exists():
     # 11. a badge's disc clears every edge but its own card's (and that card's
     #     stack, drawn behind it). Distance is from the disc's centre to the
     #     nearest edge of the other box, less the radius.
-    import math
     for b in [x for x in shapes if x["kind"] == "badge"]:
         own = b["tag"][len("badge"):]
         cx, cy, r = b["x"] + b["w"] / 2, b["y"] + b["h"] / 2, b["w"] / 2
@@ -349,7 +356,7 @@ if GEOM.exists():
                 break
 
 print(f"{NAME}: {W}×{H} · {len(boxes)} text runs"
-      + (f" · rules 1–{10 if GEOM.exists() else 4}" if BOXED else ""))
+      + (f" · rules 1–{11 if GEOM.exists() else 4}" if BOXED else ""))
 for e in errors:
     print(f"  ERROR  {e}")
 print(f"\n{len(errors)} error(s)")
