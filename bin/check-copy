@@ -275,6 +275,14 @@ if _sf.exists():
     if not _figs:
         findings.append(("contra", "software-factory.md: no figures with alt text found — "
                                    "the figure syntax changed, so this check reads nothing"))
+    # A figure written any other way (another attribute beside alt, say) would
+    # drop out of the comparison silently, so every figure must be one it read.
+    _read = {_rel for _, _rel, _ in _figs}
+    for _rel in dict.fromkeys(re.findall(r'!\[[^\]]*\]\((figures/[^)]+\.svg)\)', _src)):
+        if _rel not in _read:
+            findings.append(("contra", f"software-factory.md: {_rel} is not written as "
+                                       f"![caption]({_rel}){{alt=\"…\"}}, so this check cannot "
+                                       f"read it and its <title> and <desc> are not compared"))
     for _cap, _rel, _alt in _figs:
         _svg = _sf.parent / _rel
         if not _svg.exists():
