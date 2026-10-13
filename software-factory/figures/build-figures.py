@@ -16,8 +16,8 @@ central distinction:
     egress proxy enforces two boundaries' decisions (the glossary's "both the
     network boundary and the identity and access boundary's authorization
     decisions"), so it carries the network's mark on its corner and, as a ring
-    on the edge where the authorized scope comes in (its foot in Figures 2 and
-    6, its top in the levels), identity and access's.
+    on the edge where the authorized scope comes in (its foot in Figure 2, its
+    top in the levels and Figure 6), identity and access's.
   * WASH marks untrusted agent execution: the inside of a sandbox, and any
     agent that plans or watches from outside one.
 
@@ -30,19 +30,19 @@ which survive a greyscale print and leave the accent its one meaning:
   new words      outside a card, set on the tint
   carried over   drawn as the level before drew it
 
-Figures 2 and 6 are each one row — what starts the work, the agent in its
-sandbox, the egress proxy, and what lies behind it — between two trusted
-controls: the supply chain firewall above it, which checks the components a
-sandbox is built from and every package the proxy fetches, and the runtime
-authorization service beneath it. The levels (Figures 3–5) share one skeleton
-drawn to the lead author's composition (LV): whoever orchestrates across the
-top; beneath it the durable execution layer, a separate card, and beside that
-the service, above the column of what the proxies reach (the firewall and the
-model gateway, trusted, then what lies downstream); the frame where agents
-run, the record inside it; the outputs along the foot. Wherever it is drawn
-the service is a decision, not a container: what the agent (at Level 3, the
-orchestrator) proposes comes into it, and the scope it authorizes goes to the
-proxy.
+Figure 2 is one row — the profile, the agent in its sandbox, the egress proxy,
+and what lies behind it — between two trusted controls: the supply chain
+firewall above it, which checks the components a sandbox is built from and
+every package the proxy fetches, and the runtime authorization service beneath
+it. The levels (Figures 3–5) share one skeleton drawn to the lead author's
+composition (LV): whoever orchestrates across the top; beneath it the durable
+execution layer, a separate card, and beside that the service, above the
+column of what the proxies reach (the firewall and the model gateway,
+trusted, then what lies downstream); the frame where agents run, the record
+inside it; the outputs along the foot. Figure 6, one incident at Level 3, is
+drawn on the same skeleton. Wherever it is drawn the service is a decision,
+not a container: what the agent (at Level 3, the orchestrator) proposes comes
+into it, and the scope it authorizes goes to the proxy.
 Figure 1 is the process the boundaries serve, so it has its own composition.
 
 The drawing names things; the paper and the caption explain them. A box is
@@ -149,9 +149,11 @@ ALT = {
        "grants access. Monitoring agents watch the work from outside, changes go through "
        "approval and deploy to production, and incidents, scanner findings, monitoring and "
        "evals come back as signals that start new work.",
-    6: "A production alert leads the orchestrator to propose a task for an incident agent, one "
-       "service's logs for the last hour and one pull request, which the authorization service "
-       "checks against policy and the alert's source. When the agent reaches for another "
+    6: "A production alert leads the orchestrator to schedule a task for an incident agent on "
+       "the durable execution layer, which starts the agent in its sandbox, and to propose the "
+       "task's scope, one service's logs for the last hour and one pull request, which the "
+       "authorization service checks against policy and the alert's source. When the agent "
+       "reaches for another "
        "service's logs, the proxy blocks the call, because only a new authorization decision "
        "could widen the task; the fix ships through approval and a small first deploy, and the "
        "error rate afterward confirms it or starts the next run.",
@@ -425,8 +427,8 @@ def card_h(gloss, name=""):
 # supply chain mark. It checks the components a sandbox is built from, on the
 # path that launches the agent, and the proxy checks every package it fetches
 # with it, both ways. Its line is the checklist's ("approved versions allowed
-# by the agent's profile"). The levels draw it at the head of the column of
-# what the proxies reach (lv_column).
+# by the agent's profile"). The levels and Figure 6 draw it at the head of
+# the column of what the proxies reach (lv_column).
 SC_NAME = "Supply chain firewall"
 SC_G = "approved versions the profile allows"
 SC_LAUNCH, SC_PKG = "checks components", "checks packages"
@@ -530,7 +532,6 @@ KEY_W.update({"new at Level 1": 81.19, "new at Level 2": 81.19, "new at Level 3"
 # "agents start and stop only through the execution layer".
 APPROVAL_G = ["automatic or a person"]
 AUTH_G = "authorizes each task’s scope"
-PROXY_G = ["default-deny"]
 F2_PROXY_G = ["default-deny,", "attaches credentials"]
 EXEC_G = ["CI/CD or a step runner", "that starts each agent"]
 
@@ -552,12 +553,17 @@ TINT_W = {
     "serif|400|12.25|all four boundaries’ records, linked by run": 242.52,
     "serif|400|12.25|and task scope": 85.08,
     "serif|400|12.25|and updates the configuration": 172.98,
+    "serif|400|12.25|checks policy and the alert’s source": 203.81,
+    "serif|400|12.25|decision": 48.78,
     "serif|400|12.25|drives the next run": 109.31,
     "serif|400|12.25|each part to its own agent,": 150.66,
     "serif|400|12.25|inner loop, until it passes": 145.13,
+    "serif|400|12.25|last hour; one pull request": 150.59,
+    "serif|400|12.25|needs a new": 70.80,
     "serif|400|12.25|new work": 55.69,
     "serif|400|12.25|opens": 34.92,
     "serif|400|12.25|or a remote environment": 144.22,
+    "serif|400|12.25|proposes payments logs,": 141.97,
     "serif|400|12.25|proposes profile": 93.53,
     "serif|400|12.25|proposes scope": 89.05,
     "serif|400|12.25|review feedback": 93.75,
@@ -570,12 +576,17 @@ TINT_W = {
     "serif|400|12.5|all four boundaries’ records, by run": 207.36,
     "serif|400|12.5|and task scope": 86.81,
     "serif|400|12.5|and updates the configuration": 176.50,
+    "serif|400|12.5|decision": 49.77,
     "serif|400|12.5|each part to its own agent,": 153.73,
     "serif|400|12.5|inner loop,": 63.67,
+    "serif|400|12.5|logs, last hour;": 85.33,
+    "serif|400|12.5|needs a new": 72.25,
     "serif|400|12.5|new work": 56.81,
+    "serif|400|12.5|one pull request": 95.14,
     "serif|400|12.5|opens": 35.63,
     "serif|400|12.5|or a remote environment": 147.16,
     "serif|400|12.5|proposes": 54.00,
+    "serif|400|12.5|proposes payments": 115.17,
     "serif|400|12.5|proposes profile": 95.44,
     "serif|400|12.5|review feedback drives the next run": 210.11,
     "serif|400|12.5|schedules runs": 89.58,
@@ -732,17 +743,6 @@ class CF(SF):
 
 
 # ── shared pieces ────────────────────────────────────────────────────────────
-def node_c(f, x, y, w, h, name, kind="card", num=None, tag=""):
-    """A card with its name only, centred in the box, on one line or two."""
-    f.box(x, y, w, h, kind, tag)
-    if num:
-        f.badge(x, y, num, tag)
-    names = name if isinstance(name, (list, tuple)) else [name]
-    y0 = y + h / 2 + 4.5 - 7.5 * (len(names) - 1)
-    for i, n in enumerate(names):
-        f.name(x + PAD, y0 + 15 * i, n, f"{tag}.n{i}")
-
-
 def record(f, x0, y0, x1, y1, tag="obs", two=False):
     """The record every boundary keeps: an accent outline with a heavier top
     rule (no heavier than a grant, so the eye lands on the decision, not the
@@ -767,123 +767,6 @@ def delta_key(f, x, y, prev, gap=19):
             f.box(x, yy - 10, 18, 12, "card", f"dk{i}")
         f.text(x + 24, yy, s, f.gs, SOFT, tag=f"dk{i}.t")
         f.boxes[-1]["w"] = KEY_W[s] * k + 1
-
-
-# ═════════════════════════════════════════════════════════════════════════════
-# Figure 6's skeleton: the levels' before the lead author redrew them (the
-# levels now have their own, LV). Columns: A what starts the work · B the
-# orchestrator · C the sandbox · D the egress proxy · E what it lets through.
-# Rows: the supply chain firewall above the frame, the frame where the agent
-# runs, the runtime authorization service as a bar beneath it, the outputs and
-# the outer loop.
-# ═════════════════════════════════════════════════════════════════════════════
-class R:
-    A, B, BUS_B, C, D, BUS_E, E = (0, 112), (134, 234), 246, (264, 436), (456, 560), 582, (600, 720)
-    FX = (122, 572)
-    # the supply chain firewall, above the frame and across the sandbox and
-    # proxy columns, as the service is a bar beneath them. Its component check
-    # drops into the sandbox; its package check drops into the proxy. Each is
-    # labelled between the card and the frame.
-    SC = (236, 6, 560, 50)
-    PKG_X, SC_LY = 530, 67
-    # the frame's label sits in its top left-hand corner
-    FY0, LABX, LABY = 76, 134, 96
-    ROW, MID = (126, 270), 198
-    PROXY = (456, 168, 560, 228)
-    FY1 = 286
-    # the bar sits 112 under the frame, room for the proposal's words, and for
-    # "authorized / scope" in two lines set against the grant
-    BAR = (56, 398, 510, 442)
-    GRANT_X, GRANT_LY = 484, (372, 386.5)
-    EXIT_X, EXIT_Y = 536, 458
-    OUT = (476, 536)
-    # the outer loop's label sits above its return line
-    LOOPY, LOOP_X, LOOP_LABEL_X = 576, 36, 198
-
-
-def r_frame(f, label=()):
-    """The frame and, in its corner, its label, given as the lines it is set
-    in."""
-    f.box(R.FX[0], R.FY0, R.FX[1] - R.FX[0], R.FY1 - R.FY0, "zone", "frame")
-    y = R.LABY
-    for i, s in enumerate(label):
-        f.lab(R.LABX, y, s, f"frame.l{i}")
-        y += 14.5
-
-
-def r_sc(f, launch=None):
-    """The supply chain firewall above the frame. Its component check drops
-    into the path that starts the agent (`launch`: the point it joins, (x,
-    y)) or, where the figure draws no such path, into the sandbox's top
-    (`launch` (x, None)); the proxy's package check goes and comes back. Each
-    label sits right of its line, or left where it would meet the other."""
-    x0, y0, x1, y1 = R.SC
-    sc_card(f, x0, y0, x1)
-    lx, ly = launch or (R.BUS_B, R.MID)
-    f.link([(lx, y1), (lx, ly or R.ROW[0])], tag="sc.launch", head=ly is None, dot=ly is not None)
-    lw = f.width(SC_LAUNCH, "gloss")
-    f.gloss(lx + 8 if lx + 8 + lw < R.PKG_X - 8 else lx - 8 - lw, R.SC_LY, SC_LAUNCH,
-            "sc.launch.l")
-    f.link([(R.PKG_X, y1), (R.PKG_X, R.PROXY[1])], tag="sc.pkg", both=True)
-    f.gloss(R.PKG_X + 8, R.SC_LY, SC_PKG, "sc.pkg.l")
-
-
-def r_grant(f, x, y0, y1):
-    """The scope the service authorizes, up into the proxy: the decision going
-    out, labelled in two lines set right against its own line."""
-    f.link([(x, y0), (x, y1)], "grant", tag="grant")
-    for i, s_ in enumerate(("authorized", "scope")):
-        f.gloss(x - 8 - f.width(s_, "gloss"), R.GRANT_LY[i], s_, f"grant.l{i}")
-
-
-def r_bar(f, gloss=AUTH_G):
-    """The runtime authorization service: a decision, drawn as Figure 2 draws
-    it — what is proposed comes in, the scope it authorizes goes up to the
-    proxy that enforces it."""
-    x0, y0, x1, y1 = R.BAR
-    f.node(x0, y0, x1 - x0, y1 - y0, "Runtime authorization service", [gloss],
-           kind="guard", num=BN[IAM], tag="auth")
-    r_grant(f, R.GRANT_X, y0, R.PROXY[3])
-
-
-def r_proxy(f):
-    x0, y0, x1, y1 = R.PROXY
-    proxy_card(f, x0, y0, x1, y1, PROXY_G, R.GRANT_X)
-
-
-def r_dest(f, dest):
-    """What the proxy lets through, `dest` as (name lines, gloss lines, kind),
-    fed down one bus."""
-    ys, y = [], R.ROW[0]
-    for i, (n, g, kind) in enumerate(dest):
-        if g:
-            h = card_h(g, n)
-            f.node(R.E[0], y, R.E[1] - R.E[0], h, n, g, kind=kind, tag=f"dest{i}")
-        else:
-            h = DEST_H
-            node_c(f, R.E[0], y, R.E[1] - R.E[0], h, n, kind=kind, tag=f"dest{i}")
-        ys.append((y + h / 2, kind))
-        y += h + STACK
-    f.link([(R.PROXY[2], R.MID), (R.BUS_E, R.MID)], head=False, tag="bus.in", group="bus")
-    f.link([(R.BUS_E, ys[0][0]), (R.BUS_E, ys[-1][0])], head=False, tag="bus", group="bus")
-    for i, (yy, kind) in enumerate(ys):
-        f.link([(R.BUS_E, yy), (R.E[0], yy)], tag=f"bus.{i}", group="bus",
-               bar=(kind == "blocked"))
-
-
-def r_sandbox(f, label, name, gloss, loop=("inner loop,", "until it passes")):
-    x0, x1 = R.C
-    y0, y1 = R.ROW
-    f.box(x0, y0, x1 - x0, y1 - y0, "sandbox", "sbx")
-    f.badge(x0, y0, BN[SANDBOX], "sbx")
-    f.lab(x0 + PAD + 4, y0 + 24, label, "sbx.l")
-    f.name(x0 + PAD + 4, y0 + 52, name, "sbx.n")
-    for i, g in enumerate(gloss):
-        f.gloss(x0 + PAD + 4, y0 + 68 + i * 14.5, g, f"sbx.g{i}")
-    gy = y1 - 28
-    f.loop_glyph(x0 + PAD + 11, gy - 4, "sbx.loop")
-    f.gloss(x0 + PAD + 26, gy, loop[0], "sbx.lp0")
-    f.gloss(x0 + PAD + 26, gy + 14.5, loop[1], "sbx.lp1")
 
 
 # ═════════════════════════════════════════════════════════════════════════════
@@ -1307,57 +1190,8 @@ def build_level(n):
     f.write(f"figure-{n + 2}")
 
 
-# ── Figure 6 on a phone: its skeleton in one column ─────────────────────────
+# ── the phones' drawings, on a 360-unit content width ─────────────────────────
 NW = 360
-
-
-class NR:
-    RAIL = 4
-    X0, X1 = 24, 360
-    A = (24, 214)
-    IN = (36, 214)
-    PROXY = (232, 336)
-    BUS = 348
-    DEST = (24, 326)
-    BAR = (36, 330)
-    GX = 74
-    GRANT_X = 296
-    GUTTER = 16
-    # the supply chain firewall, between the start card and the frame, clear
-    # of the line from one to the other. Its component check drops right of
-    # the frame's label and turns into the path that starts the agent; its
-    # package check drops down the frame's right-hand side, which is empty
-    # above the proxy
-    SC = (96, 352)
-    LAUNCH_X, PKG_X = 262, 328
-
-
-def narrow_sc(f, y):
-    """The supply chain firewall on a phone, its line in two, its component
-    check's label under it, left of the line; returns its foot."""
-    bot = sc_card(f, NR.SC[0], y, NR.SC[1], ("approved versions", "the profile allows"))
-    f.gloss(NR.LAUNCH_X - 8 - f.width(SC_LAUNCH, "gloss"), bot + 18, SC_LAUNCH, "sc.launch.l")
-    return bot
-
-
-def narrow_launch(f, bot, y_turn, join=None, into=None):
-    """The firewall's component check: down the right-hand side, then left
-    at y_turn, either joining the line that launches the agent (`join`, its
-    x) or turning down into the sandbox's top (`into`, (x, top))."""
-    if into:
-        x, top = into
-        f.link([(NR.LAUNCH_X, bot), (NR.LAUNCH_X, y_turn), (x, y_turn), (x, top)],
-               tag="sc.launch")
-    else:
-        f.link([(NR.LAUNCH_X, bot), (NR.LAUNCH_X, y_turn), (join, y_turn)], tag="sc.launch",
-               head=False, dot=True)
-
-
-def narrow_pkg(f, bot, py0):
-    """The proxy's package check, both ways, labelled just above the proxy."""
-    f.link([(NR.PKG_X, bot), (NR.PKG_X, py0)], tag="sc.pkg", both=True)
-    for i, s in enumerate(("checks", "packages")):
-        f.gloss(NR.PKG_X - 8 - f.width(s, "gloss"), py0 - 22.5 + i * 14.5, s, f"sc.pkg.l{i}")
 
 
 # ── the levels on a phone: the same story in one column ──────────────────────
@@ -1965,153 +1799,214 @@ def figure2_narrow():
 
 
 # ═════════════════════════════════════════════════════════════════════════════
-# Figure 6 — only a new authorization decision can widen a task. The levels'
-# skeleton with one incident's values ("A factory in action").
+# Figure 6 — only a new authorization decision can widen a task. One incident
+# on Level 3's skeleton ("A factory in action"), so the reader turning from
+# Figure 5 finds every part where Figure 5 left it: the alert comes into the
+# orchestrator across the top; the orchestrator schedules the task on the
+# durable execution layer beneath it, which starts the incident agent, and
+# proposes the task's scope, its heaviest line, into the service, which alone
+# authorizes it. When the agent wants more, its request goes up the route the
+# agent's proposal takes at Levels 1 and 2, and the proxy blocks the call the
+# task doesn't cover.
 # ═════════════════════════════════════════════════════════════════════════════
 FIG6_AUTH = "checks policy and the alert’s source"
 BLOCKED_G = ["blocked: not", "in the task"]   # the proxy blocking, never "outside policy"
-# what the orchestrator proposes, wide and narrow alike
-FIG6_TASK = ["proposes payments", "logs, last hour;", "one pull request"]
-FIG6_ALERT = ["payments", "errors"]
+FIG6_ORCH = ["turns the alert into a task"]
+FIG6_ALERT = ["payments errors"]
+# what the orchestrator proposes: two lines wide, three on a phone
+FIG6_TASK = ["proposes payments logs,", "last hour; one pull request"]
+FIG6_TASK_N = ["proposes payments", "logs, last hour;", "one pull request"]
+FIG6_DEST = [(["Payments", "service logs"], ["last hour only"], "card"),
+             (["Authentication", "service logs"], BLOCKED_G, "blocked")]
+FIG6_OUT = [("Pull request", ["one, as", "granted"]), ("Approval", APPROVAL_G),
+            ("Deploy", ["small share of", "traffic first"]),
+            ("Production", ["error rate", "afterward"])]
+
+
+class F6:
+    """Where Figure 6 departs from LV: one sandbox, so a narrower frame (the
+    outer loop's words sit left of it, under the rail's turn); the proposal's
+    drop further right, under its longer words; the outputs higher, under
+    a shorter frame."""
+    ALERT = (0, 0, 120, 60)
+    PROP_X = 640
+    FRAME = (150, 164, 546, 354)
+    SB = (170, 442, 242, 334)              # centred on the proxy, as at Level 1
+    OUT = (420, 480)
 
 
 def figure6():
     f = CF("sf6", W, 800, CAPTION[6], ALT[6])
-    r_frame(f, label=["The factory"])
-    # no path starts the agent here, so the component check lands on the
-    # sandbox itself
-    r_sc(f, launch=(420, None))
-    f.node(R.A[0], R.MID - 38, R.A[1] - R.A[0], 76, ["Production", "alert"], FIG6_ALERT,
-           tag="sig")
-    node_c(f, R.B[0], R.MID - 26, R.B[1] - R.B[0], 52, ["Orchestrator", "agent"], kind="agent",
+    ox0, oy0, ox1, oy1 = LV.ORCH
+    ex0, ey0, ex1, ey1 = LV.EXEC
+    ax0, ay0, ax1, ay1 = LV.AUTH
+    # ── across the top: the alert into the orchestrator ──
+    x0, y0, x1, y1 = F6.ALERT
+    f.node(x0, y0, x1 - x0, y1 - y0, ["Production", "alert"], FIG6_ALERT, tag="sig")
+    f.link([(x1, LV.IN_Y), (ox0, LV.IN_Y)], tag="takes")
+    f.node(ox0, oy0, ox1 - ox0, oy1 - oy0, "Orchestrator agent", FIG6_ORCH, kind="agent",
            tag="orch")
-    f.link([(R.A[1], R.MID), (R.B[0], R.MID)], tag="takes")
-    # what the task asks for rides on the proposal, into the authorization service
-    px = 210
-    f.link([(px, R.MID + 26), (px, R.BAR[1])], tag="propose")
-    for i, s in enumerate(FIG6_TASK):
-        f.gloss(px + 8, 302 + i * 14.5, s, f"propose.l{i}")
-    r_sandbox(f, "Sandbox", "Incident agent", ["configured by", "its profile"],
-              loop=("inner loop,", "until tests pass"))
-    # wanting more is a request for a new decision, never a grant; its words
-    # sit right of its own line, so the line parts them from the proposal's
-    wx = 356
-    f.link([(wx, R.ROW[1]), (wx, R.BAR[1])], tag="wider")
-    for i, s in enumerate(("needs a new", "decision")):
-        f.gloss(wx + 8, 302 + i * 14.5, s, f"wider.l{i}")
-    r_proxy(f)
-    f.link([(R.C[1], R.MID), (R.PROXY[0], R.MID)], tag="traffic")
-    r_bar(f, gloss=FIG6_AUTH)
-    r_dest(f, [(["Payments", "service logs"], ["last hour only"], "card"),
-               (["Authentication", "service logs"], BLOCKED_G, "blocked"),
-               (["Package", "registries"], [], "card")])
-    # the fix: one pull request, approval, a small first deploy, the error rate
-    slots = [(134, 238), (258, 432), (452, 568), (588, 696)]
-    o0, o1 = R.OUT
-    f.link([(R.EXIT_X, R.PROXY[3]), (R.EXIT_X, R.EXIT_Y), (mid(slots[0]), R.EXIT_Y),
-            (mid(slots[0]), o0)], tag="pr.exit")
-    for slot, (n_, g_, t_) in zip(slots, [("Pull request", ["one, as", "granted"], "pr"),
-                                          ("Approval", APPROVAL_G, "appr"),
-                                          ("Deploy", ["small share of", "traffic first"], "deploy"),
-                                          ("Production", ["error rate", "afterward"], "prod")]):
-        f.node(slot[0], o0, slot[1] - slot[0], o1 - o0, n_, g_, tag=t_)
+    # it schedules the task on the execution layer beneath it, and proposes
+    # the task's scope, which only the service authorizes
+    f.link([(LV.TX, oy1), (LV.TX, ey0)], tag="schedule")
+    f.gloss(LV.TX + 8, ey0 - 14, "schedules the task", "schedule.l")
+    f.link([(ox1, LV.PROP_Y), (F6.PROP_X, LV.PROP_Y), (F6.PROP_X, ay0)], tag="propose",
+           heavy=True)
+    for i, s_ in enumerate(FIG6_TASK):
+        gloss_to(f, F6.PROP_X - 8, ay0 - 22 + 14.5 * i, s_, f"propose.l{i}")
+    f.node(ex0, ey0, ex1 - ex0, ey1 - ey0, "Durable execution layer", EXEC_G, tag="exec")
+    f.node(ax0, ay0, ax1 - ax0, ay1 - ay0, "Runtime authorization service", [FIG6_AUTH],
+           kind="guard", num=BN[IAM], tag="auth")
+    f.boxes[-1]["w"] = measured(f, FIG6_AUTH) + 1
+    gx = LV.P[1][0] + LV.GRANT_DX
+    f.link([(gx, ay1), (gx, LV.PY)], "grant", tag="grant")
+    f.gloss(gx + 8, ay1 + 14, "authorized scope", "grant.l")
+    # ── the factory: the execution layer starts the agent in its sandbox ──
+    fx0, fy0, fx1, fy1 = F6.FRAME
+    f.box(fx0, fy0, fx1 - fx0, fy1 - fy0, "zone", "frame")
+    f.lab(fx0 + 10, LV.LAB[1], "The factory", "frame.l")
+    sx0, sx1, sy0, sy1 = F6.SB
+    f.link([(LV.TX, ey1), (LV.TX, sy0)], tag="starts")
+    f.box(sx0, sy0, sx1 - sx0, sy1 - sy0, "sandbox", "sbx")
+    f.badge(sx0, sy0, BN[SANDBOX], "sbx")
+    tx = sx0 + PAD + 4
+    f.lab(tx, sy0 + 20, "Sandbox", "sbx.l")
+    f.name(tx, sy0 + 39, "Incident agent", "sbx.n")
+    f.gloss(tx, sy0 + 55, "configured by its profile", "sbx.g0")
+    f.loop_glyph(sx0 + PAD + 11, sy0 + 72, "sbx.loop")
+    f.gloss(sx0 + PAD + 26, sy0 + 76, "inner loop, until tests pass", "sbx.lp")
+    # wanting more is a request for a new decision, never a grant: up the
+    # route the agent's own proposal takes at Levels 1 and 2
+    wx = LV.AGENT_PX
+    f.link([(wx, sy0), (wx, LV.AGENT_PY), (ax0, LV.AGENT_PY)], tag="wider")
+    for i, s_ in enumerate(("needs a new", "decision")):
+        gloss_to(f, wx - 8, LV.LAB[1] + 18 + 14.5 * i, s_, f"wider.l{i}")
+    lv_proxy(f, 1)
+    lv_traffic(f, sx1)
+    # ── what the proxy reaches: the firewall, then the task's two services ──
+    cx0, cx1 = LV.COL
+    f.node(cx0, LV.COL_Y[0], cx1 - cx0, card_h(SC_COL_G, SC_LINES), SC_LINES, SC_COL_G,
+           kind="guard", num=BN[SUPPLY], tag="sc")
+    ys, y = [LV.COL_Y[0] + card_h(SC_COL_G, SC_LINES) / 2], LV.COL_Y[1]
+    for i, (n_, g_, kind) in enumerate(FIG6_DEST):
+        h = card_h(g_, n_)
+        f.node(cx0, y, cx1 - cx0, h, n_, g_, kind=kind, tag=f"dest{i}")
+        ys.append(y + h / 2)
+        y += h + STACK
+    pm = LV.PY + LV.PH / 2
+    f.link([(LV.P[1][1], pm), (LV.BUS, pm)], head=False, tag="bus.in", group="bus")
+    f.link([(LV.BUS, ys[0]), (LV.BUS, ys[-1])], head=False, tag="bus", group="bus")
+    for i, yy in enumerate(ys):
+        f.link([(LV.BUS, yy), (cx0, yy)], tag=f"bus.{i}", group="bus", bar=(i == len(ys) - 1))
+    o0, o1 = F6.OUT
+    f.link([(LV.BUS, ys[-1]), (LV.BUS, o0)], tag="bus.pr", group="bus")
+    f.gloss(LV.BUS + 8, o0 - 10, "opens", "bus.pr.l")
+    # ── the fix, right to left, and the error rate back to the orchestrator ──
+    slots = (LV.PR, LV.APPR, LV.DEPLOY, LV.PROD)
+    om = mid(F6.OUT)
+    for slot, (n_, g_) in zip(slots, FIG6_OUT):
+        f.node(slot[0], o0, slot[1] - slot[0], o1 - o0, n_, g_, tag=n_.split()[0].lower())
     for a, b in zip(slots, slots[1:]):
-        f.link([(a[1], mid((o0, o1))), (b[0], mid((o0, o1)))], tag=f"out{a[0]}")
-    loopy = R.LOOPY
-    f.link([(mid(slots[3]), o1), (mid(slots[3]), loopy), (R.LOOP_X, loopy),
-            (R.LOOP_X, R.MID + 38)], "loop", tag="outer")
-    f.lab(R.LOOP_LABEL_X, loopy - 24, "outer loop", "outer.l")
-    f.gloss(R.LOOP_LABEL_X, loopy - 8, "confirms the fix or starts the next run", "outer.g")
-    f.set_height(loopy + 8)
+        f.link([(a[0], om), (b[1], om)], tag=f"out{a[0]}")
+    lv_home(f, [(LV.PROD[0], om), (LV.LOOP_X, om)])
+    f.lab(LV.LOOP_X + 10, LV.LOOP_Y + 24, "outer loop", "outer.l")
+    for i, s_ in enumerate(("confirms the fix or", "starts the next run")):
+        f.gloss(LV.LOOP_X + 10, LV.LOOP_Y + 38.5 + 14.5 * i, s_, f"outer.g{i}")
+    f.set_height(o1 + 4)
     f.write("figure-6")
 
 
 def figure6_narrow():
+    """Figure 6 on a phone, on the levels' column: the alert into the
+    orchestrator; beneath it, side by side, the execution layer it schedules
+    the task on and the service it proposes the task's scope to; the frame,
+    the sandbox the execution layer starts and its proxy; what the proxy
+    reaches; the fix, and the error rate back up the rail."""
     f = CF("sf6n", NW, 1600, CAPTION[6], ALT[6], narrow=True)
+    X0, X1 = NV.X0, NV.X1
     y = 10
-    f.node(NR.A[0], y, NR.A[1] - NR.A[0], 44, "Production alert", [" ".join(FIG6_ALERT)],
-           tag="start")
-    a_mid = y + 22
-    prev = y + 44
-    sc_bot = narrow_sc(f, prev + 24)
-    fy0 = sc_bot + 28
-    f.lab(NR.GX + 14, fy0 + 22, "The factory", "frame.l")
-    y = fy0 + 40
-    ix0, ix1 = NR.IN
-    oh = card_h(FIG6_TASK)
-    f.node(ix0, y, ix1 - ix0, oh, "Orchestrator agent", FIG6_TASK, kind="agent", tag="orch")
-    f.link([(NR.GX, prev), (NR.GX, y)], tag="takes")
-    orch = y + 22
-    y += oh + 40                   # room for supply chain's line to turn into the sandbox
-    sy0, sh = y, 132
-    f.box(ix0, sy0, ix1 - ix0, sh, "sandbox", "sbx")
-    f.badge(ix0, sy0, BN[SANDBOX], "sbx")
-    f.lab(ix0 + PAD + 4, sy0 + 24, "Sandbox", "sbx.l")
-    f.name(ix0 + PAD + 4, sy0 + 50, "Incident agent", "sbx.n")
-    f.gloss(ix0 + PAD + 4, sy0 + 66, "configured by", "sbx.g0")
-    f.gloss(ix0 + PAD + 4, sy0 + 80.5, "its profile", "sbx.g1")
-    f.loop_glyph(ix0 + PAD + 11, sy0 + 100, "sbx.loop")
-    f.gloss(ix0 + PAD + 26, sy0 + 104, "inner loop,", "sbx.lp0")
-    f.gloss(ix0 + PAD + 26, sy0 + 118.5, "until tests pass", "sbx.lp1")
-    narrow_launch(f, sc_bot, sy0 - 20, into=(190, sy0))
-    sb_mid = sy0 + 62
-    fy1 = sy0 + sh + 16
-    f.box(NR.X0, fy0, NR.X1 - NR.X0, fy1 - fy0, "zone", "frame")
-    ph = card_h(PROXY_G) + 8
-    py0 = sb_mid - ph / 2
-    proxy_card(f, NR.PROXY[0], py0, NR.PROXY[1], py0 + ph, PROXY_G, NR.GRANT_X)
-    narrow_pkg(f, sc_bot, py0)
-    f.link([(ix1, sb_mid), (NR.PROXY[0], sb_mid)], tag="traffic")
-    by0 = fy1 + 40
-    bh = card_h([FIG6_AUTH])
-    f.node(NR.BAR[0], by0, NR.BAR[1] - NR.BAR[0], bh, "Runtime authorization service",
-           [FIG6_AUTH], kind="guard", num=BN[IAM], tag="auth")
-    f.link([(NR.GRANT_X, by0), (NR.GRANT_X, py0 + ph)], "grant", tag="grant")
-    for i, s in enumerate(("authorized", "scope")):
-        f.gloss(NR.GRANT_X - 8 - f.width(s, "gloss"), fy1 + 14 + i * 14.5, s, f"grant.l{i}")
-    f.link([(ix0, orch), (NR.GUTTER, orch), (NR.GUTTER, by0 + bh / 2), (NR.BAR[0], by0 + bh / 2)],
-           tag="propose")
-    wx = 150
-    f.link([(wx, sy0 + sh), (wx, by0)], tag="wider")
-    for i, s in enumerate(("needs a new", "decision")):
-        f.gloss(wx - 8 - f.width(s, "gloss"), fy1 + 14 + i * 14.5, s, f"wider.l{i}")
-    y = by0 + bh + 24
-    dests = [("Payments service logs", ["last hour only"], "card"),
-             ("Authentication service logs", [" ".join(BLOCKED_G)], "blocked"),
-             ("Package registries", [], "card")]
+    f.node(X0, y, X1 - X0, 44, "Production alert", FIG6_ALERT, tag="sig")
+    f.link([(NV.IN_X, y + 44), (NV.IN_X, y + 84)], tag="takes")
+    oy = y + 84
+    f.node(X0, oy, X1 - X0, 44, "Orchestrator agent", FIG6_ORCH, kind="agent", tag="orch")
+    o_mid, ob = oy + 22, oy + 44
+    # room under it for the proposal's three lines
+    ey = ob + 58
+    f.link([(NV.IN_X, ob), (NV.IN_X, ey)], tag="schedule")
+    f.gloss(NV.IN_X + 8, ob + 26, "schedules the task", "schedule.l")
+    f.link([(NV.PROP_X, ob), (NV.PROP_X, ey)], tag="propose", heavy=True)
+    for i, s_ in enumerate(FIG6_TASK_N):
+        gloss_to(f, NV.PROP_X - 8, ob + 16 + 14.5 * i, s_, f"propose.l{i}")
+    f.node(NV.EXEC[0], ey, NV.EXEC[1] - NV.EXEC[0], 92, ["Durable execution", "layer"],
+           ["CI/CD or a step", "runner that starts", "each agent"], tag="exec")
+    bh = 76
+    f.node(NV.AUTH[0], ey, NV.AUTH[1] - NV.AUTH[0], bh, ["Runtime authorization", "service"],
+           ["checks policy and", "the alert’s source"], kind="guard", num=BN[IAM], tag="auth")
+    sb = ey + bh
+    for i, s_ in enumerate(("authorized", "scope")):
+        f.gloss(NV.GRANT_X + 8, sb + 18 + 14.5 * i, s_, f"grant.l{i}")
+    # ── the frame, and the sandbox the execution layer starts ──
+    fy0 = sb + 66
+    lx = NV.S[0]
+    f.lab(lx, fy0 + 22, "The factory", "frame.l")
+    sy, sh = fy0 + 40, 116
+    sx0, sx1 = NV.S
+    f.link([(NV.DROP_X, ey + 92), (NV.DROP_X, sy + 40), (sx0, sy + 40)], tag="starts")
+    f.box(sx0, sy, sx1 - sx0, sh, "sandbox", "sbx")
+    f.badge(sx0, sy, BN[SANDBOX], "sbx")
+    tx = sx0 + PAD + 4
+    f.lab(tx, sy + 20, "Sandbox", "sbx.l")
+    f.name(tx, sy + 40, "Incident agent", "sbx.n")
+    f.gloss(tx, sy + 56, "configured by", "sbx.g0")
+    f.gloss(tx, sy + 70.5, "its profile", "sbx.g1")
+    f.loop_glyph(sx0 + PAD + 11, sy + 88, "sbx.loop")
+    f.gloss(sx0 + PAD + 26, sy + 92, "inner loop,", "sbx.lp0")
+    f.gloss(sx0 + PAD + 26, sy + 106.5, "until tests pass", "sbx.lp1")
+    # wanting more: up into the service, as the agent's proposal goes at
+    # Levels 1 and 2, its label under the execution layer's foot
+    f.link([(NV.AGENT_PX, sy), (NV.AGENT_PX, sb)], tag="wider")
+    for i, s_ in enumerate(("needs a new", "decision")):
+        gloss_to(f, NV.AGENT_PX - 8, sb + 40 + 14.5 * i, s_, f"wider.l{i}")
+    pmid = sy + sh / 2
+    py = narrow_proxy(f, pmid, 0)
+    f.link([(NV.GRANT_X, sb), (NV.GRANT_X, py)], "grant", tag="grant")
+    fy1 = sy + sh + 16
+    f.box(NV.FRAME[0], fy0, NV.FRAME[1] - NV.FRAME[0], fy1 - fy0, "zone", "frame")
+    # ── what the proxy reaches, and the pull request, down the bus ──
+    y = fy1 + 24
     ys = []
-    for i, (nm, g, kind) in enumerate(dests):
-        if g:
-            f.node(NR.DEST[0], y, NR.DEST[1] - NR.DEST[0], 44, nm, g, kind=kind, tag=f"dest{i}")
-        else:
-            node_c(f, NR.DEST[0], y, NR.DEST[1] - NR.DEST[0], 44, nm, kind=kind, tag=f"dest{i}")
-        ys.append((y + 22, kind))
+    for i, (nm, g, kind, tag) in enumerate(
+            [(SC_NAME, SC_COL_G, "guard", "sc")] +
+            [(" ".join(n_), [" ".join(g_)], k_, f"dest{j}")
+             for j, (n_, g_, k_) in enumerate(FIG6_DEST)]):
+        f.node(NV.DEST[0], y, NV.DEST[1] - NV.DEST[0], 44, nm, g, kind=kind,
+               num=BN[SUPPLY] if tag == "sc" else None, tag=tag)
+        ys.append(y + 22)
         y += 44 + STACK
-    # the pull request leaves through the proxy like everything else: the
-    # same bus, one more branch
-    y += 16
+    y += 30 - STACK
     pr_mid = y + 23
-    f.link([(NR.PROXY[1], sb_mid), (NR.BUS, sb_mid)], head=False, tag="bus.in", group="bus")
-    f.link([(NR.BUS, sb_mid), (NR.BUS, pr_mid)], head=False, tag="bus", group="bus")
-    for i, (yy, kind) in enumerate(ys):
-        f.link([(NR.BUS, yy), (NR.DEST[1], yy)], tag=f"bus.{i}", group="bus", bar=(kind == "blocked"))
-    f.link([(NR.BUS, pr_mid), (NR.DEST[1], pr_mid)], tag="bus.pr", group="bus")
-    outs = [("Pull request", ["one, as granted"]),
-            ("Approval", APPROVAL_G),
-            ("Deploy", ["small share of traffic first"]), ("Production", ["error rate afterward"])]
+    f.link([(NV.BUS, pmid), (NV.BUS, ys[-1])], head=False, tag="bus", group="bus")
+    for i, yy in enumerate(ys):
+        f.link([(NV.BUS, yy), (NV.DEST[1], yy)], tag=f"bus.{i}", group="bus",
+               bar=(i == len(ys) - 1))
+    f.link([(NV.BUS, ys[-1]), (NV.BUS, pr_mid), (NV.DEST[1], pr_mid)], tag="bus.pr", group="bus")
+    gloss_to(f, NV.BUS - 10, pr_mid - 23 - 8, "opens", "bus.pr.l")
+    outs = [("Pull request", ["one, as granted"]), ("Approval", APPROVAL_G),
+            ("Deploy", ["small share of traffic first"]),
+            ("Production", ["error rate afterward"])]
     for i, (nm, g) in enumerate(outs):
-        f.node(NR.X0, y, (NR.DEST[1] if i == 0 else NR.X1) - NR.X0, 46, nm, g, tag=f"out{i}")
+        f.node(X0, y, NV.DEST[1] - X0, 46, nm, g, tag=f"out{i}")
         y += 46
         if i < len(outs) - 1:
-            f.link([(NR.GX, y), (NR.GX, y + 22)], tag=f"o{i}")
+            f.link([(NV.IN_X, y), (NV.IN_X, y + 22)], tag=f"o{i}")
             y += 22
-    ly = y + 24
-    f.link([(NR.GX, y), (NR.GX, ly), (NR.RAIL, ly), (NR.RAIL, a_mid), (NR.A[0], a_mid)], "loop",
+    # the error rate, back up the rail into the orchestrator
+    ly = y + 44
+    f.link([(NV.IN_X, y), (NV.IN_X, ly), (NV.RAIL, ly), (NV.RAIL, o_mid), (X0, o_mid)], "loop",
            tag="outer")
-    f.lab(NR.GX + 10, ly - 8, "outer loop", "outer.l")
-    f.gloss(NR.GX + 10, ly + 14, "confirms the fix or", "outer.g0")
-    f.gloss(NR.GX + 10, ly + 28.5, "starts the next run", "outer.g1")
-    f.set_height(ly + 34)
+    f.lab(NV.IN_X + 10, y + 18, "outer loop", "outer.l")
+    f.gloss(NV.IN_X + 10, y + 32.5, "confirms the fix or starts the next run", "outer.g")
+    f.set_height(ly + 6)
     f.write("figure-6-narrow")
 
 

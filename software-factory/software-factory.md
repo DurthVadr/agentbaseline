@@ -151,7 +151,7 @@ Level 3 is also the path toward a **dark factory**, one that runs with no human 
 
 # A factory in action
 
-![Only a new authorization decision can widen a task](figures/figure-6.svg){alt="A production alert leads the orchestrator to propose a task for an incident agent, one service's logs for the last hour and one pull request, which the authorization service checks against policy and the alert's source. When the agent reaches for another service's logs, the proxy blocks the call, because only a new authorization decision could widen the task; the fix ships through approval and a small first deploy, and the error rate afterward confirms it or starts the next run."}
+![Only a new authorization decision can widen a task](figures/figure-6.svg){alt="A production alert leads the orchestrator to schedule a task for an incident agent on the durable execution layer, which starts the agent in its sandbox, and to propose the task's scope, one service's logs for the last hour and one pull request, which the authorization service checks against policy and the alert's source. When the agent reaches for another service's logs, the proxy blocks the call, because only a new authorization decision could widen the task; the fix ships through approval and a small first deploy, and the error rate afterward confirms it or starts the next run."}
 
 A production alert reports elevated errors in a payments service, and the orchestrator proposes a task for an incident agent with read access to the service's logs for the last hour and permission to open one pull request. The authorization service checks that request against policy for that kind of incident and the alert's authenticated source, and the egress proxy attaches credentials only to the requests it grants.
 
