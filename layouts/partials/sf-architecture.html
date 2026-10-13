@@ -13,21 +13,17 @@
        can't give flow out. The profile configures the sandbox at launch
        through the supply chain firewall, and the proxy checks packages with it.
        Its numbers are the paper's, as the page's list's are. Because it is not the
-       paper's drawing it carries no figure number; the caption is the
-       deck's line for it, and a quiet link points to the paper's own
-       drawing in the PDF. The id keeps #figure-2 links from before landing
-       here.
+       paper's drawing it carries no figure number and no caption: the list
+       above it says what it shows. The id keeps #figure-2 links from before
+       landing here.
 
-       Context: dict "caption" (the deck's line), "n" (the paper's figure
-       number for the pointer) and "pdf" (the PDF's path, or empty when the
-       checkout has none, which drops the pointer). Styles: .sfa in the
-       page's sheet, and the paper's figures' wide/narrow switch (.sff-d);
-       static/js/draw.js draws the outlines in, once. */ -}}
+       Context: dict "n" (the paper's figure number, for the id). Styles: .sfa
+       in the page's sheet, and the paper's figures' wide/narrow switch
+       (.sff-d); static/js/draw.js draws the outlines in, once. */ -}}
 <figure class="sff sfa" id="figure-{{ .n }}" data-draw>
   <div class="sff-d has-n">
     <div class="sff-w">{{ partial "sf-architecture.svg" . }}</div>
     <div class="sff-n">{{ partial "sf-architecture-narrow.svg" . }}</div>
   </div>
-  <figcaption>{{ .caption }}{{ with .pdf }} <a class="sfa-ref" href="/{{ . }}#nameddest=identity-and-access-who-the-agent-acts-for-and-what-it-may-do">The paper’s own drawing: Figure {{ $.n }} (PDF)</a>{{ end }}</figcaption>
 </figure>
 <script src="/js/draw.js" defer></script>

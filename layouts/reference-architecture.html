@@ -397,10 +397,6 @@
      outweigh the decision) */
   .sfa .sfa-rec { fill:var(--wash); stroke:var(--fig-ink); stroke-width:1.6; }
   .sfa .sfa-ico-rec { fill:var(--fig-ink); }
-  /* the pointer to the paper's own figure, on a line of its own, in the
-     label voice the page's other ways out use */
-  figure.sfa > figcaption .sfa-ref { display:table; margin-top:4px;
-    font-family:var(--labelfont); font-size:13.5px; letter-spacing:.03em; }
   /* The boundaries' outlines draw in once as the drawing comes into view,
      then turn the accent, as they do in the talk (static/js/draw.js sets
      .is-armed, then .is-drawn), one after another in the paper's order:
@@ -509,10 +505,8 @@
   {{ partial "software-factory-boundaries.html" $bd.boundaries }}
   {{- if not (and $bd.figure $bd.figure.n $bd.figure.caption) }}{{ errorf "software-factory/boundaries.yaml: `figure` needs n and caption" }}{{ end }}
   {{- /* The page's own drawing of the four boundaries (the talk deck's), not
-         the paper's Figure 2: captioned with the deck's line for it, and
-         pointing to the paper's figure in the PDF. */}}
-  {{- if not (and $bd.drawing $bd.drawing.caption) }}{{ errorf "software-factory/boundaries.yaml: `drawing` needs a caption" }}{{ end }}
-  {{ partial "sf-architecture.html" (dict "n" $bd.figure.n "caption" $bd.drawing.caption "pdf" (cond (fileExists (printf "static/%s" $sf.pdf)) $sf.pdf "")) }}
+         the paper's Figure 2, so it goes uncaptioned under the list. */}}
+  {{ partial "sf-architecture.html" (dict "n" $bd.figure.n) }}
   <div class="prose after-fig">
     {{/* The paper's "A factory in action", cut to the moment that shows the
          separation, then the line that keeps tested code and the boundaries
