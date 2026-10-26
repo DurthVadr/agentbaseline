@@ -33,7 +33,7 @@ Records current operating, approval and exception status, including the accounta
 
 #### `DIS-04` — Authoritative component registry
 
-Inventories agentic components discovered or made available for corporate use, including models, instructions, MCP servers, skills, plugins and tools, together with source, owner, version.
+Inventories agentic components and the components that enforce controls over them, discovered or made available for corporate use, including models, instructions, MCP servers, skills, plugins, tools, egress proxies, model gateways and authorization services, together with source, owner, version.
 
 #### `DIS-05` — Agent composition mapping
 
@@ -53,7 +53,7 @@ Compares the agent and component registries with evidence from source, cloud, en
 
 #### `CON-01` — Admission enforcement
 
-Blocks deployment of an agent or individual agentic component unless it is registered, risk-classified and approved; the exact release has validation evidence; and the approved configuration and runtime boundaries will be enforced.
+Blocks deployment of an agent, an individual agentic component or a component that enforces controls over agents unless it is registered, risk-classified and approved; the exact release has validation evidence; and the approved configuration and runtime boundaries will be enforced.
 
 #### `CON-02` — Toxic capability combinations
 
@@ -177,4 +177,4 @@ Denies unverified high-impact actions and provides an approved non-agent fallbac
 
 #### `RES-05` — Agentic component rug-pull protection
 
-Blocks rug-pull changes to agentic components, including unapproved changes to their code, instructions, tool definitions, requested permissions or integrity references.
+Blocks rug-pull changes to agentic components and to the components that enforce controls over them, including unapproved changes to their code, instructions, tool definitions, requested permissions or integrity references.

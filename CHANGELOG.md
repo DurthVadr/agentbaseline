@@ -31,6 +31,12 @@ never reused.
   Figtree face to render. *(2026-09-18)*
 
 ### Changed
+- `DIS-04`, `CON-01` and `RES-05` now also cover the components that enforce controls over
+  agents, such as egress proxies, model gateways and authorization services. As written they
+  covered agentic components only, so the enforcement plane had no registry, admission or
+  rug-pull requirement. Prompted by the LiteLLM 1.107.0 compromise, where the model gateway
+  itself was the entry point. Discussion in #55. Controls are `draft`, so the identifiers stay.
+  *(2026-10-26, Mertcan Sağlam, shim)*
 - Comment on v1.0-draft closed on 30 September 2026, so the bar no longer shows a deadline,
   the pages' descriptions no longer ask for comment, and the homepage's review section says
   where the comments went: the issues. *(2026-10-13, Matthew Creager, Keycard)*

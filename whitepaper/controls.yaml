@@ -92,9 +92,11 @@ controls:
     type: Record
     status: draft
     requirement: >-
-     Inventories agentic components discovered or made available for corporate
-     use, including models, instructions, MCP servers, skills, plugins and
-     tools, together with source, owner, version.
+     Inventories agentic components and the components that enforce controls
+     over them, discovered or made available for corporate use, including
+     models, instructions, MCP servers, skills, plugins, tools, egress proxies,
+     model gateways and authorization services, together with source, owner,
+     version.
 
   - id: DIS-05
     outcome: DIS
@@ -133,8 +135,9 @@ controls:
     type: Enforcement
     status: draft
     requirement: >-
-     Blocks deployment of an agent or individual agentic component unless it is
-     registered, risk-classified and approved; the exact release has validation
+     Blocks deployment of an agent, an individual agentic component or a
+     component that enforces controls over agents unless it is registered,
+     risk-classified and approved; the exact release has validation
      evidence; and the approved configuration and runtime boundaries will be
      enforced.
 
@@ -409,6 +412,7 @@ controls:
     type: Response
     status: draft
     requirement: >-
-     Blocks rug-pull changes to agentic components, including unapproved
-     changes to their code, instructions, tool definitions, requested
-     permissions or integrity references.
+     Blocks rug-pull changes to agentic components and to the components that
+     enforce controls over them, including unapproved changes to their code,
+     instructions, tool definitions, requested permissions or integrity
+     references.
